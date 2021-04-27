@@ -1,77 +1,55 @@
 <template>
-  <gmap-map
-    id="map"
-    :center="center"
-    :zoom="13"
-    :options="options"
-    map-type-id="terrain"
-  >
-    <gmap-marker :position="center">
-    </gmap-marker>
-  </gmap-map>
+  <div style="height: 500px; width: 100%">
+    <l-map
+      v-if="showMap"
+      :zoom="zoom"
+      :center="center"
+      :options="mapOptions"
+      style="height: 80%"
+      @update:center="centerUpdate"
+      @update:zoom="zoomUpdate"
+    >
+      <l-tile-layer
+        :url="url"
+        :attribution="attribution"
+      />
+    </l-map>
+  </div>
 </template>
 <script>
-  import {API_KEY} from './Maps/API_KEY'
-  import Vue from 'vue'
-  import * as VueGoogleMaps from 'vue2-google-maps'
-  Vue.use(VueGoogleMaps, {
-    load: {
-      key: API_KEY
-    }
-  })
-  export default {
-    data () {
-      return {
-        center: {
-          lat: 40.748817,
-          lng: -73.985428
-        },
-        options: {
-          styles: [{
-            'featureType': 'water',
-            'stylers': [{'saturation': 43}, {'lightness': -11}, {'hue': '#0088ff'}]
-          }, {
-            'featureType': 'road',
-            'elementType': 'geometry.fill',
-            'stylers': [{'hue': '#ff0000'}, {'saturation': -100}, {'lightness': 99}]
-          }, {
-            'featureType': 'road',
-            'elementType': 'geometry.stroke',
-            'stylers': [{'color': '#808080'}, {'lightness': 54}]
-          }, {
-            'featureType': 'landscape.man_made',
-            'elementType': 'geometry.fill',
-            'stylers': [{'color': '#ece2d9'}]
-          }, {
-            'featureType': 'poi.park',
-            'elementType': 'geometry.fill',
-            'stylers': [{'color': '#ccdca1'}]
-          }, {
-            'featureType': 'road',
-            'elementType': 'labels.text.fill',
-            'stylers': [{'color': '#767676'}]
-          }, {
-            'featureType': 'road',
-            'elementType': 'labels.text.stroke',
-            'stylers': [{'color': '#ffffff'}]
-          }, {'featureType': 'poi', 'stylers': [{'visibility': 'off'}]}, {
-            'featureType': 'landscape.natural',
-            'elementType': 'geometry.fill',
-            'stylers': [{'visibility': 'on'}, {'color': '#b8cb93'}]
-          }, {'featureType': 'poi.park', 'stylers': [{'visibility': 'on'}]}, {
-            'featureType': 'poi.sports_complex',
-            'stylers': [{'visibility': 'on'}]
-          }, {'featureType': 'poi.medical', 'stylers': [{'visibility': 'on'}]}, {
-            'featureType': 'poi.business',
-            'stylers': [{'visibility': 'simplified'}]
-          }]
-        }
-      }
+import { latLng } from "leaflet";
+import { LMap, LTileLayer } from "vue2-leaflet";
+
+export default {
+  name: "Example",
+  components: {
+    LMap,
+    LTileLayer
+  },
+  data() {
+    return {
+      zoom: 13,
+      center: latLng(47.41322, -1.219482),
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      currentZoom: 11.5,
+      currentCenter: latLng(47.41322, -1.219482),
+      showParagraph: false,
+      mapOptions: {
+        zoomSnap: 0.5
+      },
+      showMap: true
+    };
+  },
+  methods: {
+    zoomUpdate(zoom) {
+      this.currentZoom = zoom;
+    },
+    centerUpdate(center) {
+      this.currentCenter = center;
     }
   }
+};
 </script>
 <style>
-  #map {
-    min-height: calc(100vh - 123px);
-  }
 </style>
