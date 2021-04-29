@@ -219,6 +219,9 @@ $pink-color-bottom: 	            #ff2e2e;
 $black-color-top:	 	            #292929;
 $black-color-bottom: 	            #0e0e0e;
 
+$simile-color-top:	 	            #0093aa;
+$simile-color-bottom: 	            #007588;
+
 $social-facebook: 			#3b5998;
 $social-twitter: 			#55acee;
 $social-pinterest: 			#cc2127;
@@ -247,6 +250,7 @@ $new-green:           #87CB16;
 $new-orange:          #FFA534;
 $new-dark-blue:       #1F77D0;
 $new-black:           #5e5e5e;
+$new-simile:          #00b4cf;
 
 
 $topbar-x:             topbar-x !default;
@@ -261,3 +265,4 @@ $azure-navbar:              lighten($new-blue, 15%);
 $green-navbar:              lighten($new-green, 10%);
 $orange-navbar:             lighten($new-orange, 10%);
 $red-navbar:                lighten($new-red, 10%);
+$simile-navbar:             lighten($new-simile, 10%);

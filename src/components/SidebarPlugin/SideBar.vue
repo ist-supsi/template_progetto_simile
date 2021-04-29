@@ -43,19 +43,19 @@
     props: {
       title: {
         type: String,
-        default: 'Vue LBD'
+        default: 'PROGETTO SIMILE'
       },
       backgroundColor: {
         type: String,
-        default: 'black',
+        default: 'simile',
         validator: (value) => {
-          let acceptedValues = ['', 'blue', 'azure', 'green', 'orange', 'red', 'purple', 'black']
+          let acceptedValues = ['', 'blue', 'azure', 'green', 'orange', 'red', 'purple', 'black', 'simile']
           return acceptedValues.indexOf(value) !== -1
         }
       },
       backgroundImage: {
         type: String,
-        default: 'img/sidebar-5.jpg'
+        default: 'img/sidebar-simile.jpg'
       },
       activeColor: {
         type: String,

@@ -252,7 +252,7 @@ body > .navbar-collapse{
 
     &[data-image]:after,
     &.has-image:after{
-        opacity: .77;
+        opacity: .60;
     }
 
     &[data-color="black"]:after{
@@ -275,6 +275,9 @@ body > .navbar-collapse{
     }
     &[data-color="purple"]:after{
         @include icon-gradient($new-purple, $purple-color-bottom);
+    }
+    &[data-color="simile"]:after{
+        @include icon-gradient($new-simile, $simile-color-bottom);
     }
 }
 

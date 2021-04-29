@@ -352,6 +352,9 @@
 .navbar-ct-red{
     @include navbar-color($red-navbar);
 }
+.navbar-ct-red{
+    @include navbar-color($simile-navbar);
+}
 
 .navbar-transparent{
     padding-top: 15px;

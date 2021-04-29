@@ -5,11 +5,12 @@
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-warning">
-              <i class="nc-icon nc-chart text-warning"></i>
+              <!--i class="nc-icon nc-mobile text-warning"></i-->
+              <i class="fa fa-binoculars text-warning"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Capacity</p>
-              <h4 class="card-title">105GB</h4>
+              <p class="card-category">N. Osservazioni Citizen Science</p>
+              <h4 class="card-title">{{ resultCount }}</h4>
             </div>
             <div slot="footer">
               <i class="fa fa-refresh"></i>Updated now
@@ -20,11 +21,11 @@
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-success">
-              <i class="nc-icon nc-light-3 text-success"></i>
+              <i class="fa fa-balance-scale text-success"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Revenue</p>
-              <h4 class="card-title">$1,345</h4>
+              <p class="card-category">N. Misure Citizen Science</p>
+              <h4 class="card-title">{{ resultCountMeasures }}</h4>
             </div>
             <div slot="footer">
               <i class="fa fa-calendar-o"></i>Last day
@@ -65,32 +66,12 @@
       </div>
       <div class="row" style="height: 600px; margin-bottom: 30px;">
         <div class="col-md-12">
-          <l-map
-            v-if="showMap"
-            :zoom="zoom"
-            :bounds="bounds"
-            :options="mapOptions"
-            @update:center="centerUpdate"
-            @update:zoom="zoomUpdate"
-            style="height: 100%; width: 100%;"
-          >
-            <l-tile-layer
-              :url="url"
-              :attribution="attribution"
-            />
-            <l-control-layers />
-              <l-wms-tile-layer
-                v-for="layer in layers"
-                :key="layer.name"
-                :base-url="wmsUrl"
-                :layers="layer.layers"
-                :visible="layer.visible"
-                :name="layer.name"
-                :transparent="layer.transparent"
-                :format="layer.format"
-                layer-type="overlay"
-              />
-          </l-map>
+          <iframe
+            :src="src"
+            width="100%"
+            height="100%"
+            frameborder="0" >
+           </iframe>
         </div>
       </div>
 
@@ -204,18 +185,14 @@
   import ChartCard from 'src/components/Cards/ChartCard.vue'
   import StatsCard from 'src/components/Cards/StatsCard.vue'
   import LTable from 'src/components/Table.vue'
-  import { latLngBounds, latLng } from "leaflet";
-  import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
+  import axios from 'axios'
+  import VueAxios from 'vue-axios'
 
   export default {
     components: {
       LTable,
       ChartCard,
       StatsCard,
-      LMap,
-      LTileLayer,
-      "l-wms-tile-layer": LWMSTileLayer,
-      LControlLayers
     },
     data () {
       return {
@@ -301,152 +278,9 @@
             {title: 'Unfollow 5 enemies from twitter', checked: false}
           ]
         },
-        zoom: 13,
-        //center: latLng(47.41322, -1.219482),
-        bounds: latLngBounds([
-          [45.0, 7.1],
-          [48.0, 11.0]
-        ]),
-        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
-        layers: [
-          {
-            name: 'Maschera',
-            visible: true,
-            format: 'image/png',
-            layers: 'Maschera',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree naturali poligonali Svizzera',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_naturali_poligonali_Svizzera',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree protette Piemonte',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_protette_Piemonte',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree protette poligonali Lombardia',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_protette_poligonali_Lombardia',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree naturali puntuali Svizzera',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_naturali_puntuali_Svizzera',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree protette puntuali Lombardia',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_protette_puntuali_Lombardia',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Reticolo idrografico',
-            visible: true,
-            format: 'image/png',
-            layers: 'Reticolo_idrografico',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Laghi',
-            visible: true,
-            format: 'image/png',
-            layers: 'Laghi',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Strade',
-            visible: true,
-            format: 'image/png',
-            layers: 'Strade',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Ferrovie',
-            visible: true,
-            format: 'image/png',
-            layers: 'Ferrovie',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Limiti amministrativi',
-            visible: true,
-            format: 'image/png',
-            layers: 'Limiti_amministrativi',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Uso di suolo (CORINE_2018)',
-            visible: false,
-            format: 'image/png',
-            layers: 'Uso_di_suolo_CORINE_2018',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Stato delle rive',
-            visible: false,
-            format: 'image/png',
-            layers: 'Stato_delle_rive',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Depuratori con capacità > 2000 AE',
-            visible: false,
-            format: 'image/png',
-            layers: 'Depuratori_con_capacita_greater_2000_AE',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Punti prelievo d\'acqua',
-            visible: false,
-            format: 'image/png',
-            layers: 'Punti_prelievo_d_acqua',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Bacini idrografici',
-            visible: true,
-            format: 'image/png',
-            layers: 'Bacini_idrografici',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          }
-        ],
-        attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        currentZoom: 11.5,
-        //currentCenter: latLng(47.41322, -1.219482),
-        showParagraph: false,
-        mapOptions: {
-          zoomSnap: 0.5
-        },
-        showMap: true
+        src: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/view/map/?repository=dorota&project=cartografia_simile',
+        responseData: [],
+        countMeasures: 0
       }
     },
       methods: {
@@ -455,8 +289,43 @@
         },
         centerUpdate(center) {
           this.currentCenter = center;
-        }
+        },
+        measureCount () {
+          this.responseData.forEach(element => {
+            console.log(element)
+          });
+        },
+      },
+      mounted() {
+      axios.get('https://api-simile.como.polimi.it/v1/observations/').then((response) => {
+        console.log(response.data["data"][10].measures)
+        this.responseData = response.data["data"]
+        this.responseData.forEach(element => {
+            console.log(element)
+            if(element.hasOwnProperty('measures')){
+              console.log(element["measures"])
+              console.log(Object.keys(element["measures"]).length)
+              this.countMeasures += Object.keys(element["measures"]).length
+            }
+        });
+        //console.log(this.count)
+      })
+      /* .then(response => {
+        this.logItems = response.data // this bit works fine
+        this.responseData = response
+        console.log(response.data)
+      //.catch(error => console.log(error))
+      }) */
+    },
+    computed: {
+      resultCount () {
+        return this.responseData && this.responseData.length
+      },
+      resultCountMeasures () {
+        return this.countMeasures
       }
+
+    }
   }
 </script>
 <style>

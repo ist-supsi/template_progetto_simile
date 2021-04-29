@@ -1,11 +1,11 @@
 <template>
-  <div style="height: 500px; width: 100%">
+  <div style="height: 100%; width: 100%">
     <l-map
       v-if="showMap"
       :zoom="zoom"
       :center="center"
       :options="mapOptions"
-      style="height: 80%"
+      style="height: 100%"
       @update:center="centerUpdate"
       @update:zoom="zoomUpdate"
     >
