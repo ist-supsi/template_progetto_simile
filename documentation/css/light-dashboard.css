@@ -5123,6 +5123,22 @@ blockquote small {
   color: #f0a810;
 }
 
+.text-simile, .text-simile:hover {
+  color: #007588;
+}
+
+.text-simile, .text-simile:hover {
+  color: #007588;
+}
+
+.text-interreg, .text-interreg:hover {
+  color: #00309d;
+}
+
+.text-interreglight, .text-interreglight:hover {
+  color: #9ab0e8;
+}
+
 .text-danger, .text-danger:hover {
   color: #c84513;
 }

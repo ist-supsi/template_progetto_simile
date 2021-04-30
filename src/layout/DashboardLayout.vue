@@ -3,7 +3,7 @@
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
       <sidebar-link to="/admin/overview">
-        <i class="nc-icon nc-chart-pie-35"></i>
+        <i class="nc-icon nc-grid-45"></i>
         <p>Dashboard</p>
       </sidebar-link>
       <!--sidebar-link to="/gter">
@@ -12,13 +12,14 @@
       </sidebar-link-->
       <li class="router-link-exact-active nav-item">
         <a href="https://simile.como.polimi.it/SimileWebAdministrator2/" class="nav-link" target="_blank">
-          <i class="nc-icon nc-tag-content"></i>
+          <i class="nc-icon nc-mobile"></i>
           <p>WEB APP SIMILE</p>
         </a>
       </li>
       <li class="router-link-exact-active nav-item">
         <a href="https://simile.como.polimi.it/SimileWebAdministrator2/" class="nav-link" target="_blank">
-          <i class="nc-icon nc-tag-content"></i>
+          <!--i class="fa fa-map"></i-->
+          <i class="nc-icon nc-map-big"></i>
           <p>WEBGIS DATI SAT</p>
         </a>
       </li>
@@ -27,15 +28,15 @@
         <p>User Profile</p>
       </sidebar-link-->
       <sidebar-link to="/admin/table-list">
-        <i class="nc-icon nc-notes"></i>
+        <i class="nc-icon nc-tag-content"></i>
         <p>Lago Maggiore</p>
       </sidebar-link>
       <sidebar-link to="/admin/typography">
-        <i class="nc-icon nc-paper-2"></i>
+        <i class="nc-icon nc-tag-content"></i>
         <p>Lago Ceresio</p>
       </sidebar-link>
       <sidebar-link to="/admin/icons">
-        <i class="nc-icon nc-atom"></i>
+        <i class="nc-icon nc-tag-content"></i>
         <p>Lago Lario</p>
       </sidebar-link>
       <!--sidebar-link to="/admin/maps">

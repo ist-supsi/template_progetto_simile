@@ -6,7 +6,7 @@
           <stats-card>
             <div slot="header" class="icon-warning">
               <!--i class="nc-icon nc-mobile text-warning"></i-->
-              <i class="fa fa-binoculars text-warning"></i>
+              <i class="fa fa-binoculars text-simile"></i>
             </div>
             <div slot="content">
               <p class="card-category">N. Osservazioni Citizen Science</p>
@@ -21,7 +21,7 @@
         <div class="col-xl-3 col-md-6">
           <stats-card>
             <div slot="header" class="icon-success">
-              <i class="fa fa-balance-scale text-success"></i>
+              <i class="fa fa-balance-scale text-interreglight"></i>
             </div>
             <div slot="content">
               <p class="card-category">N. Misure Citizen Science</p>
@@ -62,6 +62,36 @@
             </div>
           </stats-card>
         </div>
+        <!-- se dovessero servire due card in più basta mettere col-xl-2 -->
+        <!--div class="col-xl-2 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-info">
+              <i class="nc-icon nc-favourite-28 text-primary"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Followers</p>
+              <h4 class="card-title">+45</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <div class="col-xl-2 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-info">
+              <i class="nc-icon nc-favourite-28 text-primary"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Followers</p>
+              <h4 class="card-title">+45</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div-->
 
       </div>
       <div class="row" style="height: 600px; margin-bottom: 30px;">
@@ -290,21 +320,16 @@
         centerUpdate(center) {
           this.currentCenter = center;
         },
-        measureCount () {
-          this.responseData.forEach(element => {
-            console.log(element)
-          });
-        },
       },
       mounted() {
       axios.get('https://api-simile.como.polimi.it/v1/observations/').then((response) => {
-        console.log(response.data["data"][10].measures)
+        //console.log(response.data["data"][10].measures)
         this.responseData = response.data["data"]
         this.responseData.forEach(element => {
-            console.log(element)
+            //console.log(element)
             if(element.hasOwnProperty('measures')){
-              console.log(element["measures"])
-              console.log(Object.keys(element["measures"]).length)
+              //console.log(element["measures"])
+              //console.log(Object.keys(element["measures"]).length)
               this.countMeasures += Object.keys(element["measures"]).length
             }
         });
