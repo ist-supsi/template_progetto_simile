@@ -7,7 +7,7 @@
       <div class="logo">
         <a href="#" class="simple-text logo__container">
             <div class="logo-img">
-                <img src="img/vue-logo.png" alt="">
+                <img src="img/simile-icon.png" alt="">
             </div>
           {{title}}
         </a>
@@ -100,4 +100,8 @@
  .sidebar .sidebar-wrapper .logo .logo__container {
    padding-left: 10px;
  }
+ .sidebar .logo .simple-text .logo-img img, body > .navbar-collapse .logo .simple-text .logo-img img {
+    max-width: 25px;
+    margin-bottom: 4px;
+}
 </style>

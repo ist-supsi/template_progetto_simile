@@ -2,7 +2,7 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-2 col-md-6">
           <stats-card>
             <div slot="header" class="icon-warning">
               <!--i class="nc-icon nc-mobile text-warning"></i-->
@@ -18,7 +18,7 @@
           </stats-card>
         </div>
 
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-2 col-md-6">
           <stats-card>
             <div slot="header" class="icon-success">
               <i class="fa fa-balance-scale text-interreglight"></i>
@@ -28,34 +28,63 @@
               <h4 class="card-title">{{ resultCountMeasures }}</h4>
             </div>
             <div slot="footer">
-              <i class="fa fa-calendar-o"></i>Last day
+              <i class="fa fa-refresh"></i>Updated now
             </div>
           </stats-card>
         </div>
 
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-2 col-md-6">
           <stats-card>
-            <div slot="header" class="icon-danger">
-              <i class="nc-icon nc-vector text-danger"></i>
+            <div slot="header" class="icon-success">
+              <i class="fa fa-map text-interreg"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Errors</p>
-              <h4 class="card-title">23</h4>
+              <p class="card-category">N. Mappe Satellitari</p>
+              <h4 class="card-title">NN</h4>
             </div>
             <div slot="footer">
-              <i class="fa fa-clock-o"></i>Last day
+              <i class="fa fa-refresh"></i>Updated now
             </div>
           </stats-card>
         </div>
 
-        <div class="col-xl-3 col-md-6">
+        <div class="col-xl-2 col-md-6">
           <stats-card>
-            <div slot="header" class="icon-info">
-              <i class="nc-icon nc-favourite-28 text-primary"></i>
+            <div slot="header" class="icon-danger">
+              <i class="fa fa-line-chart text-simile"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Followers</p>
-              <h4 class="card-title">+45</h4>
+              <p class="card-category">Indicatore Lago Maggiore</p>
+              <h4 class="card-title">XX</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <div class="col-xl-2 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-info">
+              <i class="fa fa-bar-chart text-interreglight"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Indicatore Lago Ceresio</p>
+              <h4 class="card-title">YY</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+        <div class="col-xl-2 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-info">
+              <i class="fa fa-area-chart text-interreg"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Indicatore Lago Lario</p>
+              <h4 class="card-title">ZZ</h4>
             </div>
             <div slot="footer">
               <i class="fa fa-refresh"></i>Updated now
