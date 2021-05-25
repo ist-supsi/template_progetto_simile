@@ -5,12 +5,17 @@
        :data-image="backgroundImage">
     <div class="sidebar-wrapper">
       <div class="logo">
-        <a href="#" class="simple-text logo__container">
+        <a href="https://progetti.interreg-italiasvizzera.eu/it/b/78/sistemainformativoperilmonitoraggiointegratodeilaghiinsubriciedeiloroe" target="_blank">
+          <div class="logo-img">
+              <img src="img/simile.png" alt="" style="width: 100%;">
+          </div>
+        </a>
+        <!--a href="#" class="simple-text logo__container">
             <div class="logo-img">
                 <img src="img/simile-icon.png" alt="">
             </div>
           {{title}}
-        </a>
+        </a-->
       </div>
 
       <slot name="content"></slot>
