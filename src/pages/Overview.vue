@@ -181,13 +181,22 @@
         <div class="col-12">
           <card>
             <div class="typo-line">
-              <p><span class="category"><b><i>IL PROGETTO</i></b></span><br>
-                Il progetto SIMILE mira alla salvaguardia dei laghi, risorsa fondamentale per il nostro territorio costantemente minacciata dai cambiamenti climatici e dagli interventi dell’uomo sull’ambiente. 
-                Attraverso la creazione di un sistema informativo avanzato, SIMILE si pone l’obiettivo di creare una politica di gestione dell’area dei grandi laghi subalpini e una strategia comune per migliorarne 
-                l’attuale sistema di monitoraggio, per prevenire e affrontare eventuali situazioni di criticità. L’iniziativa, attraverso l’approccio partecipativo “Citizen Science”, intende coinvolgere cittadini, 
-                enti, associazioni e altri attori interessati al tema della gestione delle acque affinché possano contribuire alla formalizzazione di nuove linee guida per fare fronte alle sfide che l’ecosistema dei 
-                laghi dovrà sostenere in futuro.
-              </p>
+              <p class="longtext"><span class="category"><b><i>IL PROGETTO</i></b></span><br></p>
+                <table cellspacing="2" cellpadding="2" width="100%" border="0">
+                  <tbody>
+                    <tr>
+                      <td valign="center" width="30%" style="text-align: left;"><img src="img/simile.png" alt="" style="width: 90%;"></td>
+                      <td valign="center" width="70%" style="text-align: justify;">
+                        Il progetto SIMILE mira alla salvaguardia dei laghi, risorsa fondamentale per il nostro territorio costantemente minacciata dai cambiamenti climatici e dagli interventi dell’uomo sull’ambiente. 
+                        Attraverso la creazione di un sistema informativo avanzato, SIMILE si pone l’obiettivo di creare una politica di gestione dell’area dei grandi laghi subalpini e una strategia comune per migliorarne 
+                        l’attuale sistema di monitoraggio, per prevenire e affrontare eventuali situazioni di criticità. L’iniziativa, attraverso l’approccio partecipativo “Citizen Science”, intende coinvolgere cittadini, 
+                        enti, associazioni e altri attori interessati al tema della gestione delle acque affinché possano contribuire alla formalizzazione di nuove linee guida per fare fronte alle sfide che l’ecosistema dei 
+                        laghi dovrà sostenere in futuro.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              <!--/p-->
             </div>
           </card>
         </div>
@@ -197,7 +206,7 @@
         <div class="col-12">
           <card>
             <div class="typo-line">
-              <p><span class="category"><b><i>DETTAGLI TECNICI</i></b></span><br>
+              <p class="longtext"><span class="category"><b><i>DETTAGLI TECNICI</i></b></span><br>
                 Il progetto SIMILE – Sistema Informativo per il Monitoraggio Integrato dei Laghi insubrici e dei loro Ecosistemi è finanziato nell’ambito del Programma di Cooperazione Interreg Italia-Svizzera 2014-2020. 
                 La qualità delle acque e dei loro ecosistemi è un elemento chiave sia per la sua fruizione ricreativa e turistica sia per il suo utilizzo agricolo e domestico. I laghi insubrici sono geograficamente collocati 
                 tra l’Italia e la Svizzera e la loro gestione non può prescindere da questo aspetto, pertanto solo un’azione congiunta e coordinata può garantire il raggiungimento della buona qualità della risorsa idrica. 
@@ -232,6 +241,67 @@
                 </div-->
             </div>
           </card>
+        </div>
+      </div>
+
+      <div class="row">
+      <div class="col-xl-3 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-success">
+              <i class="fa fa-balance-scale text-interreglight"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">N. Visualizzazioni</p>
+              <h4 class="card-title">XX</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-success">
+              <i class="fa fa-map text-interreg"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">N. Visitatori</p>
+              <h4 class="card-title">XX</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-danger">
+              <i class="fa fa-newspaper-o text-simile"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">News sul PROGETTO</p>
+              <h4 class="card-title"><a href="https://www.fondazionepolitecnico.it/progetti/connettivita-informazione/simile/" target="_blank"><i class="fa fa-link text-simile" style="font-size: xxx-large; margin-right: 14%;"></i></a></h4>
+            </div>
+            <div slot="footer">
+              <!--i class="fa fa-refresh"></i>Updated now-->
+            </div>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-danger">
+              <i class="fa fa-youtube text-interreglight"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Video presentazione</p>
+              <h4 class="card-title"><a href="https://youtu.be/bTxJodSuixo" target="_blank"><i class="fa fa-youtube-play text-interreglight" style="font-size: xxx-large; margin-right: 14%;"></i></a></h4>
+            </div>
+            <div slot="footer">
+              <!--i class="fa fa-refresh"></i>Updated now-->
+            </div>
+          </stats-card>
         </div>
       </div>
 

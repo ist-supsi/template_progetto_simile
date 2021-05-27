@@ -27,17 +27,17 @@
         <i class="nc-icon nc-circle-09"></i>
         <p>User Profile</p>
       </sidebar-link-->
-      <sidebar-link to="/admin/table-list">
+      <sidebar-link to="/admin/lago-maggiore">
         <i class="nc-icon nc-tag-content"></i>
         <p>Lago Maggiore</p>
       </sidebar-link>
-      <sidebar-link to="/admin/typography">
+      <sidebar-link to="/admin/lago-lugano">
         <i class="nc-icon nc-tag-content"></i>
-        <p>Lago Ceresio</p>
+        <p>Lago di Lugano</p>
       </sidebar-link>
-      <sidebar-link to="/admin/icons">
+      <sidebar-link to="/admin/lago-como">
         <i class="nc-icon nc-tag-content"></i>
-        <p>Lago Lario</p>
+        <p>Lago di Como</p>
       </sidebar-link>
       <!--sidebar-link to="/admin/maps">
         <i class="nc-icon nc-pin-3"></i>

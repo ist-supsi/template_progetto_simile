@@ -52,6 +52,12 @@ h6, .h6{
 p{
     font-size: $font-paragraph;
     line-height: $line-height-general;
+    /*text-align: justify;*/
+}
+
+p.longtext{
+    font-size: $font-paragraph;
+    line-height: $line-height-general;
     text-align: justify;
 }
 
