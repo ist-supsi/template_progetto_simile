@@ -491,13 +491,73 @@
         });
         //console.log(this.count)
       })
+
       /* .then(response => {
         this.logItems = response.data // this bit works fine
         this.responseData = response
         console.log(response.data)
       //.catch(error => console.log(error))
       }) */
+      console.log('dentro');
+          var details = {
+            'username': 'test',
+            'password': 'test',
+            'grant_type': 'password',
+            'client_id': 'istsos-istsos'
+          }
+
+          var formBody = [];
+          for (var property in details) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(details[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+          }
+          formBody = formBody.join("&");
+          axios({
+            method: 'post',
+            url: 'https://istsos.ddns.net/auth/realms/istsos/protocol/openid-connect/token',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            data: formBody
+          }).then((response2) => {
+            this.token = response2.data["access_token"]
+            console.log(this.token);
+          });
+
+          /* let ciao = fetch(
+            'https://istsos.ddns.net/auth/realms/istsos/protocol/openid-connect/token', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+              },
+              body: formBody
+            }
+          ) */
+          //console.log(ciao);
     },
+// mounted(){
+//       console.log('ciao')
+//       var base_url = 'https://istsos.ddns.net/auth/realms/istsos/protocol/openid-connect/token'
+//       var client_id='istsos-istsos'
+//       var username='test'
+//       var password='test'
+//       var grant_type='password'
+//       axios({
+//         method: 'post',
+//         url: base_url,
+//         headers: {
+//           'Accept':'application/json'
+//         },
+//         data: {
+//           'grant_type':grant_type,
+//           'client_id':client_id,
+//           'username':username, 
+//           'password':password}
+//       }).then((response) => {
+//         console.log(response);
+//       });
+//     },
     computed: {
       resultCount () {
         return this.responseData && this.responseData.length

@@ -21,6 +21,7 @@
     "chartist": "^0.11.0",
     "core-js": "^3.11.0",
     "google-maps": "^3.2.1",
+    "keycloak-js": "^13.0.1",
     "leaflet": "^1.7.1",
     "register-service-worker": "^1.5.2",
     "v-tooltip": "^2.0.0-rc.33",
@@ -28,7 +29,8 @@
     "vue-axios": "^3.2.4",
     "vue-router": "^3.0.2",
     "vue2-google-maps": "^0.8.4",
-    "vue2-leaflet": "^2.7.0"
+    "vue2-leaflet": "^2.7.0",
+    "vuejs-logger": "^1.5.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",

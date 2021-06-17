@@ -16,6 +16,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
+import Keycloak from 'keycloak-js';
 
 import 'leaflet/dist/leaflet.css';
 
@@ -42,6 +43,12 @@ const router = new VueRouter({
     }
   }
 })
+
+/* let initOptions = {
+  url: 'https://istsos.ddns.net/auth/realms/istsos/protocol/openid-connect/token', realm: 'istsos', clientId: 'app-vue', onLoad: 'login-required'
+}
+
+let keycloak = Keycloak(initOptions); */
 
 /* eslint-disable no-new */
 new Vue({
