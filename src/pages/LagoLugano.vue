@@ -340,6 +340,7 @@
   import LTable from 'src/components/Table.vue'
   import { latLngBounds, latLng } from "leaflet";
   import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
+  import axios from 'axios'
 
   export default {
     components: {
@@ -582,6 +583,20 @@
         },
         showMap: true
       }
+    },
+    mounted() {
+      axios({
+        method: 'get',
+        url: 'https://istsos.ddns.net/istsos/wa/istsos/services/demo/offerings/operations/getlist',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + window.localStorage.getItem('kcAccessToken')
+        }
+      }).then((response) => {
+        console.log(response.data);
+      }).catch(error => {
+        console.error(error);
+      });
     },
       methods: {
         zoomUpdate(zoom) {

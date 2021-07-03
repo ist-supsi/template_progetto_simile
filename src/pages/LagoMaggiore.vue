@@ -56,6 +56,8 @@
 <script>
   import LTable from 'src/components/Table.vue'
   import Card from 'src/components/Cards/Card.vue'
+  import axios from 'axios'
+
   const tableColumns = ['Id', 'Name', 'Salary', 'Country', 'City']
   const tableData = [{
     id: 1,
@@ -108,6 +110,20 @@
           data: [...tableData]
         }
       }
+    },
+    mounted() {
+      axios({
+        method: 'get',
+        url: 'https://istsos.ddns.net/istsos/wa/istsos/services/demo/procedures/operations/getlist',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + window.localStorage.getItem('kcAccessToken')
+        }
+      }).then((response) => {
+        console.log(response.data);
+      }).catch(error => {
+        console.error(error);
+      });
     }
   }
 </script>
