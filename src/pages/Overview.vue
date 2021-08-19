@@ -2,53 +2,7 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xl-2 col-md-6">
-          <stats-card>
-            <div slot="header" class="icon-warning">
-              <!--i class="nc-icon nc-mobile text-warning"></i-->
-              <i class="fa fa-binoculars text-simile"></i>
-            </div>
-            <div slot="content">
-              <p class="card-category">N. Osservazioni Citizen Science</p>
-              <h4 class="card-title">{{ resultCount }}</h4>
-            </div>
-            <div slot="footer">
-              <i class="fa fa-refresh"></i>Updated now
-            </div>
-          </stats-card>
-        </div>
-
-        <div class="col-xl-2 col-md-6">
-          <stats-card>
-            <div slot="header" class="icon-success">
-              <i class="fa fa-balance-scale text-interreglight"></i>
-            </div>
-            <div slot="content">
-              <p class="card-category">N. Misure Citizen Science</p>
-              <h4 class="card-title">{{ resultCountMeasures }}</h4>
-            </div>
-            <div slot="footer">
-              <i class="fa fa-refresh"></i>Updated now
-            </div>
-          </stats-card>
-        </div>
-
-        <div class="col-xl-2 col-md-6">
-          <stats-card>
-            <div slot="header" class="icon-success">
-              <i class="fa fa-map text-interreg"></i>
-            </div>
-            <div slot="content">
-              <p class="card-category">N. Mappe Satellitari</p>
-              <h4 class="card-title">NN</h4>
-            </div>
-            <div slot="footer">
-              <i class="fa fa-refresh"></i>Updated now
-            </div>
-          </stats-card>
-        </div>
-
-        <div class="col-xl-2 col-md-6">
+                <div class="col-xl-2 col-md-6">
           <stats-card>
             <div slot="header" class="icon-danger">
               <i class="fa fa-line-chart text-simile"></i>
@@ -69,7 +23,7 @@
               <i class="fa fa-bar-chart text-interreglight"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Indicatore Lago Ceresio</p>
+              <p class="card-category">Indicatore Lago Maggiore</p>
               <h4 class="card-title">YY</h4>
             </div>
             <div slot="footer">
@@ -83,7 +37,51 @@
               <i class="fa fa-area-chart text-interreg"></i>
             </div>
             <div slot="content">
-              <p class="card-category">Indicatore Lago Lario</p>
+              <p class="card-category">Indicatore Lago di Lugano</p>
+              <h4 class="card-title">ZZ</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <div class="col-xl-2 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-danger">
+              <i class="fa fa-line-chart text-simile"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Indicatore Lago  di Lugano</p>
+              <h4 class="card-title">XX</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <div class="col-xl-2 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-info">
+              <i class="fa fa-bar-chart text-interreglight"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Indicatore Lago di Como</p>
+              <h4 class="card-title">YY</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+        <div class="col-xl-2 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-info">
+              <i class="fa fa-area-chart text-interreg"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Indicatore Lago di Como</p>
               <h4 class="card-title">ZZ</h4>
             </div>
             <div slot="footer">
@@ -177,6 +175,97 @@
           </chart-card>
         </div>
       </div-->
+            <div class="row">
+        <div class="col-xl-3 col-lg-6">
+          <stats-card>
+            <div slot="header" class="icon-warning">
+              <!--i class="nc-icon nc-mobile text-warning"></i-->
+              <i class="fa fa-binoculars text-simile"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">N. Osservazioni da Citizen Science</p>
+              <h4 class="card-title">{{ resultCount }}</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <div class="col-xl-3 col-lg-6">
+          <stats-card>
+            <div slot="header" class="icon-success">
+              <i class="fa fa-balance-scale text-interreglight"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">N. Misure da Citizen Science</p>
+              <h4 class="card-title">{{ resultCountMeasures }}</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <div class="col-xl-3 col-lg-6">
+          <stats-card>
+            <div slot="header" class="icon-success">
+              <i class="fa fa-map text-interreg"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">N. Mappe Satellitari Prodotte</p>
+              <h4 class="card-title">NN</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <div class="col-xl-3 col-lg-6">
+          <stats-card>
+            <div slot="header" class="icon-danger">
+              <i class="fa fa-thermometer-full text-simile"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">N. Proprietà Osservate da Sensori</p>
+              <h4 class="card-title">{{ resultCountIstsos }}</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+
+        <!--div class="col-xl-2 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-info">
+              <i class="fa fa-bar-chart text-interreglight"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Indicatore Lago Ceresio</p>
+              <h4 class="card-title">YY</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div>
+        <div class="col-xl-2 col-md-6">
+          <stats-card>
+            <div slot="header" class="icon-info">
+              <i class="fa fa-area-chart text-interreg"></i>
+            </div>
+            <div slot="content">
+              <p class="card-category">Indicatore Lago Lario</p>
+              <h4 class="card-title">ZZ</h4>
+            </div>
+            <div slot="footer">
+              <i class="fa fa-refresh"></i>Updated now
+            </div>
+          </stats-card>
+        </div-->
+      </div>
       <div class="row">
         <div class="col-12">
           <card>
@@ -466,7 +555,8 @@
         },
         src: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/view/map/?repository=dorota&project=cartografia_simile',
         responseData: [],
-        countMeasures: 0
+        countMeasures: 0,
+        responseIstsosData: []
       }
     },
       methods: {
@@ -490,7 +580,7 @@
             }
         });
         //console.log(this.count)
-      })
+      });
 
       /* .then(response => {
         this.logItems = response.data // this bit works fine
@@ -498,6 +588,19 @@
         console.log(response.data)
       //.catch(error => console.log(error))
       }) */
+      axios({
+        method: 'get',
+        url: 'https://istsos.ddns.net/istsos/wa/istsos/services/demo/observedproperties',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + window.localStorage.getItem('kcAccessToken')
+        }
+      }).then((response) => {
+        console.log(response.data);
+        this.responseIstsosData = response.data["data"]
+      }).catch(error => {
+        console.error(error);
+      });
       //console.log('dentro');
           // var details = {
           //   'username': 'test',
@@ -549,6 +652,9 @@
       },
       resultCountMeasures () {
         return this.countMeasures
+      },
+      resultCountIstsos () {
+        return this.responseIstsosData && this.responseIstsosData.length
       }
 
     }
