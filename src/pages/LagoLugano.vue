@@ -181,13 +181,16 @@
           <card>
             <div class="typo-line">
               <p class="longtext"><span class="category"><b><i>Temperatura Superficiale</i></b></span><br></p>
-              <card v-for="(info, name, index) in insitu_temperatures_data">
+              <card v-for="info in insitu_temperatures_data">
                 <div class="row">
                   <div class="col-md-12" :test="info.value">
-                    <highcharts :options="info.options" style="height: 115px;"></highcharts>
+
+                        <highcharts :options="info.options" style="height: 115px;"></highcharts>
+
                   </div>
                 </div>
               </card>
+
 
             </div>
           </card>
@@ -300,7 +303,7 @@
                 pointFormat: '<b>{point.y}</b> (with target at {point.target})'
             }
         },
-        insitu_temperatures_data: {},
+        insitu_temperatures_data: [],
         tempChartOptions: {
             chart: {
                 marginTop: 40
@@ -507,15 +510,17 @@
       });
 
       Promise.all([
-          this.fetchTemetature('GHIFFA_EPILIMNIOM'),
-          this.fetchTemetature('CO_CHL_EAST', 1)
+          this.fetchTemetature('GHIFFA_EPILIMNIOM', 0, {
+              title: "Temperatura puntuale (misura in situ)"
+          }),
+          this.fetchTemetature('CO_CHL_EAST', 1, {
+              title: "Temperatura areale (stima da satellite)"
+          })
       ]).then((res)=>{
-          let obj = {};
-          for ( let ii in res ) {
-              obj[res[ii][0]] = res[ii][1];
-          };
-          self.insitu_temperatures_data = obj;
-      })
+          // const pp = {...res[0], ...res[1]};
+          self.insitu_temperatures_data = Object.values(res);
+          // console.log(self.insitu_temperatures_data);
+      });
 
     },
       methods: {
@@ -552,7 +557,7 @@
             return axios(config);
 
         },
-        fetchTemetature(procedures, order=0) {
+        fetchTemetature(procedures, order=0, alt={}) {
             var self = this;
 
             return this.call4istsos({
@@ -563,18 +568,18 @@
                 // console.log(dataArray);
                 let info = {
                     order: order,
-                    options: {...self.TEMPERATURE_DEFAULTS}
+                    options: JSON.parse(JSON.stringify(self.TEMPERATURE_DEFAULTS))
                 };
-                info.options.title.text = dataArray.field[1].name;
+                info.options.title.text = alt.title ? alt.title : `${dataArray.field[1].name} [${procedures}]`;
                 info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
                 info.options.series[0].data[0].y = dataArray.values[0][1];
                 info.value = dataArray.values[0][1];
 
-                // let newstore = {...self.insitu_temperatures_data};
-                // newstore[procedures] = info;
+                let newstore = {};
+                newstore[procedures] = info;
                 // self.insitu_temperatures_data = newstore;
 
-                return [procedures, info];
+                return info;
                 // self.insitu_temperatures_data[procedures] = info;
                 // console.log(self.insitu_temperatures_data);
             });
