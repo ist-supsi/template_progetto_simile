@@ -211,7 +211,20 @@
   import {Chart} from 'highcharts-vue';
   import Highcharts from 'highcharts';
   import loadBullet from 'highcharts/modules/bullet.js';
+  import IstsosIO from '../manageIstsosToken.js';
+
   loadBullet(Highcharts);
+
+  function getCookieValue(key) {
+    return document.cookie
+    .split('; ')
+    .find((row) => row.startsWith(key+'='))
+    .split('=')[1];
+  };
+
+  const formname = getCookieValue('form-name');
+  const formkey = getCookieValue('form-key');
+  let istsos = new IstsosIO(formname, formkey, 'get_token');
 
   Highcharts.setOptions({
       chart: {
@@ -491,22 +504,35 @@
         mapOptions: {
           zoomSnap: 0.5
         },
-        showMap: true
+        showMap: true,
       }
     },
     mounted() {
       var self = this;
-      axios({
-        method: 'get',
-        url: 'https://istsos.ddns.net/istsos/wa/istsos/services/demo/offerings/operations/getlist',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + window.localStorage.getItem('kcAccessToken')
-        }
-      }).then((response) => {
-        // console.log(response.data);
-      }).catch(error => {
-        console.error(error);
+      // axios({
+      //   method: 'get',
+      //   url: 'https://istsos.ddns.net/istsos/wa/istsos/services/demo/offerings/operations/getlist',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': 'Bearer ' + window.localStorage.getItem('kcAccessToken')
+      //   }
+      // }).then((response) => {
+      //   // console.log(response.data);
+      // }).catch(error => {
+      //   console.error(error);
+      // });
+
+      Promise.all([
+          istsos.fetchTemetature('GHIFFA_EPILIMNIOM', 0, {
+              title: "Temperatura puntuale (misura in situ)"
+          }),
+
+      ]).then((res)=>{
+          res[0]['order'] = 0
+          res[0].options.title.text
+          // const pp = {...res[0], ...res[1]};
+          self.insitu_temperatures_data = Object.values(res);
+          // console.log(self.insitu_temperatures_data);
       });
 
       Promise.all([
