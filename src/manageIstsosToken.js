@@ -129,17 +129,11 @@ export default class IstsosIO {
     }).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
         // console.log(dataArray);
-        // let info = {
-        //     // order: order,
-        //     options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
-        // };
+        let info = {
+            // order: order,
+            options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
+        };
 
-        console.log(dataArray.values[0]);
-
-        // const title = alt.title ? alt.title : `${dataArray.field[1].name} [${procedures}]`;
-        // const ts = new Date(dataArray.values[0][0]);
-
-        // info.options.title.text = `${title} al ${ts.toLocaleDateString()} ${ts.toLocaleTimeString()}`;
         info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
         info.options.series[0].data[0].y = dataArray.values[0][1];
         info.value = dataArray.values[0][1];

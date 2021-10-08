@@ -272,50 +272,6 @@
     },
     data () {
       return {
-        TEMPERATURE_DEFAULTS: {
-            chart: {
-                marginTop: 40
-            },
-            title: {
-                text: 'My Title'
-            },
-            xAxis: {
-                categories: ['<span class="hc-cat-title">Temperature</span><br/>°C']
-            },
-            yAxis: {
-                plotBands: [{
-                    from: -8,
-                    to: -4,
-                    color: 'rgb(116, 180, 202)'
-                }, {
-                    from: -4,
-                    to: 0,
-                    color: 'rgb(93, 133, 198)'
-                }, {
-                    from: 0,
-                    to: 4,
-                    color: 'rgb(68, 125, 99)'
-                }, {
-                    from: 4,
-                    to: 10,
-                    color: 'rgb(228, 248, 119)'
-                }, {
-                    from: 10,
-                    to: 21,
-                    color: 'rgb(243, 183, 4)'
-                }],
-                title: null
-            },
-            series: [{
-                data: [{
-                    y: 0,
-                    target: 12
-                }]
-            }],
-            tooltip: {
-                pointFormat: '<b>{point.y}</b> (with target at {point.target})'
-            }
-        },
         insitu_temperatures_data: [],
         tempChartOptions: {
             chart: {
@@ -509,130 +465,29 @@
     },
     mounted() {
       var self = this;
-      // axios({
-      //   method: 'get',
-      //   url: 'https://istsos.ddns.net/istsos/wa/istsos/services/demo/offerings/operations/getlist',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': 'Bearer ' + window.localStorage.getItem('kcAccessToken')
-      //   }
-      // }).then((response) => {
-      //   // console.log(response.data);
-      // }).catch(error => {
-      //   console.error(error);
-      // });
 
       Promise.all([
-          istsos.fetchTemetature('GHIFFA_EPILIMNIOM', 0, {
-              title: "Temperatura puntuale (misura in situ)"
-          }),
-
+          istsos.fetchTemetature('GHIFFA_EPILIMNIOM'),
+          istsos.fetchTemetature('CO_CHL_EAST')
       ]).then((res)=>{
           res[0]['order'] = 0
-          res[0].options.title.text
-          // const pp = {...res[0], ...res[1]};
-          self.insitu_temperatures_data = Object.values(res);
-          // console.log(self.insitu_temperatures_data);
-      });
-
-      Promise.all([
-          this.fetchTemetature('GHIFFA_EPILIMNIOM', 0, {
-              title: "Temperatura puntuale (misura in situ)"
-          }),
-          this.fetchTemetature('CO_CHL_EAST', 1, {
-              title: "Temperatura areale (stima da satellite)"
-          })
-      ]).then((res)=>{
+          res[0].options.title.text = "Temperatura puntuale (misura in situ)"
+          res[1]['order'] = 1
+          res[1].options.title.text = "Temperatura areale (stima da satellite)"
           // const pp = {...res[0], ...res[1]};
           self.insitu_temperatures_data = Object.values(res);
           // console.log(self.insitu_temperatures_data);
       });
 
     },
-      methods: {
-        zoomUpdate(zoom) {
-          this.currentZoom = zoom;
-        },
-        centerUpdate(center) {
-          this.currentCenter = center;
-        },
-        call4istsos(params) {
-            var self = this;
-
-            const DEFAULT_PARAMS = {
-                services: 'demo',
-                operations: 'getobservation',
-                offerings: 'temporary',
-                procedures: undefined,
-                observedproperties: undefined,
-                eventtime: 'last'
-            };
-
-            const path = Object.entries({...DEFAULT_PARAMS, ...(params||{})}).map((pair)=>pair.join('/')).join('/');
-            const url = new URL(`/istsos/wa/istsos/${path}`, 'https://istsos.ddns.net').toString();
-
-            var config = {
-                method: 'get',
-                url: url,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + window.localStorage.getItem('kcAccessToken')
-                }
-            };
-
-            return axios(config);
-
-        },
-        fetchTemetature(procedures, order=0, alt={}) {
-            var self = this;
-
-            return this.call4istsos({
-                procedures: procedures,
-                observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:temperature'
-            }).then((response) => {
-                const dataArray = response.data.data[0].result.DataArray;
-                // console.log(dataArray);
-                let info = {
-                    order: order,
-                    options: JSON.parse(JSON.stringify(self.TEMPERATURE_DEFAULTS))
-                };
-
-                console.log(dataArray.values[0]);
-
-                const title = alt.title ? alt.title : `${dataArray.field[1].name} [${procedures}]`;
-                const ts = new Date(dataArray.values[0][0]);
-
-                info.options.title.text = `${title} al ${ts.toLocaleDateString()} ${ts.toLocaleTimeString()}`;
-
-                info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-                info.options.series[0].data[0].y = dataArray.values[0][1];
-                info.value = dataArray.values[0][1];
-
-                let newstore = {};
-                newstore[procedures] = info;
-                // self.insitu_temperatures_data = newstore;
-
-                return info;
-                // self.insitu_temperatures_data[procedures] = info;
-                // console.log(self.insitu_temperatures_data);
-            });
-        },
-        fetchTempData() {
-            var self = this;
-
-            this.call4istsos({
-                procedures: 'GHIFFA_EPILIMNIOM',
-                observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:temperature'
-            }).then(function (response) {
-                const dataArray = response.data.data[0].result.DataArray;
-                self.tempChartOptions.title.text = dataArray.field[1].name;
-                self.tempChartOptions.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-                const value = dataArray.values[0][1];
-                self.tempChartOptions.series[0].data[0].y = value;
-            });
-
-        }
+    methods: {
+      zoomUpdate(zoom) {
+        this.currentZoom = zoom;
+      },
+      centerUpdate(center) {
+        this.currentCenter = center;
       }
+    }
   }
 </script>
 <style>
