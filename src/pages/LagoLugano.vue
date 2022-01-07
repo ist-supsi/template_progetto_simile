@@ -224,7 +224,8 @@
 
   const formname = getCookieValue('form-name');
   const formkey = getCookieValue('form-key');
-  let istsos = new IstsosIO(formname, formkey, 'get_token');
+  const root = getCookieValue('app-name');
+  let istsos = new IstsosIO(formname, formkey, `/${root}/istsos`);
 
   Highcharts.setOptions({
       chart: {

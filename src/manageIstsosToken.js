@@ -61,9 +61,9 @@ axios.interceptors.request.use(function (config) {
 
 export default class IstsosIO {
   constructor(formname, formkey, proxyUrl) {
-    this.proxyPayload = {formname: formname, formkey: formkey}
-    // this.formname = formname;
-    // this.formkey = formkey;
+    // this.proxyPayload = {'_formname': formname, '_formkey': formkey};
+    this.formname = formname;
+    this.formkey = formkey;
     this.proxy = proxyUrl;
     this.token = null;
     this._tokenInfo = null;
@@ -71,7 +71,12 @@ export default class IstsosIO {
   };
   _updateToken() {
     var self = this;
-    return axios.post(this.proxy, this.proxyPayload).then(data => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('_formname', this.formname);
+    bodyFormData.append('_formkey', this.formkey);
+    return axios.post(this.proxy, bodyFormData, {
+        headers: {"Content-Type": "multipart/form-data" }
+    }).then(data => {
       self.tokenInfo = data;
       self.expiry = Date.now() + data["expires_in"] * 1000
     });
