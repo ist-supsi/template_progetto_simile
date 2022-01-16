@@ -180,7 +180,20 @@
         <div class="col-12">
           <card>
             <div class="typo-line">
-              <p class="longtext"><span class="category"><b><i>Temperatura Superficiale</i></b></span><br></p>
+              <p class="longtext"><span class="category">
+                  <b><i>Temperatura Superficiale</i></b>
+              </span><br></p>
+              <div>
+                <card>
+                  La misura delle temperatura dell'acqua permette di seguire il 
+                  ciclo termico del lago nel corso dell'anno. Dalla temperatura 
+                  dipendono processi importanti come la stratificazione/circolazione 
+                  delle acque, la quantità di ossigeno in coluaione, lo sviluppo 
+                  delle fioriture algali. Inoltre il monitoraggio a lungo termine 
+                  delle temperature è utile per valutare la risposta del lago ai 
+                  cambiamenti climatici.
+                </card>
+              </div>
               <card v-for="info in insitu_temperatures_data">
                 <div class="row">
                   <div class="col-md-12" :test="info.value">
@@ -225,7 +238,8 @@
   const formname = getCookieValue('form-name');
   const formkey = getCookieValue('form-key');
   const root = getCookieValue('app-name');
-  let istsos = new IstsosIO(formname, formkey, `/${root}/istsos`);
+  const istsosServices = getCookieValue('istsos-services');
+  let istsos = new IstsosIO(formname, formkey, `/${root}/istsos`, istsosServices);
 
   Highcharts.setOptions({
       chart: {
@@ -468,13 +482,13 @@
       var self = this;
 
       Promise.all([
-          istsos.fetchTemetature('GHIFFA_EPILIMNIOM'),
-          istsos.fetchTemetature('CO_CHL_EAST')
+          istsos.fetchLastTemetature('TEMP_0_4'),
+          istsos.fetchTemetatureSeries('TEMP_0_4')
       ]).then((res)=>{
           res[0]['order'] = 0
-          res[0].options.title.text = "Temperatura puntuale (misura in situ)"
+          res[0].options.title.text = "Temperatura superficiale (da sensore)"
           res[1]['order'] = 1
-          res[1].options.title.text = "Temperatura areale (stima da satellite)"
+          res[1].options.title.text = "Temperatura superficiale (da sensore)"
           // const pp = {...res[0], ...res[1]};
           self.insitu_temperatures_data = Object.values(res);
           // console.log(self.insitu_temperatures_data);
