@@ -1,6 +1,8 @@
 
 import axios from 'axios';
 
+const dataColor = 'dimgray'
+
 const TEMPERATURE_DEFAULTS = {
     chart: {
         marginTop: 40
@@ -32,13 +34,18 @@ const TEMPERATURE_DEFAULTS = {
             from: 10,
             to: 21,
             color: 'rgb(243, 183, 4)'
+        }, {
+            from: 21,
+            to: 28,
+            color: 'orange'
         }],
         title: null
     },
     series: [{
         data: [{
             y: 0,
-            target: 12
+            target: null,
+            color: dataColor
         }]
     }],
     tooltip: {
@@ -48,59 +55,35 @@ const TEMPERATURE_DEFAULTS = {
 
 const TEMPERATURE_SERIES_DEFAULTS = {
     chart: {
+        type: 'line',
+        inverted: false,
         zoomType: 'x'
     },
-    title: {
-        text: 'My Title'
-    },
-    subtitle: {
-        text: document.ontouchstart === undefined ?
-            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
-    },
-    xAxis: {
-        type: 'datetime'
-    },
-    yAxis: {
-        title: {
-            text: 'Temperature'
-        }
-    },
-    legend: {
-        enabled: false
-    },
-    plotOptions: {
-        area: {
-            fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: [
-                    [0, '#000000'],
-                    [1, '#ffffff']
-                ]
-            },
-            marker: {
-                radius: 2
-            },
-            lineWidth: 1,
-            states: {
-                hover: {
-                    lineWidth: 1
-                }
-            },
-            threshold: null
-        }
-    },
+	title: {
+       text: 'Serie temporale'
+	},
+	subtitle: {},
+	xAxis: {
+       type: 'datetime',
+       // title: {text: 'foo'}
+	},
+	yAxis: {
+    	title: {
+	       text: 'Temperature'
+    	}
+	},
+	legend: {
+       enabled: false
+	},
+	plotOptions: {},
 
-    series: [{
-        type: 'line',
-        name: 'My Name',
-        data: []
-    }]
-}
+	series: [{
+    	type: 'line',
+    	name: 'My Title',
+    	data: [],
+        color: dataColor
+	}]
+};
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
@@ -216,7 +199,7 @@ export default class IstsosIO {
     */
     var self = this;
     end = (end === undefined) ? new Date() : end;
-    begin = (begin === undefined) ? new Date(new Date().setFullYear(new Date().getFullYear() + 1)) : begin;
+    begin = (begin === undefined) ? new Date(new Date().setFullYear(new Date().getFullYear() - 1)) : begin;
     let eventtime = `${begin.toISOString()}/${end.toISOString()}`;
     return this._fetchTemperature(procedures, eventtime).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
@@ -228,7 +211,7 @@ export default class IstsosIO {
         // info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
         // info.options.series[0].data[0].y = dataArray.values[0][1];
         // info.value = dataArray.values[0][1];
-        info.options.series.data = dataArray.values; //.map(el => el.slice(0, 2));
+        info.options.series[0].data = dataArray.values.map(el => [(new Date(el[0])).getTime(), el[1]]);
 
         return info;
     });

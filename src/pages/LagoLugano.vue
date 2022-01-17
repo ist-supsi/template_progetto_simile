@@ -198,7 +198,7 @@
                 <div class="row">
                   <div class="col-md-12" :test="info.value">
 
-                        <highcharts :options="info.options" style="height: 115px;"></highcharts>
+                        <highcharts :options="info.options" :style="[info.options.series[0].type ? {} : {'height': '115px'}]"></highcharts>
 
                   </div>
                 </div>
