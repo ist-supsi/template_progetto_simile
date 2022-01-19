@@ -185,25 +185,87 @@
               </span><br></p>
               <div>
                 <card>
-                  La misura delle temperatura dell'acqua permette di seguire il 
-                  ciclo termico del lago nel corso dell'anno. Dalla temperatura 
-                  dipendono processi importanti come la stratificazione/circolazione 
-                  delle acque, la quantità di ossigeno in coluaione, lo sviluppo 
-                  delle fioriture algali. Inoltre il monitoraggio a lungo termine 
-                  delle temperature è utile per valutare la risposta del lago ai 
-                  cambiamenti climatici.
-                </card>
-              </div>
-              <card v-for="info in insitu_temperatures_data">
-                <div class="row">
-                  <div class="col-md-12" :test="info.value">
+                    La misura delle temperatura dell'acqua permette di seguire il 
+                    ciclo termico del lago nel corso dell'anno. Dalla temperatura 
+                    dipendono processi importanti come la stratificazione/circolazione 
+                    delle acque, la quantità di ossigeno in coluaione, lo sviluppo 
+                    delle fioriture algali. Inoltre il monitoraggio a lungo termine 
+                    delle temperature è utile per valutare la risposta del lago ai 
+                    cambiamenti climatici.
 
-                        <highcharts :options="info.options" :style="[info.options.series[0].type ? {} : {'height': '115px'}]"></highcharts>
-
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Profondità del sensore</label>
+                        <select v-model="selected_temperature"
+                            @change="loadNewTemperatures()"
+                            class="form-control" id="exampleFormControlSelect1">
+                            <option value='TEMP_0_4'>40 cm</option>
+                            <option value='TEMP_2_5'>2.5 m</option>
+                            <option value='TEMP_5_0'>5 m</option>
+                            <option value='TEMP_8_0'>8 m</option>
+                            <option value='TEMP_12_5'>12.5 m</option>
+                            <option value='TEMP_20_0'>20 m</option>
+                        </select>
+                    </div>
+                  
+                  <div class="row">
+                    <div class="col-md-12">
+                        <highcharts :options="last_temperature_data" style="height: 115px"></highcharts>
+                    </div>
+                    <div class="col-md-12">
+                        <highcharts :options="series_temperature_data"></highcharts>
+                    </div>
                   </div>
-                </div>
-              </card>
+                </card>
+                
+              </div>
 
+            </div>
+          </card>
+          <card>
+            <div class="typo-line">
+              <p class="longtext"><span class="category">
+                  <b><i>Ossigeno disciolto</i></b>
+              </span><br></p>
+              <div>
+                <card>
+                    Ossigeno disciolto alla profondità del sensore/i, espresso
+                    come concentrazione.
+                    
+                    La presenza di ossigeno nelle acque deriva dallo scambio con
+                    l'atmosfera e dai processi biologici operati dagli organismi
+                    acquatici (fotosintesi e respirazione).
+                    Valori elevati si trovano solitamente nelle acque superficiali
+                    nel periodo estivo. Bassi valori (ipossia) o totale assenza
+                    di ossigeno (anossia) possono caratterizzare le acque profonde
+                    dei laghi eutrofi, in cui la sostanza organica prodotta negli
+                    strati superficiali sedimenta e viene decomposta dagli organismi
+                    aerobi che sottraggono ossigeno all’acqua.
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Profondità del sensore</label>
+                        <select v-model="selected_o2c"
+                            @change="loadNewO2c()"
+                            class="form-control" id="exampleFormControlSelect1">
+                            <option value='O2C_0_4'>40 cm</option>
+                            <option value='O2C_2_5'>2.5 m</option>
+                            <option value='O2C_5_0'>5 m</option>
+                            <option value='O2C_8_0'>8 m</option>
+                            <option value='O2C_12_5'>12.5 m</option>
+                            <option value='O2C_20_0'>20 m</option>
+                        </select>
+                    </div>
+                  
+                  <div class="row">
+                    <div class="col-md-12">
+                        <highcharts :options="last_o2c_data" style="height: 115px"></highcharts>
+                    </div>
+                    <div class="col-md-12">
+                        <highcharts :options="series_o2c_data"></highcharts>
+                    </div>
+                  </div>
+                </card>
+                
+              </div>
 
             </div>
           </card>
@@ -214,34 +276,34 @@
   </div>
 </template>
 <script>
-  import ChartCard from 'src/components/Cards/ChartCard.vue'
-  import StatsCard from 'src/components/Cards/StatsCard.vue'
-  import LTable from 'src/components/Table.vue'
-  import { latLngBounds, latLng } from "leaflet";
-  import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
-  import axios from 'axios';
+    import ChartCard from 'src/components/Cards/ChartCard.vue'
+    import StatsCard from 'src/components/Cards/StatsCard.vue'
+    import LTable from 'src/components/Table.vue'
+    import { latLngBounds, latLng } from "leaflet";
+    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
+    import axios from 'axios';
 
-  import {Chart} from 'highcharts-vue';
-  import Highcharts from 'highcharts';
-  import loadBullet from 'highcharts/modules/bullet.js';
-  import IstsosIO from '../manageIstsosToken.js';
+    import {Chart} from 'highcharts-vue';
+    import Highcharts from 'highcharts';
+    import loadBullet from 'highcharts/modules/bullet.js';
+    import IstsosIO from '../manageIstsosToken.js';
 
-  loadBullet(Highcharts);
+    loadBullet(Highcharts);
 
-  function getCookieValue(key) {
-    return document.cookie
-    .split('; ')
-    .find((row) => row.startsWith(key+'='))
-    .split('=')[1];
-  };
+    function getCookieValue(key) {
+        return document.cookie
+        .split('; ')
+        .find((row) => row.startsWith(key+'='))
+        .split('=')[1];
+    };
 
-  const formname = getCookieValue('form-name');
-  const formkey = getCookieValue('form-key');
-  const root = getCookieValue('app-name');
-  const istsosServices = getCookieValue('istsos-services');
-  let istsos = new IstsosIO(formname, formkey, `/${root}/istsos`, istsosServices);
+    const formname = getCookieValue('form-name');
+    const formkey = getCookieValue('form-key');
+    const root = getCookieValue('app-name');
+    const istsosServices = getCookieValue('istsos-services');
+    let istsos = new IstsosIO(formname, formkey, `/${root}/istsos`, istsosServices);
 
-  Highcharts.setOptions({
+    Highcharts.setOptions({
       chart: {
           inverted: true,
           marginLeft: 135,
@@ -274,235 +336,263 @@
       }
   });
 
-  export default {
-    components: {
-      LTable,
-      ChartCard,
-      StatsCard,
-      LMap,
-      LTileLayer,
-      "l-wms-tile-layer": LWMSTileLayer,
-      LControlLayers,
-      highcharts: Chart
-    },
-    data () {
-      return {
-        insitu_temperatures_data: [],
-        tempChartOptions: {
-            chart: {
-                marginTop: 40
-            },
-            title: {
-                text: '2017 YTD'
-            },
-            xAxis: {
-                categories: ['<span class="hc-cat-title">Revenue</span><br/>U.S. $ (1,000s)']
-            },
-            yAxis: {
-                plotBands: [{
-                    from: -10,
-                    to: 4,
-                    color: 'cyan'
-                }, {
-                    from: 4,
-                    to: 8,
-                    color: 'blue'
-                }, {
-                    from: 8,
-                    to: 16,
-                    color: 'orange'
-                }, {
-                    from: 16,
-                    to: 30,
-                    color: 'red'
-                }],
-                title: null
-            },
-            series: [{
-                data: [{
-                    y: 5.5,
-                    target: 12
-                }]
-            }],
-            tooltip: {
-                pointFormat: '<b>{point.y}</b> (with target at {point.target})'
+    export default {
+        components: {
+            LTable,
+            ChartCard,
+            StatsCard,
+            LMap,
+            LTileLayer,
+            "l-wms-tile-layer": LWMSTileLayer,
+            LControlLayers,
+            highcharts: Chart
+        },
+        data () {
+            return {
+                selected_temperature: 'TEMP_0_4',
+                selected_o2c: 'O2C_0_4',
+                last_temperature_data: {},
+                series_temperature_data: {},
+                last_o2c_data: {},
+                series_o2c_data: {},
+                // procedures: [
+                //     {
+                //         procedure: 'TEMP_0_4'
+                //     },
+                //     {
+                //         procedure: 'O2C_0_4'
+                //     },
+                //     // {
+                //     //     procedure: 'O2S_0_4'
+                //     // },
+                // ],
+                tempChartOptions: {
+                    chart: {
+                        marginTop: 40
+                    },
+                    title: {
+                        text: '2017 YTD'
+                    },
+                    xAxis: {
+                        categories: ['<span class="hc-cat-title">Revenue</span><br/>U.S. $ (1,000s)']
+                    },
+                    yAxis: {
+                        plotBands: [{
+                            from: -10,
+                            to: 4,
+                            color: 'cyan'
+                        }, {
+                            from: 4,
+                            to: 8,
+                            color: 'blue'
+                        }, {
+                            from: 8,
+                            to: 16,
+                            color: 'orange'
+                        }, {
+                            from: 16,
+                            to: 30,
+                            color: 'red'
+                        }],
+                        title: null
+                    },
+                    series: [{
+                        data: [{
+                            y: 5.5,
+                            target: 12
+                        }]
+                    }],
+                    tooltip: {
+                        pointFormat: '<b>{point.y}</b> (with target at {point.target})'
+                    }
+                },
+                editTooltip: 'Edit Task',
+                deleteTooltip: 'Remove',
+                zoom: 13,
+                //center: latLng(47.41322, -1.219482),
+                bounds: latLngBounds([
+                  [45.9, 8.9],
+                  [46.0, 9.1]
+                ]),
+                url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
+                layers: [
+                  {
+                    name: 'Maschera',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Maschera',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Aree naturali poligonali Svizzera',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Aree_naturali_poligonali_Svizzera',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Aree protette Piemonte',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Aree_protette_Piemonte',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Aree protette poligonali Lombardia',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Aree_protette_poligonali_Lombardia',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Aree naturali puntuali Svizzera',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Aree_naturali_puntuali_Svizzera',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Aree protette puntuali Lombardia',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Aree_protette_puntuali_Lombardia',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Reticolo idrografico',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Reticolo_idrografico',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Laghi',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Laghi',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Strade',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Strade',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Ferrovie',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Ferrovie',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Limiti amministrativi',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Limiti_amministrativi',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Uso di suolo (CORINE_2018)',
+                    visible: false,
+                    format: 'image/png',
+                    layers: 'Uso_di_suolo_CORINE_2018',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Stato delle rive',
+                    visible: false,
+                    format: 'image/png',
+                    layers: 'Stato_delle_rive',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Depuratori con capacità > 2000 AE',
+                    visible: false,
+                    format: 'image/png',
+                    layers: 'Depuratori_con_capacita_greater_2000_AE',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Punti prelievo d\'acqua',
+                    visible: false,
+                    format: 'image/png',
+                    layers: 'Punti_prelievo_d_acqua',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  },
+                  {
+                    name: 'Bacini idrografici',
+                    visible: true,
+                    format: 'image/png',
+                    layers: 'Bacini_idrografici',
+                    transparent: true/*,
+                    attribution: "Weather data © 2012 IEM Nexrad"*/
+                  }
+                ],
+                attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                currentZoom: 10.5,
+                //currentCenter: latLng(47.41322, -1.219482),
+                showParagraph: false,
+                mapOptions: {
+                  zoomSnap: 0.5
+                },
+                showMap: true,
             }
         },
-        editTooltip: 'Edit Task',
-        deleteTooltip: 'Remove',
-        zoom: 13,
-        //center: latLng(47.41322, -1.219482),
-        bounds: latLngBounds([
-          [45.9, 8.9],
-          [46.0, 9.1]
-        ]),
-        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
-        layers: [
-          {
-            name: 'Maschera',
-            visible: true,
-            format: 'image/png',
-            layers: 'Maschera',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree naturali poligonali Svizzera',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_naturali_poligonali_Svizzera',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree protette Piemonte',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_protette_Piemonte',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree protette poligonali Lombardia',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_protette_poligonali_Lombardia',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree naturali puntuali Svizzera',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_naturali_puntuali_Svizzera',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Aree protette puntuali Lombardia',
-            visible: true,
-            format: 'image/png',
-            layers: 'Aree_protette_puntuali_Lombardia',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Reticolo idrografico',
-            visible: true,
-            format: 'image/png',
-            layers: 'Reticolo_idrografico',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Laghi',
-            visible: true,
-            format: 'image/png',
-            layers: 'Laghi',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Strade',
-            visible: true,
-            format: 'image/png',
-            layers: 'Strade',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Ferrovie',
-            visible: true,
-            format: 'image/png',
-            layers: 'Ferrovie',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Limiti amministrativi',
-            visible: true,
-            format: 'image/png',
-            layers: 'Limiti_amministrativi',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Uso di suolo (CORINE_2018)',
-            visible: false,
-            format: 'image/png',
-            layers: 'Uso_di_suolo_CORINE_2018',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Stato delle rive',
-            visible: false,
-            format: 'image/png',
-            layers: 'Stato_delle_rive',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Depuratori con capacità > 2000 AE',
-            visible: false,
-            format: 'image/png',
-            layers: 'Depuratori_con_capacita_greater_2000_AE',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Punti prelievo d\'acqua',
-            visible: false,
-            format: 'image/png',
-            layers: 'Punti_prelievo_d_acqua',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          },
-          {
-            name: 'Bacini idrografici',
-            visible: true,
-            format: 'image/png',
-            layers: 'Bacini_idrografici',
-            transparent: true/*,
-            attribution: "Weather data © 2012 IEM Nexrad"*/
-          }
-        ],
-        attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-        currentZoom: 10.5,
-        //currentCenter: latLng(47.41322, -1.219482),
-        showParagraph: false,
-        mapOptions: {
-          zoomSnap: 0.5
+        mounted() {
+            var self = this;
+            self.fetchTemperatures('TEMP_0_4');
+            self.fetchO2c('O2C_0_4')
         },
-        showMap: true,
-      }
-    },
-    mounted() {
-      var self = this;
-
-      Promise.all([
-          istsos.fetchLastTemetature('TEMP_0_4'),
-          istsos.fetchTemetatureSeries('TEMP_0_4')
-      ]).then((res)=>{
-          res[0]['order'] = 0
-          res[0].options.title.text = "Temperatura superficiale (da sensore)"
-          res[1]['order'] = 1
-          res[1].options.title.text = "Temperatura superficiale (da sensore)"
-          // const pp = {...res[0], ...res[1]};
-          self.insitu_temperatures_data = Object.values(res);
-          // console.log(self.insitu_temperatures_data);
-      });
-
-    },
     methods: {
-      zoomUpdate(zoom) {
-        this.currentZoom = zoom;
-      },
-      centerUpdate(center) {
-        this.currentCenter = center;
-      }
-    }
+        fetchTemperatures(procedure) {
+            var self = this;
+            istsos.fetchLastTemetature(procedure).then((result)=>{
+                self.last_temperature_data = result.options;
+            });
+            istsos.fetchTemperatureSeries(procedure).then((result)=>{
+                self.series_temperature_data = result.options;
+            });
+        },
+        loadNewTemperatures() {
+            this.fetchTemperatures(this.selected_temperature);
+        },
+        fetchO2c(procedure) {
+            var self = this;
+            istsos.fetchLastO2c(procedure).then((result)=>{
+                self.last_o2c_data = result.options;
+            });
+            istsos.fetchO2cSeries(procedure).then((result)=>{
+                self.series_o2c_data = result.options;
+            });
+        },
+        loadNewO2c() {
+            this.fetchO2c(this.selected_o2c);
+        },
+        zoomUpdate(zoom) {
+            this.currentZoom = zoom;
+        },
+        centerUpdate(center) {
+            this.currentCenter = center;
+        }
+    },
   }
 </script>
 <style>

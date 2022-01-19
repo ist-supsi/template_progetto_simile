@@ -32,6 +32,8 @@ import axios from 'axios';
 Vue.use(VueRouter)
 Vue.use(LightBootstrap)
 
+Vue.config.devtools = true;
+
 //inizio richiesta token per API istsos
 var details = {
   'username': 'test',
