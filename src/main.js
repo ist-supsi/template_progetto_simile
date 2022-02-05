@@ -118,8 +118,6 @@ err => {
         var now = Date.now()
         var expiresAt = now + (response.data["expires_in"] * 1000)
         window.localStorage.setItem('kcExpiresAt', expiresAt)
-        console.log(response.data["access_token"]);
-        console.log(response.data);
         isRefreshing = false;
 
         onRefreshed();

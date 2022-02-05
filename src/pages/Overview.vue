@@ -596,55 +596,10 @@
           'Authorization': 'Bearer ' + window.localStorage.getItem('kcAccessToken')
         }
       }).then((response) => {
-        console.log(response.data);
         this.responseIstsosData = response.data["data"]
       }).catch(error => {
         console.error(error);
       });
-      //console.log('dentro');
-          // var details = {
-          //   'username': 'test',
-          //   'password': 'test',
-          //   'grant_type': 'password',
-          //   'client_id': 'istsos-istsos'
-          // }
-
-          // var formBody = [];
-          // for (var property in details) {
-          //   var encodedKey = encodeURIComponent(property);
-          //   var encodedValue = encodeURIComponent(details[property]);
-          //   formBody.push(encodedKey + "=" + encodedValue);
-          // }
-          // formBody = formBody.join("&");
-          // axios({
-          //   method: 'post',
-          //   url: 'https://istsos.ddns.net/auth/realms/istsos/protocol/openid-connect/token',
-          //   headers: {
-          //     'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-          //   },
-          //   data: formBody
-          // }).then((response2) => {
-          //   window.localStorage.setItem('kcAccessToken', response2.data["access_token"])
-          //   window.localStorage.setItem('kcRefreshToken', response2.data["refresh_token"])
-          //   window.localStorage.setItem('kcExpiresIn', response2.data["expires_in"])
-          //   var now = Date.now()
-          //   var expiresAt = now + (response2.data["expires_in"] * 1000)
-          //   window.localStorage.setItem('kcExpiresAt', expiresAt)
-          //   // this.token = response2.data["access_token"]
-          //   // console.log(this.token);
-          //   // console.log(response2.data);
-          // });
-
-          /* let ciao = fetch(
-            'https://istsos.ddns.net/auth/realms/istsos/protocol/openid-connect/token', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-              },
-              body: formBody
-            }
-          ) */
-          //console.log(ciao);
     },
     computed: {
       resultCount () {

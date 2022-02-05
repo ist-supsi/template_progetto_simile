@@ -21,7 +21,8 @@ const SidebarPlugin = {
     Vue.mixin({
       data () {
         return {
-          sidebarStore: SidebarStore
+          sidebarStore: SidebarStore,
+          dropdownVisible: false
         }
       }
     })

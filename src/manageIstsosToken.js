@@ -10,6 +10,7 @@ const TEMPERATURE_DEFAULTS = {
     title: {
         text: "My Title"
     },
+    subtitle: {style: {"color": "#666666", 'padding-bottom': '1.5em'}},
     xAxis: {
         categories: ['<span class="hc-cat-title">Temperature</span><br/>°C']
     },
@@ -53,6 +54,7 @@ const TEMPERATURE_SERIES_DEFAULTS = {
         zoomType: 'x',
         inverted: false
     },
+    height: '400px',
     time: {
         timezone: 'Europe/Rome'
     },
@@ -72,15 +74,14 @@ const TEMPERATURE_SERIES_DEFAULTS = {
         }
     },
     legend: {
-        enabled: false
+        enabled: true
     },
     plotOptions: {},
-
     series: [{
         type: 'line',
         name: 'Temperatura',
         data: [],
-        color: dataColor
+        // color: dataColor
     }]
 };
 
@@ -181,6 +182,14 @@ export default class IstsosIO {
           observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:O2D'
       })
   };
+  _fetchO2s(procedures, eventtime='last') {
+      var self = this;
+      return this.fetch({
+          procedures: procedures,
+          eventtime: eventtime,
+          observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:O2S'
+      })
+  };
   fetchLastTemetature(procedures) {
     var self = this;
     return this._fetchTemperature(procedures).then((response) => {
@@ -188,16 +197,17 @@ export default class IstsosIO {
         // console.log(dataArray);
         let info = {
             // order: order,
+            procedure: procedures,
             options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
         };
-
-        info.options.title.text = "Temperatura Superficiale";
-        info.options.subtitle = {
-            text: `Valore rilevato al: ${dataArray.values[0][0]}`
-        };
+        info.uom = dataArray.field[1].uom;
+        info.x = new Date(dataArray.values[0][0]);
+        // info.options.title.text = "Temperatura Superficiale";
+        // TODO: new Date(dataArray.values[0][0])) -> more human format!
+        info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
 
         info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-        info.options.series[0].data[0].y = dataArray.values[0][1];
+        info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
         info.value = dataArray.values[0][1];
         return info;
     });
@@ -220,12 +230,16 @@ export default class IstsosIO {
         };
 
         info.options.yAxis.title.text = `Temperatura (${dataArray.field[1].uom})`
+        info.uom = dataArray.field[1].uom;
         // info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
         // info.options.series[0].data[0].y = dataArray.values[0][1];
         // info.value = dataArray.values[0][1];
         // info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
-        info.options.series[0].data = dataArray.values.map(el => [(new Date(el[0])).getTime(), parseFloat(el[1].toPrecision(3))]);
-
+        const coeff = 1000 * 60 * 1;
+        info.options.series[0].data = dataArray.values.map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
+        info.options.series[0].name = procedures;
+        // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
+        
         return info;
     });
   };
@@ -236,16 +250,19 @@ export default class IstsosIO {
         // console.log(dataArray);
         let info = {
             // order: order,
+            procedure: procedures,
             options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
         };
 
-        info.options.title.text = "Concentrazione di ossigneno";
+        // info.options.title.text = "Concentrazione di ossigneno";
+        info.uom = dataArray.field[1].uom;
+        info.x = new Date(dataArray.values[0][0]);
         info.options.subtitle = {
             text: `Valore rilevato al: ${dataArray.values[0][0]}`
         };
 
         info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-        info.options.series[0].data[0].y = dataArray.values[0][1];
+        info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
         info.value = dataArray.values[0][1];
         return info;
     });
@@ -269,6 +286,29 @@ export default class IstsosIO {
         info.options.series[0].name = 'O2'
         info.options.series[0].data = dataArray.values.map(el => [(new Date(el[0])).getTime(), parseFloat(el[1].toPrecision(3))]);
 
+        return info;
+    });
+  };
+  fetchLastO2s(procedures) {
+    var self = this;
+    return this._fetchO2s(procedures).then((response) => {
+        const dataArray = response.data.data[0].result.DataArray;
+        // console.log(dataArray);
+        let info = {
+            // order: order,
+            options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
+        };
+
+        // info.options.title.text = "Concentrazione di ossigneno";
+        info.uom = dataArray.field[1].uom;
+        info.x = new Date(dataArray.values[0][0]);
+        info.options.subtitle = {
+            text: `Valore rilevato al: ${dataArray.values[0][0]}`
+        };
+
+        info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
+        info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(3));
+        info.value = dataArray.values[0][1];
         return info;
     });
   };

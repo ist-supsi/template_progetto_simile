@@ -1,291 +1,471 @@
 <template>
-  <div class="content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-12">
-          <card>
-            <div class="typo-line">
-              <p class="longtext"><span class="category"><b><i>LAGO CERESIO</i></b></span><br></p>
-                <table cellspacing="2" cellpadding="2" width="100%" border="0">
-                  <tbody>
-                    <tr>
-                      <td valign="center" width="65%">
-                        <div class="col-xl-4" style="max-width:100%;">
-                          <card>
-                            Lorem ipsum dolor sit amet. Ea dignissimos aspernatur et quaerat quia et quasi ipsa et voluptates debitis sit ipsum laudantium sed nobis accusantium quo quidem debitis.
-                            Non possimus dolorum qui dolores optio aut quasi dolorem. In adipisci voluptatem et consectetur sequi aut recusandae iste. Non nesciunt earum qui tempora maiores At dolorem sunt quo quia officiis.
-                            Sed facilis sunt in omnis dolor et consequatur autem aut ducimus nisi ea eius quibusdam et omnis quasi? Qui nobis mollitia eos perspiciatis asperiores et magni sequi? Non quos consequatur 33 sint facilis qui deserunt quae ex nemo illum et distinctio voluptas.<br><br>
-                            Ad libero obcaecati a atque quibusdam sed commodi iusto 33 maiores et minus debitis qui dolores dolor eum corrupti laudantium. Et exercitationem pariatur ut ipsa eveniet quo necessitatibus odit aut rerum harum et maiores odio et dolores amet ut inventore incidunt.
-                            Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
-                            vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
-                            Est consequuntur similique sed Quis corrupti sed porro obcaecati et quia magnam. Ut blanditiis explicabo vel omnis exercitationem qui facere blanditiis At dolorem quia. Non ducimus repellendus cum unde tenetur et similique quod qui pariatur possimus ea ipsum maxime.
-                            Et veniam laudantium eos tempore voluptatem qui deleniti nihil et consectetur dolore? Sit illum explicabo qui architecto nobis qui mollitia consequuntur qui odit galisum ut quae tenetur et ipsam magni est internos ducimus. Qui voluptatibus ipsa ut itaque dolore et
-                            corrupti magni hic sunt fugiat et facere harum ut libero accusantium ut molestiae tempora! Sed animi sunt non quasi explicabo sit voluptates porro qui harum omnis aut perspiciatis corrupti qui architecto consectetur in delectus iste.
-                          </card>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-thermometer text-warning"
+                                    data-toggle="tooltip"
+                                    title="Temperatura superficiale"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Temperatura</p>
+                                  <h4 class="card-title">{{lastTemp04}}</h4>
+                                  <p class="card-category">profondità: 40cm</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastTemp04Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastTemp04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.date}}
+                                    <i v-if="lastTemp04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.time}}
+                                </div>
+                            </stats-card>
                         </div>
-                      </td>
-                      <td valign="center" width="35%">
-                        <card style="height: 500px;">
-                        <l-map
-                            v-if="showMap"
-                            :zoom="currentZoom"
-                            :bounds="bounds"
-                            :options="mapOptions"
-                            @update:center="centerUpdate"
-                            @update:zoom="zoomUpdate"
-                            style="height: 100%; width: 100%;"
-                          >
-                            <l-tile-layer
-                              :url="url"
-                              :attribution="attribution"
-                            />
-                            <!--l-control-layers />
-                              <l-wms-tile-layer
-                                v-for="layer in layers"
-                                :key="layer.name"
-                                :base-url="wmsUrl"
-                                :layers="layer.layers"
-                                :visible="layer.visible"
-                                :name="layer.name"
-                                :transparent="layer.transparent"
-                                :format="layer.format"
-                                layer-type="overlay"
-                              /-->
-                          </l-map>
-                        </card>
-                        <!--div class="col-xl-4" style="max-width:100%;">
-                          <chart-card :chart-data="pieChart.data" chart-type="Pie">
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-thermometer text-warning"
+                                    data-toggle="tooltip"
+                                    title="Temperatura superficiale"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Temperatura</p>
+                                  <h4 class="card-title">{{lastTemp25}}</h4>
+                                  <p class="card-category">profondità: 2.5m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastTemp25Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastTemp25Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp25Time && lastTemp25Time.date}}
+                                    <i v-if="lastTemp25Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp25Time && lastTemp25Time.time}}
+
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-thermometer text-warning"
+                                    data-toggle="tooltip"
+                                    title="Temperatura superficiale"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Temperatura</p>
+                                  <h4 class="card-title">{{lastTemp50}}</h4>
+                                  <p class="card-category">profondità: 5m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastTemp50Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastTemp50Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp50Time && lastTemp50Time.date}}
+                                    <i v-if="lastTemp50Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp50Time && lastTemp50Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  
+                                  <i class="fas fa-thermometer-half text-warning"
+                                    data-toggle="tooltip"
+                                    title="Temperatura superficiale"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Temperatura</p>
+                                  <h4 class="card-title">{{lastTemp80}}</h4>
+                                  <p class="card-category">profondità: 8m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastTemp80Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastTemp80Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp80Time && lastTemp80Time.date}}
+                                    <i v-if="lastTemp80Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp80Time && lastTemp80Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-thermometer-half text-warning"
+                                    data-toggle="tooltip"
+                                    title="Temperatura superficiale"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Temperatura</p>
+                                  <h4 class="card-title">{{lastTemp125}}</h4>
+                                  <p class="card-category">profondità: 12.5m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastTemp125Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastTemp125Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp125Time && lastTemp125Time.date}}
+                                    <i v-if="lastTemp125Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp125Time && lastTemp125Time.time}}
+
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-thermometer-half text-warning"
+                                    data-toggle="tooltip"
+                                    title="Temperatura superficiale"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Temperatura</p>
+                                  <h4 class="card-title">{{lastTemp200}}</h4>
+                                  <p class="card-category">profondità: 20m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastTemp200Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastTemp200Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp200Time && lastTemp200Time.date}}
+                                    <i v-if="lastTemp200Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp200Time && lastTemp200Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-info"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2c04}}</h4>
+                                  <p class="card-category">profondità: 40cm</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2c04Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2c04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2c04Time && lastO2c04Time.date}}
+                                    <i v-if="lastO2c04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2c04Time && lastO2c04Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-info"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2c25}}</h4>
+                                  <p class="card-category">profondità: 2.5m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2c25Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2c25Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2c25Time && lastO2c25Time.date}}
+                                    <i v-if="lastO2c25Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2c25Time && lastO2c25Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-info"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2c50}}</h4>
+                                  <p class="card-category">profondità: 5m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2c50Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2c50Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2c50Time && lastO2c50Time.date}}
+                                    <i v-if="lastO2c50Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2c50Time && lastO2c50Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-info"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2c80}}</h4>
+                                  <p class="card-category">profondità: 8m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2c80Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2c80Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2c80Time && lastO2c80Time.date}}
+                                    <i v-if="lastO2c80Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2c80Time && lastO2c80Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-info"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2c125}}</h4>
+                                  <p class="card-category">profondità: 12.5m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2c125Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2c125Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2c125Time && lastO2c125Time.date}}
+                                    <i v-if="lastO2c125Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2c125Time && lastO2c125Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-info"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2c200}}</h4>
+                                  <p class="card-category">profondità: 20m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2c200Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2c200Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2c200Time && lastO2c200Time.date}}
+                                    <i v-if="lastO2c200Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2c200Time && lastO2c200Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-primary"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2s04}}</h4>
+                                  <p class="card-category">profondità: 40cm</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2s04Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2s04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.date}}
+                                    <i v-if="lastO2s04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-primary"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2s25}}</h4>
+                                  <p class="card-category">profondità: 2.5m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2s25Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2s25Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s25Time && lastO2s25Time.date}}
+                                    <i v-if="lastO2s25Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s25Time && lastO2s25Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-primary"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2s50}}</h4>
+                                  <p class="card-category">profondità: 5m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2s50Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2s50Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s50Time && lastO2s50Time.date}}
+                                    <i v-if="lastO2s50Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s50Time && lastO2s50Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-primary"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2s80}}</h4>
+                                  <p class="card-category">profondità: 8m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2s80Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2s80Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s80Time && lastO2s80Time.date}}
+                                    <i v-if="lastO2s80Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s80Time && lastO2s80Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-primary"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2s125}}</h4>
+                                  <p class="card-category">profondità: 12.5m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2s125Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2s125Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s125Time && lastO2s125Time.date}}
+                                    <i v-if="lastO2s125Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s125Time && lastO2s125Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fas fa-flask text-primary"
+                                    data-toggle="tooltip"
+                                    title="Ossigeno disciolto"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2s200}}</h4>
+                                  <p class="card-category">profondità: 20m</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="lastO2s200Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2s200Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s200Time && lastO2s200Time.date}}
+                                    <i v-if="lastO2s200Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s200Time && lastO2s200Time.time}}
+                                </div>
+                            </stats-card>
+                        </div>
+                    </div>
+                    <card>
+                        <card v-if="showDescription">
                             <template slot="header">
-                              <h4 class="card-title">Email Statistics</h4>
-                              <p class="card-category">Last Campaign Performance</p>
+                              <h5 class="title">LAGO CERESIO</h5>
+                              <p class="category">Descrizione</p>
                             </template>
-                            <template slot="footer">
-                              <div class="legend">
-                                <i class="fa fa-circle text-info"></i> Open
-                                <i class="fa fa-circle text-danger"></i> Bounce
-                                <i class="fa fa-circle text-warning"></i> Unsubscribe
-                              </div>
-                              <hr>
-                              <div class="stats">
-                                <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
-                              </div>
-                            </template>
-                          </chart-card>
-                        </div-->
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              <!--/p-->
-            </div>
-          </card>
-        </div>
-      </div>
-      <!--div class="row">
-        <div class="col-xl-3 col-md-6">
-          <stats-card>
-            <div slot="header" class="icon-warning">
-              <i class="nc-icon nc-chart text-warning"></i>
-            </div>
-            <div slot="content">
-              <p class="card-category">Capacity</p>
-              <h4 class="card-title">105GB</h4>
-            </div>
-            <div slot="footer">
-              <i class="fa fa-refresh"></i>Updated now
-            </div>
-          </stats-card>
-        </div>
+                            <div class="row">
+                                <div class="col-7">
+                                    Lorem ipsum dolor sit amet. Ea dignissimos aspernatur et quaerat quia et quasi ipsa et voluptates debitis sit ipsum laudantium sed nobis accusantium quo quidem debitis.
+                                    Non possimus dolorum qui dolores optio aut quasi dolorem. In adipisci voluptatem et consectetur sequi aut recusandae iste. Non nesciunt earum qui tempora maiores At dolorem sunt quo quia officiis.
+                                    Sed facilis sunt in omnis dolor et consequatur autem aut ducimus nisi ea eius quibusdam et omnis quasi? Qui nobis mollitia eos perspiciatis asperiores et magni sequi? Non quos consequatur 33 sint facilis qui deserunt quae ex nemo illum et distinctio voluptas.<br><br>
+                                    Ad libero obcaecati a atque quibusdam sed commodi iusto 33 maiores et minus debitis qui dolores dolor eum corrupti laudantium. Et exercitationem pariatur ut ipsa eveniet quo necessitatibus odit aut rerum harum et maiores odio et dolores amet ut inventore incidunt.
+                                    Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
+                                    vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
+                                </div>
+                                <div class="col-5">
+                                    <card style="height: 500px;">
+                                    <l-map
+                                        v-if="showMap"
+                                        :zoom="currentZoom"
+                                        :bounds="bounds"
+                                        :options="mapOptions"
+                                        @update:center="centerUpdate"
+                                        @update:zoom="zoomUpdate"
+                                        style="height: 100%; width: 100%;"
+                                      >
+                                        <l-tile-layer
+                                          :url="url"
+                                          :attribution="attribution"
+                                        />
+                                        <!--l-control-layers />
+                                          <l-wms-tile-layer
+                                            v-for="layer in layers"
+                                            :key="layer.name"
+                                            :base-url="wmsUrl"
+                                            :layers="layer.layers"
+                                            :visible="layer.visible"
+                                            :name="layer.name"
+                                            :transparent="layer.transparent"
+                                            :format="layer.format"
+                                            layer-type="overlay"
+                                          /-->
+                                      </l-map>
+                                    </card>
+                                </div>
+                            </div>
+                        </card>
+                        <card>
+                            <!-- <div slot="header" class="icon-warning"></div> -->
+                            <div v-if="Object.keys(series_temperature_data).length>0" class="row">
+                                <div class="col-md-12">
+                                    <highcharts :options="series_temperature_data"></highcharts>
+                                </div>
+                            </div>
 
-        <div class="col-xl-3 col-md-6">
-          <stats-card>
-            <div slot="header" class="icon-success">
-              <i class="nc-icon nc-light-3 text-success"></i>
-            </div>
-            <div slot="content">
-              <p class="card-category">Revenue</p>
-              <h4 class="card-title">$1,345</h4>
-            </div>
-            <div slot="footer">
-              <i class="fa fa-calendar-o"></i>Last day
-            </div>
-          </stats-card>
-        </div>
-
-        <div class="col-xl-3 col-md-6">
-          <stats-card>
-            <div slot="header" class="icon-danger">
-              <i class="nc-icon nc-vector text-danger"></i>
-            </div>
-            <div slot="content">
-              <p class="card-category">Errors</p>
-              <h4 class="card-title">23</h4>
-            </div>
-            <div slot="footer">
-              <i class="fa fa-clock-o"></i>Last day
-            </div>
-          </stats-card>
-        </div>
-
-        <div class="col-xl-3 col-md-6">
-          <stats-card>
-            <div slot="header" class="icon-info">
-              <i class="nc-icon nc-favourite-28 text-primary"></i>
-            </div>
-            <div slot="content">
-              <p class="card-category">Followers</p>
-              <h4 class="card-title">+45</h4>
-            </div>
-            <div slot="footer">
-              <i class="fa fa-refresh"></i>Updated now
-            </div>
-          </stats-card>
-        </div>
-
-      </div-->
-      <!--div class="row" style="height: 600px; margin-bottom: 30px;">
-        <div class="col-md-12">
-          <l-map
-            v-if="showMap"
-            :zoom="zoom"
-            :bounds="bounds"
-            :options="mapOptions"
-            @update:center="centerUpdate"
-            @update:zoom="zoomUpdate"
-            style="height: 100%; width: 100%;"
-          >
-            <l-tile-layer
-              :url="url"
-              :attribution="attribution"
-            />
-            <l-control-layers />
-              <l-wms-tile-layer
-                v-for="layer in layers"
-                :key="layer.name"
-                :base-url="wmsUrl"
-                :layers="layer.layers"
-                :visible="layer.visible"
-                :name="layer.name"
-                :transparent="layer.transparent"
-                :format="layer.format"
-                layer-type="overlay"
-              />
-          </l-map>
-        </div>
-      </div-->
-
-
-
-      <div class="row">
-        <div class="col-12">
-          <card>
-            <div class="typo-line">
-              <p class="longtext"><span class="category">
-                  <b><i>Temperatura Superficiale</i></b>
-              </span><br></p>
-              <div>
-                <card>
-                    La misura delle temperatura dell'acqua permette di seguire il 
-                    ciclo termico del lago nel corso dell'anno. Dalla temperatura 
-                    dipendono processi importanti come la stratificazione/circolazione 
-                    delle acque, la quantità di ossigeno in coluaione, lo sviluppo 
-                    delle fioriture algali. Inoltre il monitoraggio a lungo termine 
-                    delle temperature è utile per valutare la risposta del lago ai 
-                    cambiamenti climatici.
-
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Profondità del sensore</label>
-                        <select v-model="selected_temperature"
-                            @change="loadNewTemperatures()"
-                            class="form-control" id="exampleFormControlSelect1">
-                            <option value='TEMP_0_4'>40 cm</option>
-                            <option value='TEMP_2_5'>2.5 m</option>
-                            <option value='TEMP_5_0'>5 m</option>
-                            <option value='TEMP_8_0'>8 m</option>
-                            <option value='TEMP_12_5'>12.5 m</option>
-                            <option value='TEMP_20_0'>20 m</option>
-                        </select>
-                    </div>
-                  
-                  <div class="row">
-                    <div class="col-md-12">
-                        <highcharts :options="last_temperature_data" style="height: 115px"></highcharts>
-                    </div>
-                    <div class="col-md-12">
-                        <highcharts :options="series_temperature_data"></highcharts>
-                    </div>
-                  </div>
-                </card>
-                
-              </div>
-
-            </div>
-          </card>
-          <card>
-            <div class="typo-line">
-              <p class="longtext"><span class="category">
-                  <b><i>Ossigeno disciolto</i></b>
-              </span><br></p>
-              <div>
-                <card>
-                    Ossigeno disciolto alla profondità del sensore/i, espresso
-                    come concentrazione.
+                            <div slot="footer">
+                                <i v-if="Object.keys(series_temperature_data).length==0" class="fa fa-refresh fa-spin"></i>
+                            </div>
+                        </card>
+                        <card v-if="showTemperatureAnalysis">
+                            
+                        </card>
+                    </card>
                     
-                    La presenza di ossigeno nelle acque deriva dallo scambio con
-                    l'atmosfera e dai processi biologici operati dagli organismi
-                    acquatici (fotosintesi e respirazione).
-                    Valori elevati si trovano solitamente nelle acque superficiali
-                    nel periodo estivo. Bassi valori (ipossia) o totale assenza
-                    di ossigeno (anossia) possono caratterizzare le acque profonde
-                    dei laghi eutrofi, in cui la sostanza organica prodotta negli
-                    strati superficiali sedimenta e viene decomposta dagli organismi
-                    aerobi che sottraggono ossigeno all’acqua.
-
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Profondità del sensore</label>
-                        <select v-model="selected_o2c"
-                            @change="loadNewO2c()"
-                            class="form-control" id="exampleFormControlSelect1">
-                            <option value='O2C_0_4'>40 cm</option>
-                            <option value='O2C_2_5'>2.5 m</option>
-                            <option value='O2C_5_0'>5 m</option>
-                            <option value='O2C_8_0'>8 m</option>
-                            <option value='O2C_12_5'>12.5 m</option>
-                            <option value='O2C_20_0'>20 m</option>
-                        </select>
-                    </div>
-                  
-                  <div class="row">
-                    <div class="col-md-12">
-                        <highcharts :options="last_o2c_data" style="height: 115px"></highcharts>
-                    </div>
-                    <div class="col-md-12">
-                        <highcharts :options="series_o2c_data"></highcharts>
-                    </div>
-                  </div>
-                </card>
-                
-              </div>
-
+                </div>
             </div>
-          </card>
-        </div>
-      </div>
 
+
+
+
+
+
+        </div>
     </div>
-  </div>
 </template>
 <script>
+    import {Chart} from 'highcharts-vue';
+    import Highcharts from 'highcharts';
+    import loadBullet from 'highcharts/modules/bullet.js';
+
     import ChartCard from 'src/components/Cards/ChartCard.vue'
+    import HighchartCard from 'src/components/Cards/HighchartCard.vue'
     import StatsCard from 'src/components/Cards/StatsCard.vue'
     import LTable from 'src/components/Table.vue'
     import { latLngBounds, latLng } from "leaflet";
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
     import axios from 'axios';
 
-    import {Chart} from 'highcharts-vue';
-    import Highcharts from 'highcharts';
-    import loadBullet from 'highcharts/modules/bullet.js';
     import IstsosIO from '../manageIstsosToken.js';
 
     loadBullet(Highcharts);
@@ -345,10 +525,48 @@
             LTileLayer,
             "l-wms-tile-layer": LWMSTileLayer,
             LControlLayers,
-            highcharts: Chart
+            highcharts: Chart,
+            HighchartCard
         },
         data () {
             return {
+                showDescription: true,
+                lastTemp04: '',
+                lastTemp04Time: null,
+                lastTemp25: '',
+                lastTemp25Time: null,
+                lastTemp50: '',
+                lastTemp50Time: null,
+                lastTemp80: '',
+                lastTemp80Time: null,
+                lastTemp125: '',
+                lastTemp125Time: null,
+                lastTemp200: '',
+                lastTemp200Time: null,
+                lastO2c04: '',
+                lastO2c04Time: null,
+                lastO2c25: '',
+                lastO2c25Time: null,
+                lastO2c50: '',
+                lastO2c50Time: null,
+                lastO2c80: '',
+                lastO2c80Time: null,
+                lastO2c125: '',
+                lastO2c125Time: null,
+                lastO2c200: '',
+                lastO2c200Time: null,
+                lastO2s04: '',
+                lastO2s04Time: null,
+                lastO2s25: '',
+                lastO2s25Time: null,
+                lastO2s50: '',
+                lastO2s50Time: null,
+                lastO2s80: '',
+                lastO2s80Time: null,
+                lastO2s125: '',
+                lastO2s125Time: null,
+                lastO2s200Time: null,
+                lastO2s200: '',
                 selected_temperature: 'TEMP_0_4',
                 selected_o2c: 'O2C_0_4',
                 last_temperature_data: {},
@@ -366,46 +584,46 @@
                 //     //     procedure: 'O2S_0_4'
                 //     // },
                 // ],
-                tempChartOptions: {
-                    chart: {
-                        marginTop: 40
-                    },
-                    title: {
-                        text: '2017 YTD'
-                    },
-                    xAxis: {
-                        categories: ['<span class="hc-cat-title">Revenue</span><br/>U.S. $ (1,000s)']
-                    },
-                    yAxis: {
-                        plotBands: [{
-                            from: -10,
-                            to: 4,
-                            color: 'cyan'
-                        }, {
-                            from: 4,
-                            to: 8,
-                            color: 'blue'
-                        }, {
-                            from: 8,
-                            to: 16,
-                            color: 'orange'
-                        }, {
-                            from: 16,
-                            to: 30,
-                            color: 'red'
-                        }],
-                        title: null
-                    },
-                    series: [{
-                        data: [{
-                            y: 5.5,
-                            target: 12
-                        }]
-                    }],
-                    tooltip: {
-                        pointFormat: '<b>{point.y}</b> (with target at {point.target})'
-                    }
-                },
+                // tempChartOptions: {
+                //     chart: {
+                //         marginTop: 40
+                //     },
+                //     title: {
+                //         text: '2017 YTD'
+                //     },
+                //     xAxis: {
+                //         categories: ['<span class="hc-cat-title">Revenue</span><br/>U.S. $ (1,000s)']
+                //     },
+                //     yAxis: {
+                //         plotBands: [{
+                //             from: -10,
+                //             to: 4,
+                //             color: 'cyan'
+                //         }, {
+                //             from: 4,
+                //             to: 8,
+                //             color: 'blue'
+                //         }, {
+                //             from: 8,
+                //             to: 16,
+                //             color: 'orange'
+                //         }, {
+                //             from: 16,
+                //             to: 30,
+                //             color: 'red'
+                //         }],
+                //         title: null
+                //     },
+                //     series: [{
+                //         data: [{
+                //             y: 5.5,
+                //             target: 12
+                //         }]
+                //     }],
+                //     tooltip: {
+                //         pointFormat: '<b>{point.y}</b> (with target at {point.target})'
+                //     }
+                // },
                 editTooltip: 'Edit Task',
                 deleteTooltip: 'Remove',
                 zoom: 13,
@@ -551,22 +769,212 @@
                 //currentCenter: latLng(47.41322, -1.219482),
                 showParagraph: false,
                 mapOptions: {
-                  zoomSnap: 0.5
+                  zoomSnap: 0.5,
+                  scrollWheelZoom: false
                 },
                 showMap: true,
             }
         },
+        watch: {
+          series_temperature_data: {
+             handler(val){
+               // do stuff
+             },
+             deep: true
+          }
+      },
         mounted() {
             var self = this;
-            self.fetchTemperatures('TEMP_0_4');
-            self.fetchO2c('O2C_0_4')
+            this.populateCockpit();
+            // this.fetchO2c('O2C_0_4');
+            this.$root.dropdownVisible = false;
         },
     methods: {
+        populateCockpit () {
+            var self = this;
+            istsos.fetchLastTemetature('TEMP_0_4').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastTemp04 = `${result.options.series[0].data[0].y}${result.uom}`
+                self.lastTemp04Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+
+            });
+            istsos.fetchLastTemetature('TEMP_2_5').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastTemp25 = `${result.options.series[0].data[0].y}${result.uom}`
+                self.lastTemp25Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
+            istsos.fetchLastTemetature('TEMP_5_0').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastTemp50 = `${result.options.series[0].data[0].y}${result.uom}`
+                self.lastTemp50Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
+            istsos.fetchLastTemetature('TEMP_8_0').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastTemp80 = `${result.options.series[0].data[0].y}${result.uom}`
+                self.lastTemp80Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
+            istsos.fetchLastTemetature('TEMP_12_5').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastTemp125 = `${result.options.series[0].data[0].y}${result.uom}`
+                self.lastTemp125Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
+            istsos.fetchLastTemetature('TEMP_20_0').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastTemp200 = `${result.options.series[0].data[0].y}${result.uom}`
+                self.lastTemp200Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
+            istsos.fetchLastO2c('O2C_0_4').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastO2c04 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                self.lastO2c04Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
+            istsos.fetchLastO2c('O2C_2_5').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastO2c25 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                self.lastO2c25Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
+            istsos.fetchLastO2c('O2C_5_0').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastO2c50 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                self.lastO2c50Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
+            istsos.fetchLastO2c('O2C_8_0').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastO2c80 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                self.lastO2c80Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
+            istsos.fetchLastO2c('O2C_12_5').then((result)=>{
+                 // self.last_temperature_data = result.options;
+                 self.lastO2c125 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                 self.lastO2c125Time = {
+                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+             });
+             istsos.fetchLastO2c('O2C_20_0').then((result)=>{
+                 // self.last_temperature_data = result.options;
+                 self.lastO2c200 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                 self.lastO2c200Time = {
+                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+             });
+             istsos.fetchLastO2s('O2S_0_4').then((result)=>{
+                 // self.last_temperature_data = result.options;
+                 self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                 self.lastO2s04Time = {
+                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+             });
+             istsos.fetchLastO2s('O2S_2_5').then((result)=>{
+                 // self.last_temperature_data = result.options;
+                 self.lastO2s25 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                 self.lastO2s25Time = {
+                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+             });
+             istsos.fetchLastO2s('O2S_5_0').then((result)=>{
+                 // self.last_temperature_data = result.options;
+                 self.lastO2s50 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                 self.lastO2s50Time = {
+                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+             });
+             istsos.fetchLastO2s('O2S_8_0').then((result)=>{
+                 // self.last_temperature_data = result.options;
+                 self.lastO2s80 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                 self.lastO2s80Time = {
+                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+             });
+             istsos.fetchLastO2s('O2S_12_5').then((result)=>{
+                  // self.last_temperature_data = result.options;
+                  self.lastO2s125 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                  self.lastO2s125Time = {
+                      date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+              });
+              istsos.fetchLastO2s('O2S_20_0').then((result)=>{
+                  // self.last_temperature_data = result.options;
+                  self.lastO2s200 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                  self.lastO2s200Time = {
+                      date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+              });
+              self.appendTempSeries();
+        },
+        appendTempSeries () {
+            var self = this;
+            const colors = ['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce',
+        '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'];
+
+            const visibleProcedure = 'TEMP_0_4'
+            const procedures = [
+                visibleProcedure,
+                'TEMP_2_5',
+                'TEMP_5_0',
+                'TEMP_8_0',
+                'TEMP_12_5',
+                'TEMP_20_0'
+            ];
+            let i=0;
+            for (const procedure of procedures) {
+                istsos.fetchTemperatureSeries(procedure).then((result)=>{
+                    if ( procedure!=visibleProcedure ) {
+                        result.options.series[0].visible = false;
+                    };
+                    
+                    result.options.series[0].color = colors[i];
+                    i = i+1;
+                    if ( !self.series_temperature_data.series ) {
+                        self.series_temperature_data = result.options;
+                    } else {
+                        self.series_temperature_data.series.push(result.options.series[0]);
+                        self.series_temperature_data.series.sort((el1, el2) => { el1.name<el2.name } );
+                    };
+                    
+                });
+            }
+        },
         fetchTemperatures(procedure) {
             var self = this;
-            istsos.fetchLastTemetature(procedure).then((result)=>{
-                self.last_temperature_data = result.options;
-            });
+
             istsos.fetchTemperatureSeries(procedure).then((result)=>{
                 self.series_temperature_data = result.options;
             });
