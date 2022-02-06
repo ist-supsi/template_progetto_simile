@@ -99,21 +99,19 @@ axios.interceptors.request.use(function (config) {
 
 
 export default class IstsosIO {
-  constructor(formname, formkey, proxyUrl, services) {
-    // this.proxyPayload = {'_formname': formname, '_formkey': formkey};
+  constructor(proxyUrl, services) {
     this.services = services;
-    this.formname = formname;
-    this.formkey = formkey;
+    // this.formname = formname;
+    // this.formkey = formkey;
     this.proxy = proxyUrl;
-    // this.token = null;
     this._tokenInfo = null;
     this._expiry = null;
   };
   _updateToken() {
     var self = this;
     var bodyFormData = new FormData();
-    bodyFormData.append('_formname', this.formname);
-    bodyFormData.append('_formkey', this.formkey);
+    // bodyFormData.append('_formname', this.formname);
+    // bodyFormData.append('_formkey', this.formkey);
     return axios.post(this.proxy, bodyFormData, {
         headers: {"Content-Type": "multipart/form-data" }
     }).then(response => {

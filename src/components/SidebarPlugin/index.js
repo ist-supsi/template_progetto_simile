@@ -1,6 +1,8 @@
 import Sidebar from './SideBar.vue'
 import SidebarLink from './SidebarLink.vue'
 
+import IstsosIO from '../../manageIstsosToken.js';
+
 const SidebarStore = {
   showSidebar: false,
   sidebarLinks: [
@@ -15,6 +17,9 @@ const SidebarStore = {
   }
 }
 
+const proxyUrl = window.location.protocol + '//' + window.location.hostname + ':8000/istsos/index';
+const proxyServices = 'ceresiohourly'
+
 const SidebarPlugin = {
 
   install (Vue) {
@@ -22,7 +27,8 @@ const SidebarPlugin = {
       data () {
         return {
           sidebarStore: SidebarStore,
-          dropdownVisible: false
+          dropdownVisible: false,
+          istsos: new IstsosIO(proxyUrl, proxyServices),
         }
       }
     })

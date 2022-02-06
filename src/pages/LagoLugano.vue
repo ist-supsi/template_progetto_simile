@@ -437,9 +437,9 @@
                                 <i v-if="Object.keys(series_temperature_data).length==0" class="fa fa-refresh fa-spin"></i>
                             </div>
                         </card>
-                        <card v-if="showTemperatureAnalysis">
+                        <!-- <card v-if="showTemperatureAnalysis">
                             
-                        </card>
+                        </card> -->
                     </card>
                     
                 </div>
@@ -466,22 +466,22 @@
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
     import axios from 'axios';
 
-    import IstsosIO from '../manageIstsosToken.js';
+    // import IstsosIO from '../manageIstsosToken.js';
 
     loadBullet(Highcharts);
 
-    function getCookieValue(key) {
-        return document.cookie
-        .split('; ')
-        .find((row) => row.startsWith(key+'='))
-        .split('=')[1];
-    };
-
-    const formname = getCookieValue('form-name');
-    const formkey = getCookieValue('form-key');
-    const root = getCookieValue('app-name');
-    const istsosServices = getCookieValue('istsos-services');
-    let istsos = new IstsosIO(formname, formkey, `/${root}/istsos`, istsosServices);
+    // function getCookieValue(key) {
+    //     return document.cookie
+    //     .split('; ')
+    //     .find((row) => row.startsWith(key+'='))
+    //     .split('=')[1];
+    // };
+    // 
+    // const formname = getCookieValue('form-name');
+    // const formkey = getCookieValue('form-key');
+    // const root = getCookieValue('app-name');
+    // const istsosServices = getCookieValue('istsos-services');
+    // let istsos = new IstsosIO(this.$root.proxyUrl, this.$root.proxyServices);
 
     Highcharts.setOptions({
       chart: {
@@ -792,7 +792,7 @@
     methods: {
         populateCockpit () {
             var self = this;
-            istsos.fetchLastTemetature('TEMP_0_4').then((result)=>{
+            this.istsos.fetchLastTemetature('TEMP_0_4').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastTemp04 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp04Time = {
@@ -801,7 +801,7 @@
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
 
             });
-            istsos.fetchLastTemetature('TEMP_2_5').then((result)=>{
+            this.istsos.fetchLastTemetature('TEMP_2_5').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastTemp25 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp25Time = {
@@ -809,7 +809,7 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            istsos.fetchLastTemetature('TEMP_5_0').then((result)=>{
+            this.istsos.fetchLastTemetature('TEMP_5_0').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastTemp50 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp50Time = {
@@ -817,7 +817,7 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            istsos.fetchLastTemetature('TEMP_8_0').then((result)=>{
+            this.istsos.fetchLastTemetature('TEMP_8_0').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastTemp80 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp80Time = {
@@ -825,7 +825,7 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            istsos.fetchLastTemetature('TEMP_12_5').then((result)=>{
+            this.istsos.fetchLastTemetature('TEMP_12_5').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastTemp125 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp125Time = {
@@ -833,7 +833,7 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            istsos.fetchLastTemetature('TEMP_20_0').then((result)=>{
+            this.istsos.fetchLastTemetature('TEMP_20_0').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastTemp200 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp200Time = {
@@ -841,7 +841,7 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            istsos.fetchLastO2c('O2C_0_4').then((result)=>{
+            this.istsos.fetchLastO2c('O2C_0_4').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastO2c04 = `${result.options.series[0].data[0].y} ${result.uom}`;
                 self.lastO2c04Time = {
@@ -849,7 +849,7 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            istsos.fetchLastO2c('O2C_2_5').then((result)=>{
+            this.istsos.fetchLastO2c('O2C_2_5').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastO2c25 = `${result.options.series[0].data[0].y} ${result.uom}`;
                 self.lastO2c25Time = {
@@ -857,7 +857,7 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            istsos.fetchLastO2c('O2C_5_0').then((result)=>{
+            this.istsos.fetchLastO2c('O2C_5_0').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastO2c50 = `${result.options.series[0].data[0].y} ${result.uom}`;
                 self.lastO2c50Time = {
@@ -865,7 +865,7 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            istsos.fetchLastO2c('O2C_8_0').then((result)=>{
+            this.istsos.fetchLastO2c('O2C_8_0').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastO2c80 = `${result.options.series[0].data[0].y} ${result.uom}`;
                 self.lastO2c80Time = {
@@ -873,7 +873,7 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            istsos.fetchLastO2c('O2C_12_5').then((result)=>{
+            this.istsos.fetchLastO2c('O2C_12_5').then((result)=>{
                  // self.last_temperature_data = result.options;
                  self.lastO2c125 = `${result.options.series[0].data[0].y} ${result.uom}`;
                  self.lastO2c125Time = {
@@ -881,7 +881,7 @@
                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
              });
-             istsos.fetchLastO2c('O2C_20_0').then((result)=>{
+             this.istsos.fetchLastO2c('O2C_20_0').then((result)=>{
                  // self.last_temperature_data = result.options;
                  self.lastO2c200 = `${result.options.series[0].data[0].y} ${result.uom}`;
                  self.lastO2c200Time = {
@@ -889,7 +889,7 @@
                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
              });
-             istsos.fetchLastO2s('O2S_0_4').then((result)=>{
+             this.istsos.fetchLastO2s('O2S_0_4').then((result)=>{
                  // self.last_temperature_data = result.options;
                  self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
                  self.lastO2s04Time = {
@@ -897,7 +897,7 @@
                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
              });
-             istsos.fetchLastO2s('O2S_2_5').then((result)=>{
+             this.istsos.fetchLastO2s('O2S_2_5').then((result)=>{
                  // self.last_temperature_data = result.options;
                  self.lastO2s25 = `${result.options.series[0].data[0].y} ${result.uom}`;
                  self.lastO2s25Time = {
@@ -905,7 +905,7 @@
                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
              });
-             istsos.fetchLastO2s('O2S_5_0').then((result)=>{
+             this.istsos.fetchLastO2s('O2S_5_0').then((result)=>{
                  // self.last_temperature_data = result.options;
                  self.lastO2s50 = `${result.options.series[0].data[0].y} ${result.uom}`;
                  self.lastO2s50Time = {
@@ -913,7 +913,7 @@
                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
              });
-             istsos.fetchLastO2s('O2S_8_0').then((result)=>{
+             this.istsos.fetchLastO2s('O2S_8_0').then((result)=>{
                  // self.last_temperature_data = result.options;
                  self.lastO2s80 = `${result.options.series[0].data[0].y} ${result.uom}`;
                  self.lastO2s80Time = {
@@ -921,7 +921,7 @@
                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
              });
-             istsos.fetchLastO2s('O2S_12_5').then((result)=>{
+             this.istsos.fetchLastO2s('O2S_12_5').then((result)=>{
                   // self.last_temperature_data = result.options;
                   self.lastO2s125 = `${result.options.series[0].data[0].y} ${result.uom}`;
                   self.lastO2s125Time = {
@@ -929,7 +929,7 @@
                       time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                   }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
               });
-              istsos.fetchLastO2s('O2S_20_0').then((result)=>{
+              this.istsos.fetchLastO2s('O2S_20_0').then((result)=>{
                   // self.last_temperature_data = result.options;
                   self.lastO2s200 = `${result.options.series[0].data[0].y} ${result.uom}`;
                   self.lastO2s200Time = {
@@ -955,7 +955,7 @@
             ];
             let i=0;
             for (const procedure of procedures) {
-                istsos.fetchTemperatureSeries(procedure).then((result)=>{
+                this.istsos.fetchTemperatureSeries(procedure).then((result)=>{
                     if ( procedure!=visibleProcedure ) {
                         result.options.series[0].visible = false;
                     };
@@ -975,7 +975,7 @@
         fetchTemperatures(procedure) {
             var self = this;
 
-            istsos.fetchTemperatureSeries(procedure).then((result)=>{
+            this.istsos.fetchTemperatureSeries(procedure).then((result)=>{
                 self.series_temperature_data = result.options;
             });
         },
@@ -984,10 +984,10 @@
         },
         fetchO2c(procedure) {
             var self = this;
-            istsos.fetchLastO2c(procedure).then((result)=>{
+            this.istsos.fetchLastO2c(procedure).then((result)=>{
                 self.last_o2c_data = result.options;
             });
-            istsos.fetchO2cSeries(procedure).then((result)=>{
+            this.istsos.fetchO2cSeries(procedure).then((result)=>{
                 self.series_o2c_data = result.options;
             });
         },
