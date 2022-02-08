@@ -122,6 +122,21 @@ export default class IstsosIO {
   _getToken() {
     return this._tokenInfo.access_token;
   };
+  _call(params) {
+    var self = this;
+    const path = Object.entries({...(params||{})}).map((pair)=>pair.join('/')).join('/');
+    const url = new URL(`/istsos/wa/istsos/${path}`, 'https://istsos.ddns.net').toString();
+    var config = {
+        method: 'get',
+        url: url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${self._getToken()}`
+        }
+    };
+    
+    return axios(config);
+  };
   _fetch(params) {
     var self = this;
     let DEFAULT_PARAMS = {
@@ -132,17 +147,18 @@ export default class IstsosIO {
       observedproperties: undefined,
       eventtime: 'last'
     };
-    const path = Object.entries({...DEFAULT_PARAMS, ...(params||{})}).map((pair)=>pair.join('/')).join('/');
-    const url = new URL(`/istsos/wa/istsos/${path}`, 'https://istsos.ddns.net').toString();
-    var config = {
-        method: 'get',
-        url: url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${self._getToken()}`
-        }
-    };
-    return axios(config);
+    return this._call({...DEFAULT_PARAMS, ...(params||{})});
+    // const path = Object.entries({...DEFAULT_PARAMS, ...(params||{})}).map((pair)=>pair.join('/')).join('/');
+    // const url = new URL(`/istsos/wa/istsos/${path}`, 'https://istsos.ddns.net').toString();
+    // var config = {
+    //     method: 'get',
+    //     url: url,
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer ${self._getToken()}`
+    //     }
+    // };
+    // return axios(config);
   };
   fetch(params) {
     var self = this;
@@ -211,7 +227,7 @@ export default class IstsosIO {
     });
   };
   fetchTemperatureSeries(procedures, begin, end) {
-    /** 
+    /**
     procedure @string : Procedure name
     begin       @Date : Start date (Default one year ago);
     end         @Date : End date (Default now)
@@ -237,7 +253,7 @@ export default class IstsosIO {
         info.options.series[0].data = dataArray.values.map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
         info.options.series[0].name = procedures;
         // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
-        
+
         return info;
     });
   };

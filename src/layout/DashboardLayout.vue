@@ -6,23 +6,22 @@
         <i class="nc-icon nc-grid-45"></i>
         <p>Dashboard</p>
       </sidebar-link>
-      <!--sidebar-link to="/gter">
+      <!-- <sidebar-link to="/gter">
         <i class="nc-icon nc-circle-09"></i>
         <p>WEB APP</p>
-      </sidebar-link-->
-      <li class="router-link-exact-active nav-item">
+      </sidebar-link> -->
+      <!-- <li class="router-link-exact-active nav-item">
         <a href="https://simile.como.polimi.it/SimileWebAdministrator2/" class="nav-link" target="_blank">
           <i class="nc-icon nc-mobile"></i>
           <p>WEB APP SIMILE</p>
         </a>
-      </li>
-      <li class="router-link-exact-active nav-item">
+      </li> -->
+      <!-- <li class="router-link-exact-active nav-item">
         <a href="https://simile.como.polimi.it/SimileWebAdministrator2/" class="nav-link" target="_blank">
-          <!--i class="fa fa-map"></i-->
           <i class="nc-icon nc-map-big"></i>
           <p>WEBGIS DATI SAT</p>
         </a>
-      </li>
+      </li> -->
       <!--sidebar-link to="/admin/user">
         <i class="nc-icon nc-circle-09"></i>
         <p>User Profile</p>
