@@ -106,6 +106,7 @@ export default class IstsosIO {
     this.proxy = proxyUrl;
     this._tokenInfo = null;
     this._expiry = null;
+    this._wait_for_me = null;
   };
   _updateToken() {
     var self = this;
@@ -117,68 +118,56 @@ export default class IstsosIO {
     }).then(response => {
       self._tokenInfo = response.data;
       self._expiry = Date.now() + response.data["expires_in"] * 1000
+      return self._tokenInfo.access_token;
     });
   };
   _getToken() {
-    return this._tokenInfo.access_token;
+      var self = this;
+      if ( this._wait_for_me===null ) {
+          // Il token non è ancora stato recuperato
+          this._wait_for_me = this._updateToken();
+          return this._wait_for_me;
+      } else if ( this._expiry===null ) {
+          // Token in fase di recupero
+          // this._wait_for_me = this._updateToken();
+          return this._wait_for_me;
+      } else if ( Date.now()>=this._expiry ) {
+          // Token scaduto forzo l'aggiornamento
+          this._expiry=null;
+          this._wait_for_me = this._updateToken();
+          return this._wait_for_me;
+      } else {
+          // Il token presente è ancora valido... usiamolo!
+          return this._wait_for_me;
+      };
   };
   _call(params) {
-    var self = this;
-    const path = Object.entries({...(params||{})}).map((pair)=>pair.join('/')).join('/');
-    const url = new URL(`/istsos/wa/istsos/${path}`, 'https://istsos.ddns.net').toString();
-    var config = {
-        method: 'get',
-        url: url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${self._getToken()}`
-        }
-    };
-    
-    return axios(config);
-  };
-  _fetch(params) {
-    var self = this;
-    let DEFAULT_PARAMS = {
-      services: self.services,
-      operations: 'getobservation',
-      offerings: 'temporary',
-      procedures: undefined,
-      observedproperties: undefined,
-      eventtime: 'last'
-    };
-    return this._call({...DEFAULT_PARAMS, ...(params||{})});
-    // const path = Object.entries({...DEFAULT_PARAMS, ...(params||{})}).map((pair)=>pair.join('/')).join('/');
-    // const url = new URL(`/istsos/wa/istsos/${path}`, 'https://istsos.ddns.net').toString();
-    // var config = {
-    //     method: 'get',
-    //     url: url,
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Bearer ${self._getToken()}`
-    //     }
-    // };
-    // return axios(config);
+      var self = this;
+      const path = Object.entries({...(params||{})}).map((pair)=>pair.join('/')).join('/');
+      const url = new URL(`/istsos/wa/istsos/${path}`, 'https://istsos.ddns.net').toString();
+      return this._getToken().then((token) => {
+          var config = {
+              method: 'get',
+              url: url,
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              }
+          };
+          return  axios(config);
+      });
   };
   fetch(params) {
-    var self = this;
-    let cached = 0;
-    let fetched;
-    if ( this._expiry===null || Date.now()>=this._expiry ) {
-      fetched = this._updateToken().then(()=>self._fetch(params))
-    } else {
-      fetched = self._fetch(params)
-    };
-    // Non dovrebbe essere necessario...
-    // fetched.catch((error)=>{
-    //   cached += 1
-    //   if ( error.response.status==401 ) {
-    //     if ( cached<1 ) {
-    //
-    //     } else {alert};
-    //   };
-    // });
-    return fetched;
+      var self = this;
+      let DEFAULT_PARAMS = {
+          services: self.services,
+          operations: 'getobservation',
+          offerings: 'temporary',
+          procedures: undefined,
+          observedproperties: undefined,
+          eventtime: 'last'
+      };
+      return this._call({...DEFAULT_PARAMS, ...(params||{})});
   };
   _fetchTemperature(procedures, eventtime='last') {
       var self = this;

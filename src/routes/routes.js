@@ -1,4 +1,5 @@
 import DashboardLayout from '../layout/DashboardLayout.vue'
+import NoSideBarLayout from '../layout/NoSideBarLayout.vue'
 // GeneralViews
 import NotFound from '../pages/NotFoundPage.vue'
 
@@ -11,15 +12,28 @@ import LagoLugano from 'src/pages/LagoLugano.vue'
 //import Typography from 'src/pages/Typography.vue'
 //import Icons from 'src/pages/Icons.vue'
 import LagoComo from 'src/pages/LagoComo.vue'
-import Maps from 'src/pages/Maps.vue'
+// import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
+import Home from 'src/pages/Home.vue'
 
 const routes = [
   {
     path: '/',
     component: DashboardLayout,
     redirect: '/admin/overview'
+  },
+  {
+    path: '/pages',
+    component: NoSideBarLayout,
+    redirect: '/admin/home',
+    children: [
+      {
+        path: 'home',
+        name: 'Home',
+        component: Home
+      }
+    ]
   },
   {
     path: '/admin',
@@ -66,11 +80,11 @@ const routes = [
         name: 'Lago Como',
         component: LagoComo
       },
-      {
-        path: 'maps',
-        name: 'Maps',
-        component: Maps
-      },
+      // {
+      //   path: 'maps',
+      //   name: 'Maps',
+      //   component: Maps
+      // },
       {
         path: 'notifications',
         name: 'Notifications',

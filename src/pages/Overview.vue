@@ -175,7 +175,7 @@
           </chart-card>
         </div>
       </div-->
-            <div class="row">
+      <div class="row">
         <div class="col-xl-3 col-lg-6">
           <stats-card>
             <div slot="header" class="icon-warning">
@@ -580,27 +580,12 @@
                 this.countMeasures += Object.keys(element["measures"]).length
               }
           });
-          //console.log(this.count)
         });
 
-        this.istsos._call({services: 'demo', observedproperties: ''}).then((result) => {
-            console.log(result);
+        this.istsos._call({services: 'demo', observedproperties: ''}).then((response) => {
+            this.responseIstsosData = response.data["data"]
         });
 
-
-
-      // axios({
-      //   method: 'get',
-      //   url: 'https://istsos.ddns.net/istsos/wa/istsos/services/demo/observedproperties',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': 'Bearer ' + window.localStorage.getItem('kcAccessToken')
-      //   }
-      // }).then((response) => {
-      //   this.responseIstsosData = response.data["data"]
-      // }).catch(error => {
-      //   console.error(error);
-      // });
     },
     computed: {
       resultCount () {
