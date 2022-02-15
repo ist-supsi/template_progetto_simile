@@ -8,7 +8,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-thermometer text-warning"
+                                  <i class="fa fa-thermometer text-warning"
                                     data-toggle="tooltip"
                                     title="Temperatura superficiale"></i>
                                 </div>
@@ -28,7 +28,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-thermometer text-warning"
+                                  <i class="fa fa-thermometer text-warning"
                                     data-toggle="tooltip"
                                     title="Temperatura superficiale"></i>
                                 </div>
@@ -49,7 +49,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-thermometer text-warning"
+                                  <i class="fa fa-thermometer text-warning"
                                     data-toggle="tooltip"
                                     title="Temperatura superficiale"></i>
                                 </div>
@@ -71,8 +71,8 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  
-                                  <i class="fas fa-thermometer-half text-warning"
+
+                                  <i class="fa fa-thermometer-half text-warning"
                                     data-toggle="tooltip"
                                     title="Temperatura superficiale"></i>
                                 </div>
@@ -92,7 +92,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-thermometer-half text-warning"
+                                  <i class="fa fa-thermometer-half text-warning"
                                     data-toggle="tooltip"
                                     title="Temperatura superficiale"></i>
                                 </div>
@@ -113,7 +113,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-thermometer-half text-warning"
+                                  <i class="fa fa-thermometer-half text-warning"
                                     data-toggle="tooltip"
                                     title="Temperatura superficiale"></i>
                                 </div>
@@ -135,7 +135,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-info"
+                                  <i class="fa fa-flask text-info"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -155,7 +155,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-info"
+                                  <i class="fa fa-flask text-info"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -175,7 +175,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-info"
+                                  <i class="fa fa-flask text-info"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -197,7 +197,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-info"
+                                  <i class="fa fa-flask text-info"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -217,7 +217,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-info"
+                                  <i class="fa fa-flask text-info"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -237,7 +237,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-info"
+                                  <i class="fa fa-flask text-info"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -259,7 +259,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-primary"
+                                  <i class="fa fa-flask text-primary"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -279,7 +279,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-primary"
+                                  <i class="fa fa-flask text-primary"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -299,7 +299,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-primary"
+                                  <i class="fa fa-flask text-primary"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -321,7 +321,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-primary"
+                                  <i class="fa fa-flask text-primary"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -341,7 +341,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-primary"
+                                  <i class="fa fa-flask text-primary"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -361,7 +361,7 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fas fa-flask text-primary"
+                                  <i class="fa fa-flask text-primary"
                                     data-toggle="tooltip"
                                     title="Ossigeno disciolto"></i>
                                 </div>
@@ -379,52 +379,56 @@
                         </div>
                     </div>
                     <card>
-                        <card v-if="showDescription">
-                            <template slot="header">
-                              <h5 class="title">LAGO CERESIO</h5>
-                              <p class="category">Descrizione</p>
-                            </template>
-                            <div class="row">
-                                <div class="col-7">
-                                    Lorem ipsum dolor sit amet. Ea dignissimos aspernatur et quaerat quia et quasi ipsa et voluptates debitis sit ipsum laudantium sed nobis accusantium quo quidem debitis.
-                                    Non possimus dolorum qui dolores optio aut quasi dolorem. In adipisci voluptatem et consectetur sequi aut recusandae iste. Non nesciunt earum qui tempora maiores At dolorem sunt quo quia officiis.
-                                    Sed facilis sunt in omnis dolor et consequatur autem aut ducimus nisi ea eius quibusdam et omnis quasi? Qui nobis mollitia eos perspiciatis asperiores et magni sequi? Non quos consequatur 33 sint facilis qui deserunt quae ex nemo illum et distinctio voluptas.<br><br>
-                                    Ad libero obcaecati a atque quibusdam sed commodi iusto 33 maiores et minus debitis qui dolores dolor eum corrupti laudantium. Et exercitationem pariatur ut ipsa eveniet quo necessitatibus odit aut rerum harum et maiores odio et dolores amet ut inventore incidunt.
-                                    Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
-                                    vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
-                                </div>
-                                <div class="col-5">
-                                    <card style="height: 500px;">
-                                    <l-map
-                                        v-if="showMap"
-                                        :zoom="currentZoom"
-                                        :bounds="bounds"
-                                        :options="mapOptions"
-                                        @update:center="centerUpdate"
-                                        @update:zoom="zoomUpdate"
-                                        style="height: 100%; width: 100%;"
-                                      >
-                                        <l-tile-layer
-                                          :url="url"
-                                          :attribution="attribution"
-                                        />
-                                        <!--l-control-layers />
-                                          <l-wms-tile-layer
-                                            v-for="layer in layers"
-                                            :key="layer.name"
-                                            :base-url="wmsUrl"
-                                            :layers="layer.layers"
-                                            :visible="layer.visible"
-                                            :name="layer.name"
-                                            :transparent="layer.transparent"
-                                            :format="layer.format"
-                                            layer-type="overlay"
-                                          /-->
-                                      </l-map>
-                                    </card>
-                                </div>
+                    <card v-if="showDescription">
+                        <template slot="header">
+                          <h5 class="title">LAGO CERESIO</h5>
+                          <p class="category">Descrizione</p>
+                        </template>
+                        <div class="row">
+                            <div class="col-7">
+                                Lorem ipsum dolor sit amet. Ea dignissimos aspernatur et quaerat quia et quasi ipsa et voluptates debitis sit ipsum laudantium sed nobis accusantium quo quidem debitis.
+                                Non possimus dolorum qui dolores optio aut quasi dolorem. In adipisci voluptatem et consectetur sequi aut recusandae iste. Non nesciunt earum qui tempora maiores At dolorem sunt quo quia officiis.
+                                Sed facilis sunt in omnis dolor et consequatur autem aut ducimus nisi ea eius quibusdam et omnis quasi? Qui nobis mollitia eos perspiciatis asperiores et magni sequi? Non quos consequatur 33 sint facilis qui deserunt quae ex nemo illum et distinctio voluptas.<br><br>
+                                Ad libero obcaecati a atque quibusdam sed commodi iusto 33 maiores et minus debitis qui dolores dolor eum corrupti laudantium. Et exercitationem pariatur ut ipsa eveniet quo necessitatibus odit aut rerum harum et maiores odio et dolores amet ut inventore incidunt.
+                                Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
+                                vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
                             </div>
-                        </card>
+                            <div class="col-5">
+                                <card style="height: 35vh;">
+                                <l-map
+                                    v-if="showMap"
+                                    :zoom="currentZoom"
+                                    :bounds="bounds"
+                                    :options="mapOptions"
+                                    @update:center="centerUpdate"
+                                    @update:zoom="zoomUpdate"
+                                    style="height: 100%;"
+                                  >
+                                  <l-tile-layer
+                                      :url="url"
+                                      :attribution="attribution"
+                                  />
+                                    <!-- <l-tile-layer
+                                      :url="url"
+                                      :attribution="attribution"
+                                    ></l-tile-layer> -->
+                                    <!-- <l-control-layers />
+                                      <l-wms-tile-layer
+                                        v-for="layer in layers"
+                                        :key="layer.name"
+                                        :base-url="wmsUrl"
+                                        :layers="layer.layers"
+                                        :visible="layer.visible"
+                                        :name="layer.name"
+                                        :transparent="layer.transparent"
+                                        :format="layer.format"
+                                        layer-type="overlay"
+                                      > -->
+                                  </l-map>
+                                </card>
+                            </div>
+                        </div>
+                    </card>
                         <card>
                             <!-- <div slot="header" class="icon-warning"></div> -->
                             <div v-if="Object.keys(series_temperature_data).length>0" class="row">
@@ -438,10 +442,10 @@
                             </div>
                         </card>
                         <!-- <card v-if="showTemperatureAnalysis">
-                            
+
                         </card> -->
                     </card>
-                    
+
                 </div>
             </div>
 
@@ -464,6 +468,7 @@
     import LTable from 'src/components/Table.vue'
     import { latLngBounds, latLng } from "leaflet";
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
+    import 'leaflet/dist/leaflet.css';
     import axios from 'axios';
 
     // import IstsosIO from '../manageIstsosToken.js';
@@ -476,7 +481,7 @@
     //     .find((row) => row.startsWith(key+'='))
     //     .split('=')[1];
     // };
-    // 
+    //
     // const formname = getCookieValue('form-name');
     // const formkey = getCookieValue('form-key');
     // const root = getCookieValue('app-name');
@@ -959,7 +964,7 @@
                     if ( procedure!=visibleProcedure ) {
                         result.options.series[0].visible = false;
                     };
-                    
+
                     result.options.series[0].color = colors[i];
                     i = i+1;
                     if ( !self.series_temperature_data.series ) {
@@ -968,7 +973,7 @@
                         self.series_temperature_data.series.push(result.options.series[0]);
                         self.series_temperature_data.series.sort((el1, el2) => { el1.name<el2.name } );
                     };
-                    
+
                 });
             }
         },

@@ -21,25 +21,30 @@ const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/admin/overview'
+    redirect: '/admin/home'
   },
-  {
-    path: '/pages',
-    component: NoSideBarLayout,
-    redirect: '/admin/home',
-    children: [
-      {
-        path: 'home',
-        name: 'Home',
-        component: Home
-      }
-    ]
-  },
+  // {
+  //   path: '/pages',
+  //   component: NoSideBarLayout,
+  //   redirect: '/admin/home',
+  //   children: [
+  //     {
+  //       path: 'home',
+  //       name: 'Home',
+  //       component: Home
+  //     }
+  //   ]
+  // },
   {
     path: '/admin',
     component: DashboardLayout,
     redirect: '/admin/overview',
     children: [
+      {
+        path: 'home',
+        name: 'Home',
+        component: Home
+      },
       {
         path: 'overview',
         name: 'Overview',

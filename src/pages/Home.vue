@@ -59,7 +59,7 @@
           <h4 class="title">Dettagli tecnici<br />
             <!-- <small>Lago Ceresio</small> -->
           </h4>
-          
+
           <div class="col-xl-2 col-md-6">
             <stats-card>
               <div slot="header" class="icon-warning">
@@ -95,6 +95,11 @@
       ComoCard,
       MaggioreCard,
       StatsCard
+    },
+    data () {
+      return {
+        whereAmI: 'Home'
+      }
     }
   }
 </script>

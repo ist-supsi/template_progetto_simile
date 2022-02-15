@@ -2,10 +2,8 @@
   <div class="wrapper">
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link to="/admin/overview">
-        <i class="nc-icon nc-grid-45"></i>
-        <p>Dashboard</p>
-      </sidebar-link>
+
+
       <!-- <sidebar-link to="/gter">
         <i class="nc-icon nc-circle-09"></i>
         <p>WEB APP</p>
@@ -26,6 +24,10 @@
         <i class="nc-icon nc-circle-09"></i>
         <p>User Profile</p>
       </sidebar-link-->
+      <sidebar-link to="/admin/home">
+        <i class="nc-icon nc-compass-05"></i>
+        <p>Home</p>
+      </sidebar-link>
       <sidebar-link to="/admin/lago-maggiore">
         <i class="nc-icon nc-tag-content"></i>
         <p>Lago Maggiore</p>
@@ -37,6 +39,10 @@
       <sidebar-link to="/admin/lago-como">
         <i class="nc-icon nc-tag-content"></i>
         <p>Lago di Como</p>
+      </sidebar-link>
+      <sidebar-link to="/admin/overview">
+        <i class="nc-icon nc-globe-2"></i>
+        <p>GIS</p>
       </sidebar-link>
       <!--sidebar-link to="/admin/maps">
         <i class="nc-icon nc-pin-3"></i>
