@@ -196,24 +196,19 @@
                     </div>
                     <card>
                         <!-- <div slot="header" class="icon-warning"></div> -->
-                        <div v-if="Object.keys(series_temperature_data).length>0" class="row">
+                        <div v-if="Object.keys(series_data).length>0" class="row">
                             <div class="col-md-12">
-                                <highcharts :options="series_temperature_data"></highcharts>
+                                <highcharts :options="series_data"></highcharts>
                             </div>
                         </div>
 
                         <div slot="footer">
-                            <i v-if="Object.keys(series_temperature_data).length==0" class="fa fa-refresh fa-spin"></i>
+                            <i v-if="Object.keys(series_data).length==0"
+                                class="fa fa-refresh fa-spin"></i>
                         </div>
                     </card>
                 </div>
             </div>
-
-
-
-
-
-
         </div>
     </div>
 </template>
@@ -344,7 +339,7 @@
                 selected_temperature: 'TEMP_0_4',
                 selected_o2c: 'O2C_0_4',
                 last_temperature_data: {},
-                series_temperature_data: {},
+                series_data: {},
                 last_o2c_data: {},
                 series_o2c_data: {},
                 tableAllData: {},
@@ -363,17 +358,17 @@
                     //     name: 'id',
                     //     orderable: true,
                     // },
-                    // {
-                    //     label: 'Nome',
-                    //     name: 'name',
-                    //     orderable: true,
-                    // },
                     {
                         label: 'Etichetta',
                         transform: (item)=>{
                             return item.data.observedproperties[0].name
                         },
                         // name: 'name',
+                        orderable: true,
+                    },
+                    {
+                        label: 'Nome',
+                        name: 'name',
                         orderable: true,
                     },
                     {
@@ -410,8 +405,8 @@
                         orderable: false,
                     },
                     {
-                        label: '',
-                        name: 'View',
+                        label: 'Descrizione',
+                        name: 'Apri',
                         orderable: false,
                         classes: {
                             'btn': true,
@@ -421,6 +416,27 @@
                         event: "click",
                         handler: this.displayRow,
                         component: NotifyButton,
+                        iclasses: {
+                            'fa': true,
+                            'fa-info-circle': true
+                        }
+                    },
+                    {
+                        label: '',
+                        name: 'Analizza',
+                        orderable: false,
+                        classes: {
+                            'btn': true,
+                            'btn-primary': false,
+                            'btn-info': true,
+                            'btn-sm': true,
+                        },
+                        event: "click",
+                        handler: ()=>{alert('Hello!')},
+                        component: NotifyButton,
+                        iclasses: {
+                            'fa fa-line-chart': true
+                        }
                     }
                 ],
                 selectedRow: {},
@@ -552,22 +568,22 @@
                     transparent: true/*,
                     attribution: "Weather data © 2012 IEM Nexrad"*/
                   },
-                  {
-                    name: 'Strade',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Strade',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Ferrovie',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Ferrovie',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
+                  // {
+                  //   name: 'Strade',
+                  //   visible: true,
+                  //   format: 'image/png',
+                  //   layers: 'Strade',
+                  //   transparent: true/*,
+                  //   attribution: "Weather data © 2012 IEM Nexrad"*/
+                  // },
+                  // {
+                  //   name: 'Ferrovie',
+                  //   visible: true,
+                  //   format: 'image/png',
+                  //   layers: 'Ferrovie',
+                  //   transparent: true/*,
+                  //   attribution: "Weather data © 2012 IEM Nexrad"*/
+                  // },
                   {
                     name: 'Limiti amministrativi',
                     visible: true,
@@ -629,7 +645,7 @@
             }
         },
         watch: {
-          series_temperature_data: {
+          series_data: {
              handler(val){
                // do stuff
              },
@@ -642,6 +658,7 @@
             this.tableFetchData().then((result)=>{this.tableSetData()});
 
             this.populateCockpit();
+            self.appendTempSeries();
             // this.fetchO2c('O2C_0_4');
             this.$root.dropdownVisible = false;
         },
@@ -679,9 +696,9 @@
 
             var self = this;
 
-            const last_page = Math.floor(this.tableAllData.data.length/this.tableProps.length);
+            const last_page = Math.floor(this.tableAllData.data.length/this.tableProps.length)+1;
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
-            const end = (this.tableProps.page||1)*this.tableProps.length;
+            const end = (this.tableProps.page||1)*this.tableProps.length-1;
 
             const tableData = {
                 // payload: this.tableAllData.payload,
@@ -692,7 +709,7 @@
                     last_page: last_page,
                     per_page: this.tableProps.length,
                     total: this.tableAllData.data.length,
-                    to: end+1
+                    to: Math.min(end+1, this.tableAllData.data.length)
                 },
                 data: this.tableAllData.data.sort((item, other)=>{
                     let comparison;
@@ -871,12 +888,12 @@
             //           time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
             //       }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             //   });
-              self.appendTempSeries();
+
         },
         appendTempSeries () {
             var self = this;
-            const colors = ['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce',
-        '#492970', '#f28f43', '#77a1e5', '#c42525', '#a6c96a'];
+            const colors = ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
+            '#0d233a', '#77a1e5', '#8bbc21'];
 
             const visibleProcedure = 'TEMP_0_4'
             const procedures = [
@@ -896,11 +913,11 @@
 
                     result.options.series[0].color = colors[i];
                     i = i+1;
-                    if ( !self.series_temperature_data.series ) {
-                        self.series_temperature_data = result.options;
+                    if ( !self.series_data.series ) {
+                        self.series_data = result.options;
                     } else {
-                        self.series_temperature_data.series.push(result.options.series[0]);
-                        self.series_temperature_data.series.sort((el1, el2) => { el1.name<el2.name } );
+                        self.series_data.series.push(result.options.series[0]);
+                        self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
                     };
 
                 });
@@ -910,7 +927,7 @@
             var self = this;
 
             this.istsos.fetchTemperatureSeries(procedure).then((result)=>{
-                self.series_temperature_data = result.options;
+                self.series_data = result.options;
             });
         },
         loadNewTemperatures() {

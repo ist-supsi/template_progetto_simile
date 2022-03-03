@@ -1,7 +1,7 @@
 <template>
-    <button :class="classes" @click="click(data)" title="Update">
+    <button :class="classes" @click="click(data)" :title="name">
         <span>
-            <i class="fa fa-eye" aria-hidden="true"></i>
+            <i :class="iclasses" aria-hidden="true"></i>
         </span>
         &nbsp;
         {{ name }}
@@ -12,6 +12,10 @@
         props: {
             data: {},
             name: {},
+            iclasses: {
+                type: Object,
+                default: () => ({}),
+            },
             click: {
                 type: Function,
                 default: () => {}
@@ -21,7 +25,7 @@
                 default: () => ({
                     'btn': true,
                     'btn-primary': true,
-                    'btn-sm': true,
+                    'btn-sm': true
                 }),
             },
         }
