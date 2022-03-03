@@ -13,7 +13,7 @@
                                     title="Temperatura aria"></i>
                                 </div>
                                 <div slot="content">
-                                  <p class="card-category">Temperatura</p>
+                                  <p class="card-category">Temperatura dell'aria</p>
                                   <h4 class="card-title">22°C</h4>
                                   <p class="card-category">da stazione meteo</p>
                                 </div>
@@ -32,12 +32,12 @@
                                     title="Velocità del vento"></i>
                                 </div>
                                 <div slot="content">
-                                  <p class="card-category">Ossigeno</p>
+                                  <p class="card-category">Velocità del vento</p>
                                   <h4 class="card-title">20km/h</h4>
                                   <p class="card-category">da stazione meteo</p>
                                 </div>
                                 <div slot="footer">
-                                    
+
                                     <i class="fa fa-calendar" aria-hidden="true"></i>oggi
                                     <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
                                 </div>
@@ -52,19 +52,19 @@
                                     title="Umidità"></i>
                                 </div>
                                 <div slot="content">
-                                  <p class="card-category">Umidità</p>
+                                  <p class="card-category">Umidità atmosferica</p>
                                   <h4 class="card-title">30%</h4>
                                   <p class="card-category">da stazione meteo</p>
                                 </div>
                                 <div slot="footer">
-                                    
+
                                     <i class="fa fa-calendar" aria-hidden="true"></i>oggi
                                     <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
                                 </div>
                             </stats-card>
                         </div>
                     </div>
-                   
+
                     <div class="row">
                         <div class="col-4">
                             <stats-card>
@@ -75,7 +75,7 @@
                                     title="Temperatura superficiale"></i>
                                 </div>
                                 <div slot="content">
-                                  <p class="card-category">Temperatura</p>
+                                  <p class="card-category">Temperatura dell'acqua</p>
                                   <h4 class="card-title">{{lastTemp04}}</h4>
                                   <p class="card-category">profondità: 40cm</p>
                                 </div>
@@ -95,7 +95,7 @@
                                     title="Ossigeno disciolto"></i>
                                 </div>
                                 <div slot="content">
-                                  <p class="card-category">Ossigeno</p>
+                                  <p class="card-category">Ossigeno disciolto</p>
                                   <h4 class="card-title">{{lastO2c04}}</h4>
                                   <p class="card-category">profondità: 40cm</p>
                                 </div>
@@ -127,37 +127,23 @@
                             </stats-card>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                        <data-table
-                            :columns="tableColumns"
-                            :data="tableData"
-                            :per-page="[5, 10, 15]"
-                            @on-table-props-changed="reloadTable"
-                        >
-                        </data-table>
-                        <modal
-                            :row="selectedRow">
-                        </modal>
-                    </div>
-                    </div>
-                    <card>
-                    <card v-if="showDescription">
-                        <template slot="header">
+                    <!-- <card> -->
+                    <!-- <card v-if="showDescription"> -->
+                        <!-- <template slot="header">
                           <h5 class="title">LAGO CERESIO</h5>
                           <p class="category">Descrizione</p>
-                        </template>
+                        </template> -->
                         <div class="row">
-                            <div class="col-7">
+                            <!-- <div class="col-7">
                                 Lorem ipsum dolor sit amet. Ea dignissimos aspernatur et quaerat quia et quasi ipsa et voluptates debitis sit ipsum laudantium sed nobis accusantium quo quidem debitis.
                                 Non possimus dolorum qui dolores optio aut quasi dolorem. In adipisci voluptatem et consectetur sequi aut recusandae iste. Non nesciunt earum qui tempora maiores At dolorem sunt quo quia officiis.
                                 Sed facilis sunt in omnis dolor et consequatur autem aut ducimus nisi ea eius quibusdam et omnis quasi? Qui nobis mollitia eos perspiciatis asperiores et magni sequi? Non quos consequatur 33 sint facilis qui deserunt quae ex nemo illum et distinctio voluptas.<br><br>
                                 Ad libero obcaecati a atque quibusdam sed commodi iusto 33 maiores et minus debitis qui dolores dolor eum corrupti laudantium. Et exercitationem pariatur ut ipsa eveniet quo necessitatibus odit aut rerum harum et maiores odio et dolores amet ut inventore incidunt.
                                 Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
                                 vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
-                            </div>
-                            <div class="col-5">
-                                <card style="height: 35vh;">
+                            </div> -->
+                            <div class="col-12">
+                                <card style="height: 65vh;">
                                 <l-map
                                     v-if="showMap"
                                     :zoom="currentZoom"
@@ -175,7 +161,7 @@
                                       :url="url"
                                       :attribution="attribution"
                                     ></l-tile-layer> -->
-                                    <!-- <l-control-layers />
+                                    <!-- <l-control-layers /> -->
                                       <l-wms-tile-layer
                                         v-for="layer in layers"
                                         :key="layer.name"
@@ -186,29 +172,40 @@
                                         :transparent="layer.transparent"
                                         :format="layer.format"
                                         layer-type="overlay"
-                                      > -->
+                                      ></l-wms-tile-layer>
                                   </l-map>
                                 </card>
                             </div>
                         </div>
-                    </card>
-                        <card>
-                            <!-- <div slot="header" class="icon-warning"></div> -->
-                            <div v-if="Object.keys(series_temperature_data).length>0" class="row">
-                                <div class="col-md-12">
-                                    <highcharts :options="series_temperature_data"></highcharts>
-                                </div>
-                            </div>
+                    <!-- </card> -->
 
-                            <div slot="footer">
-                                <i v-if="Object.keys(series_temperature_data).length==0" class="fa fa-refresh fa-spin"></i>
-                            </div>
-                        </card>
                         <!-- <card v-if="showTemperatureAnalysis">
 
                         </card> -->
-                    </card>
+                    <!-- </card> -->
+                    <div class="row">
+                        <div class="col-12">
+                            <data-table
+                                :columns="tableColumns"
+                                :data="tableData"
+                                :per-page="[5, 10, 15]"
+                                @on-table-props-changed="reloadTable"
+                            >
+                            </data-table>
+                        </div>
+                    </div>
+                    <card>
+                        <!-- <div slot="header" class="icon-warning"></div> -->
+                        <div v-if="Object.keys(series_temperature_data).length>0" class="row">
+                            <div class="col-md-12">
+                                <highcharts :options="series_temperature_data"></highcharts>
+                            </div>
+                        </div>
 
+                        <div slot="footer">
+                            <i v-if="Object.keys(series_temperature_data).length==0" class="fa fa-refresh fa-spin"></i>
+                        </div>
+                    </card>
                 </div>
             </div>
 
@@ -234,8 +231,9 @@
     import 'leaflet/dist/leaflet.css';
     import axios from 'axios';
 
-    import Modal from 'src/components/Modal.vue';
-    import ModalButton from 'src/components/ModalButton.vue';
+    // import Modal from 'src/components/Modal.vue';
+    // import ModalButton from 'src/components/ModalButton.vue';
+    import NotifyButton from 'src/components/NotifyButton.vue';
 
     // import IstsosIO from '../manageIstsosToken.js';
 
@@ -298,8 +296,9 @@
             LControlLayers,
             highcharts: Chart,
             HighchartCard,
-            ModalButton,
-            Modal
+            NotifyButton,
+            // ModalButton,
+            // Modal
         },
         data () {
             return {
@@ -349,8 +348,10 @@
                 last_o2c_data: {},
                 series_o2c_data: {},
                 tableAllData: {},
+                showModal: false,
                 tableData: {},
                 tableProps: {
+                    page: 1,
                     search: '',
                     length: 5,
                     column: 'name',
@@ -362,13 +363,21 @@
                     //     name: 'id',
                     //     orderable: true,
                     // },
+                    // {
+                    //     label: 'Nome',
+                    //     name: 'name',
+                    //     orderable: true,
+                    // },
                     {
-                        label: 'Nome',
-                        name: 'name',
+                        label: 'Etichetta',
+                        transform: (item)=>{
+                            return item.data.observedproperties[0].name
+                        },
+                        // name: 'name',
                         orderable: true,
                     },
                     {
-                        label: '',
+                        label: 'Unità',
                         transform: (item)=>{
                             return item.data.observedproperties[0].uom
                         },
@@ -385,20 +394,33 @@
                         orderable: false,
                     },
                     {
-                        label: 'Etichetta',
+                        label: 'Inizio',
                         transform: (item)=>{
-                            return item.data.observedproperties[0].name
+                            return item.data.samplingTime.beginposition.split('T')[0]
                         },
                         // name: 'name',
                         orderable: false,
                     },
                     {
-                        label: 'Descrizione',
-                        name: '',
+                        label: 'Ultimo',
+                        transform: (item)=>{
+                            return item.data.samplingTime.endposition.split('T')[0]
+                        },
+                        // name: 'name',
                         orderable: false,
-                        component: ModalButton,
+                    },
+                    {
+                        label: '',
+                        name: 'View',
+                        orderable: false,
+                        classes: {
+                            'btn': true,
+                            'btn-primary': true,
+                            'btn-sm': true,
+                        },
                         event: "click",
-                        handler: this.updateSelectedModal,
+                        handler: this.displayRow,
+                        component: NotifyButton,
                     }
                 ],
                 selectedRow: {},
@@ -457,9 +479,11 @@
                 deleteTooltip: 'Remove',
                 zoom: 13,
                 //center: latLng(47.41322, -1.219482),
+                // 45.98815472817849, 8.970311660582176
+                // minlat="45.9029678" minlon="8.8586625" maxlat="46.0363240" maxlon="9.1252600"/
                 bounds: latLngBounds([
-                  [45.9, 8.9],
-                  [46.0, 9.1]
+                  [45.90, 8.85],
+                  [46.03, 9.12]
                 ]),
                 url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
@@ -480,14 +504,14 @@
                     transparent: true/*,
                     attribution: "Weather data © 2012 IEM Nexrad"*/
                   },
-                  {
-                    name: 'Aree protette Piemonte',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Aree_protette_Piemonte',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
+                  // {
+                  //   name: 'Aree protette Piemonte',
+                  //   visible: true,
+                  //   format: 'image/png',
+                  //   layers: 'Aree_protette_Piemonte',
+                  //   transparent: true/*,
+                  //   attribution: "Weather data © 2012 IEM Nexrad"*/
+                  // },
                   {
                     name: 'Aree protette poligonali Lombardia',
                     visible: true,
@@ -622,6 +646,20 @@
             this.$root.dropdownVisible = false;
         },
     methods: {
+        displayRow (data) {
+          const horizontalAlign = 'center';
+          const verticalAlign = 'top';
+          // const color = Math.floor((Math.random() * 4) + 1)
+          this.$notifications.notify(
+            {
+              // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
+              message: data.description,
+              icon: 'nc-icon nc-quote',
+              horizontalAlign: horizontalAlign,
+              verticalAlign: verticalAlign,
+              type: 'primary'
+            })
+        },
         updateSelectedModal(data) {
             this.selectedRow = data;
         },
@@ -900,5 +938,7 @@
   }
 </script>
 <style>
-
+.table > thead > tr > th:last-child, .table > tbody > tr > th:last-child, .table > tfoot > tr > th:last-child, .table > thead > tr > td:last-child, .table > tbody > tr > td:last-child, .table > tfoot > tr > td:last-child {
+  width: auto;
+}
 </style>

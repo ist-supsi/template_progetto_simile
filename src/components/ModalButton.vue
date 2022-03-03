@@ -5,7 +5,7 @@
         @click="click(data)"
         class="btn btn-primary btn-sm"
         data-target="#exampleModal">
-        View Row {{ data.id }} Modal
+        View
     </button>
 </template>
 <script>

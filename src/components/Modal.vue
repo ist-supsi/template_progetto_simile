@@ -1,5 +1,5 @@
 <template>
-    <div class="modal" id="exampleModal" tabindex="-1" role="dialog">
+    <div class="modal show" id="exampleModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,9 +11,9 @@
                 <div class="modal-body">
                     <p>{{ row.description }}</p>
                 </div>
-                <!-- <div class="modal-footer">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>
