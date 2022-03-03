@@ -13,20 +13,25 @@
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
  */
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import App from './App.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import App from './App.vue';
 
 // LightBootstrap plugin
-import LightBootstrap from './light-bootstrap-main'
+import LightBootstrap from './light-bootstrap-main';
+
+// DataTable plugin
+import DataTable from 'laravel-vue-datatable';
 
 // router setup
-import routes from './routes/routes'
+import routes from './routes/routes';
 
-import './registerServiceWorker'
+import './registerServiceWorker';
+
 // plugin setup
-Vue.use(VueRouter)
-Vue.use(LightBootstrap)
+Vue.use(DataTable);
+Vue.use(VueRouter);
+Vue.use(LightBootstrap);
 
 // configure router
 const router = new VueRouter({

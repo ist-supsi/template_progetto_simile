@@ -8,6 +8,68 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fa fa-sun-o text-warning"
+                                    data-toggle="tooltip"
+                                    title="Temperatura aria"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Temperatura</p>
+                                  <h4 class="card-title">22°C</h4>
+                                  <p class="card-category">da stazione meteo</p>
+                                </div>
+                                <div slot="footer">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>oggi
+                                    <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fa fa-compass text-info"
+                                    data-toggle="tooltip"
+                                    title="Velocità del vento"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">20km/h</h4>
+                                  <p class="card-category">da stazione meteo</p>
+                                </div>
+                                <div slot="footer">
+                                    
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>oggi
+                                    <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
+                                </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                  <i class="fa fa-cloud text-primary"
+                                    data-toggle="tooltip"
+                                    title="Umidità"></i>
+                                </div>
+                                <div slot="content">
+                                  <p class="card-category">Umidità</p>
+                                  <h4 class="card-title">30%</h4>
+                                  <p class="card-category">da stazione meteo</p>
+                                </div>
+                                <div slot="footer">
+                                    
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>oggi
+                                    <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
+                                </div>
+                            </stats-card>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-4">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
                                   <i class="fa fa-thermometer text-warning"
                                     data-toggle="tooltip"
                                     title="Temperatura superficiale"></i>
@@ -28,20 +90,19 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fa fa-thermometer text-warning"
+                                  <i class="fa fa-flask text-info"
                                     data-toggle="tooltip"
-                                    title="Temperatura superficiale"></i>
+                                    title="Ossigeno disciolto"></i>
                                 </div>
                                 <div slot="content">
-                                  <p class="card-category">Temperatura</p>
-                                  <h4 class="card-title">{{lastTemp25}}</h4>
-                                  <p class="card-category">profondità: 2.5m</p>
+                                  <p class="card-category">Ossigeno</p>
+                                  <h4 class="card-title">{{lastO2c04}}</h4>
+                                  <p class="card-category">profondità: 40cm</p>
                                 </div>
                                 <div slot="footer">
-                                    <i v-if="lastTemp25Time===null" class="fa fa-refresh fa-spin"></i>
-                                    <i v-if="lastTemp25Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp25Time && lastTemp25Time.date}}
-                                    <i v-if="lastTemp25Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp25Time && lastTemp25Time.time}}
-
+                                    <i v-if="lastO2c04Time===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastO2c04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2c04Time && lastO2c04Time.date}}
+                                    <i v-if="lastO2c04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2c04Time && lastO2c04Time.time}}
                                 </div>
                             </stats-card>
                         </div>
@@ -49,25 +110,36 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                   <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fa fa-thermometer text-warning"
+                                  <i class="fa fa-tint text-primary"
                                     data-toggle="tooltip"
-                                    title="Temperatura superficiale"></i>
+                                    title="Trasparenza acque"></i>
                                 </div>
                                 <div slot="content">
-                                  <p class="card-category">Temperatura</p>
-                                  <h4 class="card-title">{{lastTemp50}}</h4>
-                                  <p class="card-category">profondità: 5m</p>
+                                  <p class="card-category">Trasparenza</p>
+                                  <h4 class="card-title">{{lastSdtFig}}</h4>
+                                  <p class="card-category">località: Figino</p>
                                 </div>
                                 <div slot="footer">
-                                    <i v-if="lastTemp50Time===null" class="fa fa-refresh fa-spin"></i>
-                                    <i v-if="lastTemp50Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp50Time && lastTemp50Time.date}}
-                                    <i v-if="lastTemp50Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp50Time && lastTemp50Time.time}}
+                                    <i v-if="lastSdtTime===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="lastSdtTime" class="fa fa-calendar" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.date}}
+                                    <i v-if="lastSdtTime" class="fa fa-clock-o" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.time}}
                                 </div>
                             </stats-card>
                         </div>
                     </div>
                     <div class="row">
-
+                        <div class="col-12">
+                        <data-table
+                            :columns="tableColumns"
+                            :data="tableData"
+                            :per-page="[5, 10, 15]"
+                            @on-table-props-changed="reloadTable"
+                        >
+                        </data-table>
+                        <modal
+                            :row="selectedRow">
+                        </modal>
+                    </div>
                     </div>
                     <card>
                     <card v-if="showDescription">
@@ -162,6 +234,9 @@
     import 'leaflet/dist/leaflet.css';
     import axios from 'axios';
 
+    import Modal from 'src/components/Modal.vue';
+    import ModalButton from 'src/components/ModalButton.vue';
+
     // import IstsosIO from '../manageIstsosToken.js';
 
     loadBullet(Highcharts);
@@ -222,11 +297,15 @@
             "l-wms-tile-layer": LWMSTileLayer,
             LControlLayers,
             highcharts: Chart,
-            HighchartCard
+            HighchartCard,
+            ModalButton,
+            Modal
         },
         data () {
             return {
                 showDescription: true,
+                lastSdtFig: '',
+                lastSdtTime: null,
                 lastTemp04: '',
                 lastTemp04Time: null,
                 lastTemp25: '',
@@ -269,6 +348,60 @@
                 series_temperature_data: {},
                 last_o2c_data: {},
                 series_o2c_data: {},
+                tableAllData: {},
+                tableData: {},
+                tableProps: {
+                    search: '',
+                    length: 5,
+                    column: 'name',
+                    dir: 'asc'
+                },
+                tableColumns: [
+                    // {
+                    //     label: 'ID',
+                    //     name: 'id',
+                    //     orderable: true,
+                    // },
+                    {
+                        label: 'Nome',
+                        name: 'name',
+                        orderable: true,
+                    },
+                    {
+                        label: '',
+                        transform: (item)=>{
+                            return item.data.observedproperties[0].uom
+                        },
+                        // name: 'name',
+                        orderable: false,
+                    },
+                    {
+                        label: 'Profondità sensore',
+                        transform: (item)=>{
+                            const sub = item.data.description.match(/a [+-]?\d+(\.\d+)? m di profondità/gm)
+                            return sub && sub[0].match(/[+-]?\d+(\.\d+)? m/gm);
+                        },
+                        // name: 'name',
+                        orderable: false,
+                    },
+                    {
+                        label: 'Etichetta',
+                        transform: (item)=>{
+                            return item.data.observedproperties[0].name
+                        },
+                        // name: 'name',
+                        orderable: false,
+                    },
+                    {
+                        label: 'Descrizione',
+                        name: '',
+                        orderable: false,
+                        component: ModalButton,
+                        event: "click",
+                        handler: this.updateSelectedModal,
+                    }
+                ],
+                selectedRow: {},
                 // procedures: [
                 //     {
                 //         procedure: 'TEMP_0_4'
@@ -478,14 +611,72 @@
              },
              deep: true
           }
-      },
+        },
         mounted() {
             var self = this;
+
+            this.tableFetchData().then((result)=>{this.tableSetData()});
+
             this.populateCockpit();
             // this.fetchO2c('O2C_0_4');
             this.$root.dropdownVisible = false;
         },
     methods: {
+        updateSelectedModal(data) {
+            this.selectedRow = data;
+        },
+        tableFetchData () {
+            var self = this;
+            return this.istsos.fetchProcedures().then((result)=>{
+                self.tableAllData = {
+                    data: result.data.data
+                };
+            });
+            // return new Promise((resolve, reject) => {
+            //     self.tableAllData = {};
+            //     resolve();
+            // });
+        },
+        tableSetData () {
+
+            var self = this;
+
+            const last_page = Math.floor(this.tableAllData.data.length/this.tableProps.length);
+            const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
+            const end = (this.tableProps.page||1)*this.tableProps.length;
+
+            const tableData = {
+                // payload: this.tableAllData.payload,
+                links: {},
+                meta: {
+                    current_page: this.tableProps.page,
+                    from: start+1,
+                    last_page: last_page,
+                    per_page: this.tableProps.length,
+                    total: this.tableAllData.data.length,
+                    to: end+1
+                },
+                data: this.tableAllData.data.sort((item, other)=>{
+                    let comparison;
+                    if ( item[this.tableProps.column]<other[this.tableProps.column] ) {
+                        comparison = -1;
+                    } else {
+                        comparison = 1
+                    }
+                    if ( this.tableProps.dir=='asc' ) {
+                        return comparison
+                    } else {
+                        return comparison*-1
+                    }
+                }).slice(start, end+1)
+            };
+            this.tableData = tableData;
+        },
+        reloadTable (tableProps) {
+            var self = this;
+            this.tableProps = tableProps
+            this.tableSetData();
+        },
         populateCockpit () {
             var self = this;
             this.istsos.fetchLastTemetature('TEMP_0_4').then((result)=>{
@@ -497,46 +688,55 @@
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
 
             });
-            this.istsos.fetchLastTemetature('TEMP_2_5').then((result)=>{
-                // self.last_temperature_data = result.options;
-                self.lastTemp25 = `${result.options.series[0].data[0].y}${result.uom}`
-                self.lastTemp25Time = {
+            this.istsos.fetchLastSdt('SDT_FIG').then((result)=>{
+                self.last_trasparency_data = result.options;
+                self.lastSdtFig = `${result.options.series[0].data[0].y}${result.uom}`
+                self.lastSdtTime = {
                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+
             });
-            this.istsos.fetchLastTemetature('TEMP_5_0').then((result)=>{
-                // self.last_temperature_data = result.options;
-                self.lastTemp50 = `${result.options.series[0].data[0].y}${result.uom}`
-                self.lastTemp50Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            });
-            this.istsos.fetchLastTemetature('TEMP_8_0').then((result)=>{
-                // self.last_temperature_data = result.options;
-                self.lastTemp80 = `${result.options.series[0].data[0].y}${result.uom}`
-                self.lastTemp80Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            });
-            this.istsos.fetchLastTemetature('TEMP_12_5').then((result)=>{
-                // self.last_temperature_data = result.options;
-                self.lastTemp125 = `${result.options.series[0].data[0].y}${result.uom}`
-                self.lastTemp125Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            });
-            this.istsos.fetchLastTemetature('TEMP_20_0').then((result)=>{
-                // self.last_temperature_data = result.options;
-                self.lastTemp200 = `${result.options.series[0].data[0].y}${result.uom}`
-                self.lastTemp200Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            });
+            // this.istsos.fetchLastTemetature('TEMP_2_5').then((result)=>{
+            //     // self.last_temperature_data = result.options;
+            //     self.lastTemp25 = `${result.options.series[0].data[0].y}${result.uom}`
+            //     self.lastTemp25Time = {
+            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            // });
+            // this.istsos.fetchLastTemetature('TEMP_5_0').then((result)=>{
+            //     // self.last_temperature_data = result.options;
+            //     self.lastTemp50 = `${result.options.series[0].data[0].y}${result.uom}`
+            //     self.lastTemp50Time = {
+            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            // });
+            // this.istsos.fetchLastTemetature('TEMP_8_0').then((result)=>{
+            //     // self.last_temperature_data = result.options;
+            //     self.lastTemp80 = `${result.options.series[0].data[0].y}${result.uom}`
+            //     self.lastTemp80Time = {
+            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            // });
+            // this.istsos.fetchLastTemetature('TEMP_12_5').then((result)=>{
+            //     // self.last_temperature_data = result.options;
+            //     self.lastTemp125 = `${result.options.series[0].data[0].y}${result.uom}`
+            //     self.lastTemp125Time = {
+            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            // });
+            // this.istsos.fetchLastTemetature('TEMP_20_0').then((result)=>{
+            //     // self.last_temperature_data = result.options;
+            //     self.lastTemp200 = `${result.options.series[0].data[0].y}${result.uom}`
+            //     self.lastTemp200Time = {
+            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            // });
             this.istsos.fetchLastO2c('O2C_0_4').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastO2c04 = `${result.options.series[0].data[0].y} ${result.uom}`;
@@ -545,94 +745,94 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            this.istsos.fetchLastO2c('O2C_2_5').then((result)=>{
-                // self.last_temperature_data = result.options;
-                self.lastO2c25 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                self.lastO2c25Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            });
-            this.istsos.fetchLastO2c('O2C_5_0').then((result)=>{
-                // self.last_temperature_data = result.options;
-                self.lastO2c50 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                self.lastO2c50Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            });
-            this.istsos.fetchLastO2c('O2C_8_0').then((result)=>{
-                // self.last_temperature_data = result.options;
-                self.lastO2c80 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                self.lastO2c80Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            });
-            this.istsos.fetchLastO2c('O2C_12_5').then((result)=>{
-                 // self.last_temperature_data = result.options;
-                 self.lastO2c125 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                 self.lastO2c125Time = {
-                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-             });
-             this.istsos.fetchLastO2c('O2C_20_0').then((result)=>{
-                 // self.last_temperature_data = result.options;
-                 self.lastO2c200 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                 self.lastO2c200Time = {
-                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-             });
-             this.istsos.fetchLastO2s('O2S_0_4').then((result)=>{
-                 // self.last_temperature_data = result.options;
-                 self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                 self.lastO2s04Time = {
-                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-             });
-             this.istsos.fetchLastO2s('O2S_2_5').then((result)=>{
-                 // self.last_temperature_data = result.options;
-                 self.lastO2s25 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                 self.lastO2s25Time = {
-                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-             });
-             this.istsos.fetchLastO2s('O2S_5_0').then((result)=>{
-                 // self.last_temperature_data = result.options;
-                 self.lastO2s50 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                 self.lastO2s50Time = {
-                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-             });
-             this.istsos.fetchLastO2s('O2S_8_0').then((result)=>{
-                 // self.last_temperature_data = result.options;
-                 self.lastO2s80 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                 self.lastO2s80Time = {
-                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-             });
-             this.istsos.fetchLastO2s('O2S_12_5').then((result)=>{
-                  // self.last_temperature_data = result.options;
-                  self.lastO2s125 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                  self.lastO2s125Time = {
-                      date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-              });
-              this.istsos.fetchLastO2s('O2S_20_0').then((result)=>{
-                  // self.last_temperature_data = result.options;
-                  self.lastO2s200 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                  self.lastO2s200Time = {
-                      date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                      time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                  }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-              });
+            // this.istsos.fetchLastO2c('O2C_2_5').then((result)=>{
+            //     // self.last_temperature_data = result.options;
+            //     self.lastO2c25 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //     self.lastO2c25Time = {
+            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            // });
+            // this.istsos.fetchLastO2c('O2C_5_0').then((result)=>{
+            //     // self.last_temperature_data = result.options;
+            //     self.lastO2c50 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //     self.lastO2c50Time = {
+            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            // });
+            // this.istsos.fetchLastO2c('O2C_8_0').then((result)=>{
+            //     // self.last_temperature_data = result.options;
+            //     self.lastO2c80 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //     self.lastO2c80Time = {
+            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            // });
+            // this.istsos.fetchLastO2c('O2C_12_5').then((result)=>{
+            //      // self.last_temperature_data = result.options;
+            //      self.lastO2c125 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //      self.lastO2c125Time = {
+            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            //  });
+            //  this.istsos.fetchLastO2c('O2C_20_0').then((result)=>{
+            //      // self.last_temperature_data = result.options;
+            //      self.lastO2c200 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //      self.lastO2c200Time = {
+            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            //  });
+            //  this.istsos.fetchLastO2s('O2S_0_4').then((result)=>{
+            //      // self.last_temperature_data = result.options;
+            //      self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //      self.lastO2s04Time = {
+            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            //  });
+            //  this.istsos.fetchLastO2s('O2S_2_5').then((result)=>{
+            //      // self.last_temperature_data = result.options;
+            //      self.lastO2s25 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //      self.lastO2s25Time = {
+            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            //  });
+            //  this.istsos.fetchLastO2s('O2S_5_0').then((result)=>{
+            //      // self.last_temperature_data = result.options;
+            //      self.lastO2s50 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //      self.lastO2s50Time = {
+            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            //  });
+            //  this.istsos.fetchLastO2s('O2S_8_0').then((result)=>{
+            //      // self.last_temperature_data = result.options;
+            //      self.lastO2s80 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //      self.lastO2s80Time = {
+            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            //  });
+            //  this.istsos.fetchLastO2s('O2S_12_5').then((result)=>{
+            //       // self.last_temperature_data = result.options;
+            //       self.lastO2s125 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //       self.lastO2s125Time = {
+            //           date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //           time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //       }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            //   });
+            //   this.istsos.fetchLastO2s('O2S_20_0').then((result)=>{
+            //       // self.last_temperature_data = result.options;
+            //       self.lastO2s200 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //       self.lastO2s200Time = {
+            //           date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //           time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //       }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            //   });
               self.appendTempSeries();
         },
         appendTempSeries () {

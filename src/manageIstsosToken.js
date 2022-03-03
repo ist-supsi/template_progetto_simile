@@ -169,6 +169,14 @@ export default class IstsosIO {
       };
       return this._call({...DEFAULT_PARAMS, ...(params||{})});
   };
+  fetchProcedures() {
+      var self = this;
+      return this._call({
+            services: self.services,
+            procedures: 'operations',
+            getlist: undefined
+      });
+  };
   _fetchTemperature(procedures, eventtime='last') {
       var self = this;
       return this.fetch({
@@ -191,6 +199,14 @@ export default class IstsosIO {
           procedures: procedures,
           eventtime: eventtime,
           observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:O2S'
+      })
+  };
+  _fetchSdt(procedures, eventtime='last') {
+      var self = this;
+      return this.fetch({
+          procedures: procedures,
+          eventtime: eventtime,
+          observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:SDT'
       })
   };
   fetchLastTemetature(procedures) {
@@ -309,6 +325,29 @@ export default class IstsosIO {
             text: `Valore rilevato al: ${dataArray.values[0][0]}`
         };
 
+        info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
+        info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(3));
+        info.value = dataArray.values[0][1];
+        return info;
+    });
+  };
+  fetchLastSdt(procedures) {
+      var self = this;
+      return this._fetchSdt(procedures).then((response) => {
+        const dataArray = response.data.data[0].result.DataArray;
+        // console.log(dataArray);
+        let info = {
+            // order: order,
+            options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
+        };
+
+        info.options.title.text = "Trasparenza";
+        info.uom = dataArray.field[1].uom;
+        info.x = new Date(dataArray.values[0][0]);
+        info.options.subtitle = {
+            text: `Valore rilevato al: ${dataArray.values[0][0]}`
+        };
+        // 
         info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
         info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(3));
         info.value = dataArray.values[0][1];
