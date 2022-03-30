@@ -231,6 +231,36 @@ export default class IstsosIO {
         return info;
     });
   };
+  fetchSeries (procedures, observedproperties, begin, end) {
+      var self = this;
+      end = (end === undefined) ? new Date() : end;
+      begin = (begin === undefined) ? new Date(new Date().setFullYear(new Date().getFullYear() - 1)) : begin;
+      let eventtime = `${begin.toISOString()}/${end.toISOString()}`;
+      return this.fetch({
+          procedures: procedures,
+          eventtime: eventtime,
+          observedproperties: observedproperties
+      }).then((response) => {
+          const dataArray = response.data.data[0].result.DataArray;
+          let info = {
+              // order: order,
+              options: JSON.parse(JSON.stringify(TEMPERATURE_SERIES_DEFAULTS))
+          };
+
+          info.options.yAxis.title.text = `Temperatura (${dataArray.field[1].uom})`
+          info.uom = dataArray.field[1].uom;
+          // info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
+          // info.options.series[0].data[0].y = dataArray.values[0][1];
+          // info.value = dataArray.values[0][1];
+          // info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
+          const coeff = 1000 * 60 * 1;
+          info.options.series[0].data = dataArray.values.filter(el => el[1]!==null).map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
+          info.options.series[0].name = procedures;
+          // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
+
+          return info;
+      });
+  };
   fetchTemperatureSeries(procedures, begin, end) {
     /**
     procedure @string : Procedure name

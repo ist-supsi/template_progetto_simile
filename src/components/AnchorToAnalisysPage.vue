@@ -1,5 +1,5 @@
 <template>
-    <a :class="classes" @click="click(data)" :title="name">
+    <a :class="classes" href="/#/admin/analisi" @click="click(data)" :title="name">
         <span>
             <i :class="iclasses" aria-hidden="true"></i>
         </span>
@@ -12,16 +12,16 @@
         props: {
             data: {},
             name: {},
+            click: {
+                type: Function,
+                default: () => {}
+            },
             iclasses: {
                 type: Object,
                 default: () => ({
                   'fa': true,
-                  'fa-info-circle': true
+                  'fa-line-chart': true
                 }),
-            },
-            click: {
-                type: Function,
-                default: () => {}
             },
             classes: {
                 type: Object,

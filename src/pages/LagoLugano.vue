@@ -264,14 +264,15 @@
     import HighchartCard from 'src/components/Cards/HighchartCard.vue'
     import StatsCard from 'src/components/Cards/StatsCard.vue'
     import LTable from 'src/components/Table.vue'
+    
     import { latLngBounds, latLng } from "leaflet";
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
     import 'leaflet/dist/leaflet.css';
-    import axios from 'axios';
 
     // import Modal from 'src/components/Modal.vue';
     // import ModalButton from 'src/components/ModalButton.vue';
     import NotifyButton from 'src/components/NotifyButton.vue';
+    import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
 
     // import IstsosIO from '../manageIstsosToken.js';
 
@@ -423,10 +424,18 @@
                         orderable: false,
                     },
                     {
-                        label: 'Profondità sensore',
+                        label: 'Quota s.l.a./Profondità',
                         transform: (item)=>{
-                            const sub = item.data.description.match(/a [+-]?\d+(\.\d+)? m di profondità/gm)
-                            return sub && sub[0].match(/[+-]?\d+(\.\d+)? m/gm);
+                            const prof = item.data.description.match(/profondità di [+-]?\d+(\.\d+)? m/gm);
+                            const quot = item.data.description.match(/quota di circa [+-]?\d+(\.\d+)? m/gm);
+                            if ( prof ) {
+                                return '- '+prof[0].match(/[+-]?\d+(\.\d+)? m/gm);
+                            } else if ( quot ) {
+                                return '+ '+quot[0].match(/[+-]?\d+(\.\d+)? m/gm);
+                            } else {
+                                return '';
+                            }
+                            
                         },
                         // name: 'name',
                         orderable: false,
@@ -453,7 +462,7 @@
                         orderable: false,
                         classes: {
                             'btn': true,
-                            'btn-primary': true,
+                            'btn-info': true,
                             'btn-sm': true,
                         },
                         event: "click",
@@ -464,9 +473,31 @@
                             'fa-info-circle': true
                         }
                     },
+                    // {
+                    //     label: '',
+                    //     transform: (item)=>{
+                    //         let anchor = document.createElement('a');
+                    //         let icon = document.createElement('i');
+                    //         icon.classList.add('fa', 'fa-line-chart');
+                    //         anchor.appendChild(icon);
+                    //         let text = document.createTextNode('Analizza');
+                    //         anchor.classList.add('btn', 'btn-sm', 'btn-primary');
+                    //         anchor.appendChild(text);
+                    //         anchor.onclick = function() {
+                    //             console.log('this');
+                    //         };
+                    //         return anchor.outerHTML;
+                    //     },
+                    //     // name: 'name',
+                    //     orderable: false,
+                    // }
                     {
                         label: '',
                         name: 'Analizza',
+                        event: "click",
+                        handler: (data)=>{
+                            this.$root.analisysVariable = `${data.name}`;
+                        },
                         orderable: false,
                         classes: {
                             'btn': true,
@@ -474,17 +505,7 @@
                             'btn-info': true,
                             'btn-sm': true,
                         },
-                        href: '/#/foo',
-                        // event: "click",
-                        // handler: (data)=>{
-                        //     console.log(data);
-                        //     alert('Hello!');
-                        // },
-                        component: NotifyButton,
-                        iclasses: {
-                            'fa-info-circle': false,
-                            'fa-line-chart': true
-                        }
+                        component: AnchorToAnalisysPage
                     }
                 ],
                 selectedRow: {},
@@ -706,7 +727,7 @@
             this.tableFetchData().then((result)=>{this.tableSetData()});
 
             this.populateCockpit();
-            self.appendTempSeries();
+            // self.appendTempSeries();
             // this.fetchO2c('O2C_0_4');
             this.$root.dropdownVisible = false;
         },
@@ -734,6 +755,7 @@
                 self.tableAllData = {
                     data: result.data.data
                 };
+                self.$root.allProcedure = self.tableAllData;
             });
             // return new Promise((resolve, reject) => {
             //     self.tableAllData = {};
