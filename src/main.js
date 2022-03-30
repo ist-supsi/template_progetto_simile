@@ -24,7 +24,7 @@ import LightBootstrap from './light-bootstrap-main';
 import DataTable from 'laravel-vue-datatable';
 
 // Chroma-js
-import chroma from "chroma-js";
+// import chroma from "chroma-js";
 
 // router setup
 import routes from './routes/routes';

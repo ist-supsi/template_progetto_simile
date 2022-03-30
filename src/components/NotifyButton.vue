@@ -1,20 +1,24 @@
 <template>
-    <button :class="classes" @click="click(data)" :title="name">
+    <a :class="classes" @click="click(data)" :title="name" :href="href">
         <span>
             <i :class="iclasses" aria-hidden="true"></i>
         </span>
         &nbsp;
         {{ name }}
-    </button>
+    </a>
 </template>
 <script>
     export default {
         props: {
             data: {},
             name: {},
+            href: ()=>(false),
             iclasses: {
                 type: Object,
-                default: () => ({}),
+                default: () => ({
+                  'fa': true,
+                  'fa-info-circle': true
+                }),
             },
             click: {
                 type: Function,

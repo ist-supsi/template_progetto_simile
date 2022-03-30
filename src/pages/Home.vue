@@ -100,6 +100,9 @@
       return {
         whereAmI: 'Home'
       }
+    },
+    mounted () {
+      this.$root.whereAmI = '';
     }
   }
 </script>

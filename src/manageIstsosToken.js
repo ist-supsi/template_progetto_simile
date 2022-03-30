@@ -255,7 +255,7 @@ export default class IstsosIO {
         // info.value = dataArray.values[0][1];
         // info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
         const coeff = 1000 * 60 * 1;
-        info.options.series[0].data = dataArray.values.map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
+        info.options.series[0].data = dataArray.values.filter(el => el[1]!==null).map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
         info.options.series[0].name = procedures;
         // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
 
@@ -347,7 +347,7 @@ export default class IstsosIO {
         info.options.subtitle = {
             text: `Valore rilevato al: ${dataArray.values[0][0]}`
         };
-        // 
+        //
         info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
         info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(3));
         info.value = dataArray.values[0][1];
