@@ -214,8 +214,18 @@
                                         :name="layer.name"
                                         :transparent="layer.transparent"
                                         :format="layer.format"
+                                        :opacity="layer.opacity"
                                         layer-type="overlay"
                                       ></l-wms-tile-layer>
+                                      <!-- <v-marker-cluster>
+                                        <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">
+
+                                        </v-marker>
+                                      </v-marker-cluster> -->
+                                      <l-geo-json
+                                          :geojson="features"
+                                          :pointToLayer="(feature, latlng)=>{return L.circleMarker(latlng)}"
+                                      />
                                   </l-map>
                                 </card>
                             </div>
@@ -264,10 +274,25 @@
     import HighchartCard from 'src/components/Cards/HighchartCard.vue'
     import StatsCard from 'src/components/Cards/StatsCard.vue'
     import LTable from 'src/components/Table.vue'
-    
+
+    import { Icon } from 'leaflet';
+
+    delete Icon.Default.prototype._getIconUrl;
+    Icon.Default.mergeOptions({
+      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+      iconUrl: require('leaflet/dist/images/marker-icon.png'),
+      shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+    });
+
     import { latLngBounds, latLng } from "leaflet";
-    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
+    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson } from "vue2-leaflet";
     import 'leaflet/dist/leaflet.css';
+
+    import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+    import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
+
+    import "leaflet.markercluster/dist/MarkerCluster.css";
+    import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
     // import Modal from 'src/components/Modal.vue';
     // import ModalButton from 'src/components/ModalButton.vue';
@@ -332,10 +357,13 @@
             LMap,
             LTileLayer,
             "l-wms-tile-layer": LWMSTileLayer,
+            LGeoJson,
             LControlLayers,
             highcharts: Chart,
             HighchartCard,
             NotifyButton,
+            'v-marker-cluster': Vue2LeafletMarkerCluster,
+            'v-marker': Vue2LeafletMarker,
             // ModalButton,
             // Modal
         },
@@ -435,7 +463,7 @@
                             } else {
                                 return '';
                             }
-                            
+
                         },
                         // name: 'name',
                         orderable: false,
@@ -570,6 +598,10 @@
                   [45.90, 8.85],
                   [46.03, 9.12]
                 ]),
+                features: {
+                  "type": "FeatureCollection",
+                  "features": []
+                },
                 url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
                 layers: [
@@ -586,6 +618,7 @@
                     visible: true,
                     format: 'image/png',
                     layers: 'Aree_naturali_poligonali_Svizzera',
+                    opacity: .5,
                     transparent: true/*,
                     attribution: "Weather data © 2012 IEM Nexrad"*/
                   },
@@ -634,6 +667,7 @@
                     visible: true,
                     format: 'image/png',
                     layers: 'Laghi',
+                    opacity: .5,
                     transparent: true/*,
                     attribution: "Weather data © 2012 IEM Nexrad"*/
                   },
@@ -725,6 +759,55 @@
             var self = this;
             this.$root.whereAmI = 'Lago di Lugano';
             this.tableFetchData().then((result)=>{this.tableSetData()});
+
+            const groupBy = (x,f,g)=>x.reduce((a,b)=>{
+                if ( a[f(b)] ) {
+                    a[f(b)].push(g(b))
+                    return a;
+                } else {
+                    a[f(b)] = [g(b)]
+                    return a;
+                }
+
+            },{});
+
+            // const foo = (a)=>`${a.geometry.coordinates[0].toFixed(3)};${a.geometry.coordinates[1].toFixed(3)}`;
+            function approxPosition (a) {
+                const ff = .005
+                const lon = (a.geometry.coordinates[0]/ff).toFixed(0)*ff;
+                const lat = (a.geometry.coordinates[1]/ff).toFixed(0)*ff;
+                return `${lon};${lat}`;
+            };
+            const collectNames = (b)=>b.properties.name;
+
+            // Load markers
+            this.istsos.fetchGeometryCollection().then((result)=>{
+                const reduced = groupBy(result.data.features, approxPosition, collectNames);
+
+                let bounds = L.latLngBounds([]);
+
+                const features = Object.entries(reduced).map(([k, v]) => {
+                    const coords = k.split(';').map(parseFloat);
+                    bounds.extend(L.latLng(coords[1], coords[0]));
+                    return {
+                        "type": "Feature",
+                        "properties": {names: v},
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": coords
+                        }
+                      }
+                });
+
+                self.features = {
+                    "type": "FeatureCollection",
+                    "features": features
+                };
+
+                self.bounds = bounds;
+
+
+            })
 
             this.populateCockpit();
             // self.appendTempSeries();
