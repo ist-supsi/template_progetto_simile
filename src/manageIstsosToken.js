@@ -177,6 +177,14 @@ export default class IstsosIO {
             getlist: undefined
       });
   };
+  fetchGeometryCollection() {
+      var self = this;
+      return this._call({
+            services: self.services,
+            procedures: 'operations',
+            geojson: undefined
+      });
+  };
   _fetchTemperature(procedures, eventtime='last') {
       var self = this;
       return this.fetch({
@@ -346,7 +354,7 @@ export default class IstsosIO {
     var self = this;
     return this._fetchO2s(procedures).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
-        // console.log(dataArray);
+        console.log(dataArray);
         let info = {
             // order: order,
             options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
