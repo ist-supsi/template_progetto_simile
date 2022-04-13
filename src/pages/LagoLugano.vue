@@ -60,11 +60,10 @@
                                       </stats-card>
                                   </div>
                               </div>
-                              <div class="row">
+                              <!-- <div class="row">
                                   <div class="col-6">
                                       <stats-card>
                                           <div slot="header" class="icon-warning">
-                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
                                             <i class="fa fa-flag text-info"
                                               data-toggle="tooltip"
                                               title="Velocità del vento"></i>
@@ -84,7 +83,6 @@
                                   <div class="col-6">
                                       <stats-card>
                                           <div slot="header" class="icon-warning">
-                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
                                             <i class="fa fa-compass text-info"
                                               data-toggle="tooltip"
                                               title="Velocità del vento"></i>
@@ -101,7 +99,7 @@
                                           </div>
                                       </stats-card>
                                   </div>
-                              </div>
+                              </div> -->
                               <div class="row">
                                   <div class="col-6">
                                       <stats-card>
@@ -216,6 +214,11 @@
                                         :format="layer.format"
                                         layer-type="overlay"
                                       ></l-wms-tile-layer>
+                                      <l-geo-json
+                                        :name="markerLayer.name"
+                                        :pointToLayer="markerLayer.pointToLayer"
+                                        :geojson="markerLayer.geojson">
+                                      </l-geo-json>
                                   </l-map>
                                 </card>
                             </div>
@@ -266,7 +269,8 @@
     import LTable from 'src/components/Table.vue'
     
     import { latLngBounds, latLng } from "leaflet";
-    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
+    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson } from "vue2-leaflet";
+    
     import 'leaflet/dist/leaflet.css';
 
     // import Modal from 'src/components/Modal.vue';
@@ -332,6 +336,7 @@
             LMap,
             LTileLayer,
             "l-wms-tile-layer": LWMSTileLayer,
+            LGeoJson,
             LControlLayers,
             highcharts: Chart,
             HighchartCard,
@@ -341,6 +346,7 @@
         },
         data () {
             return {
+                markers: [],
                 showDescription: true,
                 lastSdtFig: '',
                 lastSdtTime: null,
@@ -700,8 +706,21 @@
                     layers: 'Bacini_idrografici',
                     transparent: true/*,
                     attribution: "Weather data © 2012 IEM Nexrad"*/
-                  }
+                }
                 ],
+                markerLayer: {
+                    name: 'Marker',
+                    visible: true,
+                    layers: 'MArker',
+                    geojson: {
+                      'name': 'markers',
+                      'type': 'FeatureCollection',
+                      'features': []
+                    },
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng);
+                    }
+                },
                 attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 currentZoom: 10.5,
                 //currentCenter: latLng(47.41322, -1.219482),
@@ -714,12 +733,18 @@
             }
         },
         watch: {
-          series_data: {
-             handler(val){
-               // do stuff
-             },
-             deep: true
-          }
+            markerLayer: {
+                handler(val){
+                    // do stuff
+                },
+                deep: true
+            }
+          // series_data: {
+          //    handler(val){
+          //      // do stuff
+          //    },
+          //    deep: true
+          // }
         },
         mounted() {
             var self = this;
@@ -732,6 +757,17 @@
             this.$root.dropdownVisible = false;
         },
     methods: {
+        addMarker (lon, lat) {
+            const feat = {
+              'type': 'Feature',
+              'properties': {},
+              'geometry': {
+                'type': 'Point',
+                'coordinates': [lon, lat]
+              }
+            };
+            this.markerLayer.geojson.features.push(feat);
+        },
         displayRow (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
@@ -824,11 +860,14 @@
             var self = this;
             this.istsos.fetchLastTemetature('W_TEMP_0_4').then((result)=>{
                 // self.last_temperature_data = result.options;
+                
                 self.lastTemp04 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp04Time = {
                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+
+                self.addMarker(result.coords[0], result.coords[1])
 
             });
             this.istsos.fetchLastSdt('SDT_FIG').then((result)=>{

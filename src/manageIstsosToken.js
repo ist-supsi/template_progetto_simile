@@ -213,11 +213,15 @@ export default class IstsosIO {
     var self = this;
     return this._fetchTemperature(procedures).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
-        // console.log(dataArray);
+        // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
+        const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
+        const coords = coords_[0].match(/[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?/gm)[0].split(',')
+        
         let info = {
             // order: order,
             procedure: procedures,
-            options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
+            options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS)),
+            coords: coords.map(el=>parseFloat(el))
         };
         info.uom = dataArray.field[1].uom;
         info.x = new Date(dataArray.values[0][0]);
