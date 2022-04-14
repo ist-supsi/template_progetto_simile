@@ -184,7 +184,7 @@
                             </div>
 
                             <div class="col-4">
-                                <card style="height: 62.5vh;">
+                                <card style="height: 94%;">
                                 <l-map
                                     v-if="showMap"
                                     :zoom="currentZoom"
@@ -221,8 +221,9 @@
                                         </v-marker>
                                       </v-marker-cluster> -->
                                       <l-geo-json
+                                          ref="markerLayer"
                                           :geojson="features"
-                                          :pointToLayer="(feature, latlng)=>{return L.circleMarker(latlng)}"
+                                          :options="markerLayerOptions()"
                                       />
                                   </l-map>
                                 </card>
@@ -284,39 +285,21 @@
 
     import { latLngBounds, latLng } from "leaflet";
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson } from "vue2-leaflet";
-<<<<<<< HEAD
-    
-=======
->>>>>>> d9e6f800c80358a3230208a540e46cd8179bb00d
+
     import 'leaflet/dist/leaflet.css';
 
-    import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
-    import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
+    // import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+    // import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
 
-    import "leaflet.markercluster/dist/MarkerCluster.css";
-    import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+    // import "leaflet.markercluster/dist/MarkerCluster.css";
+    // import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
     // import Modal from 'src/components/Modal.vue';
     // import ModalButton from 'src/components/ModalButton.vue';
     import NotifyButton from 'src/components/NotifyButton.vue';
     import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
 
-    // import IstsosIO from '../manageIstsosToken.js';
-
     loadBullet(Highcharts);
-
-    // function getCookieValue(key) {
-    //     return document.cookie
-    //     .split('; ')
-    //     .find((row) => row.startsWith(key+'='))
-    //     .split('=')[1];
-    // };
-    //
-    // const formname = getCookieValue('form-name');
-    // const formkey = getCookieValue('form-key');
-    // const root = getCookieValue('app-name');
-    // const istsosServices = getCookieValue('istsos-services');
-    // let istsos = new IstsosIO(this.$root.proxyUrl, this.$root.proxyServices);
 
     Highcharts.setOptions({
       chart: {
@@ -364,53 +347,54 @@
             highcharts: Chart,
             HighchartCard,
             NotifyButton,
-            'v-marker-cluster': Vue2LeafletMarkerCluster,
-            'v-marker': Vue2LeafletMarker,
+            // 'v-marker-cluster': Vue2LeafletMarkerCluster,
+            // 'v-marker': Vue2LeafletMarker,
             // ModalButton,
             // Modal
         },
         data () {
             return {
-                markers: [],
+                // markers: [],
+                selectedProc: null,
                 showDescription: true,
                 lastSdtFig: '',
                 lastSdtTime: null,
                 lastTemp04: '',
                 lastTemp04Time: null,
-                lastTemp25: '',
-                lastTemp25Time: null,
-                lastTemp50: '',
-                lastTemp50Time: null,
-                lastTemp80: '',
-                lastTemp80Time: null,
-                lastTemp125: '',
-                lastTemp125Time: null,
-                lastTemp200: '',
-                lastTemp200Time: null,
-                lastO2c04: '',
-                lastO2c04Time: null,
-                lastO2c25: '',
-                lastO2c25Time: null,
-                lastO2c50: '',
-                lastO2c50Time: null,
-                lastO2c80: '',
-                lastO2c80Time: null,
-                lastO2c125: '',
-                lastO2c125Time: null,
-                lastO2c200: '',
-                lastO2c200Time: null,
                 lastO2s04: '',
                 lastO2s04Time: null,
-                lastO2s25: '',
-                lastO2s25Time: null,
-                lastO2s50: '',
-                lastO2s50Time: null,
-                lastO2s80: '',
-                lastO2s80Time: null,
-                lastO2s125: '',
-                lastO2s125Time: null,
-                lastO2s200Time: null,
-                lastO2s200: '',
+                // lastTemp25: '',
+                // lastTemp25Time: null,
+                // lastTemp50: '',
+                // lastTemp50Time: null,
+                // lastTemp80: '',
+                // lastTemp80Time: null,
+                // lastTemp125: '',
+                // lastTemp125Time: null,
+                // lastTemp200: '',
+                // lastTemp200Time: null,
+                // lastO2c04: '',
+                // lastO2c04Time: null,
+                // lastO2c25: '',
+                // lastO2c25Time: null,
+                // lastO2c50: '',
+                // lastO2c50Time: null,
+                // lastO2c80: '',
+                // lastO2c80Time: null,
+                // lastO2c125: '',
+                // lastO2c125Time: null,
+                // lastO2c200: '',
+                // lastO2c200Time: null,
+                // lastO2s25: '',
+                // lastO2s25Time: null,
+                // lastO2s50: '',
+                // lastO2s50Time: null,
+                // lastO2s80: '',
+                // lastO2s80Time: null,
+                // lastO2s125: '',
+                // lastO2s125Time: null,
+                // lastO2s200Time: null,
+                // lastO2s200: '',
                 selected_temperature: 'TEMP_0_4',
                 selected_o2c: 'O2C_0_4',
                 last_temperature_data: {},
@@ -790,12 +774,10 @@
                     a[f(b)] = [g(b)]
                     return a;
                 }
-
             },{});
 
-            // const foo = (a)=>`${a.geometry.coordinates[0].toFixed(3)};${a.geometry.coordinates[1].toFixed(3)}`;
             function approxPosition (a) {
-                const ff = .005
+                const ff = .005 // Approximation
                 const lon = (a.geometry.coordinates[0]/ff).toFixed(0)*ff;
                 const lat = (a.geometry.coordinates[1]/ff).toFixed(0)*ff;
                 return `${lon};${lat}`;
@@ -821,13 +803,16 @@
                       }
                 });
 
+                // Set FeatureCollection
                 self.features = {
                     "type": "FeatureCollection",
                     "features": features
                 };
 
-                self.bounds = bounds;
+                // console.log(self.$refs.markerLayer);
 
+                // Set map bounds
+                self.bounds = bounds;
 
             })
 
@@ -837,6 +822,37 @@
             this.$root.dropdownVisible = false;
         },
     methods: {
+        markerLayerOptions () {
+            var self = this;
+            return {
+                pointToLayer: function (feature, latlng) {
+                    let clr;
+                    if ( !self.selectedProc ) {
+                        clr = 'text-secondary'
+                    } else if ( feature.properties.names.includes(self.selectedProc) ) {
+                        clr = 'text-warning'
+                    } else {
+                        clr = 'text-dark'
+                    };
+                    const fontAwesomeIcon = L.divIcon({
+                        html: `<i class="fa fa-map-pin fa-3x ${clr}"></i>`,
+                        iconSize: [20, 20],
+                        className: ''
+                    });
+                    const marker = L.marker(latlng, {icon: fontAwesomeIcon});
+                    return marker;
+                }
+            }
+        },
+        p2l (feature, latlng) {
+            const fontAwesomeIcon = L.divIcon({
+                html: '<i class="fa fa-map-marker fa-4x"></i>',
+                iconSize: [20, 20],
+                className: 'myDivIcon'
+            });
+            const marker = L.marker(latlng, {icon: fontAwesomeIcon});
+            return marker;
+        },
         addMarker (lon, lat) {
             const feat = {
               'type': 'Feature',
@@ -959,6 +975,14 @@
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
 
             });
+            this.istsos.fetchLastO2s('W_O2S_0_4').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                self.lastO2s04Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            });
             // this.istsos.fetchLastTemetature('TEMP_2_5').then((result)=>{
             //     // self.last_temperature_data = result.options;
             //     self.lastTemp25 = `${result.options.series[0].data[0].y}${result.uom}`
@@ -1047,14 +1071,7 @@
             //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
             //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             //  });
-             this.istsos.fetchLastO2s('W_O2S_0_4').then((result)=>{
-                 // self.last_temperature_data = result.options;
-                 self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                 self.lastO2s04Time = {
-                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-             });
+             
             //  this.istsos.fetchLastO2s('O2S_2_5').then((result)=>{
             //      // self.last_temperature_data = result.options;
             //      self.lastO2s25 = `${result.options.series[0].data[0].y} ${result.uom}`;

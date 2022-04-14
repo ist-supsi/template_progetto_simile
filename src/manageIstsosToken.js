@@ -354,7 +354,6 @@ export default class IstsosIO {
     var self = this;
     return this._fetchO2s(procedures).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
-        console.log(dataArray);
         let info = {
             // order: order,
             options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
