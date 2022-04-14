@@ -265,15 +265,17 @@
     </div>
 </template>
 <script>
-    import {Chart} from 'highcharts-vue';
-    import Highcharts from 'highcharts';
-    import loadBullet from 'highcharts/modules/bullet.js';
+    // import {Chart} from 'highcharts-vue';
+    // import Highcharts from 'highcharts';
+    // import loadBullet from 'highcharts/modules/bullet.js';
 
-    import ChartCard from 'src/components/Cards/ChartCard.vue'
-    import HighchartCard from 'src/components/Cards/HighchartCard.vue'
+    // import ChartCard from 'src/components/Cards/ChartCard.vue'
+    // import HighchartCard from 'src/components/Cards/HighchartCard.vue'
     import StatsCard from 'src/components/Cards/StatsCard.vue'
     import LTable from 'src/components/Table.vue'
 
+    // Courtesy of: https://vue2-leaflet.netlify.app/quickstart/#marker-icons-are-missing
+    // Otherwise Marker Icons are missing
     import { Icon } from 'leaflet';
 
     delete Icon.Default.prototype._getIconUrl;
@@ -299,53 +301,53 @@
     import NotifyButton from 'src/components/NotifyButton.vue';
     import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
 
-    loadBullet(Highcharts);
-
-    Highcharts.setOptions({
-      chart: {
-          inverted: true,
-          marginLeft: 135,
-          type: 'bullet'
-      },
-      title: {
-          text: null
-      },
-      legend: {
-          enabled: false
-      },
-      yAxis: {
-          gridLineWidth: 0
-      },
-      plotOptions: {
-          series: {
-              pointPadding: 0.25,
-              borderWidth: 0,
-              color: '#000',
-              targetOptions: {
-                  width: '200%'
-              }
-          }
-      },
-      credits: {
-          enabled: false
-      },
-      exporting: {
-          enabled: false
-      }
-  });
+  //   loadBullet(Highcharts);
+  //
+  //   Highcharts.setOptions({
+  //     chart: {
+  //         inverted: true,
+  //         marginLeft: 135,
+  //         type: 'bullet'
+  //     },
+  //     title: {
+  //         text: null
+  //     },
+  //     legend: {
+  //         enabled: false
+  //     },
+  //     yAxis: {
+  //         gridLineWidth: 0
+  //     },
+  //     plotOptions: {
+  //         series: {
+  //             pointPadding: 0.25,
+  //             borderWidth: 0,
+  //             color: '#000',
+  //             targetOptions: {
+  //                 width: '200%'
+  //             }
+  //         }
+  //     },
+  //     credits: {
+  //         enabled: false
+  //     },
+  //     exporting: {
+  //         enabled: false
+  //     }
+  // });
 
     export default {
         components: {
             LTable,
-            ChartCard,
+            // ChartCard,
             StatsCard,
             LMap,
             LTileLayer,
             "l-wms-tile-layer": LWMSTileLayer,
             LGeoJson,
             LControlLayers,
-            highcharts: Chart,
-            HighchartCard,
+            // highcharts: Chart,
+            // HighchartCard,
             NotifyButton,
             // 'v-marker-cluster': Vue2LeafletMarkerCluster,
             // 'v-marker': Vue2LeafletMarker,
@@ -512,6 +514,7 @@
                         event: "click",
                         handler: (data)=>{
                             this.$root.analisysVariable = `${data.name}`;
+                            this.$root.analisysVariableUrn = `${data.observedproperties[0].definition}`;
                         },
                         orderable: false,
                         classes: {
@@ -835,8 +838,9 @@
                         clr = 'text-dark'
                     };
                     const fontAwesomeIcon = L.divIcon({
-                        html: `<i class="fa fa-map-pin fa-3x ${clr}"></i>`,
-                        iconSize: [20, 20],
+                        html: `<i class="fa fa-map-pin fa-4x ${clr}"></i>`,
+                        iconSize: [40, 80],
+                        iconAnchor: [20, 40],
                         className: ''
                     });
                     const marker = L.marker(latlng, {icon: fontAwesomeIcon});
@@ -844,26 +848,26 @@
                 }
             }
         },
-        p2l (feature, latlng) {
-            const fontAwesomeIcon = L.divIcon({
-                html: '<i class="fa fa-map-marker fa-4x"></i>',
-                iconSize: [20, 20],
-                className: 'myDivIcon'
-            });
-            const marker = L.marker(latlng, {icon: fontAwesomeIcon});
-            return marker;
-        },
-        addMarker (lon, lat) {
-            const feat = {
-              'type': 'Feature',
-              'properties': {},
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [lon, lat]
-              }
-            };
-            this.markerLayer.geojson.features.push(feat);
-        },
+        // p2l (feature, latlng) {
+        //     const fontAwesomeIcon = L.divIcon({
+        //         html: '<i class="fa fa-map-marker fa-4x"></i>',
+        //         iconSize: [20, 20],
+        //         className: 'myDivIcon'
+        //     });
+        //     const marker = L.marker(latlng, {icon: fontAwesomeIcon});
+        //     return marker;
+        // },
+        // addMarker (lon, lat) {
+        //     const feat = {
+        //       'type': 'Feature',
+        //       'properties': {},
+        //       'geometry': {
+        //         'type': 'Point',
+        //         'coordinates': [lon, lat]
+        //       }
+        //     };
+        //     this.markerLayer.geojson.features.push(feat);
+        // },
         displayRow (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
@@ -956,14 +960,14 @@
             var self = this;
             this.istsos.fetchLastTemetature('W_TEMP_0_4').then((result)=>{
                 // self.last_temperature_data = result.options;
-                
+
                 self.lastTemp04 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp04Time = {
                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
 
-                self.addMarker(result.coords[0], result.coords[1])
+                // self.addMarker(result.coords[0], result.coords[1])
 
             });
             this.istsos.fetchLastSdt('SDT_FIG').then((result)=>{
@@ -1071,7 +1075,7 @@
             //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
             //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             //  });
-             
+
             //  this.istsos.fetchLastO2s('O2S_2_5').then((result)=>{
             //      // self.last_temperature_data = result.options;
             //      self.lastO2s25 = `${result.options.series[0].data[0].y} ${result.uom}`;

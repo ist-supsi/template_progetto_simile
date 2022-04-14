@@ -224,7 +224,7 @@ export default class IstsosIO {
         // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
         const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
         const coords = coords_[0].match(/[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?/gm)[0].split(',')
-        
+
         let info = {
             // order: order,
             procedure: procedures,
@@ -246,7 +246,8 @@ export default class IstsosIO {
   fetchSeries (procedures, observedproperties, begin, end) {
       var self = this;
       end = (end === undefined) ? new Date() : end;
-      begin = (begin === undefined) ? new Date(new Date().setFullYear(new Date().getFullYear() - 1)) : begin;
+      // begin = (begin === undefined) ? new Date(new Date().setFullYear(new Date().getFullYear() - 1)) : begin;
+      begin = (begin === undefined) ? new Date(new Date().setDate(new Date().getDate() - 30)) : begin;
       let eventtime = `${begin.toISOString()}/${end.toISOString()}`;
       return this.fetch({
           procedures: procedures,
