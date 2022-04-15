@@ -157,6 +157,18 @@ export default class IstsosIO {
           return  axios(config);
       });
   };
+  call(params) {
+      var self = this;
+      const DEFAULT_PARAMS = {
+          services: self.services,
+          // operations: 'getobservation',
+          // offerings: 'temporary',
+          procedures: undefined,
+          // observedproperties: undefined,
+          // eventtime: 'last'
+      };
+      return this._call({...DEFAULT_PARAMS, ...(params||{})});
+  };
   fetch(params) {
       var self = this;
       let DEFAULT_PARAMS = {
@@ -244,6 +256,18 @@ export default class IstsosIO {
     });
   };
   fetchSeries (procedures, observedproperties, begin, end) {
+      var self = this;
+      end = (end === undefined) ? new Date() : end;
+      // begin = (begin === undefined) ? new Date(new Date().setFullYear(new Date().getFullYear() - 1)) : begin;
+      begin = (begin === undefined) ? new Date(new Date().setDate(new Date().getDate() - 30)) : begin;
+      let eventtime = `${begin.toISOString()}/${end.toISOString()}`;
+      return this.fetch({
+          procedures: procedures,
+          eventtime: eventtime,
+          observedproperties: observedproperties
+      })
+  };
+  fetchSeries_old (procedures, observedproperties, begin, end) {
       var self = this;
       end = (end === undefined) ? new Date() : end;
       // begin = (begin === undefined) ? new Date(new Date().setFullYear(new Date().getFullYear() - 1)) : begin;
