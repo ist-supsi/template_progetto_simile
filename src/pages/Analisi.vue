@@ -67,7 +67,7 @@
     import NotifyButton from 'src/components/NotifyButton.vue';
     import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
 
-    import { mean,std,min,sqrt } from 'mathjs'
+    import { mean,std,min,sqrt,max } from 'mathjs'
 
     loadBullet(Highcharts);
 
@@ -117,23 +117,32 @@
         },
         yAxis: {
             plotBands: [
-            // {
-            //     from: 0,
-            //     to: 0,
-            //     color: 'grey'
-            // },
                 {
                     from: 0,
                     to: 0,
-                    color: 'rgb(116, 180, 202)'
+                    color: 'lightgrey'
+                },
+                {
+                    from: 0,
+                    to: 0,
+                    color: 'rgb(116, 180, 202)',
+                    // label: {'text': 'm-3σ'},
                 }, {
                     from: 0,
                     to: 0,
-                    color: 'rgb(93, 133, 198)'
+                    color: 'rgb(93, 133, 198)',
+                    // label: {text: 'm±σ'}
+
                 }, {
                     from: 0,
                     to: 0,
-                    color: 'rgb(68, 125, 99)'
+                    color: 'rgb(68, 125, 99)',
+                    // label: {'text': 'm+3σ'},
+                }, {
+                    from: 0,
+                    to: 0,
+                    color: 'lightgrey',
+                    // label: {'text': 'm+3σ'},
                 }
             ],
             title: null
@@ -170,17 +179,20 @@
             type: 'datetime'
         },
         yAxis: {
+            gridLineWidth: 1,
             title: {
-              text: 'Temperatura'
+              text: ''
             }
         },
         legend: {
             enabled: true
         },
-        plotOptions: {},
+        plotOptions: {
+            line: {marker: {enabled: false}}
+        },
         series: [{
             type: 'line',
-            name: 'Temperatura',
+            name: '',
             data: [],
             // color: dataColor
         }]
@@ -255,23 +267,44 @@
             });
 
             this.groupedProcedures = this.allProcedure.reduce((acc, it) => {
+
                 let arr = it.name.split('_');
+                let key;
                 if ( arr.length<=2 ) {
-                    acc[it.name] = [it.name];
-                    return acc;
+                    key = it.name;
                 } else {
-                    const key = arr.slice(0, -2).join('_');
-                    self.procedureInfos[it.name] = {
-                        group: key,
-                        observedproperties: it.observedproperties[0].definition
-                    };
+                    key = arr.slice(0, -2).join('_');
+                };
+                self.procedureInfos[it.name] = {
+                    group: key,
+                    observedproperties: it.observedproperties[0].definition
+                };
+                if ( acc ) {
                     if ( key in acc ) {
                         acc[key].push(it.name);
                     } else {
                         acc[key] = [it.name];
                     };
-                    return acc;
                 };
+                return acc;
+                // if ( arr.length<=2 ) {
+                //
+                //     acc[it.name] = [it.name];
+                //
+                //     return acc;
+                // } else {
+                //     const key = arr.slice(0, -2).join('_');
+                //     self.procedureInfos[it.name] = {
+                //         group: key,
+                //         observedproperties: it.observedproperties[0].definition
+                //     };
+                //     if ( key in acc ) {
+                //         acc[key].push(it.name);
+                //     } else {
+                //         acc[key] = [it.name];
+                //     };
+                //     return acc;
+                // };
             }, {});
 
             this.setSeries(prm);
@@ -304,19 +337,46 @@
                             const variableAverage = mean(series);
                             const variableStd = sqrt(std(series));
 
+                            // console.log(result);
+                            result.options.yAxis.plotLines = [{
+                                color: 'darkgrey',
+                                dashStyle: 'ShortDash',
+                                width: 2,
+                                value: variableAverage
+                            },{
+                                color: 'darkgrey',
+                                dashStyle: 'DashDot',
+                                width: 2,
+                                value: variableAverage-3*variableStd
+                            },{
+                                color: 'darkgrey',
+                                dashStyle: 'DashDot',
+                                width: 2,
+                                value: variableAverage+3*variableStd
+                            }];
+
+
                             if ( prm===undefined ) {
                                 prm = Promise.resolve();
                             };
                             (prm).then(()=>{
-                                // self.bulletOptions.yAxis.plotBands[0].from = 0;
-                                // self.bulletOptions.yAxis.plotBands[0].to = variableAverage-3*variableStd;
-                                self.bulletOptions.yAxis.plotBands[0].from = variableAverage-3*variableStd;
-                                self.bulletOptions.yAxis.plotBands[0].to = variableAverage-variableStd;
-                                self.bulletOptions.yAxis.plotBands[1].from = variableAverage-variableStd;
-                                self.bulletOptions.yAxis.plotBands[1].to = variableAverage+variableStd;
-                                self.bulletOptions.yAxis.plotBands[2].from = variableAverage+variableStd;
-                                self.bulletOptions.yAxis.plotBands[2].to = variableAverage+3*variableStd;
+                                self.bulletOptions.yAxis.plotBands[0].from = min([0, min(series)]);
+                                self.bulletOptions.yAxis.plotBands[0].to = variableAverage-3*variableStd;
+
+                                self.bulletOptions.yAxis.plotBands[1].from = variableAverage-3*variableStd;
+                                self.bulletOptions.yAxis.plotBands[1].to = variableAverage-variableStd;
+                                self.bulletOptions.yAxis.plotBands[1].label = {text: 'm-3σ'}
+                                self.bulletOptions.yAxis.plotBands[2].from = variableAverage-variableStd;
+                                self.bulletOptions.yAxis.plotBands[2].to = variableAverage+variableStd;
+                                self.bulletOptions.yAxis.plotBands[2].label = {text: 'm±σ'}
+                                self.bulletOptions.yAxis.plotBands[3].from = variableAverage+variableStd;
+                                self.bulletOptions.yAxis.plotBands[3].to = variableAverage+3*variableStd;
+                                self.bulletOptions.yAxis.plotBands[3].label = {text: 'm+3σ'}
                                 self.bulletOptions.series[0].data[0].target = series.slice(-1)[0];
+
+                                self.bulletOptions.yAxis.plotBands[4].from = variableAverage+3*variableStd;
+                                self.bulletOptions.yAxis.plotBands[4].to = max(series);
+
                             });
 
                         };
