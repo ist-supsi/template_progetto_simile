@@ -3,130 +3,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="row">
-                        <div class="col-4">
-                            <stats-card>
-                                <div slot="header" class="icon-warning">
-                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fa fa-sun-o text-warning"
-                                    data-toggle="tooltip"
-                                    title="Temperatura aria"></i>
-                                </div>
-                                <div slot="content">
-                                  <p class="card-category">Temperatura dell'aria</p>
-                                  <h4 class="card-title">22°C</h4>
-                                  <p class="card-category">da stazione meteo</p>
-                                </div>
-                                <div slot="footer">
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>oggi
-                                    <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
-                                </div>
-                            </stats-card>
-                        </div>
-                        <div class="col-4">
-                            <stats-card>
-                                <div slot="header" class="icon-warning">
-                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fa fa-compass text-info"
-                                    data-toggle="tooltip"
-                                    title="Velocità del vento"></i>
-                                </div>
-                                <div slot="content">
-                                  <p class="card-category">Velocità del vento</p>
-                                  <h4 class="card-title">20km/h</h4>
-                                  <p class="card-category">da stazione meteo</p>
-                                </div>
-                                <div slot="footer">
-
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>oggi
-                                    <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
-                                </div>
-                            </stats-card>
-                        </div>
-                        <div class="col-4">
-                            <stats-card>
-                                <div slot="header" class="icon-warning">
-                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fa fa-cloud text-primary"
-                                    data-toggle="tooltip"
-                                    title="Umidità"></i>
-                                </div>
-                                <div slot="content">
-                                  <p class="card-category">Umidità atmosferica</p>
-                                  <h4 class="card-title">30%</h4>
-                                  <p class="card-category">da stazione meteo</p>
-                                </div>
-                                <div slot="footer">
-
-                                    <i class="fa fa-calendar" aria-hidden="true"></i>oggi
-                                    <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
-                                </div>
-                            </stats-card>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-4">
-                            <stats-card>
-                                <div slot="header" class="icon-warning">
-                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fa fa-thermometer text-warning"
-                                    data-toggle="tooltip"
-                                    title="Temperatura superficiale"></i>
-                                </div>
-                                <div slot="content">
-                                  <p class="card-category">Temperatura dell'acqua</p>
-                                  <h4 class="card-title">{{lastTemp04}}</h4>
-                                  <p class="card-category">profondità: 40cm</p>
-                                </div>
-                                <div slot="footer">
-                                    <i v-if="lastTemp04Time===null" class="fa fa-refresh fa-spin"></i>
-                                    <i v-if="lastTemp04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.date}}
-                                    <i v-if="lastTemp04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.time}}
-                                </div>
-                            </stats-card>
-                        </div>
-                        <div class="col-4">
-                            <stats-card>
-                                <div slot="header" class="icon-warning">
-                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fa fa-flask text-info"
-                                    data-toggle="tooltip"
-                                    title="Ossigeno disciolto"></i>
-                                </div>
-                                <div slot="content">
-                                  <p class="card-category">Ossigeno disciolto</p>
-                                  <h4 class="card-title">{{lastO2c04}}</h4>
-                                  <p class="card-category">profondità: 40cm</p>
-                                </div>
-                                <div slot="footer">
-                                    <i v-if="lastO2c04Time===null" class="fa fa-refresh fa-spin"></i>
-                                    <i v-if="lastO2c04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2c04Time && lastO2c04Time.date}}
-                                    <i v-if="lastO2c04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2c04Time && lastO2c04Time.time}}
-                                </div>
-                            </stats-card>
-                        </div>
-                        <div class="col-4">
-                            <stats-card>
-                                <div slot="header" class="icon-warning">
-                                  <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                  <i class="fa fa-tint text-primary"
-                                    data-toggle="tooltip"
-                                    title="Trasparenza acque"></i>
-                                </div>
-                                <div slot="content">
-                                  <p class="card-category">Trasparenza</p>
-                                  <h4 class="card-title">{{lastSdtFig}}</h4>
-                                  <p class="card-category">località: Figino</p>
-                                </div>
-                                <div slot="footer">
-                                    <i v-if="lastSdtTime===null" class="fa fa-refresh fa-spin"></i>
-                                    <i v-if="lastSdtTime" class="fa fa-calendar" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.date}}
-                                    <i v-if="lastSdtTime" class="fa fa-clock-o" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.time}}
-                                </div>
-                            </stats-card>
-                        </div>
-                    </div>
                     <!-- <card> -->
                     <!-- <card v-if="showDescription"> -->
                         <!-- <template slot="header">
@@ -142,8 +18,173 @@
                                 Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
                                 vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
                             </div> -->
-                            <div class="col-12">
-                                <card style="height: 65vh;">
+                            <div class="col-8">
+                              <div class="row">
+                                  <div class="col-6">
+                                      <stats-card>
+                                          <div slot="header" class="icon-warning">
+                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                            <i class="fa fa-sun-o text-warning"
+                                              data-toggle="tooltip"
+                                              title="Temperatura aria"></i>
+                                          </div>
+                                          <div slot="content">
+                                            <p class="card-category">Temperatura dell'aria</p>
+                                            <h4 class="card-title">22°C</h4>
+                                            <p class="card-category">da stazione meteo</p>
+                                          </div>
+                                          <div slot="footer">
+                                              <i class="fa fa-calendar" aria-hidden="true"></i>oggi
+                                              <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
+                                          </div>
+                                      </stats-card>
+                                  </div>
+                                  <div class="col-6">
+                                      <stats-card>
+                                          <div slot="header" class="icon-warning">
+                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                            <i class="fa fa-cloud text-primary"
+                                              data-toggle="tooltip"
+                                              title="Umidità"></i>
+                                          </div>
+                                          <div slot="content">
+                                            <p class="card-category">Umidità atmosferica</p>
+                                            <h4 class="card-title">30%</h4>
+                                            <p class="card-category">da stazione meteo</p>
+                                          </div>
+                                          <div slot="footer">
+
+                                              <i class="fa fa-calendar" aria-hidden="true"></i>oggi
+                                              <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
+                                          </div>
+                                      </stats-card>
+                                  </div>
+                              </div>
+                              <!-- <div class="row">
+                                  <div class="col-6">
+                                      <stats-card>
+                                          <div slot="header" class="icon-warning">
+                                            <i class="fa fa-flag text-info"
+                                              data-toggle="tooltip"
+                                              title="Velocità del vento"></i>
+                                          </div>
+                                          <div slot="content">
+                                            <p class="card-category">Velocità del vento</p>
+                                            <h4 class="card-title">20km/h</h4>
+                                            <p class="card-category">da stazione meteo</p>
+                                          </div>
+                                          <div slot="footer">
+
+                                              <i class="fa fa-calendar" aria-hidden="true"></i>oggi
+                                              <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
+                                          </div>
+                                      </stats-card>
+                                  </div>
+                                  <div class="col-6">
+                                      <stats-card>
+                                          <div slot="header" class="icon-warning">
+                                            <i class="fa fa-compass text-info"
+                                              data-toggle="tooltip"
+                                              title="Velocità del vento"></i>
+                                          </div>
+                                          <div slot="content">
+                                            <p class="card-category">Direzione del vento</p>
+                                            <h4 class="card-title">NNE</h4>
+                                            <p class="card-category">da stazione meteo</p>
+                                          </div>
+                                          <div slot="footer">
+
+                                              <i class="fa fa-calendar" aria-hidden="true"></i>oggi
+                                              <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
+                                          </div>
+                                      </stats-card>
+                                  </div>
+                              </div> -->
+                              <div class="row">
+                                  <div class="col-6">
+                                      <stats-card>
+                                          <div slot="header" class="icon-warning">
+                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                            <i class="fa fa-thermometer text-warning"
+                                              data-toggle="tooltip"
+                                              title="Temperatura superficiale"></i>
+                                          </div>
+                                          <div slot="content">
+                                            <p class="card-category">Temperatura dell'acqua</p>
+                                            <h4 class="card-title"><b>{{lastTemp04}}</b></h4>
+                                            <p class="card-category">profondità: 40cm</p>
+                                          </div>
+                                          <div slot="footer">
+                                              <i v-if="lastTemp04Time===null" class="fa fa-refresh fa-spin"></i>
+                                              <i v-if="lastTemp04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.date}}
+                                              <i v-if="lastTemp04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.time}}
+                                          </div>
+                                      </stats-card>
+                                  </div>
+                                  <div class="col-6">
+                                      <stats-card>
+                                          <div slot="header" class="icon-warning">
+                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                            <i class="fa fa-flask text-primary"
+                                              data-toggle="tooltip"
+                                              title="Ossigeno disciolto"></i>
+                                          </div>
+                                          <div slot="content">
+                                            <p class="card-category">Ossigeno disciolto</p>
+                                            <h4 class="card-title"><b>{{lastO2s04}}</b></h4>
+                                            <p class="card-category">profondità: 40cm</p>
+                                          </div>
+                                          <div slot="footer">
+                                              <i v-if="lastO2s04Time===null" class="fa fa-refresh fa-spin"></i>
+                                              <i v-if="lastO2s04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.date}}
+                                              <i v-if="lastO2s04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.time}}
+                                          </div>
+                                      </stats-card>
+                                  </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-6">
+                                    <stats-card>
+                                        <div slot="header" class="icon-warning">
+                                          <i class="fa fa-tint text-primary"
+                                            data-toggle="tooltip"
+                                            title="Trasparenza acque"></i>
+                                        </div>
+                                        <div slot="content">
+                                          <p class="card-category">Trasparenza</p>
+                                          <h4 class="card-title"><b>{{lastSdtFig}}</b></h4>
+                                          <p class="card-category">località: Figino</p>
+                                        </div>
+                                        <div slot="footer">
+                                            <i v-if="lastSdtTime===null" class="fa fa-refresh fa-spin"></i>
+                                            <i v-if="lastSdtTime" class="fa fa-calendar" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.date}}
+                                            <i v-if="lastSdtTime" class="fa fa-clock-o" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.time}}
+                                        </div>
+                                    </stats-card>
+                                </div>
+                                <div class="col-6">
+                                    <stats-card>
+                                        <div slot="header" class="icon-warning">
+                                          <i class="fa fa-pagelines text-success"
+                                            data-toggle="tooltip"
+                                            title="Clorofilla e alghe"></i>
+                                        </div>
+                                        <div slot="content">
+                                          <p class="card-category">Clorofilla e alghe</p>
+                                          <h4 class="card-title">20 μg/L</h4>
+                                          <p class="card-category">località: Figino</p>
+                                        </div>
+                                        <div slot="footer">
+                                          <i class="fa fa-calendar" aria-hidden="true"></i>oggi
+                                          <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
+                                        </div>
+                                    </stats-card>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-4">
+                                <card style="height: 94%;">
                                 <l-map
                                     v-if="showMap"
                                     :zoom="currentZoom"
@@ -171,8 +212,19 @@
                                         :name="layer.name"
                                         :transparent="layer.transparent"
                                         :format="layer.format"
+                                        :opacity="layer.opacity"
                                         layer-type="overlay"
                                       ></l-wms-tile-layer>
+                                      <!-- <v-marker-cluster>
+                                        <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">
+
+                                        </v-marker>
+                                      </v-marker-cluster> -->
+                                      <l-geo-json
+                                          ref="markerLayer"
+                                          :geojson="features"
+                                          :options="markerLayerOptions()"
+                                      />
                                   </l-map>
                                 </card>
                             </div>
@@ -194,8 +246,8 @@
                             </data-table>
                         </div>
                     </div>
-                    <card>
-                        <!-- <div slot="header" class="icon-warning"></div> -->
+                    <!-- <card>
+
                         <div v-if="Object.keys(series_data).length>0" class="row">
                             <div class="col-md-12">
                                 <highcharts :options="series_data"></highcharts>
@@ -206,136 +258,145 @@
                             <i v-if="Object.keys(series_data).length==0"
                                 class="fa fa-refresh fa-spin"></i>
                         </div>
-                    </card>
+                    </card> -->
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-    import {Chart} from 'highcharts-vue';
-    import Highcharts from 'highcharts';
-    import loadBullet from 'highcharts/modules/bullet.js';
+    // import {Chart} from 'highcharts-vue';
+    // import Highcharts from 'highcharts';
+    // import loadBullet from 'highcharts/modules/bullet.js';
 
-    import ChartCard from 'src/components/Cards/ChartCard.vue'
-    import HighchartCard from 'src/components/Cards/HighchartCard.vue'
+    // import ChartCard from 'src/components/Cards/ChartCard.vue'
+    // import HighchartCard from 'src/components/Cards/HighchartCard.vue'
     import StatsCard from 'src/components/Cards/StatsCard.vue'
     import LTable from 'src/components/Table.vue'
+
+    // Courtesy of: https://vue2-leaflet.netlify.app/quickstart/#marker-icons-are-missing
+    // Otherwise Marker Icons are missing
+    import { Icon } from 'leaflet';
+
+    delete Icon.Default.prototype._getIconUrl;
+    Icon.Default.mergeOptions({
+      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+      iconUrl: require('leaflet/dist/images/marker-icon.png'),
+      shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+    });
+
     import { latLngBounds, latLng } from "leaflet";
-    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers } from "vue2-leaflet";
+    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson } from "vue2-leaflet";
+
     import 'leaflet/dist/leaflet.css';
-    import axios from 'axios';
+
+    // import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+    // import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
+
+    // import "leaflet.markercluster/dist/MarkerCluster.css";
+    // import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
     // import Modal from 'src/components/Modal.vue';
     // import ModalButton from 'src/components/ModalButton.vue';
     import NotifyButton from 'src/components/NotifyButton.vue';
+    import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
 
-    // import IstsosIO from '../manageIstsosToken.js';
-
-    loadBullet(Highcharts);
-
-    // function getCookieValue(key) {
-    //     return document.cookie
-    //     .split('; ')
-    //     .find((row) => row.startsWith(key+'='))
-    //     .split('=')[1];
-    // };
-    //
-    // const formname = getCookieValue('form-name');
-    // const formkey = getCookieValue('form-key');
-    // const root = getCookieValue('app-name');
-    // const istsosServices = getCookieValue('istsos-services');
-    // let istsos = new IstsosIO(this.$root.proxyUrl, this.$root.proxyServices);
-
-    Highcharts.setOptions({
-      chart: {
-          inverted: true,
-          marginLeft: 135,
-          type: 'bullet'
-      },
-      title: {
-          text: null
-      },
-      legend: {
-          enabled: false
-      },
-      yAxis: {
-          gridLineWidth: 0
-      },
-      plotOptions: {
-          series: {
-              pointPadding: 0.25,
-              borderWidth: 0,
-              color: '#000',
-              targetOptions: {
-                  width: '200%'
-              }
-          }
-      },
-      credits: {
-          enabled: false
-      },
-      exporting: {
-          enabled: false
-      }
-  });
+  //   loadBullet(Highcharts);
+  //
+  //   Highcharts.setOptions({
+  //     chart: {
+  //         inverted: true,
+  //         marginLeft: 135,
+  //         type: 'bullet'
+  //     },
+  //     title: {
+  //         text: null
+  //     },
+  //     legend: {
+  //         enabled: false
+  //     },
+  //     yAxis: {
+  //         gridLineWidth: 0
+  //     },
+  //     plotOptions: {
+  //         series: {
+  //             pointPadding: 0.25,
+  //             borderWidth: 0,
+  //             color: '#000',
+  //             targetOptions: {
+  //                 width: '200%'
+  //             }
+  //         }
+  //     },
+  //     credits: {
+  //         enabled: false
+  //     },
+  //     exporting: {
+  //         enabled: false
+  //     }
+  // });
 
     export default {
         components: {
             LTable,
-            ChartCard,
+            // ChartCard,
             StatsCard,
             LMap,
             LTileLayer,
             "l-wms-tile-layer": LWMSTileLayer,
+            LGeoJson,
             LControlLayers,
-            highcharts: Chart,
-            HighchartCard,
+            // highcharts: Chart,
+            // HighchartCard,
             NotifyButton,
+            // 'v-marker-cluster': Vue2LeafletMarkerCluster,
+            // 'v-marker': Vue2LeafletMarker,
             // ModalButton,
             // Modal
         },
         data () {
             return {
+                // markers: [],
+                selectedProc: null,
                 showDescription: true,
                 lastSdtFig: '',
                 lastSdtTime: null,
                 lastTemp04: '',
                 lastTemp04Time: null,
-                lastTemp25: '',
-                lastTemp25Time: null,
-                lastTemp50: '',
-                lastTemp50Time: null,
-                lastTemp80: '',
-                lastTemp80Time: null,
-                lastTemp125: '',
-                lastTemp125Time: null,
-                lastTemp200: '',
-                lastTemp200Time: null,
-                lastO2c04: '',
-                lastO2c04Time: null,
-                lastO2c25: '',
-                lastO2c25Time: null,
-                lastO2c50: '',
-                lastO2c50Time: null,
-                lastO2c80: '',
-                lastO2c80Time: null,
-                lastO2c125: '',
-                lastO2c125Time: null,
-                lastO2c200: '',
-                lastO2c200Time: null,
                 lastO2s04: '',
                 lastO2s04Time: null,
-                lastO2s25: '',
-                lastO2s25Time: null,
-                lastO2s50: '',
-                lastO2s50Time: null,
-                lastO2s80: '',
-                lastO2s80Time: null,
-                lastO2s125: '',
-                lastO2s125Time: null,
-                lastO2s200Time: null,
-                lastO2s200: '',
+                // lastTemp25: '',
+                // lastTemp25Time: null,
+                // lastTemp50: '',
+                // lastTemp50Time: null,
+                // lastTemp80: '',
+                // lastTemp80Time: null,
+                // lastTemp125: '',
+                // lastTemp125Time: null,
+                // lastTemp200: '',
+                // lastTemp200Time: null,
+                // lastO2c04: '',
+                // lastO2c04Time: null,
+                // lastO2c25: '',
+                // lastO2c25Time: null,
+                // lastO2c50: '',
+                // lastO2c50Time: null,
+                // lastO2c80: '',
+                // lastO2c80Time: null,
+                // lastO2c125: '',
+                // lastO2c125Time: null,
+                // lastO2c200: '',
+                // lastO2c200Time: null,
+                // lastO2s25: '',
+                // lastO2s25Time: null,
+                // lastO2s50: '',
+                // lastO2s50Time: null,
+                // lastO2s80: '',
+                // lastO2s80Time: null,
+                // lastO2s125: '',
+                // lastO2s125Time: null,
+                // lastO2s200Time: null,
+                // lastO2s200: '',
                 selected_temperature: 'TEMP_0_4',
                 selected_o2c: 'O2C_0_4',
                 last_temperature_data: {},
@@ -380,10 +441,18 @@
                         orderable: false,
                     },
                     {
-                        label: 'Profondità sensore',
+                        label: 'Quota s.l.a./Profondità',
                         transform: (item)=>{
-                            const sub = item.data.description.match(/a [+-]?\d+(\.\d+)? m di profondità/gm)
-                            return sub && sub[0].match(/[+-]?\d+(\.\d+)? m/gm);
+                            const prof = item.data.description.match(/profondità di [+-]?\d+(\.\d+)? m/gm);
+                            const quot = item.data.description.match(/quota di circa [+-]?\d+(\.\d+)? m/gm);
+                            if ( prof ) {
+                                return '- '+prof[0].match(/[+-]?\d+(\.\d+)? m/gm);
+                            } else if ( quot ) {
+                                return '+ '+quot[0].match(/[+-]?\d+(\.\d+)? m/gm);
+                            } else {
+                                return '';
+                            }
+
                         },
                         // name: 'name',
                         orderable: false,
@@ -410,7 +479,7 @@
                         orderable: false,
                         classes: {
                             'btn': true,
-                            'btn-primary': true,
+                            'btn-info': true,
                             'btn-sm': true,
                         },
                         event: "click",
@@ -421,9 +490,32 @@
                             'fa-info-circle': true
                         }
                     },
+                    // {
+                    //     label: '',
+                    //     transform: (item)=>{
+                    //         let anchor = document.createElement('a');
+                    //         let icon = document.createElement('i');
+                    //         icon.classList.add('fa', 'fa-line-chart');
+                    //         anchor.appendChild(icon);
+                    //         let text = document.createTextNode('Analizza');
+                    //         anchor.classList.add('btn', 'btn-sm', 'btn-primary');
+                    //         anchor.appendChild(text);
+                    //         anchor.onclick = function() {
+                    //             console.log('this');
+                    //         };
+                    //         return anchor.outerHTML;
+                    //     },
+                    //     // name: 'name',
+                    //     orderable: false,
+                    // }
                     {
                         label: '',
                         name: 'Analizza',
+                        event: "click",
+                        handler: (data)=>{
+                            this.$root.analisysVariable = `${data.name}`;
+                            this.$root.analisysVariableUrn = `${data.observedproperties[0].definition}`;
+                        },
                         orderable: false,
                         classes: {
                             'btn': true,
@@ -431,12 +523,7 @@
                             'btn-info': true,
                             'btn-sm': true,
                         },
-                        event: "click",
-                        handler: ()=>{alert('Hello!')},
-                        component: NotifyButton,
-                        iclasses: {
-                            'fa fa-line-chart': true
-                        }
+                        component: AnchorToAnalisysPage
                     }
                 ],
                 selectedRow: {},
@@ -501,6 +588,10 @@
                   [45.90, 8.85],
                   [46.03, 9.12]
                 ]),
+                features: {
+                  "type": "FeatureCollection",
+                  "features": []
+                },
                 url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
                 layers: [
@@ -517,6 +608,7 @@
                     visible: true,
                     format: 'image/png',
                     layers: 'Aree_naturali_poligonali_Svizzera',
+                    opacity: .5,
                     transparent: true/*,
                     attribution: "Weather data © 2012 IEM Nexrad"*/
                   },
@@ -565,6 +657,7 @@
                     visible: true,
                     format: 'image/png',
                     layers: 'Laghi',
+                    opacity: .5,
                     transparent: true/*,
                     attribution: "Weather data © 2012 IEM Nexrad"*/
                   },
@@ -631,8 +724,21 @@
                     layers: 'Bacini_idrografici',
                     transparent: true/*,
                     attribution: "Weather data © 2012 IEM Nexrad"*/
-                  }
+                }
                 ],
+                markerLayer: {
+                    name: 'Marker',
+                    visible: true,
+                    layers: 'MArker',
+                    geojson: {
+                      'name': 'markers',
+                      'type': 'FeatureCollection',
+                      'features': []
+                    },
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng);
+                    }
+                },
                 attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 currentZoom: 10.5,
                 //currentCenter: latLng(47.41322, -1.219482),
@@ -645,24 +751,123 @@
             }
         },
         watch: {
-          series_data: {
-             handler(val){
-               // do stuff
-             },
-             deep: true
-          }
+            markerLayer: {
+                handler(val){
+                    // do stuff
+                },
+                deep: true
+            }
+          // series_data: {
+          //    handler(val){
+          //      // do stuff
+          //    },
+          //    deep: true
+          // }
         },
         mounted() {
             var self = this;
-
+            this.$root.whereAmI = 'Lago di Lugano';
             this.tableFetchData().then((result)=>{this.tableSetData()});
 
+            const groupBy = (x,f,g)=>x.reduce((a,b)=>{
+                if ( a[f(b)] ) {
+                    a[f(b)].push(g(b))
+                    return a;
+                } else {
+                    a[f(b)] = [g(b)]
+                    return a;
+                }
+            },{});
+
+            function approxPosition (a) {
+                const ff = .005 // Approximation
+                const lon = (a.geometry.coordinates[0]/ff).toFixed(0)*ff;
+                const lat = (a.geometry.coordinates[1]/ff).toFixed(0)*ff;
+                return `${lon};${lat}`;
+            };
+            const collectNames = (b)=>b.properties.name;
+
+            // Load markers
+            this.istsos.fetchGeometryCollection().then((result)=>{
+                const reduced = groupBy(result.data.features, approxPosition, collectNames);
+
+                let bounds = L.latLngBounds([]);
+
+                const features = Object.entries(reduced).map(([k, v]) => {
+                    const coords = k.split(';').map(parseFloat);
+                    bounds.extend(L.latLng(coords[1], coords[0]));
+                    return {
+                        "type": "Feature",
+                        "properties": {names: v},
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": coords
+                        }
+                      }
+                });
+
+                // Set FeatureCollection
+                self.features = {
+                    "type": "FeatureCollection",
+                    "features": features
+                };
+
+                // console.log(self.$refs.markerLayer);
+
+                // Set map bounds
+                self.bounds = bounds;
+
+            })
+
             this.populateCockpit();
-            self.appendTempSeries();
+            // self.appendTempSeries();
             // this.fetchO2c('O2C_0_4');
             this.$root.dropdownVisible = false;
         },
     methods: {
+        markerLayerOptions () {
+            var self = this;
+            return {
+                pointToLayer: function (feature, latlng) {
+                    let clr;
+                    if ( !self.selectedProc ) {
+                        clr = 'text-secondary'
+                    } else if ( feature.properties.names.includes(self.selectedProc) ) {
+                        clr = 'text-warning'
+                    } else {
+                        clr = 'text-dark'
+                    };
+                    const fontAwesomeIcon = L.divIcon({
+                        html: `<i class="fa fa-map-pin fa-4x ${clr}"></i>`,
+                        iconSize: [40, 80],
+                        iconAnchor: [20, 40],
+                        className: ''
+                    });
+                    const marker = L.marker(latlng, {icon: fontAwesomeIcon});
+                    return marker;
+                }
+            }
+        },
+        // p2l (feature, latlng) {
+        //     const fontAwesomeIcon = L.divIcon({
+        //         html: '<i class="fa fa-map-marker fa-4x"></i>',
+        //         iconSize: [20, 20],
+        //         className: 'myDivIcon'
+        //     });
+        //     const marker = L.marker(latlng, {icon: fontAwesomeIcon});
+        //     return marker;
+        // },
+        // addMarker (lon, lat) {
+        //     const feat = {
+        //       'type': 'Feature',
+        //       'properties': {},
+        //       'geometry': {
+        //         'type': 'Point',
+        //         'coordinates': [lon, lat]
+        //       }
+        //     };
+        //     this.markerLayer.geojson.features.push(feat);
+        // },
         displayRow (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
@@ -686,6 +891,7 @@
                 self.tableAllData = {
                     data: result.data.data
                 };
+                self.$root.allProcedure = self.tableAllData;
             });
             // return new Promise((resolve, reject) => {
             //     self.tableAllData = {};
@@ -696,9 +902,39 @@
 
             var self = this;
 
-            const last_page = Math.floor(this.tableAllData.data.length/this.tableProps.length)+1;
+            const substr = self.tableProps.search.toLowerCase();
+
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
+
+            const filteredSortedData = this.tableAllData.data.filter(el=>{
+                if (self.tableProps.search.length==0) {
+                    return true;
+                } else if (el.description.toLowerCase().includes(substr)) {
+                    return true;
+                } else if (el.name.toLowerCase().includes(substr)) {
+                    return true;
+                } else {
+                    return false;
+                };
+            }).sort((item, other)=>{
+                let comparison;
+                if ( item[this.tableProps.column]<other[this.tableProps.column] ) {
+                    comparison = -1;
+                } else {
+                    comparison = 1
+                }
+                if ( this.tableProps.dir=='asc' ) {
+                    return comparison
+                } else {
+                    return comparison*-1
+                }
+            }).slice(start, end+1);
+
+            // TODO: Concordare la paginazione e la statistica dei risultati con
+            // il numero di dati filtrati.
+
+            const last_page = Math.floor(this.tableAllData.data.length/this.tableProps.length)+1;
 
             const tableData = {
                 // payload: this.tableAllData.payload,
@@ -711,19 +947,7 @@
                     total: this.tableAllData.data.length,
                     to: Math.min(end+1, this.tableAllData.data.length)
                 },
-                data: this.tableAllData.data.sort((item, other)=>{
-                    let comparison;
-                    if ( item[this.tableProps.column]<other[this.tableProps.column] ) {
-                        comparison = -1;
-                    } else {
-                        comparison = 1
-                    }
-                    if ( this.tableProps.dir=='asc' ) {
-                        return comparison
-                    } else {
-                        return comparison*-1
-                    }
-                }).slice(start, end+1)
+                data: filteredSortedData
             };
             this.tableData = tableData;
         },
@@ -734,13 +958,16 @@
         },
         populateCockpit () {
             var self = this;
-            this.istsos.fetchLastTemetature('TEMP_0_4').then((result)=>{
+            this.istsos.fetchLastTemetature('W_TEMP_0_4').then((result)=>{
                 // self.last_temperature_data = result.options;
+
                 self.lastTemp04 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp04Time = {
                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+
+                // self.addMarker(result.coords[0], result.coords[1])
 
             });
             this.istsos.fetchLastSdt('SDT_FIG').then((result)=>{
@@ -751,6 +978,14 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
 
+            });
+            this.istsos.fetchLastO2s('W_O2S_0_4').then((result)=>{
+                // self.last_temperature_data = result.options;
+                self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
+                self.lastO2s04Time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
             // this.istsos.fetchLastTemetature('TEMP_2_5').then((result)=>{
             //     // self.last_temperature_data = result.options;
@@ -792,14 +1027,14 @@
             //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
             //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             // });
-            this.istsos.fetchLastO2c('O2C_0_4').then((result)=>{
-                // self.last_temperature_data = result.options;
-                self.lastO2c04 = `${result.options.series[0].data[0].y} ${result.uom}`;
-                self.lastO2c04Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            });
+            // this.istsos.fetchLastO2c('O2C_0_4').then((result)=>{
+            //     // self.last_temperature_data = result.options;
+            //     self.lastO2c04 = `${result.options.series[0].data[0].y} ${result.uom}`;
+            //     self.lastO2c04Time = {
+            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
+            // });
             // this.istsos.fetchLastO2c('O2C_2_5').then((result)=>{
             //     // self.last_temperature_data = result.options;
             //     self.lastO2c25 = `${result.options.series[0].data[0].y} ${result.uom}`;
@@ -840,14 +1075,7 @@
             //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
             //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             //  });
-            //  this.istsos.fetchLastO2s('O2S_0_4').then((result)=>{
-            //      // self.last_temperature_data = result.options;
-            //      self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //      self.lastO2s04Time = {
-            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            //  });
+
             //  this.istsos.fetchLastO2s('O2S_2_5').then((result)=>{
             //      // self.last_temperature_data = result.options;
             //      self.lastO2s25 = `${result.options.series[0].data[0].y} ${result.uom}`;
@@ -895,14 +1123,14 @@
             const colors = ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
             '#0d233a', '#77a1e5', '#8bbc21'];
 
-            const visibleProcedure = 'TEMP_0_4'
+            const visibleProcedure = 'W_TEMP_0_4'
             const procedures = [
                 visibleProcedure,
-                'TEMP_2_5',
-                'TEMP_5_0',
-                'TEMP_8_0',
-                'TEMP_12_5',
-                'TEMP_20_0'
+                'W_TEMP_2_5',
+                'W_TEMP_5_0',
+                'W_TEMP_8_0',
+                'W_TEMP_12_5',
+                'W_TEMP_20_0'
             ];
             let i=0;
             for (const procedure of procedures) {

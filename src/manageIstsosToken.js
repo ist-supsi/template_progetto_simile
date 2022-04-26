@@ -157,6 +157,18 @@ export default class IstsosIO {
           return  axios(config);
       });
   };
+  call(params) {
+      var self = this;
+      const DEFAULT_PARAMS = {
+          services: self.services,
+          // operations: 'getobservation',
+          // offerings: 'temporary',
+          procedures: undefined,
+          // observedproperties: undefined,
+          // eventtime: 'last'
+      };
+      return this._call({...DEFAULT_PARAMS, ...(params||{})});
+  };
   fetch(params) {
       var self = this;
       let DEFAULT_PARAMS = {
@@ -175,6 +187,14 @@ export default class IstsosIO {
             services: self.services,
             procedures: 'operations',
             getlist: undefined
+      });
+  };
+  fetchGeometryCollection() {
+      var self = this;
+      return this._call({
+            services: self.services,
+            procedures: 'operations',
+            geojson: undefined
       });
   };
   _fetchTemperature(procedures, eventtime='last') {
@@ -213,11 +233,15 @@ export default class IstsosIO {
     var self = this;
     return this._fetchTemperature(procedures).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
-        // console.log(dataArray);
+        // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
+        const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
+        const coords = coords_[0].match(/[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?/gm)[0].split(',')
+
         let info = {
             // order: order,
             procedure: procedures,
-            options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
+            options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS)),
+            coords: coords.map(el=>parseFloat(el))
         };
         info.uom = dataArray.field[1].uom;
         info.x = new Date(dataArray.values[0][0]);
@@ -230,6 +254,49 @@ export default class IstsosIO {
         info.value = dataArray.values[0][1];
         return info;
     });
+  };
+  fetchSeries (procedures, observedproperties, begin, end) {
+      var self = this;
+      end = (end === undefined) ? new Date() : end;
+      // begin = (begin === undefined) ? new Date(new Date().setFullYear(new Date().getFullYear() - 1)) : begin;
+      begin = (begin === undefined) ? new Date(new Date().setDate(new Date().getDate() - 30)) : begin;
+      let eventtime = `${begin.toISOString()}/${end.toISOString()}`;
+      return this.fetch({
+          procedures: procedures,
+          eventtime: eventtime,
+          observedproperties: observedproperties
+      })
+  };
+  fetchSeries_old (procedures, observedproperties, begin, end) {
+      var self = this;
+      end = (end === undefined) ? new Date() : end;
+      // begin = (begin === undefined) ? new Date(new Date().setFullYear(new Date().getFullYear() - 1)) : begin;
+      begin = (begin === undefined) ? new Date(new Date().setDate(new Date().getDate() - 30)) : begin;
+      let eventtime = `${begin.toISOString()}/${end.toISOString()}`;
+      return this.fetch({
+          procedures: procedures,
+          eventtime: eventtime,
+          observedproperties: observedproperties
+      }).then((response) => {
+          const dataArray = response.data.data[0].result.DataArray;
+          let info = {
+              // order: order,
+              options: JSON.parse(JSON.stringify(TEMPERATURE_SERIES_DEFAULTS))
+          };
+
+          info.options.yAxis.title.text = `Temperatura (${dataArray.field[1].uom})`
+          info.uom = dataArray.field[1].uom;
+          // info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
+          // info.options.series[0].data[0].y = dataArray.values[0][1];
+          // info.value = dataArray.values[0][1];
+          // info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
+          const coeff = 1000 * 60 * 1;
+          info.options.series[0].data = dataArray.values.filter(el => el[1]!==null).map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
+          info.options.series[0].name = procedures;
+          // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
+
+          return info;
+      });
   };
   fetchTemperatureSeries(procedures, begin, end) {
     /**
@@ -255,7 +322,7 @@ export default class IstsosIO {
         // info.value = dataArray.values[0][1];
         // info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
         const coeff = 1000 * 60 * 1;
-        info.options.series[0].data = dataArray.values.map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
+        info.options.series[0].data = dataArray.values.filter(el => el[1]!==null).map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
         info.options.series[0].name = procedures;
         // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
 
@@ -312,7 +379,6 @@ export default class IstsosIO {
     var self = this;
     return this._fetchO2s(procedures).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
-        // console.log(dataArray);
         let info = {
             // order: order,
             options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))
@@ -347,7 +413,7 @@ export default class IstsosIO {
         info.options.subtitle = {
             text: `Valore rilevato al: ${dataArray.values[0][0]}`
         };
-        // 
+        //
         info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
         info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(3));
         info.value = dataArray.values[0][1];
