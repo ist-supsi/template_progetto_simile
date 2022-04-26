@@ -1,8 +1,8 @@
 FROM node:12
 
-WORKDIR /usr/src/app/vue-light-bootstrap-dashboard
+COPY . ./usr/src/app/
 
-COPY package*.json ./
+WORKDIR /usr/src/app/simile
 
 RUN npm install
 
