@@ -97,6 +97,9 @@ axios.interceptors.request.use(function (config) {
   return Promise.reject(error);
 });
 
+// TODO:
+// Per informazioni aggregate per tipo di misura: 
+// https://istsos.ddns.net/istsos/wa/istsos/services/<servizio>/observedproperties
 
 export default class IstsosIO {
   constructor(proxyUrl, services) {
