@@ -404,8 +404,10 @@
                 last_o2c_data: {},
                 series_o2c_data: {},
                 tableAllData: {},
+                tableAllData2: {},
                 showModal: false,
                 tableData: {},
+                tableData2: {},
                 tableProps: {
                     page: 1,
                     search: '',
@@ -769,6 +771,8 @@
             this.$root.whereAmI = 'Lago di Lugano';
             this.tableFetchData().then((result)=>{this.tableSetData()});
 
+            this.tableFetchData2();
+
             const groupBy = (x,f,g)=>x.reduce((a,b)=>{
                 if ( a[f(b)] ) {
                     a[f(b)].push(g(b))
@@ -885,6 +889,52 @@
         updateSelectedModal(data) {
             this.selectedRow = data;
         },
+        tableFetchData2 () {
+            var self = this;
+            // Promise.all([
+            //     // promise1, promise2, promise3
+            //     this.istsos.fetchObserverProperties(),
+            //     this.istsos.fetchProcedures()
+            // ]).then((datas) => {
+            //     console.log(datas[0].data.data);
+            //     console.log(datas[1].data.data);
+            //
+            //     function inizio(new_, actual_) {
+            //         if (actual_=== undefined) {
+            //             return new_.inizio;
+            //         } else if ( Date.parse(new_.inizio) < Date.parse(actual_.samplingTime.beginposition) ) {
+            //             return new_.inizio;
+            //         } else {
+            //             return actual_.samplingTime.beginposition;
+            //         };
+            //     };
+            //
+            //     function fine(new_, actual_) {
+            //         if (actual_=== undefined) {
+            //             return new_.fine;
+            //         } else if ( Date.parse(new_.fine) > Date.parse(actual_.samplingTime.endposition) ) {
+            //             return new_.fine;
+            //         } else {
+            //             return actual_.samplingTime.endposition;
+            //         };
+            //     };
+            //
+            //
+            //
+            //     // procByName = Object.fromEntries( datas[1].data.data.map( x => [x.observedproperties, x]) );
+            //     let procByName = datas[1].data.data.reduce((a, b) => ({
+            //         nome: b.name,
+            //         descrizione: b.description,
+            //         unita: b.observedproperties[0].uom,
+            //         inizio: inizio(a, b),
+            //         fine: fine(a, b)
+            //     }));
+            //     console.log(procByName);
+            //
+            //
+            // });
+
+        },
         tableFetchData () {
             var self = this;
             return this.istsos.fetchProcedures().then((result)=>{
@@ -897,6 +947,12 @@
             //     self.tableAllData = {};
             //     resolve();
             // });
+        },
+        tableSetData2() {
+            var self = this;
+
+
+
         },
         tableSetData () {
 

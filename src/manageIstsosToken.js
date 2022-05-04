@@ -98,7 +98,7 @@ axios.interceptors.request.use(function (config) {
 });
 
 // TODO:
-// Per informazioni aggregate per tipo di misura: 
+// Per informazioni aggregate per tipo di misura:
 // https://istsos.ddns.net/istsos/wa/istsos/services/<servizio>/observedproperties
 
 export default class IstsosIO {
@@ -190,6 +190,13 @@ export default class IstsosIO {
             services: self.services,
             procedures: 'operations',
             getlist: undefined
+      });
+  };
+  fetchObserverProperties() {
+      var self = this;
+      return this._call({
+            services: self.services,
+            observedproperties: undefined,
       });
   };
   fetchGeometryCollection() {
