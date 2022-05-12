@@ -21,7 +21,6 @@
                             <div class="col-8">
                               <div class="row">
                                   <div class="col-6">
-                                      <!--  -->
                                       <stats-card>
                                           <div slot="header" class="icon-warning">
                                             <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -57,7 +56,7 @@
                                             <p v-if="!cards[1].description" class="card-category placeholder-glow">
                                               <span class="placeholder col-12"></span>
                                             </p>
-                                            <p v-else class="card-category">{{cards[1].description && cards[1].description.substring(0, 24) || "--"}}</p>
+                                            <p v-else class="card-category">{{cards[1].description && cards[1].description.substring(0, 25) || "--"}}</p>
                                             <h4 class="card-title">{{cards[1].data || "N.P."}} {{cards[1].uom || ""}}</h4>
                                             <p class="card-category">{{cards[1].message || "--"}}</p>
                                           </div>
@@ -208,6 +207,7 @@
                                           <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
                                         </div>
                                     </stats-card>
+
                                 </div>
                               </div>
                             </div>
@@ -679,6 +679,7 @@
             cards: {
                 handler(val){
                     // do stuff
+                    console.log(val);
                 },
                 deep: true
             }
@@ -686,7 +687,7 @@
         mounted() {
             var self = this;
             this.$root.whereAmI = 'Lago di Lugano';
-            
+
             this.tableFetchData2().then((values) => {
                 this.tableSetData();
             });
@@ -708,7 +709,7 @@
 
             const groupBy = (x,f,g)=>x.reduce((a,b)=>{
                 const rr = g(b);
-                
+
                 if ( a[f(b)] ) {
                     // a[f(b)].push(g(b))
                     if ( !a[f(b)][rr.name] ) {
@@ -729,7 +730,7 @@
                 return `${lon};${lat}`;
             };
             const collectNames = (b)=>{
-                console.log(b.properties);
+
                 return {
                     name: b.properties.observedproperties[0].name,
                     procedure: b.properties.name,
@@ -762,7 +763,7 @@
                             if ( ia>ib ) return 1;
                             return -1
 
-                        }).map(ii=>ii[1])},
+                        }).map(a=>a[1])},
                         "geometry": {
                             "type": "Point",
                             "coordinates": coords
@@ -787,7 +788,7 @@
         },
     methods: {
         getCardIcon (name) {
-            console.log(name);
+
             if (name == 'air-relative-humidity') {
                 return 'fa fa-cloud text-primary';
             } else if (name == 'air-temperature') {
@@ -798,12 +799,29 @@
         loadCardsData () {
             var self = this;
 
-            for (var ii = 0; ii < 6; ii++) {
-                if ( this.features.features[this.selectedMarker].properties.names[ii] ) {
-                    self.cards[ii] = this.features.features[this.selectedMarker].properties.names[ii]
+            function updateCard(index, result) {
+                self.cards[index].data = result.value;
+                self.cards[index].uom = result.uom;
+                self.cards[index].time = {
+                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 };
             };
 
+            for (let ii = 0; ii < 6; ii++) {
+                if ( this.features.features[this.selectedMarker].properties.names[ii] ) {
+                    let info = this.features.features[this.selectedMarker].properties.names[ii];
+                    this.cards[ii] = info;
+
+                    self.cards[ii].data = null;
+                    this.istsos.fetchBy(
+                        self.cards[ii].urn,
+                        self.cards[ii].procedure
+                    ).then((result)=>{
+                        updateCard(ii, result);
+                    });
+                };
+            };
         },
         markerLayerOptions () {
             var self = this;
@@ -874,7 +892,7 @@
             ]).then((results)=>{
                 self.$root.allProcedure = results[1].data.data;
                 let tableAllData = results[0].data.data
-                
+
                 tableAllData.forEach((el => {
                     const ff = results[1].data.data.filter(proc => proc.observedproperties[0].name==el.name);
                     const ends = ff.map(proc=>proc.samplingTime.endposition);
@@ -883,7 +901,7 @@
                     const end = ends.length ? Math.min(...ends.map(bb=>(Date.parse(bb)))) : 0;
                     if ( begin && end ) {
                         const diffTime = Math.abs(end - begin);
-                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                         el['days'] = diffDays;
                         el['begin'] = new Date(begin).toLocaleDateString('it-IT');
                         el['end'] = new Date(end).toLocaleDateString('it-IT');

@@ -207,9 +207,10 @@ export default class IstsosIO {
             geojson: undefined
       });
   };
-  responseToTemperature (response) {
+
+  adaptResponse (response) {
       // water:temperature
-      
+
       const dataArray = response.data.data[0].result.DataArray;
       // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
       const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
@@ -217,7 +218,7 @@ export default class IstsosIO {
 
       let info = {
           // order: order,
-          procedure: procedures,
+          procedure: response.data.data[0].name,
           options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS)),
           coords: coords.map(el=>parseFloat(el))
       };
@@ -229,7 +230,7 @@ export default class IstsosIO {
 
       info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
       info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
-      info.value = dataArray.values[0][1];
+      info.value = dataArray.values[0][1].toFixed(1);
       return info;
   };
   fetchBy(urn, procedures, eventtime='last') {
@@ -239,11 +240,15 @@ export default class IstsosIO {
           eventtime: eventtime,
           observedproperties: urn
       }).then((response)=>{
-          if ( urn.endsWith('water:temperature') ) {
-              return self.responseToTemperature(response)
-          } else {
-              throw 'Not Implemented!';
-          };
+          return self.adaptResponse(response);
+          // if ( urn.endsWith('water:temperature') ) {
+          //     return self.responseToWaterTemperature(response)
+          // } else if ( urn.endsWith('meteo:air:temperature') ) {
+          //     return self.responseToAirTemperature(response)
+          // } else {
+          //     console.error(urn);
+          //     throw 'Not Implemented!';
+          // };
       });
   };
   _fetchTemperature(procedures, eventtime='last') {
