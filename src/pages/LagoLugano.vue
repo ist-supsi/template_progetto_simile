@@ -21,21 +21,27 @@
                             <div class="col-8">
                               <div class="row">
                                   <div class="col-6">
+                                      <!--  -->
                                       <stats-card>
                                           <div slot="header" class="icon-warning">
                                             <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                            <i class="fa fa-sun-o text-warning"
+                                            <i :class="getCardIcon(cards[0].name)"
                                               data-toggle="tooltip"
-                                              title="Temperatura aria"></i>
+                                              title="cards[0].title||'no data'"></i>
                                           </div>
                                           <div slot="content">
-                                            <p class="card-category">Temperatura dell'aria</p>
-                                            <h4 class="card-title">22°C</h4>
-                                            <p class="card-category">da stazione meteo</p>
+                                            <p v-if="!cards[0].description" class="card-category placeholder-glow">
+                                              <span class="placeholder col-12"></span>
+                                            </p>
+                                            <p v-else class="card-category">{{cards[0].description && cards[0].description.substring(0, 24) || "--"}}</p>
+                                            <h4 class="card-title">{{cards[0].data || "N.P."}} {{cards[0].uom || ""}}</h4>
+                                            <p class="card-category">{{cards[0].message || "--"}}</p>
                                           </div>
                                           <div slot="footer">
-                                              <i class="fa fa-calendar" aria-hidden="true"></i>oggi
-                                              <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
+                                              <i v-if="cards[0].data===null" class="fa fa-refresh fa-spin"></i>
+                                              <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                              <i v-if="cards[0].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[0].time && cards[0].time.date}}
+                                              <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
                                           </div>
                                       </stats-card>
                                   </div>
@@ -43,6 +49,29 @@
                                       <stats-card>
                                           <div slot="header" class="icon-warning">
                                             <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                            <i :class="getCardIcon(cards[1].name)"
+                                              data-toggle="tooltip"
+                                              title="cards[1].title||'no data'"></i>
+                                          </div>
+                                          <div slot="content">
+                                            <p v-if="!cards[1].description" class="card-category placeholder-glow">
+                                              <span class="placeholder col-12"></span>
+                                            </p>
+                                            <p v-else class="card-category">{{cards[1].description && cards[1].description.substring(0, 24) || "--"}}</p>
+                                            <h4 class="card-title">{{cards[1].data || "N.P."}} {{cards[1].uom || ""}}</h4>
+                                            <p class="card-category">{{cards[1].message || "--"}}</p>
+                                          </div>
+                                          <div slot="footer">
+                                              <i v-if="cards[1].data===null" class="fa fa-refresh fa-spin"></i>
+                                              <i v-if="cards[1].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                              <i v-if="cards[1].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[1].time && cards[1].time.date}}
+                                              <i v-if="cards[1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[1].time && cards[1].time.time}}
+                                          </div>
+                                      </stats-card>
+                                  </div>
+                                  <!-- <div class="col-6">
+                                      <stats-card>
+                                          <div slot="header" class="icon-warning">
                                             <i class="fa fa-cloud text-primary"
                                               data-toggle="tooltip"
                                               title="Umidità"></i>
@@ -58,7 +87,7 @@
                                               <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
                                           </div>
                                       </stats-card>
-                                  </div>
+                                  </div> -->
                               </div>
                               <!-- <div class="row">
                                   <div class="col-6">
@@ -238,7 +267,7 @@
                     <div class="row">
                         <div class="col-12">
                             <data-table
-                                :columns="tableColumns"
+                                :columns="tableColumns2"
                                 :data="tableData"
                                 :per-page="[5, 10, 15]"
                                 @on-table-props-changed="reloadTable"
@@ -415,108 +444,39 @@
                     column: 'name',
                     dir: 'asc'
                 },
-                tableColumns: [
-                    // {
-                    //     label: 'ID',
-                    //     name: 'id',
-                    //     orderable: true,
-                    // },
-                    {
-                        label: 'Etichetta',
-                        transform: (item)=>{
-                            return item.data.observedproperties[0].name
-                        },
-                        // name: 'name',
-                        orderable: true,
-                    },
+                tableColumns2: [
                     {
                         label: 'Nome',
                         name: 'name',
                         orderable: true,
                     },
                     {
-                        label: 'Unità',
-                        transform: (item)=>{
-                            return item.data.observedproperties[0].uom
-                        },
-                        // name: 'name',
+                        label: 'Descrizione',
+                        name: 'description',
                         orderable: false,
                     },
                     {
-                        label: 'Quota s.l.a./Profondità',
-                        transform: (item)=>{
-                            const prof = item.data.description.match(/profondità di [+-]?\d+(\.\d+)? m/gm);
-                            const quot = item.data.description.match(/quota di circa [+-]?\d+(\.\d+)? m/gm);
-                            if ( prof ) {
-                                return '- '+prof[0].match(/[+-]?\d+(\.\d+)? m/gm);
-                            } else if ( quot ) {
-                                return '+ '+quot[0].match(/[+-]?\d+(\.\d+)? m/gm);
-                            } else {
-                                return '';
-                            }
-
-                        },
-                        // name: 'name',
+                        label: 'Giorni',
+                        name: 'days',
                         orderable: false,
                     },
                     {
                         label: 'Inizio',
-                        transform: (item)=>{
-                            return item.data.samplingTime.beginposition.split('T')[0]
-                        },
-                        // name: 'name',
+                        name: 'begin',
                         orderable: false,
                     },
                     {
-                        label: 'Ultimo',
-                        transform: (item)=>{
-                            return item.data.samplingTime.endposition.split('T')[0]
-                        },
-                        // name: 'name',
+                        label: 'Fine',
+                        name: 'end',
                         orderable: false,
                     },
-                    {
-                        label: 'Descrizione',
-                        name: 'Apri',
-                        orderable: false,
-                        classes: {
-                            'btn': true,
-                            'btn-info': true,
-                            'btn-sm': true,
-                        },
-                        event: "click",
-                        handler: this.displayRow,
-                        component: NotifyButton,
-                        iclasses: {
-                            'fa': true,
-                            'fa-info-circle': true
-                        }
-                    },
-                    // {
-                    //     label: '',
-                    //     transform: (item)=>{
-                    //         let anchor = document.createElement('a');
-                    //         let icon = document.createElement('i');
-                    //         icon.classList.add('fa', 'fa-line-chart');
-                    //         anchor.appendChild(icon);
-                    //         let text = document.createTextNode('Analizza');
-                    //         anchor.classList.add('btn', 'btn-sm', 'btn-primary');
-                    //         anchor.appendChild(text);
-                    //         anchor.onclick = function() {
-                    //             console.log('this');
-                    //         };
-                    //         return anchor.outerHTML;
-                    //     },
-                    //     // name: 'name',
-                    //     orderable: false,
-                    // }
                     {
                         label: '',
                         name: 'Analizza',
                         event: "click",
                         handler: (data)=>{
-                            this.$root.analisysVariable = `${data.name}`;
-                            this.$root.analisysVariableUrn = `${data.observedproperties[0].definition}`;
+                            this.$root.analisysVariable = `${data.procedures[0]}`;
+                            this.$root.analisysVariableUrn = `${data.definition}`;
                         },
                         orderable: false,
                         classes: {
@@ -529,57 +489,6 @@
                     }
                 ],
                 selectedRow: {},
-                // procedures: [
-                //     {
-                //         procedure: 'TEMP_0_4'
-                //     },
-                //     {
-                //         procedure: 'O2C_0_4'
-                //     },
-                //     // {
-                //     //     procedure: 'O2S_0_4'
-                //     // },
-                // ],
-                // tempChartOptions: {
-                //     chart: {
-                //         marginTop: 40
-                //     },
-                //     title: {
-                //         text: '2017 YTD'
-                //     },
-                //     xAxis: {
-                //         categories: ['<span class="hc-cat-title">Revenue</span><br/>U.S. $ (1,000s)']
-                //     },
-                //     yAxis: {
-                //         plotBands: [{
-                //             from: -10,
-                //             to: 4,
-                //             color: 'cyan'
-                //         }, {
-                //             from: 4,
-                //             to: 8,
-                //             color: 'blue'
-                //         }, {
-                //             from: 8,
-                //             to: 16,
-                //             color: 'orange'
-                //         }, {
-                //             from: 16,
-                //             to: 30,
-                //             color: 'red'
-                //         }],
-                //         title: null
-                //     },
-                //     series: [{
-                //         data: [{
-                //             y: 5.5,
-                //             target: 12
-                //         }]
-                //     }],
-                //     tooltip: {
-                //         pointFormat: '<b>{point.y}</b> (with target at {point.target})'
-                //     }
-                // },
                 editTooltip: 'Edit Task',
                 deleteTooltip: 'Remove',
                 zoom: 13,
@@ -750,6 +659,8 @@
                   scrollWheelZoom: false
                 },
                 showMap: true,
+                selectedMarker: 1,
+                cards: [{}, {}, {}, {}, {}, {}]
             }
         },
         watch: {
@@ -758,27 +669,55 @@
                     // do stuff
                 },
                 deep: true
+            },
+            selectedMarker: {
+                handler(val){
+                    // do stuff
+                    this.loadCardsData();
+                },
+            },
+            cards: {
+                handler(val){
+                    // do stuff
+                },
+                deep: true
             }
-          // series_data: {
-          //    handler(val){
-          //      // do stuff
-          //    },
-          //    deep: true
-          // }
         },
         mounted() {
             var self = this;
             this.$root.whereAmI = 'Lago di Lugano';
-            this.tableFetchData().then((result)=>{this.tableSetData()});
+            
+            this.tableFetchData2().then((values) => {
+                this.tableSetData();
+            });
 
-            this.tableFetchData2();
+            const good_names = [
+                "air-temperature",
+                "air-relative-humidity",
+                "wind-direction",
+                "wind-speed-max",
+                "water-temperature",
+                "water-O2S",
+                "water-SDT",
+                "water-PTOT",
+                "water-depth",
+                "water-Pload",
+                "water-Biovol",
+                "water-PC"
+            ];
 
             const groupBy = (x,f,g)=>x.reduce((a,b)=>{
+                const rr = g(b);
+                
                 if ( a[f(b)] ) {
-                    a[f(b)].push(g(b))
+                    // a[f(b)].push(g(b))
+                    if ( !a[f(b)][rr.name] ) {
+                        a[f(b)][rr.name] = rr;
+                    };
                     return a;
                 } else {
-                    a[f(b)] = [g(b)]
+                    a[f(b)] = {};
+                    a[f(b)][rr.name] = rr;
                     return a;
                 }
             },{});
@@ -789,12 +728,23 @@
                 const lat = (a.geometry.coordinates[1]/ff).toFixed(0)*ff;
                 return `${lon};${lat}`;
             };
-            const collectNames = (b)=>b.properties.name;
+            const collectNames = (b)=>{
+                console.log(b.properties);
+                return {
+                    name: b.properties.observedproperties[0].name,
+                    procedure: b.properties.name,
+                    urn: b.properties.observedproperties[0].def,
+                    description: b.properties.description
+                }
+            };
 
             // Load markers
             this.istsos.fetchGeometryCollection().then((result)=>{
-                const reduced = groupBy(result.data.features, approxPosition, collectNames);
-
+                const reduced = groupBy(
+                    result.data.features,
+                    approxPosition,
+                    collectNames
+                );
                 let bounds = L.latLngBounds([]);
 
                 const features = Object.entries(reduced).map(([k, v]) => {
@@ -802,12 +752,22 @@
                     bounds.extend(L.latLng(coords[1], coords[0]));
                     return {
                         "type": "Feature",
-                        "properties": {names: v},
+                        "properties": {names: Object.entries(v).sort((a, b) => {
+                            const ia = good_names.indexOf(a[0]);
+                            const ib = good_names.indexOf(b[0]);
+
+                            if ( ia==ib ) return 0;
+                            if ( ia==-1 ) return 1;
+                            if ( ib==-1 ) return -1;
+                            if ( ia>ib ) return 1;
+                            return -1
+
+                        }).map(ii=>ii[1])},
                         "geometry": {
                             "type": "Point",
                             "coordinates": coords
                         }
-                      }
+                    }
                 });
 
                 // Set FeatureCollection
@@ -815,8 +775,7 @@
                     "type": "FeatureCollection",
                     "features": features
                 };
-
-                // console.log(self.$refs.markerLayer);
+                this.loadCardsData();
 
                 // Set map bounds
                 self.bounds = bounds;
@@ -824,11 +783,28 @@
             })
 
             this.populateCockpit();
-            // self.appendTempSeries();
-            // this.fetchO2c('O2C_0_4');
             this.$root.dropdownVisible = false;
         },
     methods: {
+        getCardIcon (name) {
+            console.log(name);
+            if (name == 'air-relative-humidity') {
+                return 'fa fa-cloud text-primary';
+            } else if (name == 'air-temperature') {
+                return 'fa fa-sun-o text-warning';
+            };
+            return 'fa fa-question-circle-o text-info';
+        },
+        loadCardsData () {
+            var self = this;
+
+            for (var ii = 0; ii < 6; ii++) {
+                if ( this.features.features[this.selectedMarker].properties.names[ii] ) {
+                    self.cards[ii] = this.features.features[this.selectedMarker].properties.names[ii]
+                };
+            };
+
+        },
         markerLayerOptions () {
             var self = this;
             return {
@@ -891,68 +867,30 @@
         },
         tableFetchData2 () {
             var self = this;
-            // Promise.all([
-            //     // promise1, promise2, promise3
-            //     this.istsos.fetchObserverProperties(),
-            //     this.istsos.fetchProcedures()
-            // ]).then((datas) => {
-            //     console.log(datas[0].data.data);
-            //     console.log(datas[1].data.data);
-            //
-            //     function inizio(new_, actual_) {
-            //         if (actual_=== undefined) {
-            //             return new_.inizio;
-            //         } else if ( Date.parse(new_.inizio) < Date.parse(actual_.samplingTime.beginposition) ) {
-            //             return new_.inizio;
-            //         } else {
-            //             return actual_.samplingTime.beginposition;
-            //         };
-            //     };
-            //
-            //     function fine(new_, actual_) {
-            //         if (actual_=== undefined) {
-            //             return new_.fine;
-            //         } else if ( Date.parse(new_.fine) > Date.parse(actual_.samplingTime.endposition) ) {
-            //             return new_.fine;
-            //         } else {
-            //             return actual_.samplingTime.endposition;
-            //         };
-            //     };
-            //
-            //
-            //
-            //     // procByName = Object.fromEntries( datas[1].data.data.map( x => [x.observedproperties, x]) );
-            //     let procByName = datas[1].data.data.reduce((a, b) => ({
-            //         nome: b.name,
-            //         descrizione: b.description,
-            //         unita: b.observedproperties[0].uom,
-            //         inizio: inizio(a, b),
-            //         fine: fine(a, b)
-            //     }));
-            //     console.log(procByName);
-            //
-            //
-            // });
 
-        },
-        tableFetchData () {
-            var self = this;
-            return this.istsos.fetchProcedures().then((result)=>{
-                self.tableAllData = {
-                    data: result.data.data
-                };
-                self.$root.allProcedure = self.tableAllData;
-            });
-            // return new Promise((resolve, reject) => {
-            //     self.tableAllData = {};
-            //     resolve();
-            // });
-        },
-        tableSetData2() {
-            var self = this;
-
-
-
+            return Promise.all([
+                this.istsos.fetchObserverProperties(),
+                this.istsos.fetchProcedures()
+            ]).then((results)=>{
+                self.$root.allProcedure = results[1].data.data;
+                let tableAllData = results[0].data.data
+                
+                tableAllData.forEach((el => {
+                    const ff = results[1].data.data.filter(proc => proc.observedproperties[0].name==el.name);
+                    const ends = ff.map(proc=>proc.samplingTime.endposition);
+                    const begins = ff.map(proc=>proc.samplingTime.beginposition);
+                    const begin = begins.length ? Math.min(...begins.map(bb=>(Date.parse(bb)))) : 0;
+                    const end = ends.length ? Math.min(...ends.map(bb=>(Date.parse(bb)))) : 0;
+                    if ( begin && end ) {
+                        const diffTime = Math.abs(end - begin);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                        el['days'] = diffDays;
+                        el['begin'] = new Date(begin).toLocaleDateString('it-IT');
+                        el['end'] = new Date(end).toLocaleDateString('it-IT');
+                    }
+                }));
+                self.tableAllData = {data: tableAllData.filter(el => el.begin && el.end)}
+            })
         },
         tableSetData () {
 

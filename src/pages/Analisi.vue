@@ -212,7 +212,7 @@
         data () { return {
             last_value: null,
             series_data: {},
-            allProcedure: this.$root.allProcedure.data,
+            allProcedure: this.$root.allProcedure,
             groupedProcedures: {},
             procedureInfos: {},
             variableInfo: {},

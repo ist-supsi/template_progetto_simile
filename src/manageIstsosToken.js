@@ -207,6 +207,45 @@ export default class IstsosIO {
             geojson: undefined
       });
   };
+  responseToTemperature (response) {
+      // water:temperature
+      
+      const dataArray = response.data.data[0].result.DataArray;
+      // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
+      const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
+      const coords = coords_[0].match(/[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?/gm)[0].split(',')
+
+      let info = {
+          // order: order,
+          procedure: procedures,
+          options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS)),
+          coords: coords.map(el=>parseFloat(el))
+      };
+      info.uom = dataArray.field[1].uom;
+      info.x = new Date(dataArray.values[0][0]);
+      // info.options.title.text = "Temperatura Superficiale";
+      // TODO: new Date(dataArray.values[0][0])) -> more human format!
+      info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
+
+      info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
+      info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
+      info.value = dataArray.values[0][1];
+      return info;
+  };
+  fetchBy(urn, procedures, eventtime='last') {
+      var self = this;
+      return this.fetch({
+          procedures: procedures,
+          eventtime: eventtime,
+          observedproperties: urn
+      }).then((response)=>{
+          if ( urn.endsWith('water:temperature') ) {
+              return self.responseToTemperature(response)
+          } else {
+              throw 'Not Implemented!';
+          };
+      });
+  };
   _fetchTemperature(procedures, eventtime='last') {
       var self = this;
       return this.fetch({
