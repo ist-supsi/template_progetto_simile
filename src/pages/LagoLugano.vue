@@ -29,10 +29,10 @@
                                               title="cards[0].title||'no data'"></i>
                                           </div>
                                           <div slot="content">
-                                            <p v-if="!cards[0].description" class="card-category placeholder-glow">
+                                            <p v-if="!cards[0].title" class="card-category placeholder-glow">
                                               <span class="placeholder col-12"></span>
                                             </p>
-                                            <p v-else class="card-category">{{cards[0].description && cards[0].description.substring(0, 24) || "--"}}</p>
+                                            <p v-else class="card-category">{{cards[0].title || "--"}}</p>
                                             <h4 class="card-title">{{cards[0].data || "N.P."}} {{cards[0].uom || ""}}</h4>
                                             <p class="card-category">{{cards[0].message || "--"}}</p>
                                           </div>
@@ -53,10 +53,10 @@
                                               title="cards[1].title||'no data'"></i>
                                           </div>
                                           <div slot="content">
-                                            <p v-if="!cards[1].description" class="card-category placeholder-glow">
+                                            <p v-if="!cards[1].title" class="card-category placeholder-glow">
                                               <span class="placeholder col-12"></span>
                                             </p>
-                                            <p v-else class="card-category">{{cards[1].description && cards[1].description.substring(0, 25) || "--"}}</p>
+                                            <p v-else class="card-category">{{cards[1].title || "--"}}</p>
                                             <h4 class="card-title">{{cards[1].data || "N.P."}} {{cards[1].uom || ""}}</h4>
                                             <p class="card-category">{{cards[1].message || "--"}}</p>
                                           </div>
@@ -133,6 +133,27 @@
                                       <stats-card>
                                           <div slot="header" class="icon-warning">
                                             <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                            <i :class="getCardIcon(cards[2].name)"
+                                              data-toggle="tooltip"
+                                              title="cards[2].title||'no data'"></i>
+                                          </div>
+                                          <div slot="content">
+                                            <p v-if="!cards[2].title" class="card-category placeholder-glow">
+                                              <span class="placeholder col-12"></span>
+                                            </p>
+                                            <p v-else class="card-category">{{cards[2].title || "--"}}</p>
+                                            <h4 class="card-title">{{cards[2].data || "N.P."}} {{cards[2].uom || ""}}</h4>
+                                            <p class="card-category">{{cards[2].message || "--"}}</p>
+                                          </div>
+                                          <div slot="footer">
+                                              <i v-if="cards[2].data===null" class="fa fa-refresh fa-spin"></i>
+                                              <i v-if="cards[2].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                              <i v-if="cards[2].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[2].time && cards[2].time.date}}
+                                              <i v-if="cards[2].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[2].time && cards[2].time.time}}
+                                          </div>
+                                      </stats-card>
+                                      <!-- <stats-card>
+                                          <div slot="header" class="icon-warning">
                                             <i class="fa fa-thermometer text-warning"
                                               data-toggle="tooltip"
                                               title="Temperatura superficiale"></i>
@@ -147,12 +168,33 @@
                                               <i v-if="lastTemp04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.date}}
                                               <i v-if="lastTemp04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.time}}
                                           </div>
-                                      </stats-card>
+                                      </stats-card> -->
                                   </div>
                                   <div class="col-6">
                                       <stats-card>
                                           <div slot="header" class="icon-warning">
                                             <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                            <i :class="getCardIcon(cards[3].name)"
+                                              data-toggle="tooltip"
+                                              title="cards[3].title||'no data'"></i>
+                                          </div>
+                                          <div slot="content">
+                                            <p v-if="!cards[3].title" class="card-category placeholder-glow">
+                                              <span class="placeholder col-12"></span>
+                                            </p>
+                                            <p v-else class="card-category">{{cards[3].title || "--"}}</p>
+                                            <h4 class="card-title">{{cards[3].data || "N.P."}} {{cards[3].uom || ""}}</h4>
+                                            <p class="card-category">{{cards[3].message || "--"}}</p>
+                                          </div>
+                                          <div slot="footer">
+                                              <i v-if="cards[3].data===null" class="fa fa-refresh fa-spin"></i>
+                                              <i v-if="cards[3].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                              <i v-if="cards[3].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[3].time && cards[3].time.date}}
+                                              <i v-if="cards[3].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[3].time && cards[3].time.time}}
+                                          </div>
+                                      </stats-card>
+                                      <!-- <stats-card>
+                                          <div slot="header" class="icon-warning">
                                             <i class="fa fa-flask text-primary"
                                               data-toggle="tooltip"
                                               title="Ossigeno disciolto"></i>
@@ -167,12 +209,34 @@
                                               <i v-if="lastO2s04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.date}}
                                               <i v-if="lastO2s04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.time}}
                                           </div>
-                                      </stats-card>
+                                      </stats-card> -->
                                   </div>
                               </div>
                               <div class="row">
                                 <div class="col-6">
                                     <stats-card>
+                                        <div slot="header" class="icon-warning">
+                                          <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                          <i :class="getCardIcon(cards[4].name)"
+                                            data-toggle="tooltip"
+                                            title="cards[4].title||'no data'"></i>
+                                        </div>
+                                        <div slot="content">
+                                          <p v-if="!cards[4].title" class="card-category placeholder-glow">
+                                            <span class="placeholder col-12"></span>
+                                          </p>
+                                          <p v-else class="card-category">{{cards[4].title || "--"}}</p>
+                                          <h4 class="card-title">{{cards[4].data || "N.P."}} {{cards[4].uom || ""}}</h4>
+                                          <p class="card-category">{{cards[4].message || "--"}}</p>
+                                        </div>
+                                        <div slot="footer">
+                                            <i v-if="cards[4].data===null" class="fa fa-refresh fa-spin"></i>
+                                            <i v-if="cards[4].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                            <i v-if="cards[4].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[4].time && cards[4].time.date}}
+                                            <i v-if="cards[4].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[4].time && cards[4].time.time}}
+                                        </div>
+                                    </stats-card>
+                                    <!-- <stats-card>
                                         <div slot="header" class="icon-warning">
                                           <i class="fa fa-tint text-primary"
                                             data-toggle="tooltip"
@@ -188,10 +252,32 @@
                                             <i v-if="lastSdtTime" class="fa fa-calendar" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.date}}
                                             <i v-if="lastSdtTime" class="fa fa-clock-o" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.time}}
                                         </div>
-                                    </stats-card>
+                                    </stats-card> -->
                                 </div>
                                 <div class="col-6">
                                     <stats-card>
+                                        <div slot="header" class="icon-warning">
+                                          <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                          <i :class="getCardIcon(cards[5].name)"
+                                            data-toggle="tooltip"
+                                            title="cards[5].title||'no data'"></i>
+                                        </div>
+                                        <div slot="content">
+                                          <p v-if="!cards[5].title" class="card-category placeholder-glow">
+                                            <span class="placeholder col-12"></span>
+                                          </p>
+                                          <p v-else class="card-category">{{cards[5].title || "--"}}</p>
+                                          <h4 class="card-title">{{cards[5].data || "N.P."}} {{cards[5].uom || ""}}</h4>
+                                          <p class="card-category">{{cards[5].message || "--"}}</p>
+                                        </div>
+                                        <div slot="footer">
+                                            <i v-if="cards[5].data===null" class="fa fa-refresh fa-spin"></i>
+                                            <i v-if="cards[5].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                            <i v-if="cards[5].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[5].time && cards[5].time.date}}
+                                            <i v-if="cards[5].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[5].time && cards[5].time.time}}
+                                        </div>
+                                    </stats-card>
+                                    <!-- <stats-card>
                                         <div slot="header" class="icon-warning">
                                           <i class="fa fa-pagelines text-success"
                                             data-toggle="tooltip"
@@ -206,7 +292,7 @@
                                           <i class="fa fa-calendar" aria-hidden="true"></i>oggi
                                           <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
                                         </div>
-                                    </stats-card>
+                                    </stats-card> -->
 
                                 </div>
                               </div>
@@ -455,11 +541,11 @@
                         name: 'description',
                         orderable: false,
                     },
-                    {
-                        label: 'Giorni',
-                        name: 'days',
-                        orderable: false,
-                    },
+                    // {
+                    //     label: 'Giorni',
+                    //     name: 'days',
+                    //     orderable: false,
+                    // },
                     {
                         label: 'Inizio',
                         name: 'begin',
@@ -782,46 +868,75 @@
                 self.bounds = bounds;
 
             })
-
+            
+            // TODO: DEPRECATE
             this.populateCockpit();
             this.$root.dropdownVisible = false;
         },
     methods: {
         getCardIcon (name) {
-
+            console.log(name);
             if (name == 'air-relative-humidity') {
                 return 'fa fa-cloud text-primary';
             } else if (name == 'air-temperature') {
                 return 'fa fa-sun-o text-warning';
+            } else if (name == 'water-temperature') {
+                return 'fa fa-thermometer text-warning';
+            } else if (name == 'water-O2S') {
+                return 'fa fa-flask text-primary';
+            } else if (name == 'wind-speed-max') {
+                return 'fa fa-flag text-info';
+            } else if (name == 'wind-direction') {
+                return 'fa fa-compass text-info';
             };
             return 'fa fa-question-circle-o text-info';
         },
         loadCardsData () {
             var self = this;
 
+            const titles = {
+                'air-temperature': "Temperatura dell'aria",
+                'wind-speed-max': "Velocità del vento di picco",
+                'water-temperature': "Temperatura dell'acqua",
+                'air-relative-humidity': "Umidità relativa dell'aria",
+                'wind-direction': "Direzione del vento"
+            };
+
+            let cards = [];
             function updateCard(index, result) {
-                self.cards[index].data = result.value;
-                self.cards[index].uom = result.uom;
-                self.cards[index].time = {
+                // console.log(result);
+                // self.cards[index].description = self.cards[index].description.substring(0, 27)
+                // const title = self.tableAllData.filter((el)=>{el.definition==result.urn})[0];
+                // console.log(title);
+                cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27)
+                cards[index].data = result.value;
+                cards[index].uom = result.uom;
+                cards[index].time = {
                     date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 };
+                cards[index].message = result.locationUrn.split(':').at(-1);
             };
 
+            let calls = []
             for (let ii = 0; ii < 6; ii++) {
                 if ( this.features.features[this.selectedMarker].properties.names[ii] ) {
                     let info = this.features.features[this.selectedMarker].properties.names[ii];
-                    this.cards[ii] = info;
+                    cards.push(info)
+                    // this.cards[ii] = info;
 
-                    self.cards[ii].data = null;
-                    this.istsos.fetchBy(
-                        self.cards[ii].urn,
-                        self.cards[ii].procedure
+                    cards[ii].data = null;
+                    calls.push(this.istsos.fetchBy(
+                        cards[ii].urn,
+                        cards[ii].procedure
                     ).then((result)=>{
                         updateCard(ii, result);
-                    });
+                    }));
                 };
             };
+            Promise.all(calls).then(()=>{
+                self.cards = cards;
+            })
         },
         markerLayerOptions () {
             var self = this;

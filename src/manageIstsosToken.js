@@ -209,8 +209,8 @@ export default class IstsosIO {
   };
 
   adaptResponse (response) {
+      console.log(response);
       // water:temperature
-
       const dataArray = response.data.data[0].result.DataArray;
       // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
       const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
@@ -222,6 +222,8 @@ export default class IstsosIO {
           options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS)),
           coords: coords.map(el=>parseFloat(el))
       };
+      info.urn = response.data.data[0].procedure
+      info.locationUrn = response.data.data[0].featureOfInterest.name
       info.uom = dataArray.field[1].uom;
       info.x = new Date(dataArray.values[0][0]);
       // info.options.title.text = "Temperatura Superficiale";
