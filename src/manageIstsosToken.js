@@ -209,10 +209,9 @@ export default class IstsosIO {
   };
 
   adaptResponse (response) {
-      console.log(response);
       // water:temperature
       const dataArray = response.data.data[0].result.DataArray;
-      // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
+      // profondità di [+-]?\d+(\.\d+)? m/gm
       const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
       const coords = coords_[0].match(/[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?/gm)[0].split(',')
 
@@ -220,19 +219,25 @@ export default class IstsosIO {
           // order: order,
           procedure: response.data.data[0].name,
           options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS)),
-          coords: coords.map(el=>parseFloat(el))
+          coords: coords.map(el=>parseFloat(el)),
+          x: null,
+          value: null
       };
       info.urn = response.data.data[0].procedure
       info.locationUrn = response.data.data[0].featureOfInterest.name
       info.uom = dataArray.field[1].uom;
-      info.x = new Date(dataArray.values[0][0]);
-      // info.options.title.text = "Temperatura Superficiale";
-      // TODO: new Date(dataArray.values[0][0])) -> more human format!
-      info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
 
-      info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-      info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
-      info.value = dataArray.values[0][1].toFixed(1);
+      if ( dataArray.values.length>0 ) {
+          info.x = new Date(dataArray.values[0][0]);
+          // info.options.title.text = "Temperatura Superficiale";
+          // TODO: new Date(dataArray.values[0][0])) -> more human format!
+          info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
+
+          info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
+          info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
+          info.value = dataArray.values[0][1].toFixed(1);
+      };
+
       return info;
   };
   fetchBy(urn, procedures, eventtime='last') {
@@ -289,7 +294,7 @@ export default class IstsosIO {
     var self = this;
     return this._fetchTemperature(procedures).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
-        // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
+        // profondità di [+-]?\d+(\.\d+)? m/gm
         const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
         const coords = coords_[0].match(/[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?/gm)[0].split(',')
 
@@ -389,7 +394,6 @@ export default class IstsosIO {
     var self = this;
     return this._fetchO2c(procedures).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
-        // console.log(dataArray);
         let info = {
             // order: order,
             procedure: procedures,
@@ -416,7 +420,6 @@ export default class IstsosIO {
     let eventtime = `${begin.toISOString()}/${end.toISOString()}`;
     return this._fetchO2c(procedures, eventtime).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
-        // console.log(dataArray);
         let info = {
             // order: order,
             options: JSON.parse(JSON.stringify(TEMPERATURE_SERIES_DEFAULTS))
@@ -457,7 +460,6 @@ export default class IstsosIO {
       var self = this;
       return this._fetchSdt(procedures).then((response) => {
         const dataArray = response.data.data[0].result.DataArray;
-        // console.log(dataArray);
         let info = {
             // order: order,
             options: JSON.parse(JSON.stringify(TEMPERATURE_DEFAULTS))

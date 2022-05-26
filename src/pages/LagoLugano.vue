@@ -726,7 +726,7 @@
                 markerLayer: {
                     name: 'Marker',
                     visible: true,
-                    layers: 'MArker',
+                    layers: 'Marker',
                     geojson: {
                       'name': 'markers',
                       'type': 'FeatureCollection',
@@ -765,7 +765,6 @@
             cards: {
                 handler(val){
                     // do stuff
-                    console.log(val);
                 },
                 deep: true
             }
@@ -834,22 +833,26 @@
                 );
                 let bounds = L.latLngBounds([]);
 
-                const features = Object.entries(reduced).map(([k, v]) => {
+                const features = Object.entries(reduced).map(([k, v], ii) => {
                     const coords = k.split(';').map(parseFloat);
                     bounds.extend(L.latLng(coords[1], coords[0]));
                     return {
                         "type": "Feature",
-                        "properties": {names: Object.entries(v).sort((a, b) => {
-                            const ia = good_names.indexOf(a[0]);
-                            const ib = good_names.indexOf(b[0]);
+                        "properties": {
+                            markerIndex: ii,
+                            names: Object.entries(v).sort((a, b) => {
+                                  const ia = good_names.indexOf(a[0]);
+                                  const ib = good_names.indexOf(b[0]);
 
-                            if ( ia==ib ) return 0;
-                            if ( ia==-1 ) return 1;
-                            if ( ib==-1 ) return -1;
-                            if ( ia>ib ) return 1;
-                            return -1
+                                  if ( ia==ib ) return 0;
+                                  if ( ia==-1 ) return 1;
+                                  if ( ib==-1 ) return -1;
+                                  if ( ia>ib ) return 1;
+                                  return -1
 
-                        }).map(a=>a[1])},
+                              }).map(a=>a[1]),
+
+                        },
                         "geometry": {
                             "type": "Point",
                             "coordinates": coords
@@ -868,14 +871,13 @@
                 self.bounds = bounds;
 
             })
-            
+
             // TODO: DEPRECATE
             this.populateCockpit();
             this.$root.dropdownVisible = false;
         },
     methods: {
         getCardIcon (name) {
-            console.log(name);
             if (name == 'air-relative-humidity') {
                 return 'fa fa-cloud text-primary';
             } else if (name == 'air-temperature') {
@@ -904,24 +906,25 @@
 
             let cards = [];
             function updateCard(index, result) {
-                // console.log(result);
                 // self.cards[index].description = self.cards[index].description.substring(0, 27)
                 // const title = self.tableAllData.filter((el)=>{el.definition==result.urn})[0];
-                // console.log(title);
                 cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27)
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
-                cards[index].time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                if ( result.x ) {
+                    cards[index].time = {
+                        date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                        time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                    };
                 };
+
                 cards[index].message = result.locationUrn.split(':').at(-1);
             };
 
             let calls = []
             for (let ii = 0; ii < 6; ii++) {
-                if ( this.features.features[this.selectedMarker].properties.names[ii] ) {
-                    let info = this.features.features[this.selectedMarker].properties.names[ii];
+                if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
+                    let info = self.features.features[self.selectedMarker].properties.names[ii];
                     cards.push(info)
                     // this.cards[ii] = info;
 
@@ -956,7 +959,7 @@
                         iconAnchor: [20, 40],
                         className: ''
                     });
-                    const marker = L.marker(latlng, {icon: fontAwesomeIcon});
+                    const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{self.selectedMarker=feature.properties.markerIndex});
                     return marker;
                 }
             }
