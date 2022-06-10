@@ -890,6 +890,8 @@
                 return 'fa fa-flag text-info';
             } else if (name == 'wind-direction') {
                 return 'fa fa-compass text-info';
+            } else if (name == 'water-SDT') {
+                return 'fa fa-tint text-primary';
             };
             return 'fa fa-question-circle-o text-info';
         },
