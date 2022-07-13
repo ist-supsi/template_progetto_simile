@@ -415,6 +415,7 @@
     // import ModalButton from 'src/components/ModalButton.vue';
     import NotifyButton from 'src/components/NotifyButton.vue';
     import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
+    import indicatorDescription from '../indicatorDescription';
 
   //   loadBullet(Highcharts);
   //
@@ -555,6 +556,23 @@
                         label: 'Fine',
                         name: 'end',
                         orderable: false,
+                    },
+                     {
+                        label: ' ',
+                        name: 'info',
+                        orderable: false,
+                        classes: {
+                            'btn': true,
+                            'btn-info': true,
+                            'btn-sm': true,
+                        },
+                        event: "click",
+                        handler: this.displayRow,
+                        component: NotifyButton,
+                        iclasses: {
+                            'fa': true,
+                            'fa-info-circle': true
+                        }
                     },
                     {
                         label: '',
@@ -993,11 +1011,11 @@
           this.$notifications.notify(
             {
               // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
-              message: data.description,
+              message: indicatorDescription[data.name],
               icon: 'nc-icon nc-quote',
               horizontalAlign: horizontalAlign,
               verticalAlign: verticalAlign,
-              type: 'primary'
+              type: 'primary',
             })
         },
         updateSelectedModal(data) {
@@ -1310,9 +1328,11 @@
         },
         centerUpdate(center) {
             this.currentCenter = center;
-        }
-    },
-  }
+        },
+        
+    }
+    };
+  
 </script>
 <style>
 .table > thead > tr > th:last-child, .table > tbody > tr > th:last-child, .table > tfoot > tr > th:last-child, .table > thead > tr > td:last-child, .table > tbody > tr > td:last-child, .table > tfoot > tr > td:last-child {
