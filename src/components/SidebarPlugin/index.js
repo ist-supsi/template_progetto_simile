@@ -1,3 +1,5 @@
+import config from '../../../config.js'
+
 import Sidebar from './SideBar.vue'
 import SidebarLink from './SidebarLink.vue'
 
@@ -17,7 +19,9 @@ const SidebarStore = {
   }
 }
 
-const proxyUrl = window.location.protocol + '//' + window.location.hostname + ':8000/istsos/index';
+// const proxyHost = window.location.hostname
+// const proxyUrl = window.location.protocol + '//' + proxyHost + ':8000/istsos/index';
+const proxyUrl = `${window.location.protocol}//${config.istsosProxy.host}:${config.istsosProxy.port}/${config.istsosProxy.name}/index`
 const proxyServices = 'ceresiohourly'
 
 const SidebarPlugin = {
