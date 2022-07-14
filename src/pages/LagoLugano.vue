@@ -1008,15 +1008,31 @@
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
           // const color = Math.floor((Math.random() * 4) + 1)
-          this.$notifications.notify(
-            {
-              // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
-              message: indicatorDescription[data.name],
-              icon: 'nc-icon nc-quote',
-              horizontalAlign: horizontalAlign,
-              verticalAlign: verticalAlign,
-              type: 'primary',
-            })
+          //if it finds the name of the indicator in the indicatorDescription dictionary then 
+          //it shows the notification
+          if(indicatorDescription[data.name]){
+                this.$notifications.notify(
+                {
+                // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
+                    message: indicatorDescription[data.name],
+                    icon: 'nc-icon nc-quote',
+                    horizontalAlign: horizontalAlign,
+                    verticalAlign: verticalAlign,
+                    type: 'primary',
+                 })
+          }
+          else {
+             this.$notifications.notify(
+                {
+                // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
+                    message: 'no description found',
+                    icon: 'nc-icon nc-quote',
+                    horizontalAlign: horizontalAlign,
+                    verticalAlign: verticalAlign,
+                    type: 'primary',
+                 })
+          }
+          
         },
         updateSelectedModal(data) {
             this.selectedRow = data;
