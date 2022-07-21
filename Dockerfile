@@ -1,13 +1,11 @@
 FROM node:12
 
-ARG FRONTENDAPP=simile
+COPY . ./usr/src/app/
 
-WORKDIR /usr/src/app/$FRONTENDAPP/
+WORKDIR /usr/src/app/
 
-COPY package*.json ./
-RUN npm i
+RUN npm install
 
-# TODO: con una cartella condivisa potrebbe non essere necessario copiare la repo
-COPY . .
+EXPOSE 8080
 
 CMD ["npm", "run", "dev"]
