@@ -13,6 +13,7 @@
         :url="url"
         :attribution="attribution"
       />
+    
     </l-map>
   </div>
 </template>
@@ -25,6 +26,8 @@ export default {
   components: {
     LMap,
     LTileLayer
+   
+
   },
   data() {
     return {
