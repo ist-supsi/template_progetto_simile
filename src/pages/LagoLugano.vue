@@ -989,6 +989,7 @@
                     const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
                         self.selectedMarker=feature.properties.markerIndex
                         });
+                    
                         
                     return marker;
                 }
@@ -1014,6 +1015,12 @@
         //     };
         //     this.markerLayer.geojson.features.push(feat);
         // },
+        removeMarker(index) {
+            this.markers.splice(index, 1);
+            },
+        addMarker(event) {
+            this.markers.push(event.latlng);
+            },
         displayRow (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';

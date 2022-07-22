@@ -50,36 +50,115 @@
                   tra l’Italia e la Svizzera e la loro gestione non può prescindere da questo aspetto, pertanto solo un’azione congiunta e coordinata può garantire il raggiungimento della buona qualità della risorsa idrica.
                   SIMILE nasce quindi sulla base della sinergia tra gli attori tecnico-scientifici e istituzionali dei due Paesi coinvolti. Il progetto, tramite un processo partecipato (partner, cittadini, associazioni, enti),
                   prevede la produzione di linee guida per affrontate le sfide future che i grandi laghi subalpini saranno chiamati ad affrontare.</p>
-                </p>
+                
               </div>
             </card>
           </div>
         </div>
 
-        <div class="row">
-          <h4 class="title">Dettagli tecnici<br />
-            <!-- <small>Lago Ceresio</small> -->
-          </h4>
-
-          <div class="col-xl-2 col-md-6">
-            <stats-card>
-              <div slot="header" class="icon-warning">
-                <i class="nc-icon nc-chart text-warning"></i>
-              </div>
-              <div slot="content">
-                <p class="card-category">Capacity</p>
-                <h4 class="card-title">105GB</h4>
-              </div>
-              <!-- <div slot="footer">
-                <i class="fa fa-refresh"></i>Updated now
-              </div> -->
-            </stats-card>
+      
+         <div style="margin-left:15px; width:100%">
+            <div class="row">
+              <h4 class="title">Dettagli tecnici<br/>
+                <!-- <small>Lago Ceresio</small> -->
+              </h4>
+            </div>
           </div>
+          <!-- raw where technical details will be displayed -->
+          <div class="row">
+            <div class="col-xl-2 col-md-6">
+              <stats-card>
+                <div slot="header" class="icon-warning">
+                  <i class="nc-icon nc-chart text-warning"></i>
+                </div>
+                <div slot="content">
+                  <p class="card-category">Capacity</p>
+                  <h4 class="card-title">105GB</h4>
+                </div>
+                <!-- <div slot="footer">
+                  <i class="fa fa-refresh"></i>Updated now
+                </div> -->
+              </stats-card>
+              </div>
+          </div>
+
+    <!-- raw where Overview details will be displayed -->
+         <div style="margin-left:15px; width:100%">
+          <div class="row"> 
+              <h4 class="title">
+            Overview<br/>
+              </h4> 
+            </div>
+          </div>
+
+          <div class="row"> 
+            <div class="col-xl-3 col-md-6">
+                <stats-card>
+                  <div slot="header" class="icon-success">
+                    <i class="fa fa-balance-scale text-interreglight"></i>
+                  </div>
+                    <div slot="content">
+                      <p class="card-category">N. Visualizzazioni</p>
+                      <h4 class="card-title">XX</h4>
+                    </div>
+                      <div slot="footer">
+                        <i class="fa fa-refresh"></i>Updated now
+                      </div>
+                </stats-card>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+              <stats-card>
+                <div slot="header" class="icon-success">
+                  <i class="fa fa-map text-interreg"></i>
+                </div>
+                  <div slot="content">
+                    <p class="card-category">N. Visitatori</p>
+                    <h4 class="card-title">XX</h4>
+                  </div>
+                  <div slot="footer">
+                    <i class="fa fa-refresh"></i>Updated now
+                  </div>
+              </stats-card>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+             <stats-card>
+                <div slot="header" class="icon-danger">
+                  <i class="fa fa-newspaper-o text-simile"></i>
+                </div>
+                  <div slot="content">
+                    <p class="card-category">News sul PROGETTO</p>
+                    <h4 class="card-title"><a href="https://www.fondazionepolitecnico.it/progetti/connettivita-informazione/simile/" target="_blank"><i class="fa fa-link text-simile" style="font-size: xxx-large; margin-right: 14%;"></i></a></h4>
+                  </div>
+                    <div slot="footer">
+                      <!--i class="fa fa-refresh"></i>Updated now-->
+                    </div>
+              </stats-card>  
+            </div>
+
+
+            <div class="col-xl-3 col-md-6">
+              <stats-card>
+                <div slot="header" class="icon-danger">
+                  <i class="fa fa-youtube text-interreglight"></i>
+                </div>
+                  <div slot="content">
+                    <p class="card-category">Video presentazione</p>
+                    <h4 class="card-title"><a href="https://youtu.be/bTxJodSuixo" target="_blank"><i class="fa fa-youtube-play text-interreglight" style="font-size: xxx-large; margin-right: 14%;"></i></a></h4>
+                  </div>
+                    <div slot="footer">
+                      <!--i class="fa fa-refresh"></i>Updated now-->
+                    </div>
+              </stats-card>
+            </div>
+        
+
         </div>
 
 
-
-    </div>
+  </div>
+    
   </div>
 
 </template>
