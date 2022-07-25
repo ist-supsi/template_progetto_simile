@@ -14,7 +14,8 @@ let indicatorDescription =
             coluaione, lo sviluppo delle fioriture algali. Inoltre il monitoraggio a lungo 
             termine delle temperature è utile per valutare la risposta del lago ai 
             cambiamenti climatici.
-            `
+            `,
+            icon:'fa fa-thermometer-three-quarters text-warning',
         },
 
         'water-SDT': {
@@ -26,7 +27,8 @@ let indicatorDescription =
             Una bassa trasperenza puo' essere indicativa della presenza di una fioritura
             algale ma anche di solidi sopsesi dovuti agli apporti a lago, ad esempio dopo 
             forti eventi di precipitazione.
-            `
+            `,
+            icon:'fa fa-tint text-primary',
         },
 
         'water-depth': {
@@ -35,7 +37,8 @@ let indicatorDescription =
             (tra febbraio e marzo) indica lo strato rimescolato, ovvero lo strato delle 
             acque interessate da omogenizzazione termica e ridistribuzione di ossigeno e 
             nutrienti.
-            `
+            `,
+            icon:'fa fa-arrows-v text-primary',
         },
 
         'pH': {
@@ -46,7 +49,8 @@ let indicatorDescription =
             di apporti di sostanze inquinanti acide o basiche. pH elevati, anche superiori
             a 9, si possono rilevare nelle acque superficiali in estate in corrispindenza 
             di fioriture algali. 
-            `
+            `,
+            icon:'fa fa-certificate text-primary',
         },
 
         'conducibilità': {
@@ -56,7 +60,8 @@ let indicatorDescription =
             concentrazione dei soluti presenta nell’acqua stessa. La conducibilità puo' 
             quindi indicare aumento/diminuzione nella presenza di soluti, ad esempio a 
             causa di fattori meteo-climatici e idrologici. 
-            `
+            `,
+            icon:'fa fa-bolt text-primary',
         },
 
         'ossigeno-disciolto-concentrazione': {
@@ -69,7 +74,8 @@ let indicatorDescription =
             eutrofi, in cui la sostanza organica prodotta negli strati superficiali 
             sedimenta e viene decomposta dagli organismi aerobi che sottraggono 
             ossigeno all’acqua. 
-            `
+            `,
+            icon:'fa fa-eercast text-primary',
         },
 
 
@@ -80,14 +86,16 @@ let indicatorDescription =
             massimo, preso uguale a cento, che si può avere nelle stesse condizioni di 
             salinità, di temperatura e pressione atmosferica. Valori superiodi al 100%
             indicano condizioni di sovrassaturazione. 
-            `
+            `,
+            icon:'fa fa-flask text-primary',
         },
 
         'Solidi-sospesi-totali': {
             title : 'Solidi sospesi totali',
             description: `I solidi sospesi foniscono informazioni sulla presenza di sostanze indisciolte
             nelle acque. Sono correlati alla trasparenza/torbidità.
-            `
+            `,
+            icon:'fa fa-bandcamp text-primary',
         },
 
         'water-PTOT': {
@@ -96,7 +104,8 @@ let indicatorDescription =
             apportata al lago nell'arco di un anno. Si calcola come somma degli apporti 
             dai singoli tributari, sulla base di concentrazioni e deflussi, e dall'eventuale
             areale non drenato. 
-            `
+            `,
+            icon:'fa fa-line-chart text-primary',
         },
 
         'water-Nload': {
@@ -105,7 +114,8 @@ let indicatorDescription =
             apportata al lago nell'arco di un anno. Si calcola come somma degli apporti 
             dai singoli tributari, sulla base di concentrazioni e deflussi, e dall'eventuale
             areale non drenato.
-            `
+            `,
+            icon:'fa fa-flask text-primary',
         },
 
         'water-Pload': {
@@ -113,7 +123,8 @@ let indicatorDescription =
             description: `Valore medio annuo delle concentrazioni (medie sulla colonna d'acqua ponderate
             sui volumi) di P totale. La media annua è calcolata a parire dai valori 
             ottenuti nei monitoraggi mensili o con altra frequenza temporale.
-            `
+            `,
+            icon:'fa fa-file-powerpoint-o text-primary',
         },
 
         'concentrazione-di-azoto': {
@@ -121,7 +132,8 @@ let indicatorDescription =
             description: `Valore medio annuo delle concentrazioni (medie sulla colonna d'acqua ponderate
             sui volumi) di N totale. La media annua è calcolata a parire dai valori 
             ottenuti nei monitoraggi mensili o con altra frequenza temporale. 
-            `
+            `,
+            icon:'fa fa-flask text-primary',
         },
 
         'indice-LTLeco': {
@@ -129,7 +141,8 @@ let indicatorDescription =
             description: `Indice che descrive lo stato trofico di un lago; basato sulla somma di punteggi
             derivanti dal valore di P totale alla circolazione, trasperenza media annua, 
             e valori di ossigeno alla saturazione in ipolimnio a fine stratificazione.
-            `
+            `,
+            icon:'fa fa-superpowers text-primary',
         },
 
         'water-Chl-a': {
@@ -141,7 +154,8 @@ let indicatorDescription =
             produttività algale. La concentrazione è più alta nei laghi più produttivi o 
             eutrofi. L'aumento dei valori di clorofilla può essereutilizzato come segnale 
             dello sviluppo di una fioritura algale.
-            `
+            `,
+            icon:'fa fa-flask text-primary',
         },
 
         'water-PC': {
@@ -151,7 +165,8 @@ let indicatorDescription =
             come indicatore della presenza e della densità di questo gruppo e il loro 
             aumento temporale puo' essere un possibile segnale dello sviluppo di una 
             fioritura di cianobatteri.
-            `
+            `,
+            icon:'fa fa-flask text-primary',
         },
 
         'water-Biovol': {
@@ -160,7 +175,8 @@ let indicatorDescription =
             complessiva di un lago. Il biovolume varia nel corso dell'anno, con i massimi 
             di solito in corrispondenza dei mesi estivi. Viene misurato sulla base 
             dei conteggi degli organismi fitoplanctonici presenti.
-            `
+            `,
+            icon:'fa fa-circle text-primary',
         },
 
         'indice-IPAM-fitoplancton': {
@@ -176,7 +192,8 @@ let indicatorDescription =
             Concorre insieme agli indici LFI, MTIspecies/MacroIMMI, LTLeco, SQA inquinanti
             specifici, alla definizione dello Stato Ecologico del Corpo Idrico Corpo Idrico
             superficiale (CI) lacustre.
-            `
+            `,
+            icon:'fa fa-italic text-primary',
         },
 
         'cianobatteri': {
@@ -190,7 +207,8 @@ let indicatorDescription =
             di effetti negativi sulla salute umana. Il contributo percentuale dei 
             cianobatteri alla biomassa totale fitoplancton è quindi un indicatore dello
             stato qualitativo delle acque.
-            `
+            `,
+            icon:'fa  fa-flask text-primary',
         },
 
         'air-temperature': {
@@ -199,7 +217,9 @@ let indicatorDescription =
             meteorologiche collocate sulle boe/piattaforme, può essere di supporto 
             all'intrepretazione dei parametri limnologici misurati dai sensori o attraverso
             i monitoraggi.
-            `
+            `,
+            icon:'fa fa-sun-o text-warning',
+            // icon:'fa fa-question-circle-o text-info',
         },
 
         'wind-speed-max': {
@@ -207,7 +227,8 @@ let indicatorDescription =
             description: `Velocità e direzione del vento possono essere di supporto all'interpretazione 
             degli altri parametri limnologici rilevati: in partcolare ilvento svolge 
             un ruolo importante nelle dinamiche di stratificazione e mescolamento dei laghi.
-            `
+            `,
+            icon:'fa  fa-fighter-jet text-info',
         },
 
 
@@ -216,25 +237,29 @@ let indicatorDescription =
         'wind-direction': {
             title : 'Direzione del vento',
             description: `Direzione del vento
-            `
+            `,
+            icon:'fa fa-flag text-info',
         },
 
         'air-pressure': {
             title : 'Pressione dell aria',
             description: `Pressione dell'aria
-            `
+            `,
+            icon:'fa fa-arrows-h text-info',
         },
 
         'air-relative-humidity': {
             title : 'Umidità dell aria',
             description: `Umidità dell'aria
-            `
+            `,
+            icon: 'fa fa-tint text-info',
         },
 
         'global-radiation': {
             title : 'Radiazione globali',
             description: `Radiazione globali
-            `
+            `,
+            icon:'fa fa-bolt text-info',
         },
 
     };

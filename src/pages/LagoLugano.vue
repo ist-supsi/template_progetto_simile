@@ -308,6 +308,7 @@
                                     @update:center="centerUpdate"
                                     @update:zoom="zoomUpdate"
                                     style="height: 100%;"
+
                                   >
                                   <l-tile-layer
                                       :url="url"
@@ -335,6 +336,8 @@
 
                                         </v-marker>
                                       </v-marker-cluster> -->
+
+
                                       <l-geo-json
                                           ref="markerLayer"
                                           :geojson="features"
@@ -897,45 +900,66 @@
             // TODO: DEPRECATE
             this.populateCockpit();
             this.$root.dropdownVisible = false;
+
+            
+
         },
+            
     methods: {
+
+        
         getCardIcon (name) {
-            if (name == 'air-relative-humidity') {
-                return 'fa fa-cloud text-primary';
-            } else if (name == 'air-temperature') {
-                return 'fa fa-sun-o text-warning';
-            } else if (name == 'water-temperature') {
-                return 'fa fa-thermometer text-warning';
-            } else if (name == 'water-O2S') {
-                return 'fa fa-flask text-primary';
-            } else if (name == 'wind-speed-max') {
-                return 'fa fa-flag text-info';
-            } else if (name == 'wind-direction') {
-                return 'fa fa-compass text-info';
-            } else if (name == 'water-SDT') {
-                return 'fa fa-tint text-primary';
-            };
-            return 'fa fa-question-circle-o text-info';
+
+            // if (name == 'air-relative-humidity') {
+            //     return 'fa fa-cloud text-primary';
+            // } else if (name == 'air-temperature') {
+            //     return 'fa fa-sun-o text-warning';
+            // } else if (name == 'water-temperature') {
+            //     return 'fa fa-thermometer text-warning';
+            // } else if (name == 'water-O2S') {
+            //     return 'fa fa-flask text-primary';
+            // } else if (name == 'wind-speed-max') {
+            //     return 'fa fa-flag text-info';
+            // } else if (name == 'wind-direction') {
+            //     return 'fa fa-compass text-info';
+            // } else if (name == 'water-SDT') {
+            //     return 'fa fa-tint text-primary';
+            // };
+            //  return 'fa fa-question-circle-o text-info';
+
+            if(indicatorDescription[name]==undefined || indicatorDescription[name].icon==undefined){
+                 return 'fa fa-question-circle-o text-info';
+            }
+            else {
+                return indicatorDescription[name].icon;
+            }
+            
         },
         loadCardsData () {
             var self = this;
             
-            const titles = {
-                'air-temperature': "Temperatura dell'aria",
-                'wind-speed-max': "Velocità del vento di picco",
-                'water-temperature': "Temperatura dell'acqua",
-                'air-relative-humidity': "Umidità relativa dell'aria",
-                'wind-direction': "Direzione del vento"
-            };
+            // const titles = {
+            //     'air-temperature': "Temperatura dell'aria",
+            //     'wind-speed-max': "Velocità del vento di picco",
+            //     'water-temperature': "Temperatura dell'acqua",
+            //     'air-relative-humidity': "Umidità relativa dell'aria",
+            //     'wind-direction': "Direzione del vento"
+            // };
             
 
             let cards = [];
             function updateCard(index, result) {
                 // self.cards[index].description = self.cards[index].description.substring(0, 27)
                 // const title = self.tableAllData.filter((el)=>{el.definition==result.urn})[0];
-                cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27);
+                // cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27);
                 
-                // cards[index].title = indicatorDescription[cards[index].name].title || cards[index].description.substring(0, 27);
+                if(indicatorDescription[cards[index].name]==undefined){
+                cards[index].title = cards[index].description.substring(0, 27);
+                }
+                else{
+                    cards[index].title = indicatorDescription[cards[index].name].title
+                }
+                // cards[index].title = indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
                 if ( result.x ) {

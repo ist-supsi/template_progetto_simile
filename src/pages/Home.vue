@@ -64,96 +64,55 @@
               </h4>
             </div>
           </div>
+
           <!-- raw where technical details will be displayed -->
           <div class="row">
-            <div class="col-xl-2 col-md-6">
-              <stats-card>
-                <div slot="header" class="icon-warning">
-                  <i class="nc-icon nc-chart text-warning"></i>
-                </div>
-                <div slot="content">
-                  <p class="card-category">Capacity</p>
-                  <h4 class="card-title">105GB</h4>
-                </div>
-                <!-- <div slot="footer">
-                  <i class="fa fa-refresh"></i>Updated now
-                </div> -->
-              </stats-card>
+              <div class="col-xl-3 col-lg-6">
+            <stats-card>
+              <div slot="header" class="icon-warning">
+                <!--i class="nc-icon nc-mobile text-warning"></i-->
+                <i class="fa fa-binoculars text-simile"></i>
               </div>
+              <div slot="content">
+                <p class="card-category">N. Osservazioni da Citizen Science</p>
+                <h4 class="card-title">{{ resultCount }}</h4>
+              </div>
+              <div slot="footer">
+                <!-- <i class="fa fa-refresh"></i>Updated now -->
+              </div>
+            </stats-card>
+           </div>
+
+          <div class="col-xl-3 col-lg-6">
+            <stats-card>
+              <div slot="header" class="icon-success">
+                <i class="fa fa-balance-scale text-interreglight"></i>
+              </div>
+              <div slot="content">
+                <p class="card-category">N. Misure da Citizen Science</p>
+                <h4 class="card-title">{{ resultCountMeasures }}</h4>
+              </div>
+              <div slot="footer">
+                <!-- <i class="fa fa-refresh"></i>Updated now -->
+              </div>
+            </stats-card>
           </div>
 
-    <!-- raw where Overview details will be displayed -->
-         <div style="margin-left:15px; width:100%">
-          <div class="row"> 
-              <h4 class="title">
-            Overview<br/>
-              </h4> 
-            </div>
+          <div class="col-xl-3 col-lg-6">
+            <stats-card>
+              <div slot="header" class="icon-success">
+                <i class="fa fa-line-chart text-success" aria-hidden="true"></i>
+                <!-- <i class="fa fa-thermometer-full text-simile"></i> -->
+              </div>
+              <div slot="content">
+                <p class="card-category">N. Proprietà Osservate da Sensori</p>
+                <h4 class="card-title">{{ resultCountIstsos }}</h4>
+              </div>
+              <div slot="footer">
+                <!-- <i class="fa fa-refresh"></i>Updated now -->
+              </div>
+            </stats-card>
           </div>
-
-          <div class="row"> 
-            <div class="col-xl-3 col-md-6">
-                <stats-card>
-                  <div slot="header" class="icon-success">
-                    <i class="fa fa-balance-scale text-interreglight"></i>
-                  </div>
-                    <div slot="content">
-                      <p class="card-category">N. Visualizzazioni</p>
-                      <h4 class="card-title">XX</h4>
-                    </div>
-                      <div slot="footer">
-                        <i class="fa fa-refresh"></i>Updated now
-                      </div>
-                </stats-card>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-              <stats-card>
-                <div slot="header" class="icon-success">
-                  <i class="fa fa-map text-interreg"></i>
-                </div>
-                  <div slot="content">
-                    <p class="card-category">N. Visitatori</p>
-                    <h4 class="card-title">XX</h4>
-                  </div>
-                  <div slot="footer">
-                    <i class="fa fa-refresh"></i>Updated now
-                  </div>
-              </stats-card>
-            </div>
-
-            <div class="col-xl-3 col-md-6">
-             <stats-card>
-                <div slot="header" class="icon-danger">
-                  <i class="fa fa-newspaper-o text-simile"></i>
-                </div>
-                  <div slot="content">
-                    <p class="card-category">News sul PROGETTO</p>
-                    <h4 class="card-title"><a href="https://www.fondazionepolitecnico.it/progetti/connettivita-informazione/simile/" target="_blank"><i class="fa fa-link text-simile" style="font-size: xxx-large; margin-right: 14%;"></i></a></h4>
-                  </div>
-                    <div slot="footer">
-                      <!--i class="fa fa-refresh"></i>Updated now-->
-                    </div>
-              </stats-card>  
-            </div>
-
-
-            <div class="col-xl-3 col-md-6">
-              <stats-card>
-                <div slot="header" class="icon-danger">
-                  <i class="fa fa-youtube text-interreglight"></i>
-                </div>
-                  <div slot="content">
-                    <p class="card-category">Video presentazione</p>
-                    <h4 class="card-title"><a href="https://youtu.be/bTxJodSuixo" target="_blank"><i class="fa fa-youtube-play text-interreglight" style="font-size: xxx-large; margin-right: 14%;"></i></a></h4>
-                  </div>
-                    <div slot="footer">
-                      <!--i class="fa fa-refresh"></i>Updated now-->
-                    </div>
-              </stats-card>
-            </div>
-        
-
         </div>
 
 
