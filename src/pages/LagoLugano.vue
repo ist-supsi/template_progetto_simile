@@ -330,18 +330,21 @@
                                         :format="layer.format"
                                         :opacity="layer.opacity"
                                         layer-type="overlay"
-                                      ></l-wms-tile-layer>
-                                      <!-- <v-marker-cluster>
-                                        <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">
 
+                                        
+                                      ></l-wms-tile-layer>
+                                        
+                                      <!-- <v-marker-cluster>
+                                        <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">                                   
                                         </v-marker>
                                       </v-marker-cluster> -->
 
-
+                                    
                                       <l-geo-json
                                           ref="markerLayer"
                                           :geojson="features"
                                           :options="markerLayerOptions()"
+                                          
                                       />
                                   </l-map>
                                 </card>
@@ -467,11 +470,12 @@
             LControlLayers,
             // highcharts: Chart,
             // HighchartCard,
-            NotifyButton,
+            NotifyButton
             // 'v-marker-cluster': Vue2LeafletMarkerCluster,
             // 'v-marker': Vue2LeafletMarker,
             // ModalButton,
             // Modal
+           
             
         },
         data () {
@@ -757,7 +761,8 @@
                     },
                     pointToLayer: function (feature, latlng) {
                         return L.marker(latlng);
-                    }
+                    
+                    }      
                 },
                 attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 currentZoom: 10.5,
@@ -1009,16 +1014,24 @@
                         iconSize: [40, 80],
                         iconAnchor: [20, 40],
                         className: '',
-                    });
-                    const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
-                        self.selectedMarker=feature.properties.markerIndex
-                        });
-                    
                         
-                    return marker;
+                        
+                    });
+                    // const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
+                    //     self.selectedMarker=feature.properties.markerIndex
+                    //     });
+                
+                    const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
+                    self.selectedMarker=feature.properties.markerIndex
+                    });
+                    
+                //    var popup =L.popup().setContent();
+                    // return marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+                    return marker.bindPopup(""+latlng+"").openPopup();
                 }
             }
         },
+       
         // p2l (feature, latlng) {
         //     const fontAwesomeIcon = L.divIcon({
         //         html: '<i class="fa fa-map-marker fa-4x"></i>',
