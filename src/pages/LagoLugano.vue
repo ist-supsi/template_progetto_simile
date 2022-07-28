@@ -1023,14 +1023,22 @@
                 
                     const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
                     self.selectedMarker=feature.properties.markerIndex
-                    });
                     
-                //    var popup =L.popup().setContent();
+                    })
+                                 
                     // return marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-                    return marker.bindPopup(""+latlng+"").openPopup();
+                    if(feature.properties.names[0].message==undefined){
+                         return marker.bindPopup(""+latlng+"").openPopup();
+                    }
+                      else{
+                        return marker.bindPopup(feature.properties.names[0].message+"<br>"+latlng+""+"").openPopup();
+                      }                 
+                    }
+                    
+                    // return marker;
                 }
-            }
-        },
+            },
+        
        
         // p2l (feature, latlng) {
         //     const fontAwesomeIcon = L.divIcon({
@@ -1399,9 +1407,11 @@
         centerUpdate(center) {
             this.currentCenter = center;
         },
-        
     }
-    };
+}
+        
+    
+    
   
 </script>
 <style>

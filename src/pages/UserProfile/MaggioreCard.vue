@@ -10,7 +10,7 @@
         </h4>
       </a>
     </div>
-    <p class="description text-center">
+    <p class="description text-justify">
       Grande lago pedemontano originato dalla rimodellazione glaciale di una preesistente valle fluviale.
       È il secondo lago italiano sia per superficie e volume che profondità massima
       (370 m) ed è situato tra le provincie di Varese (a est),
