@@ -29,6 +29,7 @@ let indicatorDescription =
             forti eventi di precipitazione.
             `,
             icon:'fa fa-tint text-primary',
+           
         },
 
         'water-depth': {

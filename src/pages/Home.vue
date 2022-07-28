@@ -144,7 +144,11 @@
     },
     data () {
       return {
-        whereAmI: 'Home'
+        whereAmI: 'Home',
+        src: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/view/map/?repository=dorota&project=cartografia_simile',
+        responseData: [],
+        countMeasures: 0,
+        responseIstsosData: []
       }
     },
     mounted () {
