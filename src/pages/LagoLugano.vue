@@ -405,11 +405,14 @@
       iconUrl: require('leaflet/dist/images/marker-icon.png'),
       shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
+    
 
     import { latLngBounds, latLng } from "leaflet";
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson } from "vue2-leaflet";
 
     import 'leaflet/dist/leaflet.css';
+    import 'assets/simileIcons/style.css';
+    
 
     // import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
     // import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
@@ -470,11 +473,12 @@
             LControlLayers,
             // highcharts: Chart,
             // HighchartCard,
-            NotifyButton
+            NotifyButton,
             // 'v-marker-cluster': Vue2LeafletMarkerCluster,
             // 'v-marker': Vue2LeafletMarker,
             // ModalButton,
             // Modal
+            
            
             
         },

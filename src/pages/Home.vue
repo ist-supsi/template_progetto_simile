@@ -71,7 +71,7 @@
           </div> -->
 
           <!-- raw where technical details will be displayed -->
-          <div class="row">
+          <div class="row justify-content-center">
               <div class="col-xl-3 col-lg-6">
             <stats-card>
               <div slot="header" class="icon-warning">
