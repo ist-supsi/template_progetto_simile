@@ -10,12 +10,13 @@
         </h4>
       </a>
     </div>
-    <p class="description text-center">
+    <p class="description text-justify">
       Lorem ipsum dolor sit amet.<br />
       Ea dignissimos aspernatur et quaerat quia et<br />
       quasi ipsa et voluptates debitis sit ipsum<br />
       laudantium sed nobis accusantium<br />
       quo quidem debitis.
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     </p>
     <div slot="footer" class="text-center d-flex justify-content-center">
       <!-- <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>

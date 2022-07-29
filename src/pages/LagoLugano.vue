@@ -308,6 +308,7 @@
                                     @update:center="centerUpdate"
                                     @update:zoom="zoomUpdate"
                                     style="height: 100%;"
+
                                   >
                                   <l-tile-layer
                                       :url="url"
@@ -329,16 +330,21 @@
                                         :format="layer.format"
                                         :opacity="layer.opacity"
                                         layer-type="overlay"
-                                      ></l-wms-tile-layer>
-                                      <!-- <v-marker-cluster>
-                                        <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">
 
+                                        
+                                      ></l-wms-tile-layer>
+                                        
+                                      <!-- <v-marker-cluster>
+                                        <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">                                   
                                         </v-marker>
                                       </v-marker-cluster> -->
+
+                                    
                                       <l-geo-json
                                           ref="markerLayer"
                                           :geojson="features"
                                           :options="markerLayerOptions()"
+                                          
                                       />
                                   </l-map>
                                 </card>
@@ -464,11 +470,13 @@
             LControlLayers,
             // highcharts: Chart,
             // HighchartCard,
-            NotifyButton,
+            NotifyButton
             // 'v-marker-cluster': Vue2LeafletMarkerCluster,
             // 'v-marker': Vue2LeafletMarker,
             // ModalButton,
             // Modal
+           
+            
         },
         data () {
             return {
@@ -573,6 +581,7 @@
                             'fa': true,
                             'fa-info-circle': true
                         }
+                        
                     },
                     {
                         label: '',
@@ -752,7 +761,8 @@
                     },
                     pointToLayer: function (feature, latlng) {
                         return L.marker(latlng);
-                    }
+                    
+                    }      
                 },
                 attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 currentZoom: 10.5,
@@ -765,6 +775,7 @@
                 showMap: true,
                 selectedMarker: 1,
                 cards: [{}, {}, {}, {}, {}, {}]
+                
             }
         },
         watch: {
@@ -838,7 +849,8 @@
                     name: b.properties.observedproperties[0].name,
                     procedure: b.properties.name,
                     urn: b.properties.observedproperties[0].def,
-                    description: b.properties.description
+                    description: b.properties.description,
+                    
                 }
             };
 
@@ -861,7 +873,7 @@
                             names: Object.entries(v).sort((a, b) => {
                                   const ia = good_names.indexOf(a[0]);
                                   const ib = good_names.indexOf(b[0]);
-
+                                
                                   if ( ia==ib ) return 0;
                                   if ( ia==-1 ) return 1;
                                   if ( ib==-1 ) return -1;
@@ -893,42 +905,66 @@
             // TODO: DEPRECATE
             this.populateCockpit();
             this.$root.dropdownVisible = false;
+
+            
+
         },
+            
     methods: {
+
+        
         getCardIcon (name) {
-            if (name == 'air-relative-humidity') {
-                return 'fa fa-cloud text-primary';
-            } else if (name == 'air-temperature') {
-                return 'fa fa-sun-o text-warning';
-            } else if (name == 'water-temperature') {
-                return 'fa fa-thermometer text-warning';
-            } else if (name == 'water-O2S') {
-                return 'fa fa-flask text-primary';
-            } else if (name == 'wind-speed-max') {
-                return 'fa fa-flag text-info';
-            } else if (name == 'wind-direction') {
-                return 'fa fa-compass text-info';
-            } else if (name == 'water-SDT') {
-                return 'fa fa-tint text-primary';
-            };
-            return 'fa fa-question-circle-o text-info';
+
+            // if (name == 'air-relative-humidity') {
+            //     return 'fa fa-cloud text-primary';
+            // } else if (name == 'air-temperature') {
+            //     return 'fa fa-sun-o text-warning';
+            // } else if (name == 'water-temperature') {
+            //     return 'fa fa-thermometer text-warning';
+            // } else if (name == 'water-O2S') {
+            //     return 'fa fa-flask text-primary';
+            // } else if (name == 'wind-speed-max') {
+            //     return 'fa fa-flag text-info';
+            // } else if (name == 'wind-direction') {
+            //     return 'fa fa-compass text-info';
+            // } else if (name == 'water-SDT') {
+            //     return 'fa fa-tint text-primary';
+            // };
+            //  return 'fa fa-question-circle-o text-info';
+
+            if(indicatorDescription[name]==undefined || indicatorDescription[name].icon==undefined){
+                 return 'fa fa-question-circle-o text-info';
+            }
+            else {
+                return indicatorDescription[name].icon;
+            }
+            
         },
         loadCardsData () {
             var self = this;
-
-            const titles = {
-                'air-temperature': "Temperatura dell'aria",
-                'wind-speed-max': "Velocità del vento di picco",
-                'water-temperature': "Temperatura dell'acqua",
-                'air-relative-humidity': "Umidità relativa dell'aria",
-                'wind-direction': "Direzione del vento"
-            };
+            
+            // const titles = {
+            //     'air-temperature': "Temperatura dell'aria",
+            //     'wind-speed-max': "Velocità del vento di picco",
+            //     'water-temperature': "Temperatura dell'acqua",
+            //     'air-relative-humidity': "Umidità relativa dell'aria",
+            //     'wind-direction': "Direzione del vento"
+            // };
+            
 
             let cards = [];
             function updateCard(index, result) {
                 // self.cards[index].description = self.cards[index].description.substring(0, 27)
                 // const title = self.tableAllData.filter((el)=>{el.definition==result.urn})[0];
-                cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27)
+                // cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27);
+                
+                if(indicatorDescription[cards[index].name]==undefined){
+                cards[index].title = cards[index].description.substring(0, 27);
+                }
+                else{
+                    cards[index].title = indicatorDescription[cards[index].name].title
+                }
+                // cards[index].title = indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
                 if ( result.x ) {
@@ -937,7 +973,7 @@
                         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                     };
                 };
-
+                
                 cards[index].message = result.locationUrn.split(':').at(-1);
             };
 
@@ -974,16 +1010,36 @@
                         clr = 'text-dark'
                     };
                     const fontAwesomeIcon = L.divIcon({
-                        html: `<i class="fa fa-map-pin fa-4x ${clr}"></i>`,
+                        html: `<i class="fa fa-map-marker fa-4x ${clr}"></i>`,
                         iconSize: [40, 80],
                         iconAnchor: [20, 40],
-                        className: ''
+                        className: '',
+                        
+                        
                     });
-                    const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{self.selectedMarker=feature.properties.markerIndex});
-                    return marker;
+                    // const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
+                    //     self.selectedMarker=feature.properties.markerIndex
+                    //     });
+                
+                    const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
+                    self.selectedMarker=feature.properties.markerIndex
+                    
+                    })
+                                 
+                    // return marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+                    if(feature.properties.names[0].message==undefined){
+                         return marker.bindPopup(""+latlng+"").openPopup();
+                    }
+                      else{
+                        return marker.bindPopup(feature.properties.names[0].message+"<br>"+latlng+""+"").openPopup();
+                      }                 
+                    }
+                    
+                    // return marker;
                 }
-            }
-        },
+            },
+        
+       
         // p2l (feature, latlng) {
         //     const fontAwesomeIcon = L.divIcon({
         //         html: '<i class="fa fa-map-marker fa-4x"></i>',
@@ -1004,6 +1060,12 @@
         //     };
         //     this.markerLayer.geojson.features.push(feat);
         // },
+        removeMarker(index) {
+            this.markers.splice(index, 1);
+            },
+        addMarker(event) {
+            this.markers.push(event.latlng);
+            },
         displayRow (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
@@ -1014,7 +1076,7 @@
                 this.$notifications.notify(
                 {
                 // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
-                    message: indicatorDescription[data.name],
+                    message: indicatorDescription[data.name].description,
                     icon: 'nc-icon nc-quote',
                     horizontalAlign: horizontalAlign,
                     verticalAlign: verticalAlign,
@@ -1345,9 +1407,11 @@
         centerUpdate(center) {
             this.currentCenter = center;
         },
-        
     }
-    };
+}
+        
+    
+    
   
 </script>
 <style>
