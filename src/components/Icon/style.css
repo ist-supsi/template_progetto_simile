@@ -1,0 +1,171 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?qzsx0f');
+  src:  url('fonts/icomoon.eot?qzsx0f#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?qzsx0f') format('truetype'),
+    url('fonts/icomoon.woff?qzsx0f') format('woff'),
+    url('fonts/icomoon.svg?qzsx0f#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-ossigeno_disc_conc:before {
+  content: "\e900";
+}
+.icon-water_Nload .path1:before {
+  content: "\e901";
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path2:before {
+  content: "\e902";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-water_Nload .path3:before {
+  content: "\e903";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path4:before {
+  content: "\e904";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path5:before {
+  content: "\e905";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path6:before {
+  content: "\e906";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path7:before {
+  content: "\e907";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path8:before {
+  content: "\e908";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path9:before {
+  content: "\e909";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path10:before {
+  content: "\e90a";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path11:before {
+  content: "\e90b";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_Nload .path12:before {
+  content: "\e90c";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-water_pload:before {
+  content: "\e90d";
+}
+.icon-conc_azoto:before {
+  content: "\e90e";
+}
+.icon-indice_LTleco:before {
+  content: "\e90f";
+}
+.icon-water_CHl_a:before {
+  content: "\e910";
+}
+.icon-water_PC:before {
+  content: "\e911";
+}
+.icon-water_biovol:before {
+  content: "\e912";
+}
+.icon-indice_IPAM:before {
+  content: "\e913";
+}
+.icon-cianobatteri:before {
+  content: "\e914";
+}
+.icon-air_temperature:before {
+  content: "\e915";
+}
+.icon-wind_speed:before {
+  content: "\e916";
+}
+.icon-wind_direction:before {
+  content: "\e917";
+}
+.icon-air_pressure:before {
+  content: "\e918";
+}
+.icon-air_humidity:before {
+  content: "\e919";
+}
+.icon-global_radiation:before {
+  content: "\e91a";
+}
+.icon-water_PTOT:before {
+  content: "\e91b";
+}
+.icon-water_conduc:before {
+  content: "\e91c";
+}
+.icon-solidi_sospesi .path1:before {
+  content: "\e91d";
+  color: rgb(0, 0, 0);
+}
+.icon-solidi_sospesi .path2:before {
+  content: "\e91e";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-solidi_sospesi .path3:before {
+  content: "\e91f";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-solidi_sospesi .path4:before {
+  content: "\e920";
+  margin-left: -1em;
+  color: rgb(34, 34, 34);
+}
+.icon-water_O2S:before {
+  content: "\e921";
+}
+.icon-water_SDT:before {
+  content: "\e922";
+}
+.icon-water-depht:before {
+  content: "\e923";
+}
+.icon-ph:before {
+  content: "\e924";
+}
+.icon-water_temp:before {
+  content: "\e925";
+}

@@ -1,4 +1,6 @@
+
 import NotifyButton from  './components/NotifyButton.vue'
+import Icon from "./components/Icon/Icon.vue";
 
 //creo un dizionario delle descrizioni degli indicatori, da visualizzare nel tasto info. 
 let indicatorDescription =  
@@ -15,7 +17,8 @@ let indicatorDescription =
             termine delle temperature è utile per valutare la risposta del lago ai 
             cambiamenti climatici.
             `,
-            icon:'fa fa-thermometer-three-quarters text-warning',
+            // icon:'fa fa-thermometer-three-quarters text-warning',
+            icon:'icon-water_temp',
         },
 
         'water-SDT': {

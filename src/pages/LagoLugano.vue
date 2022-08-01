@@ -19,6 +19,16 @@
                                 vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
                             </div> -->
                             <div class="col-8">
+                            <div class="row">
+                                <div class="col">
+                                    <div v-if="selectedMarker">
+                                        <h4>Figino</h4>
+                                    </div> 
+                                    <div v-if="!selectedMarker">
+                                        <h4>Gandria</h4>
+                                    </div>
+                                </div>
+                            </div>
                               <div class="row">
                                   <div class="col-6">
                                       <stats-card>
@@ -411,7 +421,7 @@
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson } from "vue2-leaflet";
 
     import 'leaflet/dist/leaflet.css';
-    import 'assets/simileIcons/style.css';
+    
     
 
     // import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
@@ -477,15 +487,7 @@
             // 'v-marker-cluster': Vue2LeafletMarkerCluster,
             // 'v-marker': Vue2LeafletMarker,
             // ModalButton,
-            // Modal
-<<<<<<< HEAD
-            
-           
-            
-=======
-
-
->>>>>>> 313ac7c1e05263270a53cb5d731235ad6e994bba
+            // Modal 
         },
         data () {
             return {
@@ -1026,21 +1028,33 @@
 
 
                     });
+                    const redMarker = L.divIcon({
+                        html: `<i class="fa fa-map-marker fa-4x text-danger ${clr}"></i>`,
+                        iconSize: [40, 80],
+                        iconAnchor: [20, 40],
+                        className: '',
+
+                    });
                     // const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
                     //     self.selectedMarker=feature.properties.markerIndex
                     //     });
-
+                    
                     const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
-                    self.selectedMarker=feature.properties.markerIndex
-
+                        marker.setIcon(redMarker);
+                        self.selectedMarker=feature.properties.markerIndex;
+               
                     })
 
                     // return marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
                     if(feature.properties.names[0].message==undefined){
+                        
                          return marker.bindPopup("N.P.").openPopup();
+                                
                     }
                       else{
+                       
                         return marker.bindPopup("<h5>"+feature.properties.names[0].message+"</h5>").openPopup();
+                        
                       }
                     }
 
@@ -1069,6 +1083,14 @@
         //     };
         //     this.markerLayer.geojson.features.push(feat);
         // },
+        getSelectedMarker(){
+             if(feature.properties.names[0].message==undefined){
+                 return "N.P.";
+            }
+            else {
+                return feature.properties.names[0].message;
+            }
+        },
         removeMarker(index) {
             this.markers.splice(index, 1);
             },
