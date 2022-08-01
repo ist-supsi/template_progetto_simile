@@ -1,11 +1,13 @@
+// Configurazione di sviluppo locale
 const devProxyConf = {
-    port: 8000,
+    port: ':8000',
     host: window.location.hostname,
     name: 'istsos'
 };
 
+// Configurazione di deploy su server SUPSI
 const proxyConf = {
-    port: 80,
+    port: '',
     host: 'simile.ddns.net', // window.location.hostname,
     name: 'api/istsos'
 };

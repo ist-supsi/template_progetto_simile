@@ -234,8 +234,9 @@ export default class IstsosIO {
           info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
 
           info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-          info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
-          info.value = dataArray.values[0][1].toFixed(1);
+          const value = dataArray.values[0][1] && dataArray.values[0][1].toPrecision(3);
+          info.options.series[0].data[0].y = parseFloat(value);
+          info.value = dataArray.values[0][1] && dataArray.values[0][1].toFixed(1);
       };
 
       return info;
@@ -293,7 +294,9 @@ export default class IstsosIO {
   fetchLastTemetature(procedures) {
     var self = this;
     return this._fetchTemperature(procedures).then((response) => {
+
         const dataArray = response.data.data[0].result.DataArray;
+
         // profondità di [+-]?\d+(\.\d+)? m/gm
         const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
         const coords = coords_[0].match(/[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?/gm)[0].split(',')
@@ -311,7 +314,8 @@ export default class IstsosIO {
         info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
 
         info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-        info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
+        const value = dataArray.values[0][1] && dataArray.values[0][1].toPrecision(2);
+        info.options.series[0].data[0].y = parseFloat(value);
         info.value = dataArray.values[0][1];
         return info;
     });
@@ -451,7 +455,8 @@ export default class IstsosIO {
         };
 
         info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-        info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(3));
+        const value = dataArray.values[0][1] && dataArray.values[0][1].toPrecision(3);
+        info.options.series[0].data[0].y = parseFloat(value);
         info.value = dataArray.values[0][1];
         return info;
     });
