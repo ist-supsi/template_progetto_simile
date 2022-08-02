@@ -400,6 +400,8 @@
     // import Highcharts from 'highcharts';
     // import loadBullet from 'highcharts/modules/bullet.js';
 
+    // import SimileIcon from 'src/components/Icon/SimileIcon.vue'
+
     // import ChartCard from 'src/components/Cards/ChartCard.vue'
     // import HighchartCard from 'src/components/Cards/HighchartCard.vue'
     import StatsCard from 'src/components/Cards/StatsCard.vue'
@@ -488,6 +490,9 @@
             // 'v-marker': Vue2LeafletMarker,
             // ModalButton,
             // Modal 
+
+            // SimileIcon,
+           
         },
         data () {
             return {
@@ -1057,7 +1062,7 @@
                         
                       }
                     }
-
+                    
                     // return marker;
                 }
             },

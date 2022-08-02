@@ -1,6 +1,6 @@
 
 import NotifyButton from  './components/NotifyButton.vue'
-import Icon from "./components/Icon/Icon.vue";
+
 
 //creo un dizionario delle descrizioni degli indicatori, da visualizzare nel tasto info. 
 let indicatorDescription =  
