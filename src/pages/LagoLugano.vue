@@ -1,6 +1,13 @@
 <template>
     <div class="content">
+            <div class="container-fluid">
+                <div class="alert alert-simile" role="alert">
+                        <h5>Stato Attuale</h5>
+                </div>      
+            </div>
+    
         <div class="container-fluid">
+            
             <div class="row">
                 <div class="col-12">
                     <!-- <card> -->
@@ -19,7 +26,7 @@
                                 vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
                             </div> -->
                             <div class="col-8">
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col">
                                     <div v-if="selectedMarker">
                                         <h4>Figino</h4>
@@ -28,8 +35,9 @@
                                         <h4>Gandria</h4>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                               <div class="row">
+                                 
                                   <div class="col-6">
                                       <stats-card>
                                           <div slot="header" class="icon-warning">
@@ -303,7 +311,7 @@
                                           <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
                                         </div>
                                     </stats-card> -->
-
+                                    
                                 </div>
                               </div>
                             </div>
@@ -360,23 +368,48 @@
                                 </card>
                             </div>
                         </div>
+                    </div>
                     <!-- </card> -->
 
                         <!-- <card v-if="showTemperatureAnalysis">
 
                         </card> -->
                     <!-- </card> -->
-                    <div class="row">
-                        <div class="col-12">
-                            <data-table
-                                :columns="tableColumns2"
-                                :data="tableData"
-                                :per-page="[5, 10, 15]"
-                                @on-table-props-changed="reloadTable"
-                            >
-                            </data-table>
+                     
+
+                      <div class="container-fluid">
+                            <div class="alert alert-simile" role="alert">
+                                    <h5>Serie Storiche</h5>
+                            </div>  
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <data-table
+                                                :columns="tableColumns2"
+                                                :data="tableData"
+                                                :per-page="[5, 10, 15]"
+                                                @on-table-props-changed="reloadTable"
+                                            >
+                                            </data-table>
+                                        </div>
+                                    </div>
                         </div>
-                    </div>
+                        <div class="container-fluid">
+                            <div class="alert alert-simile" role="alert">
+                                <h5>Dati Cipais</h5>
+                            </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                         <data-table
+                                            :columns="tableColumns2"
+                                            :data="tableData"
+                                            :per-page="[5, 10, 15]"
+                                            @on-table-props-changed="reloadTable"
+                                        >
+                                    </data-table>
+                                </div>
+                                    
+                        </div>  
                     <!-- <card>
 
                         <div v-if="Object.keys(series_data).length>0" class="row">
@@ -492,6 +525,8 @@
             // Modal 
 
             // SimileIcon,
+            indicatorDescription
+            
            
         },
         data () {
@@ -560,6 +595,12 @@
                         label: 'Nome',
                         name: 'name',
                         orderable: true,
+                        // hidden: true,
+                    },
+                    {
+                        label:'Titolo',
+                        name: 'titolo',
+                        orderable: true,          
                     },
                     {
                         label: 'Descrizione',
@@ -812,7 +853,7 @@
                     // do stuff
                 },
                 deep: true
-            }
+            },
         },
         mounted() {
             var self = this;
@@ -820,6 +861,7 @@
 
             this.tableFetchData2().then((values) => {
                 this.tableSetData();
+                // this.showTitle();
             });
 
             const good_names = [
@@ -922,8 +964,6 @@
             this.populateCockpit();
             this.$root.dropdownVisible = false;
 
-
-
         },
 
     methods: {
@@ -992,7 +1032,7 @@
 
                 cards[index].message = result.locationUrn.split(':').at(-1);
             };
-
+            
             let calls = []
             for (let ii = 0; ii < 6; ii++) {
                 if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
@@ -1013,6 +1053,7 @@
                 self.cards = cards;
             })
         },
+        
         markerLayerOptions () {
             var self = this;
             return {
@@ -1049,7 +1090,7 @@
                         self.selectedMarker=feature.properties.markerIndex;
                
                     })
-
+                    
                     // return marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
                     if(feature.properties.names[0].message==undefined){
                         
@@ -1159,8 +1200,26 @@
                         el['end'] = new Date(end).toLocaleDateString('it-IT');
                     }
                 }));
+                //testing inizio
+                // console.log(tableAllData[2].name);
+                // console.log(indicatorDescription[tableAllData[2].name].title)
+                // var i
+                // var titleTable
+                // for( i=0;i<tableAllData.length;i++){
+                //     if(tableAllData[i].name==undefined){
+                //         title= "N.P."
+                //     }
+                //     else{
+                //         title = indicatorDescription[tableAllData[i].name].title;
+                //     }
+                     
+                // }
+                // console.log(title);     
+                //testing fine
                 self.tableAllData = {data: tableAllData.filter(el => el.begin && el.end)}
+                
             })
+           
         },
         tableSetData () {
 
@@ -1214,6 +1273,7 @@
                 data: filteredSortedData
             };
             this.tableData = tableData;
+            
         },
         reloadTable (tableProps) {
             var self = this;
@@ -1443,6 +1503,19 @@
         centerUpdate(center) {
             this.currentCenter = center;
         },
+        // showTitle(){
+        //     var self=this;
+        //     this.tableFetchData2();
+        //     if(tableAllData.name==indicatorDescription.name){
+        //     return indicatorDescription.name.title
+        //     }
+        //     else if(tableAllData.name==undefined){
+        //     return 'N.D.'
+        //     }
+            
+        // },
+       
+        
     }
 }
 

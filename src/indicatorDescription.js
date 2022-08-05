@@ -2,6 +2,7 @@
 import NotifyButton from  './components/NotifyButton.vue'
 
 
+
 //creo un dizionario delle descrizioni degli indicatori, da visualizzare nel tasto info. 
 let indicatorDescription =  
 
@@ -19,6 +20,7 @@ let indicatorDescription =
             `,
             // icon:'fa fa-thermometer-three-quarters text-warning',
             icon:'icon-water_temp',
+            
         },
 
         'water-SDT': {
@@ -31,7 +33,9 @@ let indicatorDescription =
             algale ma anche di solidi sopsesi dovuti agli apporti a lago, ad esempio dopo 
             forti eventi di precipitazione.
             `,
-            icon:'fa fa-tint text-primary',
+            // icon:'fa fa-tint text-primary',
+            icon:'icon-water_SDT',
+            tag:'CIPAIS',
            
         },
 
@@ -42,7 +46,9 @@ let indicatorDescription =
             acque interessate da omogenizzazione termica e ridistribuzione di ossigeno e 
             nutrienti.
             `,
-            icon:'fa fa-arrows-v text-primary',
+            // icon:'fa fa-arrows-v text-primary',
+            icon:'icon-water-depht',
+            tag:'CIPAIS',
         },
 
         'pH': {
@@ -54,7 +60,8 @@ let indicatorDescription =
             a 9, si possono rilevare nelle acque superficiali in estate in corrispindenza 
             di fioriture algali. 
             `,
-            icon:'fa fa-certificate text-primary',
+            // icon:'fa fa-certificate text-primary',
+            icon:'icon-ph',
         },
 
         'conducibilità': {
@@ -65,7 +72,8 @@ let indicatorDescription =
             quindi indicare aumento/diminuzione nella presenza di soluti, ad esempio a 
             causa di fattori meteo-climatici e idrologici. 
             `,
-            icon:'fa fa-bolt text-primary',
+            // icon:'fa fa-bolt text-primary',
+            icon:'icon-water_conduc',
         },
 
         'ossigeno-disciolto-concentrazione': {
@@ -79,7 +87,8 @@ let indicatorDescription =
             sedimenta e viene decomposta dagli organismi aerobi che sottraggono 
             ossigeno all’acqua. 
             `,
-            icon:'fa fa-eercast text-primary',
+            // icon:'fa fa-eercast text-primary',
+            icon:'icon-ossigeno_disc_conc',
         },
 
 
@@ -91,7 +100,9 @@ let indicatorDescription =
             salinità, di temperatura e pressione atmosferica. Valori superiodi al 100%
             indicano condizioni di sovrassaturazione. 
             `,
-            icon:'fa fa-flask text-primary',
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-water_O2S',
+
         },
 
         'Solidi-sospesi-totali': {
@@ -99,7 +110,8 @@ let indicatorDescription =
             description: `I solidi sospesi foniscono informazioni sulla presenza di sostanze indisciolte
             nelle acque. Sono correlati alla trasparenza/torbidità.
             `,
-            icon:'fa fa-bandcamp text-primary',
+            // icon:'fa fa-bandcamp text-primary',
+            icon:'icon-solidi_sospesi',
         },
 
         'water-PTOT': {
@@ -109,7 +121,9 @@ let indicatorDescription =
             dai singoli tributari, sulla base di concentrazioni e deflussi, e dall'eventuale
             areale non drenato. 
             `,
-            icon:'fa fa-line-chart text-primary',
+            // icon:'fa fa-line-chart text-primary',
+            icon:'icon-water_PTOT',
+            tag:'CIPAIS',
         },
 
         'water-Nload': {
@@ -119,7 +133,9 @@ let indicatorDescription =
             dai singoli tributari, sulla base di concentrazioni e deflussi, e dall'eventuale
             areale non drenato.
             `,
-            icon:'fa fa-flask text-primary',
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-water_Nload',
+            tag:'CIPAIS',
         },
 
         'water-Pload': {
@@ -128,7 +144,9 @@ let indicatorDescription =
             sui volumi) di P totale. La media annua è calcolata a parire dai valori 
             ottenuti nei monitoraggi mensili o con altra frequenza temporale.
             `,
-            icon:'fa fa-file-powerpoint-o text-primary',
+            // icon:'fa fa-file-powerpoint-o text-primary',
+            icon:'icon-water_pload',
+            tag:'CIPAIS',
         },
 
         'concentrazione-di-azoto': {
@@ -137,7 +155,9 @@ let indicatorDescription =
             sui volumi) di N totale. La media annua è calcolata a parire dai valori 
             ottenuti nei monitoraggi mensili o con altra frequenza temporale. 
             `,
-            icon:'fa fa-flask text-primary',
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-conc_azoto',
+            tag:'CIPAIS',
         },
 
         'indice-LTLeco': {
@@ -146,7 +166,8 @@ let indicatorDescription =
             derivanti dal valore di P totale alla circolazione, trasperenza media annua, 
             e valori di ossigeno alla saturazione in ipolimnio a fine stratificazione.
             `,
-            icon:'fa fa-superpowers text-primary',
+            // icon:'fa fa-superpowers text-primary',
+            icon:'icon-indice_LTleco',
         },
 
         'water-Chl-a': {
@@ -159,7 +180,8 @@ let indicatorDescription =
             eutrofi. L'aumento dei valori di clorofilla può essereutilizzato come segnale 
             dello sviluppo di una fioritura algale.
             `,
-            icon:'fa fa-flask text-primary',
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-water_CHl_a'
         },
 
         'water-PC': {
@@ -170,7 +192,8 @@ let indicatorDescription =
             aumento temporale puo' essere un possibile segnale dello sviluppo di una 
             fioritura di cianobatteri.
             `,
-            icon:'fa fa-flask text-primary',
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-water_PC',
         },
 
         'water-Biovol': {
@@ -180,7 +203,8 @@ let indicatorDescription =
             di solito in corrispondenza dei mesi estivi. Viene misurato sulla base 
             dei conteggi degli organismi fitoplanctonici presenti.
             `,
-            icon:'fa fa-circle text-primary',
+            // icon:'fa fa-circle text-primary',
+            icon:'icon-water_biovol',
         },
 
         'indice-IPAM-fitoplancton': {
@@ -197,7 +221,8 @@ let indicatorDescription =
             specifici, alla definizione dello Stato Ecologico del Corpo Idrico Corpo Idrico
             superficiale (CI) lacustre.
             `,
-            icon:'fa fa-italic text-primary',
+            // icon:'fa fa-italic text-primary',
+            icon:'icon-indice_IPAM',
         },
 
         'cianobatteri': {
@@ -212,7 +237,8 @@ let indicatorDescription =
             cianobatteri alla biomassa totale fitoplancton è quindi un indicatore dello
             stato qualitativo delle acque.
             `,
-            icon:'fa  fa-flask text-primary',
+            // icon:'fa  fa-flask text-primary',
+            icon:'icon-cianobatteri',
         },
 
         'air-temperature': {
@@ -222,8 +248,9 @@ let indicatorDescription =
             all'intrepretazione dei parametri limnologici misurati dai sensori o attraverso
             i monitoraggi.
             `,
-            icon:'fa fa-sun-o text-warning',
+            // icon:'fa fa-sun-o text-warning',
             // icon:'fa fa-question-circle-o text-info',
+            icon:'icon-air_temperature',
         },
 
         'wind-speed-max': {
@@ -232,7 +259,8 @@ let indicatorDescription =
             degli altri parametri limnologici rilevati: in partcolare ilvento svolge 
             un ruolo importante nelle dinamiche di stratificazione e mescolamento dei laghi.
             `,
-            icon:'fa  fa-fighter-jet text-info',
+            // icon:'fa  fa-fighter-jet text-info',
+            icon:'icon-wind_speed',
         },
 
 
@@ -242,28 +270,32 @@ let indicatorDescription =
             title : 'Direzione del vento',
             description: `Direzione del vento
             `,
-            icon:'fa fa-flag text-info',
+            // icon:'fa fa-flag text-info',
+            icon:'icon-wind_direction',
         },
 
         'air-pressure': {
             title : 'Pressione dell aria',
             description: `Pressione dell'aria
             `,
-            icon:'fa fa-arrows-h text-info',
+            // icon:'fa fa-arrows-h text-info',
+            icon:' icon-air_pressure',
         },
 
         'air-relative-humidity': {
             title : 'Umidità dell aria',
             description: `Umidità dell'aria
             `,
-            icon: 'fa fa-tint text-info',
+            // icon: 'fa fa-tint text-info',
+            icon:' icon-air_humidity',
         },
 
         'global-radiation': {
             title : 'Radiazione globali',
             description: `Radiazione globali
             `,
-            icon:'fa fa-bolt text-info',
+            // icon:'fa fa-bolt text-info',
+            icon:'icon-global_radiation',
         },
 
     };

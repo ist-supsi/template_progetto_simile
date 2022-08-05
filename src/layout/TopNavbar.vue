@@ -2,6 +2,7 @@
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="#/admin/overview" :href="false">{{$root.whereAmI}}</a>
+       <!-- <span class="navbar-brand mb-0 h1">prova</span> -->
       <button type="button"
               class="navbar-toggler navbar-toggler-right"
               :class="{toggled: $sidebar.showSidebar}"
@@ -13,14 +14,16 @@
         <span class="navbar-toggler-bar burger-lines"></span>
         <span class="navbar-toggler-bar burger-lines"></span>
       </button>
-
+         
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="nav navbar-nav mr-auto">
-          <!--li class="nav-item">
-            <a class="nav-link" href="#" data-toggle="dropdown">
-              <i class="nc-icon nc-palette"></i>
-            </a>
-          </li-->
+
+          <!-- <li class="nav-item">
+            <a class="navbar-brand">
+              {{}}         
+            </a>   
+          </li> -->
+
           <!-- <base-dropdown tag="li">
             <template slot="title">
               <i class="nc-icon nc-planet"></i>
@@ -68,16 +71,13 @@
   </nav>
 </template>
 <script>
+
+
   export default {
     computed: {
       routeName () {
         const {name} = this.$route
         return this.capitalizeFirstLetter(name)
-      }
-    },
-    data () {
-      return {
-        activeNotifications: false
       }
     },
     methods: {

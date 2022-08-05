@@ -1,5 +1,5 @@
 <template>
-  <card class="card-user">
+  <card class="card-user h-100">
     <img slot="image" src="http://a.tile.stamen.com/watercolor/15/17198/11658.jpg" alt="Lago Ceresio"/>
     <div class="author">
       <a href="#/admin/lago-maggiore">

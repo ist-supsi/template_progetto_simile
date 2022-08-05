@@ -1,5 +1,5 @@
 <template>
-  <card class="card-user">
+  <card class="card-user h-100">
     <img slot="image" src="http://a.tile.stamen.com/watercolor/15/17198/11657.jpg" alt="Lago Ceresio"/>
     <div class="author">
       <a href="#/admin/lago-lugano">
@@ -19,7 +19,6 @@
         Il bacino nord è il più profondo (288 m) e presenta un bacino imbrifero di modeste dimensioni rispetto al volume,
         di conseguenza ha un elevato tempo teorico di ricambio (12.3 anni). 
         Le acque del lago sono utilizzate per il consumo idropotabile, il prelievo ad uso termico e industriale, la balneazione, la pesca professionale e sportiva.
-        <br><br><br><br><br><br><br>
     </p>
     <div slot="footer" class="text-center d-flex justify-content-center">
       <!-- <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>
