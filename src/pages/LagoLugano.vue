@@ -402,9 +402,9 @@
                                     <div class="col-12">
                                          <data-table
                                             :columns="tableColumns2"
-                                            :data="tableData"
+                                            :data="tableDataCipais"
                                             :per-page="[5, 10, 15]"
-                                            @on-table-props-changed="reloadTable"
+                                            @on-table-props-changed="reloadTableCipais"
                                         >
                                     </data-table>
                                 </div>
@@ -582,8 +582,16 @@
                 tableAllData2: {},
                 showModal: false,
                 tableData: {},
+                tableDataCipais:{},
                 tableData2: {},
                 tableProps: {
+                    page: 1,
+                    search: '',
+                    length: 5,
+                    column: 'name',
+                    dir: 'asc'
+                },
+                tablePropsCipais: {
                     page: 1,
                     search: '',
                     length: 5,
@@ -596,10 +604,11 @@
                         name: 'name',
                         orderable: true,
                         // hidden: true,
+                        
                     },
                     {
                         label:'Titolo',
-                        name: 'titolo',
+                        name:'title',
                         orderable: true,          
                     },
                     {
@@ -647,6 +656,7 @@
                         handler: (data)=>{
                             this.$root.analisysVariable = `${data.procedures[0]}`;
                             this.$root.analisysVariableUrn = `${data.definition}`;
+                            
                         },
                         orderable: false,
                         classes: {
@@ -861,9 +871,10 @@
 
             this.tableFetchData2().then((values) => {
                 this.tableSetData();
-                // this.showTitle();
+                this.tableSetDataCipais();
             });
-
+           
+            
             const good_names = [
                 "air-temperature",
                 "air-relative-humidity",
@@ -1185,13 +1196,23 @@
             ]).then((results)=>{
                 self.$root.allProcedure = results[1].data.data;
                 let tableAllData = results[0].data.data
-
+                
                 tableAllData.forEach((el => {
+                    
                     const ff = results[1].data.data.filter(proc => proc.observedproperties[0].name==el.name);
                     const ends = ff.map(proc=>proc.samplingTime.endposition);
                     const begins = ff.map(proc=>proc.samplingTime.beginposition);
                     const begin = begins.length ? Math.min(...begins.map(bb=>(Date.parse(bb)))) : 0;
                     const end = ends.length ? Math.min(...ends.map(bb=>(Date.parse(bb)))) : 0;
+
+                    el['title']= indicatorDescription[tableAllData[2].name].title;
+                    // if((indicatorDescription[tableAllData.indexOf(results).name].title)==undefined){
+                    //     el['title'] = 'N.P.'
+                    // }
+                    // else{
+                    //     el['title'] = (indicatorDescription[tableAllData.indexOf(results).name].title);
+                    // }
+                
                     if ( begin && end ) {
                         const diffTime = Math.abs(end - begin);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -1199,6 +1220,7 @@
                         el['begin'] = new Date(begin).toLocaleDateString('it-IT');
                         el['end'] = new Date(end).toLocaleDateString('it-IT');
                     }
+                    
                 }));
                 //testing inizio
                 // console.log(tableAllData[2].name);
@@ -1224,7 +1246,7 @@
         tableSetData () {
 
             var self = this;
-
+        
             const substr = self.tableProps.search.toLowerCase();
 
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
@@ -1275,10 +1297,69 @@
             this.tableData = tableData;
             
         },
+        tableSetDataCipais () {
+
+            var self = this;
+
+            const substr = self.tablePropsCipais.search.toLowerCase();
+
+            const start = (this.tablePropsCipais.page||1)*this.tablePropsCipais.length-this.tablePropsCipais.length;
+            const end = (this.tablePropsCipais.page||1)*this.tablePropsCipais.length-1;
+
+            const filteredSortedData = this.tableAllData.data.filter(el=>{
+                if (self.tablePropsCipais.search.length==0) {
+                    return true;
+                } else if (el.description.toLowerCase().includes(substr)) {
+                    return true;
+                } else if (el.name.toLowerCase().includes(substr)) {
+                    return true;
+                } else {
+                    return false;
+                };
+            }).sort((item, other)=>{
+                let comparison;
+                if ( item[this.tablePropsCipais.column]<other[this.tablePropsCipais.column] ) {
+                    comparison = -1;
+                } else {
+                    comparison = 1
+                }
+                if ( this.tablePropsCipais.dir=='asc' ) {
+                    return comparison
+                } else {
+                    return comparison*-1
+                }
+            }).slice(start, end+1);
+
+            // TODO: Concordare la paginazione e la statistica dei risultati con
+            // il numero di dati filtrati.
+
+            const last_page = Math.floor(this.tableAllData.data.length/this.tablePropsCipais.length)+1;
+            
+            const tableDataCipais = {
+                // payload: this.tableAllData.payload,
+                links: {},
+                meta: {
+                    current_page: this.tablePropsCipais.page,
+                    from: start+1,
+                    last_page: last_page,
+                    per_page: this.tablePropsCipais.length,
+                    total: this.tableAllData.data.length,
+                    to: Math.min(end+1, this.tableAllData.data.length)
+                },
+                data: filteredSortedData
+            };
+            this.tableDataCipais = tableDataCipais;
+            
+        },
         reloadTable (tableProps) {
             var self = this;
             this.tableProps = tableProps
             this.tableSetData();
+        },
+        reloadTableCipais (tablePropsCipais) {
+            var self = this;
+            this.tablePropsCipais = tablePropsCipais
+            this.tableSetDataCipais();
         },
         populateCockpit () {
             var self = this;
@@ -1503,20 +1584,29 @@
         centerUpdate(center) {
             this.currentCenter = center;
         },
-        // showTitle(){
-        //     var self=this;
-        //     this.tableFetchData2();
-        //     if(tableAllData.name==indicatorDescription.name){
-        //     return indicatorDescription.name.title
+        // showTitle(tableProps){
+        //     if(tableProps.column.name==indicatorDescription.name){
+        //     return indicatorDescription[tableProps.column.name].title
         //     }
-        //     else if(tableAllData.name==undefined){
+        //     else if(tableProps.column.name==undefined){
         //     return 'N.D.'
         //     }
-            
+        //    console.log(tableProps.column.name)
+        //    console.log('HEllo')
         // },
-       
+        showTitle(data) {
+          
+          if(indicatorDescription[data.name]==undefined){         
+                return 'no title found'   
+          }
+          else {
+                   return indicatorDescription[data.name].title   
+                }
+          },
+          
         
     }
+    
 }
 
 
