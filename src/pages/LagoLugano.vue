@@ -591,31 +591,31 @@
                     column: 'name',
                     dir: 'asc'
                 },
-                tablePropsCipais: {
-                    page: 1,
-                    search: '',
-                    length: 5,
-                    column: 'name',
-                    dir: 'asc'
-                },
+                // tablePropsCipais: {
+                //     page: 1,
+                //     search: '',
+                //     length: 5,
+                //     column: 'name',
+                //     dir: 'asc'
+                // },
                 tableColumns2: [
-                    {
-                        label: 'Nome',
-                        name: 'name',
-                        orderable: true,
-                        // hidden: true,
+                    // {
+                    //     // label: 'Nome',
+                    //     // name: 'name',
+                    //     // orderable: true,
+                    //     // hidden: true,
                         
-                    },
+                    // },
                     {
                         label:'Titolo',
                         name:'title',
                         orderable: true,          
                     },
-                    {
-                        label: 'Descrizione',
-                        name: 'description',
-                        orderable: false,
-                    },
+                    // {
+                    //     label: 'Descrizione',
+                    //     name: 'description',
+                    //     orderable: false,
+                    // },
                     // {
                     //     label: 'Giorni',
                     //     name: 'days',
@@ -1205,8 +1205,6 @@
                     const begin = begins.length ? Math.min(...begins.map(bb=>(Date.parse(bb)))) : 0;
                     const end = ends.length ? Math.min(...ends.map(bb=>(Date.parse(bb)))) : 0;
 
-                    el['title']= indicatorDescription[tableAllData[2].name].title;
-                   
                 
                     if ( begin && end ) {
                         const diffTime = Math.abs(end - begin);
@@ -1248,6 +1246,13 @@
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
 
             const filteredSortedData = this.tableAllData.data.filter(el=>{
+                if(el.procedures[0].includes("CIPAIS")){
+                    return false;
+                }
+                else {
+                    return true;
+                };
+            }).filter(el=>{
                 if (self.tableProps.search.length==0) {
                     return true;
                 } else if (el.description.toLowerCase().includes(substr)) {
@@ -1269,13 +1274,16 @@
                 } else {
                     return comparison*-1
                 }
-            }).slice(start, end+1);
+            });
 
             // TODO: Concordare la paginazione e la statistica dei risultati con
             // il numero di dati filtrati.
-
-            const last_page = Math.floor(this.tableAllData.data.length/this.tableProps.length)+1;
-
+            
+            const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
+            const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
+                el['title']= indicatorDescription[el.name].title;
+                return el;
+            });
             const tableData = {
                 // payload: this.tableAllData.payload,
                 links: {},
@@ -1284,10 +1292,10 @@
                     from: start+1,
                     last_page: last_page,
                     per_page: this.tableProps.length,
-                    total: this.tableAllData.data.length,
+                    total: filteredSortedData.length,
                     to: Math.min(end+1, this.tableAllData.data.length)
                 },
-                data: filteredSortedData
+                data: slicedData
             };
             this.tableData = tableData;
             
@@ -1296,13 +1304,20 @@
 
             var self = this;
 
-            const substr = self.tablePropsCipais.search.toLowerCase();
+            const substr = self.tableProps.search.toLowerCase();
 
-            const start = (this.tablePropsCipais.page||1)*this.tablePropsCipais.length-this.tablePropsCipais.length;
-            const end = (this.tablePropsCipais.page||1)*this.tablePropsCipais.length-1;
+            const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
+            const end = (this.tableProps.page||1)*this.tableProps.length-1;
 
             const filteredSortedData = this.tableAllData.data.filter(el=>{
-                if (self.tablePropsCipais.search.length==0) {
+                if(el.procedures[0].includes("CIPAIS")){
+                    return true;
+                }
+                else {
+                    return false;
+                };
+                }).filter(el=>{
+                if (self.tableProps.search.length==0) {
                     return true;
                 } else if (el.description.toLowerCase().includes(substr)) {
                     return true;
@@ -1313,35 +1328,38 @@
                 };
             }).sort((item, other)=>{
                 let comparison;
-                if ( item[this.tablePropsCipais.column]<other[this.tablePropsCipais.column] ) {
+                if ( item[this.tableProps.column]<other[this.tableProps.column] ) {
                     comparison = -1;
                 } else {
                     comparison = 1
                 }
-                if ( this.tablePropsCipais.dir=='asc' ) {
+                if ( this.tableProps.dir=='asc' ) {
                     return comparison
                 } else {
                     return comparison*-1
                 }
-            }).slice(start, end+1);
+            });
 
             // TODO: Concordare la paginazione e la statistica dei risultati con
             // il numero di dati filtrati.
 
-            const last_page = Math.floor(this.tableAllData.data.length/this.tablePropsCipais.length)+1;
-            
+            const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
+            const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
+                el['title']= indicatorDescription[el.name].title;
+                return el;
+            });
             const tableDataCipais = {
                 // payload: this.tableAllData.payload,
                 links: {},
                 meta: {
-                    current_page: this.tablePropsCipais.page,
+                    current_page: this.tableProps.page,
                     from: start+1,
                     last_page: last_page,
-                    per_page: this.tablePropsCipais.length,
-                    total: this.tableAllData.data.length,
+                    per_page: this.tableProps.length,
+                    total: filteredSortedData.length,
                     to: Math.min(end+1, this.tableAllData.data.length)
                 },
-                data: filteredSortedData
+                data: slicedData
             };
             this.tableDataCipais = tableDataCipais;
             
@@ -1351,9 +1369,9 @@
             this.tableProps = tableProps
             this.tableSetData();
         },
-        reloadTableCipais (tablePropsCipais) {
+        reloadTableCipais (tableProps) {
             var self = this;
-            this.tablePropsCipais = tablePropsCipais
+            this.tableProps = tableProps
             this.tableSetDataCipais();
         },
         populateCockpit () {
