@@ -1206,12 +1206,7 @@
                     const end = ends.length ? Math.min(...ends.map(bb=>(Date.parse(bb)))) : 0;
 
                     el['title']= indicatorDescription[tableAllData[2].name].title;
-                    // if((indicatorDescription[tableAllData.indexOf(results).name].title)==undefined){
-                    //     el['title'] = 'N.P.'
-                    // }
-                    // else{
-                    //     el['title'] = (indicatorDescription[tableAllData.indexOf(results).name].title);
-                    // }
+                   
                 
                     if ( begin && end ) {
                         const diffTime = Math.abs(end - begin);
@@ -1229,10 +1224,10 @@
                 // var titleTable
                 // for( i=0;i<tableAllData.length;i++){
                 //     if(tableAllData[i].name==undefined){
-                //         title= "N.P."
+                //         el['title']= "N.P."
                 //     }
                 //     else{
-                //         title = indicatorDescription[tableAllData[i].name].title;
+                //         el['title'] = indicatorDescription[tableAllData[i].name].title;
                 //     }
                      
                 // }
@@ -1584,25 +1579,7 @@
         centerUpdate(center) {
             this.currentCenter = center;
         },
-        // showTitle(tableProps){
-        //     if(tableProps.column.name==indicatorDescription.name){
-        //     return indicatorDescription[tableProps.column.name].title
-        //     }
-        //     else if(tableProps.column.name==undefined){
-        //     return 'N.D.'
-        //     }
-        //    console.log(tableProps.column.name)
-        //    console.log('HEllo')
-        // },
-        showTitle(data) {
-          
-          if(indicatorDescription[data.name]==undefined){         
-                return 'no title found'   
-          }
-          else {
-                   return indicatorDescription[data.name].title   
-                }
-          },
+       
           
         
     }
