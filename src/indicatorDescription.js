@@ -304,6 +304,18 @@ let indicatorDescription =
 //var indicatorID1 =indicatorDescription["indicatorID1"]; 
 //var indicatorID2 =indicatorDescription["indicatorID2"];
 
+function getCardIcon (name) {
 
-export default indicatorDescription;
+
+    if(indicatorDescription[name]==undefined || indicatorDescription[name].icon==undefined){
+         return 'fa fa-question-circle-o text-info';
+    }
+    else {
+        return indicatorDescription[name].icon;
+    }
+
+};
+
+export default {indicatorDescription, getCardIcon};
+
 

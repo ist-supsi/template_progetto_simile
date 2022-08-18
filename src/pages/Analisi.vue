@@ -1,4 +1,5 @@
 <template>
+
     <div class="content">
         <div class="container-fluid">
             <div class="row">
@@ -8,6 +9,9 @@
                     </card>
                 </div>
             </div>
+
+            
+
             <div class="row">
                 <div class="col-12">
                     <card>
@@ -26,7 +30,35 @@
 
                             </div>
                         </div>
-
+    <div class="row d-flex justify-content-center">
+            <div class="col-6">
+                <div class="alert alert-simile">
+                <stats-card>
+                    <div slot="header" class="icon-warning">
+                        <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                        <i :class="getCardIcon2(cards[0].name)"
+                            data-toggle="tooltip"
+                            title="cards[0].title||'no data'"></i>
+                
+                    </div>
+                    <div slot="content">
+                         <p v-if="!cards[0].title" class="card-category placeholder-glow">
+                         <span class="placeholder col-12"></span>
+                        </p>
+                        <p v-else class="card-category">{{cards[0].title || "--"}}</p>
+                        <h4 class="card-title">{{cards[0].data || "N.P."}} {{cards[0].uom || ""}}</h4>
+                        <p class="card-category">{{cards[0].message || "--"}}</p>
+                    </div>
+                    <div slot="footer">
+                        <i v-if="cards[0].data===null" class="fa fa-refresh fa-spin"></i>
+                        <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i>
+                        <i v-if="cards[0].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[0].time && cards[0].time.date}}
+                        <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
+                    </div>
+                </stats-card>
+                </div>
+            </div>
+        </div>            
                         <div v-if="Object.keys(bulletOptions).length>0" class="row">
                             <div class="col-md-12">
                               <figure class="highcharts-figure">
@@ -67,7 +99,9 @@
     import NotifyButton from 'src/components/NotifyButton.vue';
     import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
 
-    import { mean,std,min,sqrt,max } from 'mathjs'
+    import { mean,std,min,sqrt,max } from 'mathjs';
+    import indicatorDescription  from '../indicatorDescription';
+
 
     loadBullet(Highcharts);
 
@@ -217,6 +251,8 @@
             procedureInfos: {},
             variableInfo: {},
             description: '',
+            valueInfo: {},
+            cards: [{}],
             analisysVariable: this.$root.analisysVariable,
             analisysVariableUrn: this.$root.analisysVariableUrn,
             seriesBegin: new Date(new Date().setDate(new Date().getDate() - 7)),
@@ -232,6 +268,18 @@
              handler(val){
                // do stuff
              },
+             deep: true
+          },
+          valueInfo: {
+             handler(val){
+               // do stuff
+             },
+             deep: true
+          },
+          cards:{
+            handler(val){
+
+            },
              deep: true
           },
           seriesBegin: {
@@ -260,12 +308,32 @@
                 eventtime: 'last',
                 observedproperties: this.analisysVariableUrn
             }).then((result)=>{
-                const info = self.istosToBullet(result);
+                // const info = self.istosToBullet(result);
                 // console.log(info);
-
-                self.bulletOptions = info.options;
+                // self.bulletOptions = info.options;
+                console.log(result.data.data[0].result.DataArray.field[1].name);
+                const info= {
+                    message: result.data.data[0].featureOfInterest.name.split(':').at(-1),
+                    data: result.data.data[0].result.DataArray.values[0][1].toFixed(2),
+                    uom: result.data.data[0].result.DataArray.field[1].uom,
+                    name:result.data.data[0].result.DataArray.field[1].name,
+                };
+                // self.cards[0].message = result.data.data[0].featureOfInterest.name.split(':').at(-1);
+                // self.cards[0].data = result.data.data[0].result.DataArray.values[0][1].toFixed(2);
+                // cards[0].message =
+                
+                if(indicatorDescription.indicatorDescription[info.name]==undefined){
+                    info.title = 'N.P.';
+                }
+                else{
+                    info.title = indicatorDescription.indicatorDescription[info.name].title;
+                    info.icon = indicatorDescription.indicatorDescription[info.name].icon;
+                    
+                }
+                self.cards = [info];
+               
             });
-
+            
             this.groupedProcedures = this.allProcedure.reduce((acc, it) => {
 
                 let arr = it.name.split('_');
@@ -307,7 +375,7 @@
                 // };
             }, {});
 
-            this.setSeries(prm);
+            // this.setSeries(prm);
 
         },
         methods: {
@@ -333,9 +401,19 @@
                         } else {
                             result.options.series[0].visible = true;
                             const series = result.options.series[0].data.map((xy)=>xy[1]);
-                            // console.log(series);
+                            
                             const variableAverage = mean(series);
                             const variableStd = sqrt(std(series));
+
+                            // if(series.length>0){
+                            // const variableAverage = mean(series);
+                            // const variableStd = sqrt(std(series));
+                            // }
+                            // else{
+                            // const variableAverage = null;
+                            // const variableStd = null;
+                            // }
+                            
 
                             // console.log(result);
                             result.options.yAxis.plotLines = [{
@@ -347,12 +425,12 @@
                                 color: 'darkgrey',
                                 dashStyle: 'DashDot',
                                 width: 2,
-                                value: variableAverage-3*variableStd
+                                value: variableAverage-3*self.variableStd
                             },{
                                 color: 'darkgrey',
                                 dashStyle: 'DashDot',
                                 width: 2,
-                                value: variableAverage+3*variableStd
+                                value: variableAverage+3*self.variableStd
                             }];
 
 
@@ -438,6 +516,11 @@
                   // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
 
                   return info;
+            },
+            getCardIcon2(name){
+                console.log(name);
+                return indicatorDescription.getCardIcon(name);
+                
             },
         },
   }

@@ -525,7 +525,7 @@
             // Modal 
 
             // SimileIcon,
-            indicatorDescription
+            
             
            
         },
@@ -999,11 +999,11 @@
             // };
             //  return 'fa fa-question-circle-o text-info';
 
-            if(indicatorDescription[name]==undefined || indicatorDescription[name].icon==undefined){
+            if(indicatorDescription.indicatorDescription[name]==undefined || indicatorDescription.indicatorDescription[name].icon==undefined){
                  return 'fa fa-question-circle-o text-info';
             }
             else {
-                return indicatorDescription[name].icon;
+                return indicatorDescription.indicatorDescription[name].icon;
             }
 
         },
@@ -1025,13 +1025,13 @@
                 // const title = self.tableAllData.filter((el)=>{el.definition==result.urn})[0];
                 // cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27);
 
-                if(indicatorDescription[cards[index].name]==undefined){
+                if(indicatorDescription.indicatorDescription[cards[index].name]==undefined){
                 cards[index].title = cards[index].description.substring(0, 27);
                 }
                 else{
-                    cards[index].title = indicatorDescription[cards[index].name].title
+                    cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
                 }
-                // cards[index].title = indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
+                // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
                 if ( result.x ) {
@@ -1158,13 +1158,13 @@
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
           // const color = Math.floor((Math.random() * 4) + 1)
-          //if it finds the name of the indicator in the indicatorDescription dictionary then
+          //if it finds the name of the indicator in the indicatorDescription.indicatorDescription dictionary then
           //it shows the notification
-          if(indicatorDescription[data.name]){
+          if(indicatorDescription.indicatorDescription[data.name]){
                 this.$notifications.notify(
                 {
                 // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
-                    message: indicatorDescription[data.name].description,
+                    message: indicatorDescription.indicatorDescription[data.name].description,
                     icon: 'nc-icon nc-quote',
                     horizontalAlign: horizontalAlign,
                     verticalAlign: verticalAlign,
@@ -1217,7 +1217,7 @@
                 }));
                 //testing inizio
                 // console.log(tableAllData[2].name);
-                // console.log(indicatorDescription[tableAllData[2].name].title)
+                // console.log(indicatorDescription.indicatorDescription[tableAllData[2].name].title)
                 // var i
                 // var titleTable
                 // for( i=0;i<tableAllData.length;i++){
@@ -1225,7 +1225,7 @@
                 //         el['title']= "N.P."
                 //     }
                 //     else{
-                //         el['title'] = indicatorDescription[tableAllData[i].name].title;
+                //         el['title'] = indicatorDescription.indicatorDescription[tableAllData[i].name].title;
                 //     }
                      
                 // }
@@ -1281,7 +1281,7 @@
             
             const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
-                el['title']= indicatorDescription[el.name].title;
+                el['title']= indicatorDescription.indicatorDescription[el.name].title;
                 return el;
             });
             const tableData = {
@@ -1345,7 +1345,7 @@
 
             const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
-                el['title']= indicatorDescription[el.name].title;
+                el['title']= indicatorDescription.indicatorDescription[el.name].title;
                 return el;
             });
             const tableDataCipais = {
