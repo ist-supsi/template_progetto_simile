@@ -656,6 +656,7 @@
                         handler: (data)=>{
                             this.$root.analisysVariable = `${data.procedures[0]}`;
                             this.$root.analisysVariableUrn = `${data.definition}`;
+                            console.log(data.procedures);
                             
                         },
                         orderable: false,
@@ -856,6 +857,8 @@
                 handler(val){
                     // do stuff
                     this.loadCardsData();
+                    this.tableSetData();
+                    this.tableSetDataCipais();
                 },
             },
             cards: {
@@ -869,10 +872,6 @@
             var self = this;
             this.$root.whereAmI = 'Lago di Lugano';
 
-            this.tableFetchData2().then((values) => {
-                this.tableSetData();
-                this.tableSetDataCipais();
-            });
            
             
             const good_names = [
@@ -923,8 +922,12 @@
                 }
             };
 
-            // Load markers
-            this.istsos.fetchGeometryCollection().then((result)=>{
+            Promise.all([
+                this.tableFetchData2(),
+                this.istsos.fetchGeometryCollection(),
+            ]).then(results=>{
+                const result = results[1];
+                console.log(result.data.features);
                 const reduced = groupBy(
                     result.data.features,
                     approxPosition,
@@ -956,8 +959,53 @@
                             "type": "Point",
                             "coordinates": coords
                         }
+                        
                     }
-                });
+                    
+            });
+            
+            // this.tableFetchData2().then((values) => {
+            //     this.tableSetData();
+            //     this.tableSetDataCipais();
+            // });
+
+
+            // Load markers
+            // this.istsos.fetchGeometryCollection().then((result)=>{
+            //     console.log(result.data.features);
+            //     const reduced = groupBy(
+            //         result.data.features,
+            //         approxPosition,
+            //         collectNames
+            //     );
+            //     let bounds = L.latLngBounds([]);
+
+            //     const features = Object.entries(reduced).map(([k, v], ii) => {
+            //         const coords = k.split(';').map(parseFloat);
+            //         bounds.extend(L.latLng(coords[1], coords[0]));
+            //         return {
+            //             "type": "Feature",
+            //             "properties": {
+            //                 markerIndex: ii,
+            //                 names: Object.entries(v).sort((a, b) => {
+            //                       const ia = good_names.indexOf(a[0]);
+            //                       const ib = good_names.indexOf(b[0]);
+
+            //                       if ( ia==ib ) return 0;
+            //                       if ( ia==-1 ) return 1;
+            //                       if ( ib==-1 ) return -1;
+            //                       if ( ia>ib ) return 1;
+            //                       return -1
+
+            //                   }).map(a=>a[1]),
+
+            //             },
+            //             "geometry": {
+            //                 "type": "Point",
+            //                 "coordinates": coords
+            //             }
+            //         }
+            //     });
 
                 // Set FeatureCollection
                 self.features = {
@@ -965,12 +1013,14 @@
                     "features": features
                 };
                 this.loadCardsData();
+                this.tableSetData();
+                this.tableSetDataCipais();
 
                 // Set map bounds
                 self.bounds = bounds;
 
             })
-
+            
             // TODO: DEPRECATE
             this.populateCockpit();
             this.$root.dropdownVisible = false;
@@ -1244,13 +1294,16 @@
 
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
-
+            
+            const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
+                                // self.features.features[self.selectedMarker].properties.names
             const filteredSortedData = this.tableAllData.data.filter(el=>{
-                if(el.procedures[0].includes("CIPAIS")){
-                    return false;
+                
+                if(!el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0]) ){
+                    return true;
                 }
                 else {
-                    return true;
+                    return false;
                 };
             }).filter(el=>{
                 if (self.tableProps.search.length==0) {
@@ -1305,12 +1358,12 @@
             var self = this;
 
             const substr = self.tableProps.search.toLowerCase();
-
+            const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
 
             const filteredSortedData = this.tableAllData.data.filter(el=>{
-                if(el.procedures[0].includes("CIPAIS")){
+                if(el.procedures[0].includes("CIPAIS")&& selectedProc.includes(el.procedures[0])){
                     return true;
                 }
                 else {

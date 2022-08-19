@@ -30,9 +30,10 @@
 
                             </div>
                         </div>
+                        
     <div class="row d-flex justify-content-center">
             <div class="col-6">
-                <div class="alert alert-simile">
+                <!-- <div class="alert alert-simile"> -->
                 <stats-card>
                     <div slot="header" class="icon-warning">
                         <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -56,7 +57,7 @@
                         <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
                     </div>
                 </stats-card>
-                </div>
+                <!-- </div> -->
             </div>
         </div>            
                         <div v-if="Object.keys(bulletOptions).length>0" class="row">
