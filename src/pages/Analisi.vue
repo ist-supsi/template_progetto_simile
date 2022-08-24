@@ -141,7 +141,7 @@
 
     const BULLET_DEFAULTS = {
         chart: {
-            marginTop: 40
+            marginTop: 40,
         },
         title: {
             text: "Ultimo valore misurato"
@@ -241,6 +241,7 @@
             highcharts: Chart,
             HighchartCard,
             NotifyButton,
+            BULLET_DEFAULTS,
             // ModalButton,
             // Modal
         },

@@ -375,7 +375,85 @@
 
                         </card> -->
                     <!-- </card> -->
-                     
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Home</button>
+            </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Profile</button>
+                </li>
+            
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                <div class="col-12">
+                    <data-table
+                        :columns="tableColumns2"
+                        :data="tableData"
+                        :per-page="[5, 10, 15]"
+                        @on-table-props-changed="reloadTable"
+                        >
+                        </data-table>
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+
+                <div class="col-12">
+                    <p>ciao</p>
+                </div>
+
+            </div>
+                
+        </div>
+
+
+        <!-- <div class="col-md-12">
+                <figure v-for="infoChart in cipaisData" class="highcharts-figure">
+                <highcharts id="container" :options="lineOptions"></highcharts>
+                </figure>
+              
+                </div>
+                            -->
+
+
+
+                    <!-- <TabNav :tabs="['Serie Storiche', 'Dati CIPAIS']" :selected="selected" @selected="setSelected">
+
+                        <Tab :isSelected="selected === 'Serie Storiche'">
+                            
+                                <div class="col-12">
+                                    <data-table
+                                        :columns="tableColumns2"
+                                        :data="tableData"
+                                        :per-page="[5, 10, 15]"
+                                        @on-table-props-changed="reloadTable"
+                                    >
+                                    </data-table>
+                                </div>
+                            
+                        </Tab>
+                        <Tab :isSelected="selected === 'Dati CIPAIS'">
+                            <div class="row">
+                                <div class="col-12">
+                                    <CipaisLugano>
+                                    
+                                    </CipaisLugano>
+                                     <data-table
+                                        :columns="tableColumns2"
+                                        :data="tableDataCipais"
+                                        :per-page="[5, 10, 15]"
+                                        @on-table-props-changed="reloadTableCipais"
+                                        >
+                                    </data-table>
+                                </div>
+                            </div>
+                        </Tab>
+
+                    </TabNav>
+                      -->
+<!--                         
 
                       <div class="container-fluid">
                             <div class="alert alert-simile" role="alert">
@@ -409,7 +487,9 @@
                                     </data-table>
                                 </div>
                                     
-                        </div>  
+                        </div>   -->
+
+
                     <!-- <card>
 
                         <div v-if="Object.keys(series_data).length>0" class="row">
@@ -426,7 +506,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    
 </template>
 <script>
     // import {Chart} from 'highcharts-vue';
@@ -471,6 +551,14 @@
     import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
     import indicatorDescription from '../indicatorDescription';
 
+    import TabNav from '../layout/TabNav.vue';
+    import Tab from '../components/Tab.vue';
+    import CipaisLugano from '../components/CipaisLugano.vue';
+import TestChart from '../components/testChart.vue';
+
+
+    
+
   //   loadBullet(Highcharts);
   //
   //   Highcharts.setOptions({
@@ -508,30 +596,31 @@
 
     export default {
         components: {
-            LTable,
-            // ChartCard,
-            StatsCard,
-            LMap,
-            LTileLayer,
-            "l-wms-tile-layer": LWMSTileLayer,
-            LGeoJson,
-            LControlLayers,
-            // highcharts: Chart,
-            // HighchartCard,
-            NotifyButton,
-            // 'v-marker-cluster': Vue2LeafletMarkerCluster,
-            // 'v-marker': Vue2LeafletMarker,
-            // ModalButton,
-            // Modal 
-
-            // SimileIcon,
-            
-            
-           
-        },
+    LTable,
+    // ChartCard,
+    StatsCard,
+    LMap,
+    LTileLayer,
+    "l-wms-tile-layer": LWMSTileLayer,
+    LGeoJson,
+    LControlLayers,
+    // highcharts: Chart,
+    // HighchartCard,
+    NotifyButton,
+    // 'v-marker-cluster': Vue2LeafletMarkerCluster,
+    // 'v-marker': Vue2LeafletMarker,
+    // ModalButton,
+    // Modal 
+    // SimileIcon,
+    TabNav,
+    Tab,
+    CipaisLugano,
+    TestChart
+},
         data () {
             return {
                 // markers: [],
+                
                 selectedProc: null,
                 showDescription: true,
                 lastSdtFig: '',
@@ -579,6 +668,7 @@
                 last_o2c_data: {},
                 series_o2c_data: {},
                 tableAllData: {},
+                dataCipais:{},
                 tableAllData2: {},
                 showModal: false,
                 tableData: {},
@@ -656,7 +746,6 @@
                         handler: (data)=>{
                             this.$root.analisysVariable = `${data.procedures[0]}`;
                             this.$root.analisysVariableUrn = `${data.definition}`;
-                            console.log(data.procedures);
                             
                         },
                         orderable: false,
@@ -842,8 +931,8 @@
                 },
                 showMap: true,
                 selectedMarker: 1,
-                cards: [{}, {}, {}, {}, {}, {}]
-
+                cards: [{}, {}, {}, {}, {}, {}],
+                selected: 'Serie storiche'
             }
         },
         watch: {
@@ -1020,7 +1109,7 @@
                 self.bounds = bounds;
 
             })
-            
+
             // TODO: DEPRECATE
             this.populateCockpit();
             this.$root.dropdownVisible = false;
@@ -1281,8 +1370,16 @@
                 // }
                 // console.log(title);     
                 //testing fine
-                self.tableAllData = {data: tableAllData.filter(el => el.begin && el.end)}
-                
+                self.tableAllData = {data: tableAllData.filter(el => el.begin && el.end)};
+                const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure);
+                self.cipaisData  = this.tableAllData.data.filter(el=>{
+                if(el.procedures[0].includes("CIPAIS")&& selectedProc.includes(el.procedures[0])){
+                    return true;
+                }
+                else {
+                    return false;
+                };
+                })
             })
            
         },
@@ -1361,7 +1458,7 @@
             const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
-
+            
             const filteredSortedData = this.tableAllData.data.filter(el=>{
                 if(el.procedures[0].includes("CIPAIS")&& selectedProc.includes(el.procedures[0])){
                     return true;
@@ -1650,6 +1747,9 @@
         centerUpdate(center) {
             this.currentCenter = center;
         },
+        setSelected(tab){
+            this.selected =tab;
+        }
        
           
         
@@ -1662,7 +1762,12 @@
 
 </script>
 <style>
-.table > thead > tr > th:last-child, .table > tbody > tr > th:last-child, .table > tfoot > tr > th:last-child, .table > thead > tr > td:last-child, .table > tbody > tr > td:last-child, .table > tfoot > tr > td:last-child {
+.table > thead > tr > th:last-child, 
+.table > tbody > tr > th:last-child, 
+.table > tfoot > tr > th:last-child, 
+.table > thead > tr > td:last-child, 
+.table > tbody > tr > td:last-child, 
+.table > tfoot > tr > td:last-child {
   width: auto;
 }
 </style>
