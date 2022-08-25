@@ -10,7 +10,7 @@
                 </div>
             </div>
 
-            
+
 
             <div class="row">
                 <div class="col-12">
@@ -30,7 +30,7 @@
 
                             </div>
                         </div>
-                        
+
     <div class="row d-flex justify-content-center">
             <div class="col-6">
                 <!-- <div class="alert alert-simile"> -->
@@ -40,7 +40,7 @@
                         <i :class="getCardIcon2(cards[0].name)"
                             data-toggle="tooltip"
                             title="cards[0].title||'no data'"></i>
-                
+
                     </div>
                     <div slot="content">
                          <p v-if="!cards[0].title" class="card-category placeholder-glow">
@@ -59,7 +59,7 @@
                 </stats-card>
                 <!-- </div> -->
             </div>
-        </div>            
+        </div>
                         <div v-if="Object.keys(bulletOptions).length>0" class="row">
                             <div class="col-md-12">
                               <figure class="highcharts-figure">
@@ -323,19 +323,19 @@
                 // self.cards[0].message = result.data.data[0].featureOfInterest.name.split(':').at(-1);
                 // self.cards[0].data = result.data.data[0].result.DataArray.values[0][1].toFixed(2);
                 // cards[0].message =
-                
+
                 if(indicatorDescription.indicatorDescription[info.name]==undefined){
                     info.title = 'N.P.';
                 }
                 else{
                     info.title = indicatorDescription.indicatorDescription[info.name].title;
                     info.icon = indicatorDescription.indicatorDescription[info.name].icon;
-                    
+
                 }
                 self.cards = [info];
-               
+
             });
-            
+
             this.groupedProcedures = this.allProcedure.reduce((acc, it) => {
 
                 let arr = it.name.split('_');
@@ -403,7 +403,7 @@
                         } else {
                             result.options.series[0].visible = true;
                             const series = result.options.series[0].data.map((xy)=>xy[1]);
-                            
+
                             const variableAverage = mean(series);
                             const variableStd = sqrt(std(series));
 
@@ -415,7 +415,7 @@
                             // const variableAverage = null;
                             // const variableStd = null;
                             // }
-                            
+
 
                             // console.log(result);
                             result.options.yAxis.plotLines = [{
@@ -522,7 +522,7 @@
             getCardIcon2(name){
                 console.log(name);
                 return indicatorDescription.getCardIcon(name);
-                
+
             },
         },
   }

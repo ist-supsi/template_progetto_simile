@@ -3,11 +3,11 @@
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
                         <h5>Stato Attuale</h5>
-                </div>      
+                </div>
             </div>
-    
+
         <div class="container-fluid">
-            
+
             <div class="row">
                 <div class="col-12">
                     <!-- <card> -->
@@ -30,14 +30,14 @@
                                 <div class="col">
                                     <div v-if="selectedMarker">
                                         <h4>Figino</h4>
-                                    </div> 
+                                    </div>
                                     <div v-if="!selectedMarker">
                                         <h4>Gandria</h4>
                                     </div>
                                 </div>
                             </div> -->
                               <div class="row">
-                                 
+
                                   <div class="col-6">
                                       <stats-card>
                                           <div slot="header" class="icon-warning">
@@ -311,7 +311,7 @@
                                           <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
                                         </div>
                                     </stats-card> -->
-                                    
+
                                 </div>
                               </div>
                             </div>
@@ -383,7 +383,7 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Profile</button>
                 </li>
-            
+
         </ul>
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
@@ -405,15 +405,20 @@
                 </div>
 
             </div>
-                
+
         </div>
 
+        <div class="col-md-12">
+            <figure v-for="data in dataCipais" class="highcharts-figure">
+                <highcharts :options="data"></highcharts>
+            </figure>
+        </div>
 
         <!-- <div class="col-md-12">
                 <figure v-for="infoChart in cipaisData" class="highcharts-figure">
                 <highcharts id="container" :options="lineOptions"></highcharts>
                 </figure>
-              
+
                 </div>
                             -->
 
@@ -422,7 +427,7 @@
                     <!-- <TabNav :tabs="['Serie Storiche', 'Dati CIPAIS']" :selected="selected" @selected="setSelected">
 
                         <Tab :isSelected="selected === 'Serie Storiche'">
-                            
+
                                 <div class="col-12">
                                     <data-table
                                         :columns="tableColumns2"
@@ -432,13 +437,13 @@
                                     >
                                     </data-table>
                                 </div>
-                            
+
                         </Tab>
                         <Tab :isSelected="selected === 'Dati CIPAIS'">
                             <div class="row">
                                 <div class="col-12">
                                     <CipaisLugano>
-                                    
+
                                     </CipaisLugano>
                                      <data-table
                                         :columns="tableColumns2"
@@ -453,12 +458,12 @@
 
                     </TabNav>
                       -->
-<!--                         
+<!--
 
                       <div class="container-fluid">
                             <div class="alert alert-simile" role="alert">
                                     <h5>Serie Storiche</h5>
-                            </div>  
+                            </div>
                                     <div class="row">
                                         <div class="col-12">
                                             <data-table
@@ -486,7 +491,7 @@
                                         >
                                     </data-table>
                                 </div>
-                                    
+
                         </div>   -->
 
 
@@ -506,7 +511,7 @@
                 </div>
             </div>
         </div>
-    
+
 </template>
 <script>
     // import {Chart} from 'highcharts-vue';
@@ -530,14 +535,14 @@
       iconUrl: require('leaflet/dist/images/marker-icon.png'),
       shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
-    
+
 
     import { latLngBounds, latLng } from "leaflet";
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson } from "vue2-leaflet";
 
     import 'leaflet/dist/leaflet.css';
-    
-    
+
+
 
     // import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
     // import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
@@ -554,10 +559,42 @@
     import TabNav from '../layout/TabNav.vue';
     import Tab from '../components/Tab.vue';
     import CipaisLugano from '../components/CipaisLugano.vue';
-import TestChart from '../components/testChart.vue';
+    import TestChart from '../components/testChart.vue';
 
+    import {Chart} from 'highcharts-vue';
+    import Highcharts from 'highcharts';
 
-    
+    import istsosToHighcharts from './istsosToHighcharts';
+
+    Highcharts.setOptions({
+        chart: {
+            inverted: true,
+            marginLeft: 135,
+            type: 'bullet'
+        },
+        title: {
+            text: null
+        },
+        legend: {
+            enabled: false
+        },
+        yAxis: {
+            gridLineWidth: 0
+        },
+        plotOptions: {
+            series: {
+                pointPadding: 0.25,
+                borderWidth: 0,
+                color: '#000'
+            }
+        },
+        credits: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        }
+    });
 
   //   loadBullet(Highcharts);
   //
@@ -604,13 +641,13 @@ import TestChart from '../components/testChart.vue';
     "l-wms-tile-layer": LWMSTileLayer,
     LGeoJson,
     LControlLayers,
-    // highcharts: Chart,
+    highcharts: Chart,
     // HighchartCard,
     NotifyButton,
     // 'v-marker-cluster': Vue2LeafletMarkerCluster,
     // 'v-marker': Vue2LeafletMarker,
     // ModalButton,
-    // Modal 
+    // Modal
     // SimileIcon,
     TabNav,
     Tab,
@@ -620,7 +657,8 @@ import TestChart from '../components/testChart.vue';
         data () {
             return {
                 // markers: [],
-                
+                selectedCipaisProcedures: [],
+                cipaisData: [],
                 selectedProc: null,
                 showDescription: true,
                 lastSdtFig: '',
@@ -668,6 +706,7 @@ import TestChart from '../components/testChart.vue';
                 last_o2c_data: {},
                 series_o2c_data: {},
                 tableAllData: {},
+                allProcedures: {},
                 dataCipais:{},
                 tableAllData2: {},
                 showModal: false,
@@ -694,12 +733,12 @@ import TestChart from '../components/testChart.vue';
                     //     // name: 'name',
                     //     // orderable: true,
                     //     // hidden: true,
-                        
+
                     // },
                     {
                         label:'Titolo',
                         name:'title',
-                        orderable: true,          
+                        orderable: true,
                     },
                     // {
                     //     label: 'Descrizione',
@@ -746,7 +785,7 @@ import TestChart from '../components/testChart.vue';
                         handler: (data)=>{
                             this.$root.analisysVariable = `${data.procedures[0]}`;
                             this.$root.analisysVariableUrn = `${data.definition}`;
-                            
+
                         },
                         orderable: false,
                         classes: {
@@ -936,6 +975,14 @@ import TestChart from '../components/testChart.vue';
             }
         },
         watch: {
+            selectedCipaisProcedures: {
+                handler(val){
+                    // do stuff
+                    // TODO: load cipais data
+                    this.loadCipaisData();
+                },
+                // deep: true
+            },
             markerLayer: {
                 handler(val){
                     // do stuff
@@ -961,8 +1008,8 @@ import TestChart from '../components/testChart.vue';
             var self = this;
             this.$root.whereAmI = 'Lago di Lugano';
 
-           
-            
+
+
             const good_names = [
                 "air-temperature",
                 "air-relative-humidity",
@@ -1016,7 +1063,6 @@ import TestChart from '../components/testChart.vue';
                 this.istsos.fetchGeometryCollection(),
             ]).then(results=>{
                 const result = results[1];
-                console.log(result.data.features);
                 const reduced = groupBy(
                     result.data.features,
                     approxPosition,
@@ -1032,27 +1078,27 @@ import TestChart from '../components/testChart.vue';
                         "properties": {
                             markerIndex: ii,
                             names: Object.entries(v).sort((a, b) => {
-                                  const ia = good_names.indexOf(a[0]);
-                                  const ib = good_names.indexOf(b[0]);
+                                const ia = good_names.indexOf(a[0]);
+                                const ib = good_names.indexOf(b[0]);
 
-                                  if ( ia==ib ) return 0;
-                                  if ( ia==-1 ) return 1;
-                                  if ( ib==-1 ) return -1;
-                                  if ( ia>ib ) return 1;
-                                  return -1
+                                if ( ia==ib ) return 0;
+                                if ( ia==-1 ) return 1;
+                                if ( ib==-1 ) return -1;
+                                if ( ia>ib ) return 1;
+                                return -1
 
-                              }).map(a=>a[1]),
-
+                            }).map(a=>a[1]),
+                            // infos: v,
                         },
                         "geometry": {
                             "type": "Point",
                             "coordinates": coords
                         }
-                        
+
                     }
-                    
+
             });
-            
+
             // this.tableFetchData2().then((values) => {
             //     this.tableSetData();
             //     this.tableSetDataCipais();
@@ -1101,9 +1147,9 @@ import TestChart from '../components/testChart.vue';
                     "type": "FeatureCollection",
                     "features": features
                 };
-                this.loadCardsData();
-                this.tableSetData();
-                this.tableSetDataCipais();
+                self.loadCardsData();
+                self.tableSetData();
+                self.tableSetDataCipais();
 
                 // Set map bounds
                 self.bounds = bounds;
@@ -1146,6 +1192,36 @@ import TestChart from '../components/testChart.vue';
             }
 
         },
+        loadCipaisData () {
+            var self = this;
+            let dataCipais = [];
+            let prms = [];
+            for (const proc of this.selectedCipaisProcedures) {
+
+                const info = self.allProcedures[proc.procedure];
+
+                if (info.samplingTime.beginposition && info.samplingTime.endposition) {
+                    const begin = new Date(info.samplingTime.beginposition);
+                    const end = new Date(info.samplingTime.endposition);
+
+                    const prm = this.istsos.fetchSeries(
+                        proc.procedure,
+                        info.observedproperties[0].definition,
+                        begin,
+                        end
+                    ).then(response=>{
+                        const result = istsosToHighcharts.istosToLine(response);
+                        // result.options.name = 'foo';
+                        console.log(result);
+                        dataCipais.push(result.options);
+                    });
+                    prms.push(prm);
+                };
+            };
+
+            Promise.all(prms).then(()=>{self.dataCipais=dataCipais});
+
+        },
         loadCardsData () {
             var self = this;
 
@@ -1182,7 +1258,7 @@ import TestChart from '../components/testChart.vue';
 
                 cards[index].message = result.locationUrn.split(':').at(-1);
             };
-            
+
             let calls = []
             for (let ii = 0; ii < 6; ii++) {
                 if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
@@ -1203,7 +1279,7 @@ import TestChart from '../components/testChart.vue';
                 self.cards = cards;
             })
         },
-        
+
         markerLayerOptions () {
             var self = this;
             return {
@@ -1234,26 +1310,26 @@ import TestChart from '../components/testChart.vue';
                     // const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
                     //     self.selectedMarker=feature.properties.markerIndex
                     //     });
-                    
+
                     const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
                         marker.setIcon(redMarker);
                         self.selectedMarker=feature.properties.markerIndex;
-               
+
                     })
-                    
+
                     // return marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
                     if(feature.properties.names[0].message==undefined){
-                        
+
                          return marker.bindPopup("N.P.").openPopup();
-                                
+
                     }
                       else{
-                       
+
                         return marker.bindPopup("<h5>"+feature.properties.names[0].message+"</h5>").openPopup();
-                        
+
                       }
                     }
-                    
+
                     // return marker;
                 }
             },
@@ -1333,18 +1409,21 @@ import TestChart from '../components/testChart.vue';
                 this.istsos.fetchObserverProperties(),
                 this.istsos.fetchProcedures()
             ]).then((results)=>{
-                self.$root.allProcedure = results[1].data.data;
-                let tableAllData = results[0].data.data
-                
+                self.allProcedures = results[1].data.data.reduce((obj, it)=>{
+                    obj[it.name]=it;
+                    return obj
+                }, {});
+                let tableAllData = results[0].data.data;
+
                 tableAllData.forEach((el => {
-                    
+
                     const ff = results[1].data.data.filter(proc => proc.observedproperties[0].name==el.name);
                     const ends = ff.map(proc=>proc.samplingTime.endposition);
                     const begins = ff.map(proc=>proc.samplingTime.beginposition);
                     const begin = begins.length ? Math.min(...begins.map(bb=>(Date.parse(bb)))) : 0;
                     const end = ends.length ? Math.min(...ends.map(bb=>(Date.parse(bb)))) : 0;
 
-                
+
                     if ( begin && end ) {
                         const diffTime = Math.abs(end - begin);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -1352,7 +1431,7 @@ import TestChart from '../components/testChart.vue';
                         el['begin'] = new Date(begin).toLocaleDateString('it-IT');
                         el['end'] = new Date(end).toLocaleDateString('it-IT');
                     }
-                    
+
                 }));
                 //testing inizio
                 // console.log(tableAllData[2].name);
@@ -1366,36 +1445,26 @@ import TestChart from '../components/testChart.vue';
                 //     else{
                 //         el['title'] = indicatorDescription.indicatorDescription[tableAllData[i].name].title;
                 //     }
-                     
+
                 // }
-                // console.log(title);     
+                // console.log(title);
                 //testing fine
                 self.tableAllData = {data: tableAllData.filter(el => el.begin && el.end)};
-                const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure);
-                self.cipaisData  = this.tableAllData.data.filter(el=>{
-                if(el.procedures[0].includes("CIPAIS")&& selectedProc.includes(el.procedures[0])){
-                    return true;
-                }
-                else {
-                    return false;
-                };
-                })
             })
-           
         },
         tableSetData () {
 
             var self = this;
-        
+
             const substr = self.tableProps.search.toLowerCase();
 
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
-            
+
             const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
                                 // self.features.features[self.selectedMarker].properties.names
             const filteredSortedData = this.tableAllData.data.filter(el=>{
-                
+
                 if(!el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0]) ){
                     return true;
                 }
@@ -1428,7 +1497,7 @@ import TestChart from '../components/testChart.vue';
 
             // TODO: Concordare la paginazione e la statistica dei risultati con
             // il numero di dati filtrati.
-            
+
             const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
                 el['title']= indicatorDescription.indicatorDescription[el.name].title;
@@ -1448,25 +1517,28 @@ import TestChart from '../components/testChart.vue';
                 data: slicedData
             };
             this.tableData = tableData;
-            
+
         },
         tableSetDataCipais () {
+            const selectedProc = this.features.features[this.selectedMarker].properties.names;
+            this.selectedCipaisProcedures = selectedProc.filter(el=>el.procedure.includes("CIPAIS"));
+
+        },
+        tableSetDataCipais_old () {
 
             var self = this;
 
             const substr = self.tableProps.search.toLowerCase();
-            const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
+            const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
-            
+
             const filteredSortedData = this.tableAllData.data.filter(el=>{
-                if(el.procedures[0].includes("CIPAIS")&& selectedProc.includes(el.procedures[0])){
-                    return true;
-                }
-                else {
-                    return false;
-                };
-                }).filter(el=>{
+                if (el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0])) {
+                        return true;
+                    } else {
+                        return false;
+            };}).filter(el=>{
                 if (self.tableProps.search.length==0) {
                     return true;
                 } else if (el.description.toLowerCase().includes(substr)) {
@@ -1512,7 +1584,7 @@ import TestChart from '../components/testChart.vue';
                 data: slicedData
             };
             this.tableDataCipais = tableDataCipais;
-            
+
         },
         reloadTable (tableProps) {
             var self = this;
@@ -1750,11 +1822,11 @@ import TestChart from '../components/testChart.vue';
         setSelected(tab){
             this.selected =tab;
         }
-       
-          
-        
+
+
+
     }
-    
+
 }
 
 
@@ -1762,11 +1834,11 @@ import TestChart from '../components/testChart.vue';
 
 </script>
 <style>
-.table > thead > tr > th:last-child, 
-.table > tbody > tr > th:last-child, 
-.table > tfoot > tr > th:last-child, 
-.table > thead > tr > td:last-child, 
-.table > tbody > tr > td:last-child, 
+.table > thead > tr > th:last-child,
+.table > tbody > tr > th:last-child,
+.table > tfoot > tr > th:last-child,
+.table > thead > tr > td:last-child,
+.table > tbody > tr > td:last-child,
 .table > tfoot > tr > td:last-child {
   width: auto;
 }
