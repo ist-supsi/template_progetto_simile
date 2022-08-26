@@ -9,508 +9,331 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-12">
-                    <!-- <card> -->
-                    <!-- <card v-if="showDescription"> -->
-                        <!-- <template slot="header">
-                          <h5 class="title">LAGO CERESIO</h5>
-                          <p class="category">Descrizione</p>
-                        </template> -->
-                        <div class="row">
-                            <!-- <div class="col-7">
-                                Lorem ipsum dolor sit amet. Ea dignissimos aspernatur et quaerat quia et quasi ipsa et voluptates debitis sit ipsum laudantium sed nobis accusantium quo quidem debitis.
-                                Non possimus dolorum qui dolores optio aut quasi dolorem. In adipisci voluptatem et consectetur sequi aut recusandae iste. Non nesciunt earum qui tempora maiores At dolorem sunt quo quia officiis.
-                                Sed facilis sunt in omnis dolor et consequatur autem aut ducimus nisi ea eius quibusdam et omnis quasi? Qui nobis mollitia eos perspiciatis asperiores et magni sequi? Non quos consequatur 33 sint facilis qui deserunt quae ex nemo illum et distinctio voluptas.<br><br>
-                                Ad libero obcaecati a atque quibusdam sed commodi iusto 33 maiores et minus debitis qui dolores dolor eum corrupti laudantium. Et exercitationem pariatur ut ipsa eveniet quo necessitatibus odit aut rerum harum et maiores odio et dolores amet ut inventore incidunt.
-                                Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
-                                vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
-                            </div> -->
-                            <div class="col-8">
-                            <!-- <div class="row">
-                                <div class="col">
-                                    <div v-if="selectedMarker">
-                                        <h4>Figino</h4>
-                                    </div>
-                                    <div v-if="!selectedMarker">
-                                        <h4>Gandria</h4>
-                                    </div>
+                <!-- <div class="col-7">
+                    Lorem ipsum dolor sit amet. Ea dignissimos aspernatur et quaerat quia et quasi ipsa et voluptates debitis sit ipsum laudantium sed nobis accusantium quo quidem debitis.
+                    Non possimus dolorum qui dolores optio aut quasi dolorem. In adipisci voluptatem et consectetur sequi aut recusandae iste. Non nesciunt earum qui tempora maiores At dolorem sunt quo quia officiis.
+                    Sed facilis sunt in omnis dolor et consequatur autem aut ducimus nisi ea eius quibusdam et omnis quasi? Qui nobis mollitia eos perspiciatis asperiores et magni sequi? Non quos consequatur 33 sint facilis qui deserunt quae ex nemo illum et distinctio voluptas.<br><br>
+                    Ad libero obcaecati a atque quibusdam sed commodi iusto 33 maiores et minus debitis qui dolores dolor eum corrupti laudantium. Et exercitationem pariatur ut ipsa eveniet quo necessitatibus odit aut rerum harum et maiores odio et dolores amet ut inventore incidunt.
+                    Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
+                    vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
+                </div> -->
+                <div class="col-8">
+                    <div class="row">
+                        <div class="col-6">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                    <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                    <i :class="getCardIcon(cards[0].name)"
+                                      data-toggle="tooltip"
+                                      title="cards[0].title||'no data'"></i>
                                 </div>
-                            </div> -->
-                              <div class="row">
-
-                                  <div class="col-6">
-                                      <stats-card>
-                                          <div slot="header" class="icon-warning">
-                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                            <i :class="getCardIcon(cards[0].name)"
-                                              data-toggle="tooltip"
-                                              title="cards[0].title||'no data'"></i>
-                                          </div>
-                                          <div slot="content">
-                                            <p v-if="!cards[0].title" class="card-category placeholder-glow">
-                                              <span class="placeholder col-12"></span>
-                                            </p>
-                                            <p v-else class="card-category">{{cards[0].title || "--"}}</p>
-                                            <h4 class="card-title">{{cards[0].data || "N.P."}} {{cards[0].uom || ""}}</h4>
-                                            <p class="card-category">{{cards[0].message || "--"}}</p>
-                                          </div>
-                                          <div slot="footer">
-                                              <i v-if="cards[0].data===null" class="fa fa-refresh fa-spin"></i>
-                                              <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                              <i v-if="cards[0].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[0].time && cards[0].time.date}}
-                                              <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
-                                          </div>
-                                      </stats-card>
-                                  </div>
-                                  <div class="col-6">
-                                      <stats-card>
-                                          <div slot="header" class="icon-warning">
-                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                            <i :class="getCardIcon(cards[1].name)"
-                                              data-toggle="tooltip"
-                                              title="cards[1].title||'no data'"></i>
-                                          </div>
-                                          <div slot="content">
-                                            <p v-if="!cards[1].title" class="card-category placeholder-glow">
-                                              <span class="placeholder col-12"></span>
-                                            </p>
-                                            <p v-else class="card-category">{{cards[1].title || "--"}}</p>
-                                            <h4 class="card-title">{{cards[1].data || "N.P."}} {{cards[1].uom || ""}}</h4>
-                                            <p class="card-category">{{cards[1].message || "--"}}</p>
-                                          </div>
-                                          <div slot="footer">
-                                              <i v-if="cards[1].data===null" class="fa fa-refresh fa-spin"></i>
-                                              <i v-if="cards[1].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                              <i v-if="cards[1].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[1].time && cards[1].time.date}}
-                                              <i v-if="cards[1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[1].time && cards[1].time.time}}
-                                          </div>
-                                      </stats-card>
-                                  </div>
-                                  <!-- <div class="col-6">
-                                      <stats-card>
-                                          <div slot="header" class="icon-warning">
-                                            <i class="fa fa-cloud text-primary"
-                                              data-toggle="tooltip"
-                                              title="Umidità"></i>
-                                          </div>
-                                          <div slot="content">
-                                            <p class="card-category">Umidità atmosferica</p>
-                                            <h4 class="card-title">30%</h4>
-                                            <p class="card-category">da stazione meteo</p>
-                                          </div>
-                                          <div slot="footer">
-
-                                              <i class="fa fa-calendar" aria-hidden="true"></i>oggi
-                                              <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
-                                          </div>
-                                      </stats-card>
-                                  </div> -->
-                              </div>
-                              <!-- <div class="row">
-                                  <div class="col-6">
-                                      <stats-card>
-                                          <div slot="header" class="icon-warning">
-                                            <i class="fa fa-flag text-info"
-                                              data-toggle="tooltip"
-                                              title="Velocità del vento"></i>
-                                          </div>
-                                          <div slot="content">
-                                            <p class="card-category">Velocità del vento</p>
-                                            <h4 class="card-title">20km/h</h4>
-                                            <p class="card-category">da stazione meteo</p>
-                                          </div>
-                                          <div slot="footer">
-
-                                              <i class="fa fa-calendar" aria-hidden="true"></i>oggi
-                                              <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
-                                          </div>
-                                      </stats-card>
-                                  </div>
-                                  <div class="col-6">
-                                      <stats-card>
-                                          <div slot="header" class="icon-warning">
-                                            <i class="fa fa-compass text-info"
-                                              data-toggle="tooltip"
-                                              title="Velocità del vento"></i>
-                                          </div>
-                                          <div slot="content">
-                                            <p class="card-category">Direzione del vento</p>
-                                            <h4 class="card-title">NNE</h4>
-                                            <p class="card-category">da stazione meteo</p>
-                                          </div>
-                                          <div slot="footer">
-
-                                              <i class="fa fa-calendar" aria-hidden="true"></i>oggi
-                                              <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
-                                          </div>
-                                      </stats-card>
-                                  </div>
-                              </div> -->
-                              <div class="row">
-                                  <div class="col-6">
-                                      <stats-card>
-                                          <div slot="header" class="icon-warning">
-                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                            <i :class="getCardIcon(cards[2].name)"
-                                              data-toggle="tooltip"
-                                              title="cards[2].title||'no data'"></i>
-                                          </div>
-                                          <div slot="content">
-                                            <p v-if="!cards[2].title" class="card-category placeholder-glow">
-                                              <span class="placeholder col-12"></span>
-                                            </p>
-                                            <p v-else class="card-category">{{cards[2].title || "--"}}</p>
-                                            <h4 class="card-title">{{cards[2].data || "N.P."}} {{cards[2].uom || ""}}</h4>
-                                            <p class="card-category">{{cards[2].message || "--"}}</p>
-                                          </div>
-                                          <div slot="footer">
-                                              <i v-if="cards[2].data===null" class="fa fa-refresh fa-spin"></i>
-                                              <i v-if="cards[2].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                              <i v-if="cards[2].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[2].time && cards[2].time.date}}
-                                              <i v-if="cards[2].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[2].time && cards[2].time.time}}
-                                          </div>
-                                      </stats-card>
-                                      <!-- <stats-card>
-                                          <div slot="header" class="icon-warning">
-                                            <i class="fa fa-thermometer text-warning"
-                                              data-toggle="tooltip"
-                                              title="Temperatura superficiale"></i>
-                                          </div>
-                                          <div slot="content">
-                                            <p class="card-category">Temperatura dell'acqua</p>
-                                            <h4 class="card-title"><b>{{lastTemp04}}</b></h4>
-                                            <p class="card-category">profondità: 40cm</p>
-                                          </div>
-                                          <div slot="footer">
-                                              <i v-if="lastTemp04Time===null" class="fa fa-refresh fa-spin"></i>
-                                              <i v-if="lastTemp04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.date}}
-                                              <i v-if="lastTemp04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.time}}
-                                          </div>
-                                      </stats-card> -->
-                                  </div>
-                                  <div class="col-6">
-                                      <stats-card>
-                                          <div slot="header" class="icon-warning">
-                                            <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                            <i :class="getCardIcon(cards[3].name)"
-                                              data-toggle="tooltip"
-                                              title="cards[3].title||'no data'"></i>
-                                          </div>
-                                          <div slot="content">
-                                            <p v-if="!cards[3].title" class="card-category placeholder-glow">
-                                              <span class="placeholder col-12"></span>
-                                            </p>
-                                            <p v-else class="card-category">{{cards[3].title || "--"}}</p>
-                                            <h4 class="card-title">{{cards[3].data || "N.P."}} {{cards[3].uom || ""}}</h4>
-                                            <p class="card-category">{{cards[3].message || "--"}}</p>
-                                          </div>
-                                          <div slot="footer">
-                                              <i v-if="cards[3].data===null" class="fa fa-refresh fa-spin"></i>
-                                              <i v-if="cards[3].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                              <i v-if="cards[3].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[3].time && cards[3].time.date}}
-                                              <i v-if="cards[3].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[3].time && cards[3].time.time}}
-                                          </div>
-                                      </stats-card>
-                                      <!-- <stats-card>
-                                          <div slot="header" class="icon-warning">
-                                            <i class="fa fa-flask text-primary"
-                                              data-toggle="tooltip"
-                                              title="Ossigeno disciolto"></i>
-                                          </div>
-                                          <div slot="content">
-                                            <p class="card-category">Ossigeno disciolto</p>
-                                            <h4 class="card-title"><b>{{lastO2s04}}</b></h4>
-                                            <p class="card-category">profondità: 40cm</p>
-                                          </div>
-                                          <div slot="footer">
-                                              <i v-if="lastO2s04Time===null" class="fa fa-refresh fa-spin"></i>
-                                              <i v-if="lastO2s04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.date}}
-                                              <i v-if="lastO2s04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.time}}
-                                          </div>
-                                      </stats-card> -->
-                                  </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-6">
-                                    <stats-card>
-                                        <div slot="header" class="icon-warning">
-                                          <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                          <i :class="getCardIcon(cards[4].name)"
-                                            data-toggle="tooltip"
-                                            title="cards[4].title||'no data'"></i>
-                                        </div>
-                                        <div slot="content">
-                                          <p v-if="!cards[4].title" class="card-category placeholder-glow">
-                                            <span class="placeholder col-12"></span>
-                                          </p>
-                                          <p v-else class="card-category">{{cards[4].title || "--"}}</p>
-                                          <h4 class="card-title">{{cards[4].data || "N.P."}} {{cards[4].uom || ""}}</h4>
-                                          <p class="card-category">{{cards[4].message || "--"}}</p>
-                                        </div>
-                                        <div slot="footer">
-                                            <i v-if="cards[4].data===null" class="fa fa-refresh fa-spin"></i>
-                                            <i v-if="cards[4].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                            <i v-if="cards[4].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[4].time && cards[4].time.date}}
-                                            <i v-if="cards[4].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[4].time && cards[4].time.time}}
-                                        </div>
-                                    </stats-card>
-                                    <!-- <stats-card>
-                                        <div slot="header" class="icon-warning">
-                                          <i class="fa fa-tint text-primary"
-                                            data-toggle="tooltip"
-                                            title="Trasparenza acque"></i>
-                                        </div>
-                                        <div slot="content">
-                                          <p class="card-category">Trasparenza</p>
-                                          <h4 class="card-title"><b>{{lastSdtFig}}</b></h4>
-                                          <p class="card-category">località: Figino</p>
-                                        </div>
-                                        <div slot="footer">
-                                            <i v-if="lastSdtTime===null" class="fa fa-refresh fa-spin"></i>
-                                            <i v-if="lastSdtTime" class="fa fa-calendar" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.date}}
-                                            <i v-if="lastSdtTime" class="fa fa-clock-o" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.time}}
-                                        </div>
-                                    </stats-card> -->
+                                <div slot="content">
+                                    <p v-if="!cards[0].title" class="card-category placeholder-glow">
+                                      <span class="placeholder col-12"></span>
+                                    </p>
+                                    <p v-else class="card-category">{{cards[0].title || "--"}}</p>
+                                    <h4 class="card-title">{{cards[0].data || "N.P."}} {{cards[0].uom || ""}}</h4>
+                                    <p class="card-category">{{cards[0].message || "--"}}</p>
                                 </div>
-                                <div class="col-6">
-                                    <stats-card>
-                                        <div slot="header" class="icon-warning">
-                                          <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                          <i :class="getCardIcon(cards[5].name)"
-                                            data-toggle="tooltip"
-                                            title="cards[5].title||'no data'"></i>
-                                        </div>
-                                        <div slot="content">
-                                          <p v-if="!cards[5].title" class="card-category placeholder-glow">
-                                            <span class="placeholder col-12"></span>
-                                          </p>
-                                          <p v-else class="card-category">{{cards[5].title || "--"}}</p>
-                                          <h4 class="card-title">{{cards[5].data || "N.P."}} {{cards[5].uom || ""}}</h4>
-                                          <p class="card-category">{{cards[5].message || "--"}}</p>
-                                        </div>
-                                        <div slot="footer">
-                                            <i v-if="cards[5].data===null" class="fa fa-refresh fa-spin"></i>
-                                            <i v-if="cards[5].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                            <i v-if="cards[5].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[5].time && cards[5].time.date}}
-                                            <i v-if="cards[5].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[5].time && cards[5].time.time}}
-                                        </div>
-                                    </stats-card>
-                                    <!-- <stats-card>
-                                        <div slot="header" class="icon-warning">
-                                          <i class="fa fa-pagelines text-success"
-                                            data-toggle="tooltip"
-                                            title="Clorofilla e alghe"></i>
-                                        </div>
-                                        <div slot="content">
-                                          <p class="card-category">Clorofilla e alghe</p>
-                                          <h4 class="card-title">20 μg/L</h4>
-                                          <p class="card-category">località: Figino</p>
-                                        </div>
-                                        <div slot="footer">
-                                          <i class="fa fa-calendar" aria-hidden="true"></i>oggi
-                                          <i class="fa fa-clock-o" aria-hidden="true"></i>adesso
-                                        </div>
-                                    </stats-card> -->
-
+                                <div slot="footer">
+                                    <i v-if="cards[0].data===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                    <i v-if="cards[0].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[0].time && cards[0].time.date}}
+                                    <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
                                 </div>
-                              </div>
-                            </div>
-
-                            <div class="col-4">
-                                <card style="height: 94%;">
-                                <l-map
-                                    v-if="showMap"
-                                    :zoom="currentZoom"
-                                    :bounds="bounds"
-                                    :options="mapOptions"
-                                    @update:center="centerUpdate"
-                                    @update:zoom="zoomUpdate"
-                                    style="height: 100%;"
-
-                                  >
-                                  <l-tile-layer
-                                      :url="url"
-                                      :attribution="attribution"
-                                  />
-                                    <!-- <l-tile-layer
-                                      :url="url"
-                                      :attribution="attribution"
-                                    ></l-tile-layer> -->
-                                    <!-- <l-control-layers /> -->
-                                      <l-wms-tile-layer
-                                        v-for="layer in layers"
-                                        :key="layer.name"
-                                        :base-url="wmsUrl"
-                                        :layers="layer.layers"
-                                        :visible="layer.visible"
-                                        :name="layer.name"
-                                        :transparent="layer.transparent"
-                                        :format="layer.format"
-                                        :opacity="layer.opacity"
-                                        layer-type="overlay"
-
-
-                                      ></l-wms-tile-layer>
-
-                                      <!-- <v-marker-cluster>
-                                        <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">
-                                        </v-marker>
-                                      </v-marker-cluster> -->
-
-
-                                      <l-geo-json
-                                          ref="markerLayer"
-                                          :geojson="features"
-                                          :options="markerLayerOptions()"
-
-                                      />
-                                  </l-map>
-                                </card>
-                            </div>
+                            </stats-card>
+                        </div>
+                        <div class="col-6">
+                            <stats-card>
+                                <div slot="header" class="icon-warning">
+                                    <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                    <i :class="getCardIcon(cards[1].name)"
+                                      data-toggle="tooltip"
+                                      title="cards[1].title||'no data'"></i>
+                                </div>
+                                <div slot="content">
+                                    <p v-if="!cards[1].title" class="card-category placeholder-glow">
+                                      <span class="placeholder col-12"></span>
+                                    </p>
+                                    <p v-else class="card-category">{{cards[1].title || "--"}}</p>
+                                    <h4 class="card-title">{{cards[1].data || "N.P."}} {{cards[1].uom || ""}}</h4>
+                                    <p class="card-category">{{cards[1].message || "--"}}</p>
+                                </div>
+                                <div slot="footer">
+                                    <i v-if="cards[1].data===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="cards[1].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                    <i v-if="cards[1].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[1].time && cards[1].time.date}}
+                                    <i v-if="cards[1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[1].time && cards[1].time.time}}
+                                </div>
+                            </stats-card>
                         </div>
                     </div>
-                    <!-- </card> -->
+                  <div class="row">
+                      <div class="col-6">
+                          <stats-card>
+                              <div slot="header" class="icon-warning">
+                                <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                <i :class="getCardIcon(cards[2].name)"
+                                  data-toggle="tooltip"
+                                  title="cards[2].title||'no data'"></i>
+                              </div>
+                              <div slot="content">
+                                <p v-if="!cards[2].title" class="card-category placeholder-glow">
+                                  <span class="placeholder col-12"></span>
+                                </p>
+                                <p v-else class="card-category">{{cards[2].title || "--"}}</p>
+                                <h4 class="card-title">{{cards[2].data || "N.P."}} {{cards[2].uom || ""}}</h4>
+                                <p class="card-category">{{cards[2].message || "--"}}</p>
+                              </div>
+                              <div slot="footer">
+                                  <i v-if="cards[2].data===null" class="fa fa-refresh fa-spin"></i>
+                                  <i v-if="cards[2].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                  <i v-if="cards[2].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[2].time && cards[2].time.date}}
+                                  <i v-if="cards[2].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[2].time && cards[2].time.time}}
+                              </div>
+                          </stats-card>
+                          <!-- <stats-card>
+                              <div slot="header" class="icon-warning">
+                                <i class="fa fa-thermometer text-warning"
+                                  data-toggle="tooltip"
+                                  title="Temperatura superficiale"></i>
+                              </div>
+                              <div slot="content">
+                                <p class="card-category">Temperatura dell'acqua</p>
+                                <h4 class="card-title"><b>{{lastTemp04}}</b></h4>
+                                <p class="card-category">profondità: 40cm</p>
+                              </div>
+                              <div slot="footer">
+                                  <i v-if="lastTemp04Time===null" class="fa fa-refresh fa-spin"></i>
+                                  <i v-if="lastTemp04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.date}}
+                                  <i v-if="lastTemp04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.time}}
+                              </div>
+                          </stats-card> -->
+                      </div>
+                      <div class="col-6">
+                          <stats-card>
+                              <div slot="header" class="icon-warning">
+                                <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                <i :class="getCardIcon(cards[3].name)"
+                                  data-toggle="tooltip"
+                                  title="cards[3].title||'no data'"></i>
+                              </div>
+                              <div slot="content">
+                                <p v-if="!cards[3].title" class="card-category placeholder-glow">
+                                  <span class="placeholder col-12"></span>
+                                </p>
+                                <p v-else class="card-category">{{cards[3].title || "--"}}</p>
+                                <h4 class="card-title">{{cards[3].data || "N.P."}} {{cards[3].uom || ""}}</h4>
+                                <p class="card-category">{{cards[3].message || "--"}}</p>
+                              </div>
+                              <div slot="footer">
+                                  <i v-if="cards[3].data===null" class="fa fa-refresh fa-spin"></i>
+                                  <i v-if="cards[3].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                  <i v-if="cards[3].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[3].time && cards[3].time.date}}
+                                  <i v-if="cards[3].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[3].time && cards[3].time.time}}
+                              </div>
+                          </stats-card>
+                          <!-- <stats-card>
+                              <div slot="header" class="icon-warning">
+                                <i class="fa fa-flask text-primary"
+                                  data-toggle="tooltip"
+                                  title="Ossigeno disciolto"></i>
+                              </div>
+                              <div slot="content">
+                                <p class="card-category">Ossigeno disciolto</p>
+                                <h4 class="card-title"><b>{{lastO2s04}}</b></h4>
+                                <p class="card-category">profondità: 40cm</p>
+                              </div>
+                              <div slot="footer">
+                                  <i v-if="lastO2s04Time===null" class="fa fa-refresh fa-spin"></i>
+                                  <i v-if="lastO2s04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.date}}
+                                  <i v-if="lastO2s04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.time}}
+                              </div>
+                          </stats-card> -->
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                        <stats-card>
+                            <div slot="header" class="icon-warning">
+                              <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                              <i :class="getCardIcon(cards[4].name)"
+                                data-toggle="tooltip"
+                                title="cards[4].title||'no data'"></i>
+                            </div>
+                            <div slot="content">
+                              <p v-if="!cards[4].title" class="card-category placeholder-glow">
+                                <span class="placeholder col-12"></span>
+                              </p>
+                              <p v-else class="card-category">{{cards[4].title || "--"}}</p>
+                              <h4 class="card-title">{{cards[4].data || "N.P."}} {{cards[4].uom || ""}}</h4>
+                              <p class="card-category">{{cards[4].message || "--"}}</p>
+                            </div>
+                            <div slot="footer">
+                                <i v-if="cards[4].data===null" class="fa fa-refresh fa-spin"></i>
+                                <i v-if="cards[4].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                <i v-if="cards[4].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[4].time && cards[4].time.date}}
+                                <i v-if="cards[4].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[4].time && cards[4].time.time}}
+                            </div>
+                        </stats-card>
+                        <!-- <stats-card>
+                            <div slot="header" class="icon-warning">
+                              <i class="fa fa-tint text-primary"
+                                data-toggle="tooltip"
+                                title="Trasparenza acque"></i>
+                            </div>
+                            <div slot="content">
+                              <p class="card-category">Trasparenza</p>
+                              <h4 class="card-title"><b>{{lastSdtFig}}</b></h4>
+                              <p class="card-category">località: Figino</p>
+                            </div>
+                            <div slot="footer">
+                                <i v-if="lastSdtTime===null" class="fa fa-refresh fa-spin"></i>
+                                <i v-if="lastSdtTime" class="fa fa-calendar" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.date}}
+                                <i v-if="lastSdtTime" class="fa fa-clock-o" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.time}}
+                            </div>
+                        </stats-card> -->
+                    </div>
+                    <div class="col-6">
+                        <stats-card>
+                            <div slot="header" class="icon-warning">
+                                <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                <i :class="getCardIcon(cards[5].name)"
+                                    data-toggle="tooltip"
+                                    title="cards[5].title||'no data'"></i>
+                            </div>
+                            <div slot="content">
+                                <p v-if="!cards[5].title" class="card-category placeholder-glow">
+                                    <span class="placeholder col-12"></span>
+                                </p>
+                                <p v-else class="card-category">{{cards[5].title || "--"}}</p>
+                                <h4 class="card-title">{{cards[5].data || "N.P."}} {{cards[5].uom || ""}}</h4>
+                                <p class="card-category">{{cards[5].message || "--"}}</p>
+                            </div>
+                            <div slot="footer">
+                                <i v-if="cards[5].data===null" class="fa fa-refresh fa-spin"></i>
+                                <i v-if="cards[5].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                <i v-if="cards[5].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[5].time && cards[5].time.date}}
+                                <i v-if="cards[5].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[5].time && cards[5].time.time}}
+                            </div>
+                        </stats-card>
+                    </div>
+                  </div>
+                </div>
 
-                        <!-- <card v-if="showTemperatureAnalysis">
+                <div class="col-4">
+                    <card style="height: 94%;">
+                    <l-map
+                        v-if="showMap"
+                        :zoom="currentZoom"
+                        :bounds="bounds"
+                        :options="mapOptions"
+                        @update:center="centerUpdate"
+                        @update:zoom="zoomUpdate"
+                        style="height: 100%;"
 
-                        </card> -->
-                    <!-- </card> -->
+                      >
+                      <l-tile-layer
+                          :url="url"
+                          :attribution="attribution"
+                      />
+                        <!-- <l-tile-layer
+                          :url="url"
+                          :attribution="attribution"
+                        ></l-tile-layer> -->
+                        <!-- <l-control-layers /> -->
+                          <l-wms-tile-layer
+                            v-for="layer in layers"
+                            :key="layer.name"
+                            :base-url="wmsUrl"
+                            :layers="layer.layers"
+                            :visible="layer.visible"
+                            :name="layer.name"
+                            :transparent="layer.transparent"
+                            :format="layer.format"
+                            :opacity="layer.opacity"
+                            layer-type="overlay"
 
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Home</button>
-            </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Profile</button>
+
+                          ></l-wms-tile-layer>
+
+                          <!-- <v-marker-cluster>
+                            <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">
+                            </v-marker>
+                          </v-marker-cluster> -->
+
+
+                          <l-geo-json
+                              ref="markerLayer"
+                              :geojson="features"
+                              :options="markerLayerOptions()"
+
+                          />
+                      </l-map>
+                    </card>
+                </div>
+            </div>
+
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a :class="{'nav-link': true, active: selectedTab=='home'}" id="home-tab" data-toggle="tab"
+                        role="tab" aria-controls="home"
+                        aria-selected="true" @click="selectedTab='home'">Home</a>
                 </li>
-
-        </ul>
-        <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-                <div class="col-12">
-                    <data-table
-                        :columns="tableColumns2"
-                        :data="tableData"
-                        :per-page="[5, 10, 15]"
-                        @on-table-props-changed="reloadTable"
-                        >
-                        </data-table>
-                </div>
-
-            </div>
-            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
-
-                <div class="col-12">
-                    <p>ciao</p>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-12">
-            <figure v-for="data in dataCipais" class="highcharts-figure">
-                <highcharts :options="data"></highcharts>
-            </figure>
-        </div>
-
-        <!-- <div class="col-md-12">
-                <figure v-for="infoChart in cipaisData" class="highcharts-figure">
-                <highcharts id="container" :options="lineOptions"></highcharts>
-                </figure>
-
-                </div>
-                            -->
-
-
-
-                    <!-- <TabNav :tabs="['Serie Storiche', 'Dati CIPAIS']" :selected="selected" @selected="setSelected">
-
-                        <Tab :isSelected="selected === 'Serie Storiche'">
-
+                <li class="nav-item">
+                    <a :class="{'nav-link': true, active: selectedTab=='cipais'}" id="profile-tab" data-toggle="tab"
+                        role="tab" aria-controls="profile"
+                        aria-selected="false" @click="selectedTab='cipais'">Pannello CIPAIS</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='home', active: selectedTab=='home'}"
+                        id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}">
+                            <h4>Misure disponibili</h4>
+                            <div class="row">
                                 <div class="col-12">
                                     <data-table
                                         :columns="tableColumns2"
                                         :data="tableData"
                                         :per-page="[5, 10, 15]"
                                         @on-table-props-changed="reloadTable"
-                                    >
-                                    </data-table>
-                                </div>
-
-                        </Tab>
-                        <Tab :isSelected="selected === 'Dati CIPAIS'">
-                            <div class="row">
-                                <div class="col-12">
-                                    <CipaisLugano>
-
-                                    </CipaisLugano>
-                                     <data-table
-                                        :columns="tableColumns2"
-                                        :data="tableDataCipais"
-                                        :per-page="[5, 10, 15]"
-                                        @on-table-props-changed="reloadTableCipais"
                                         >
                                     </data-table>
                                 </div>
                             </div>
-                        </Tab>
-
-                    </TabNav>
-                      -->
-<!--
-
-                      <div class="container-fluid">
-                            <div class="alert alert-simile" role="alert">
-                                    <h5>Serie Storiche</h5>
-                            </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <data-table
-                                                :columns="tableColumns2"
-                                                :data="tableData"
-                                                :per-page="[5, 10, 15]"
-                                                @on-table-props-changed="reloadTable"
-                                            >
-                                            </data-table>
-                                        </div>
-                                    </div>
                         </div>
-                        <div class="container-fluid">
-                            <div class="alert alert-simile" role="alert">
-                                <h5>Dati Cipais</h5>
-                            </div>
 
-                                <div class="row">
-                                    <div class="col-12">
-                                         <data-table
-                                            :columns="tableColumns2"
-                                            :data="tableDataCipais"
-                                            :per-page="[5, 10, 15]"
-                                            @on-table-props-changed="reloadTableCipais"
-                                        >
-                                    </data-table>
+                    </div>
+                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='cipais', active: selectedTab=='cipais'}"
+                        id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div v-if="dataCipais.length>0" class="container-fluid">
+                            <div v-for="ii in Array.from(Array(dataCipais.length), (n,i)=>i).filter(e=>!(e%2))" class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="dataCipais[ii]"></highcharts>
+                                    </figure>
                                 </div>
-
-                        </div>   -->
-
-
-                    <!-- <card>
-
-                        <div v-if="Object.keys(series_data).length>0" class="row">
-                            <div class="col-md-12">
-                                <highcharts :options="series_data"></highcharts>
+                                <div class="col-lg-6 col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="dataCipais[ii+1]"></highcharts>
+                                    </figure>
+                                </div>
+                            </div>
+                            <div class="row" v-if="dataCipais.length%2">
+                                <div class="col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="dataCipais[dataCipais.length]"></highcharts>
+                                    </figure>
+                                </div>
                             </div>
                         </div>
-
-                        <div slot="footer">
-                            <i v-if="Object.keys(series_data).length==0"
-                                class="fa fa-refresh fa-spin"></i>
-                        </div>
-                    </card> -->
-                </div>
+                    </div>
             </div>
         </div>
+    </div>
+</div>
 
 </template>
 <script>
@@ -542,8 +365,6 @@
 
     import 'leaflet/dist/leaflet.css';
 
-
-
     // import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
     // import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
 
@@ -565,6 +386,7 @@
     import Highcharts from 'highcharts';
 
     import istsosToHighcharts from './istsosToHighcharts';
+    import { mean,std,min,sqrt,max } from 'mathjs';
 
     Highcharts.setOptions({
         chart: {
@@ -657,6 +479,7 @@
         data () {
             return {
                 // markers: [],
+                selectedTab: 'home',
                 selectedCipaisProcedures: [],
                 cipaisData: [],
                 selectedProc: null,
@@ -1163,34 +986,12 @@
         },
 
     methods: {
-
-
         getCardIcon (name) {
-
-            // if (name == 'air-relative-humidity') {
-            //     return 'fa fa-cloud text-primary';
-            // } else if (name == 'air-temperature') {
-            //     return 'fa fa-sun-o text-warning';
-            // } else if (name == 'water-temperature') {
-            //     return 'fa fa-thermometer text-warning';
-            // } else if (name == 'water-O2S') {
-            //     return 'fa fa-flask text-primary';
-            // } else if (name == 'wind-speed-max') {
-            //     return 'fa fa-flag text-info';
-            // } else if (name == 'wind-direction') {
-            //     return 'fa fa-compass text-info';
-            // } else if (name == 'water-SDT') {
-            //     return 'fa fa-tint text-primary';
-            // };
-            //  return 'fa fa-question-circle-o text-info';
-
             if(indicatorDescription.indicatorDescription[name]==undefined || indicatorDescription.indicatorDescription[name].icon==undefined){
-                 return 'fa fa-question-circle-o text-info';
-            }
-            else {
+                return 'fa fa-question-circle-o text-info';
+            } else {
                 return indicatorDescription.indicatorDescription[name].icon;
-            }
-
+            };
         },
         loadCipaisData () {
             var self = this;
@@ -1212,7 +1013,23 @@
                     ).then(response=>{
                         const result = istsosToHighcharts.istosToLine(response);
                         // result.options.name = 'foo';
-                        console.log(result);
+                        const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+
+                        result.options.yAxis.plotLines = [{
+                            color: 'darkgrey',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: variableAverage,
+                            label: {
+                                text: 'media della serie',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            }
+                        }];
+
+                        result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                        result.options.subtitle.text = `${info.description} (${result.uom})`;
                         dataCipais.push(result.options);
                     });
                     prms.push(prm);
@@ -1285,82 +1102,28 @@
             return {
                 pointToLayer: function (feature, latlng) {
                     let clr;
-                    if ( !self.selectedProc ) {
-                        clr = 'text-secondary'
-                    } else if ( feature.properties.names.includes(self.selectedProc) ) {
-                        clr = 'text-warning'
+                    if ( feature.properties.markerIndex == self.selectedMarker ) {
+                        clr = 'text-primary'
                     } else {
-                        clr = 'text-dark'
+                        clr = 'text-secondary'
                     };
                     const fontAwesomeIcon = L.divIcon({
                         html: `<i class="fa fa-map-marker fa-4x ${clr}"></i>`,
                         iconSize: [40, 80],
                         iconAnchor: [20, 40],
-                        className: '',
-
-
+                        className: ''
                     });
-                    const redMarker = L.divIcon({
-                        html: `<i class="fa fa-map-marker fa-4x text-danger ${clr}"></i>`,
-                        iconSize: [40, 80],
-                        iconAnchor: [20, 40],
-                        className: '',
-
-                    });
-                    // const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
-                    //     self.selectedMarker=feature.properties.markerIndex
-                    //     });
 
                     const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
-                        marker.setIcon(redMarker);
-                        self.selectedMarker=feature.properties.markerIndex;
+                        self.selectedMarker=feature.properties.markerIndex
+                    });
 
-                    })
+                    if (feature.properties.names[0].message) {
+                        marker.bindTooltip(`<h6>${feature.properties.names[0].message}</h6>`)
+                    };
 
-                    // return marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-                    if(feature.properties.names[0].message==undefined){
-
-                         return marker.bindPopup("N.P.").openPopup();
-
-                    }
-                      else{
-
-                        return marker.bindPopup("<h5>"+feature.properties.names[0].message+"</h5>").openPopup();
-
-                      }
-                    }
-
-                    // return marker;
+                    return marker;
                 }
-            },
-
-
-        // p2l (feature, latlng) {
-        //     const fontAwesomeIcon = L.divIcon({
-        //         html: '<i class="fa fa-map-marker fa-4x"></i>',
-        //         iconSize: [20, 20],
-        //         className: 'myDivIcon'
-        //     });
-        //     const marker = L.marker(latlng, {icon: fontAwesomeIcon});
-        //     return marker;
-        // },
-        // addMarker (lon, lat) {
-        //     const feat = {
-        //       'type': 'Feature',
-        //       'properties': {},
-        //       'geometry': {
-        //         'type': 'Point',
-        //         'coordinates': [lon, lat]
-        //       }
-        //     };
-        //     this.markerLayer.geojson.features.push(feat);
-        // },
-        getSelectedMarker(){
-             if(feature.properties.names[0].message==undefined){
-                 return "N.P.";
-            }
-            else {
-                return feature.properties.names[0].message;
             }
         },
         removeMarker(index) {

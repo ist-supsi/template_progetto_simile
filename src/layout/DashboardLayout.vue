@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" style="height: 100%;">
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
 
