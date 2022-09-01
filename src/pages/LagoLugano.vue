@@ -333,7 +333,7 @@
             </div>
         </div>
     </div>
-</div>
+
 
 </template>
 <script>
@@ -388,35 +388,35 @@
     import istsosToHighcharts from './istsosToHighcharts';
     import { mean,std,min,sqrt,max } from 'mathjs';
 
-    Highcharts.setOptions({
-        chart: {
-            inverted: true,
-            marginLeft: 135,
-            type: 'bullet'
-        },
-        title: {
-            text: null
-        },
-        legend: {
-            enabled: false
-        },
-        yAxis: {
-            gridLineWidth: 0
-        },
-        plotOptions: {
-            series: {
-                pointPadding: 0.25,
-                borderWidth: 0,
-                color: '#000'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        exporting: {
-            enabled: false
-        }
-    });
+    // Highcharts.setOptions({
+    //     chart: {
+    //         inverted: true,
+    //         marginLeft: 135,
+    //         type: 'bullet'
+    //     },
+    //     title: {
+    //         text: null
+    //     },
+    //     legend: {
+    //         enabled: false
+    //     },
+    //     yAxis: {
+    //         gridLineWidth: 0
+    //     },
+    //     plotOptions: {
+    //         series: {
+    //             pointPadding: 0.25,
+    //             borderWidth: 0,
+    //             color: '#000'
+    //         }
+    //     },
+    //     credits: {
+    //         enabled: false
+    //     },
+    //     exporting: {
+    //         enabled: false
+    //     }
+    // });
 
   //   loadBullet(Highcharts);
   //

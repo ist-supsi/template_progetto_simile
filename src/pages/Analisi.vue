@@ -1,13 +1,45 @@
 <template>
 
     <div class="content">
+        
+        
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12">
-                    <card><H3>Descrizione</H3>
+                <div class="col-6">
+                    <span height="200px"><H3>Descrizione</H3>
                       {{ description }}
-                    </card>
+                    </span>
                 </div>
+
+            
+                        <div class="col-6">
+                        <!-- <div class="alert alert-simile"> -->
+                        <stats-card>
+                            <div slot="header" class="icon-warning">
+                                <!-- <i class="nc-icon nc-chart text-warning"></i> -->
+                                <i :class="getCardIcon2(cards[0].name)"
+                                    data-toggle="tooltip"
+                                    title="cards[0].title||'no data'"></i>
+
+                            </div>
+                            <div slot="content">
+                                <p v-if="!cards[0].title" class="card-category placeholder-glow">
+                                <span class="placeholder col-12"></span>
+                                </p>
+                                <p v-else class="card-category">{{cards[0].title || "--"}}</p>
+                                <h4 class="card-title">{{cards[0].data || "N.P."}} {{cards[0].uom || ""}}</h4>
+                                <p class="card-category">{{cards[0].message || "--"}}</p>
+                            </div>
+                            <div slot="footer">
+                                <i v-if="cards[0].data===null" class="fa fa-refresh fa-spin"></i>
+                                <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                <i v-if="cards[0].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[0].time && cards[0].time.date}}
+                                <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
+                            </div>
+                        </stats-card>
+                        <!-- </div> -->
+                        </div>
+                
             </div>
 
 
@@ -31,47 +63,19 @@
                             </div>
                         </div>
 
-    <div class="row d-flex justify-content-center">
-            <div class="col-6">
-                <!-- <div class="alert alert-simile"> -->
-                <stats-card>
-                    <div slot="header" class="icon-warning">
-                        <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                        <i :class="getCardIcon2(cards[0].name)"
-                            data-toggle="tooltip"
-                            title="cards[0].title||'no data'"></i>
-
-                    </div>
-                    <div slot="content">
-                         <p v-if="!cards[0].title" class="card-category placeholder-glow">
-                         <span class="placeholder col-12"></span>
-                        </p>
-                        <p v-else class="card-category">{{cards[0].title || "--"}}</p>
-                        <h4 class="card-title">{{cards[0].data || "N.P."}} {{cards[0].uom || ""}}</h4>
-                        <p class="card-category">{{cards[0].message || "--"}}</p>
-                    </div>
-                    <div slot="footer">
-                        <i v-if="cards[0].data===null" class="fa fa-refresh fa-spin"></i>
-                        <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i>
-                        <i v-if="cards[0].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[0].time && cards[0].time.date}}
-                        <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
-                    </div>
-                </stats-card>
-                <!-- </div> -->
-            </div>
-        </div>
+<!--     
                         <div v-if="Object.keys(bulletOptions).length>0" class="row">
                             <div class="col-md-12">
                               <figure class="highcharts-figure">
                                   <highcharts id="bulletgraph" :options="bulletOptions"></highcharts>
                                 </figure>
                             </div>
-                        </div>
+                        </div> -->
 
 
                         <div v-if="Object.keys(series_data).length>0" class="row">
                             <div class="col-md-12">
-                                <highcharts :options="series_data"></highcharts>
+                                    <highcharts :options="series_data"></highcharts> 
                             </div>
                         </div>
 
@@ -88,7 +92,7 @@
 <script>
     import {Chart} from 'highcharts-vue';
     import Highcharts from 'highcharts';
-    import loadBullet from 'highcharts/modules/bullet.js';
+    // import loadBullet from 'highcharts/modules/bullet.js';
 
     import ChartCard from 'src/components/Cards/ChartCard.vue'
     import HighchartCard from 'src/components/Cards/HighchartCard.vue'
@@ -103,14 +107,15 @@
     import { mean,std,min,sqrt,max } from 'mathjs';
     import indicatorDescription  from '../indicatorDescription';
 
+    import istsosToHighcharts from './istsosToHighcharts';
 
-    loadBullet(Highcharts);
+    // loadBullet(Highcharts);
 
     Highcharts.setOptions({
         chart: {
             inverted: true,
             marginLeft: 135,
-            type: 'bullet'
+            type: 'line'
         },
         title: {
             text: null
@@ -137,62 +142,63 @@
     });
 
     // const dataColor = '#4572A7'
-    const dataColor = 'black'
 
-    const BULLET_DEFAULTS = {
-        chart: {
-            marginTop: 40,
-        },
-        title: {
-            text: "Ultimo valore misurato"
-        },
-        subtitle: {style: {"color": "#666666", 'padding-bottom': '1.5em'}},
-        xAxis: {
-            categories: ['<span class="hc-cat-title">Temperature</span><br/>°C']
-        },
-        yAxis: {
-            plotBands: [
-                {
-                    from: 0,
-                    to: 0,
-                    color: 'lightgrey'
-                },
-                {
-                    from: 0,
-                    to: 0,
-                    color: 'rgb(116, 180, 202)',
-                    // label: {'text': 'm-3σ'},
-                }, {
-                    from: 0,
-                    to: 0,
-                    color: 'rgb(93, 133, 198)',
-                    // label: {text: 'm±σ'}
+    // const dataColor = 'black'
 
-                }, {
-                    from: 0,
-                    to: 0,
-                    color: 'rgb(68, 125, 99)',
-                    // label: {'text': 'm+3σ'},
-                }, {
-                    from: 0,
-                    to: 0,
-                    color: 'lightgrey',
-                    // label: {'text': 'm+3σ'},
-                }
-            ],
-            title: null
-        },
-        series: [{
-            data: [{
-                y: 0,
-                target: null,
-                color: dataColor
-            }]
-        }],
-        tooltip: {
-            pointFormat: '<b>{point.y}</b> (with target at {point.target})'
-        }
-    };
+    // const BULLET_DEFAULTS = {
+    //     chart: {
+    //         marginTop: 40,
+    //     },
+    //     title: {
+    //         text: "Ultimo valore misurato"
+    //     },
+    //     subtitle: {style: {"color": "#666666", 'padding-bottom': '1.5em'}},
+    //     xAxis: {
+    //         categories: ['<span class="hc-cat-title">Temperature</span><br/>°C']
+    //     },
+    //     yAxis: {
+    //         plotBands: [
+    //             {
+    //                 from: 0,
+    //                 to: 0,
+    //                 color: 'lightgrey'
+    //             },
+    //             {
+    //                 from: 0,
+    //                 to: 0,
+    //                 color: 'rgb(116, 180, 202)',
+    //                 // label: {'text': 'm-3σ'},
+    //             }, {
+    //                 from: 0,
+    //                 to: 0,
+    //                 color: 'rgb(93, 133, 198)',
+    //                 // label: {text: 'm±σ'}
+
+    //             }, {
+    //                 from: 0,
+    //                 to: 0,
+    //                 color: 'rgb(68, 125, 99)',
+    //                 // label: {'text': 'm+3σ'},
+    //             }, {
+    //                 from: 0,
+    //                 to: 0,
+    //                 color: 'lightgrey',
+    //                 // label: {'text': 'm+3σ'},
+    //             }
+    //         ],
+    //         title: null
+    //     },
+    //     series: [{
+    //         data: [{
+    //             y: 0,
+    //             target: null,
+    //             color: dataColor
+    //         }]
+    //     }],
+    //     tooltip: {
+    //         pointFormat: '<b>{point.y}</b> (with target at {point.target})'
+    //     }
+    // };
 
     const LINE_DEFAULTS = {
         chart: {
@@ -241,7 +247,8 @@
             highcharts: Chart,
             HighchartCard,
             NotifyButton,
-            BULLET_DEFAULTS,
+            // BULLET_DEFAULTS,
+            // LINE_DEFAULTS,
             // ModalButton,
             // Modal
         },
@@ -313,7 +320,7 @@
                 // const info = self.istosToBullet(result);
                 // console.log(info);
                 // self.bulletOptions = info.options;
-                console.log(result.data.data[0].result.DataArray.field[1].name);
+               
                 const info= {
                     message: result.data.data[0].featureOfInterest.name.split(':').at(-1),
                     data: result.data.data[0].result.DataArray.values[0][1].toFixed(2),
@@ -335,7 +342,7 @@
                 self.cards = [info];
 
             });
-
+           
             this.groupedProcedures = this.allProcedure.reduce((acc, it) => {
 
                 let arr = it.name.split('_');
@@ -382,15 +389,15 @@
         },
         methods: {
             setBegin (value) {
-                // console.log(value);
+                console.log(value);
                 this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
             },
             setSeries (prm) {
                 var self = this;
                 self.series_data = {};
+                
                 let counter=0;
                 for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
-
                     this.istsos.fetchSeries(
                         procedure,
                         this.procedureInfos[procedure].observedproperties,
@@ -460,7 +467,7 @@
                             });
 
                         };
-
+                        
                         result.options.series[0].color = this.category_colors[counter];
                         counter = counter+1;
                         if ( !self.series_data.series ) {
@@ -469,6 +476,7 @@
                             self.series_data.series.push(result.options.series[0]);
                             self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
                         };
+                       
                     });
                 };
             },
@@ -516,14 +524,14 @@
                   info.options.series[0].data = dataArray.values.filter(el => el[1]!==null).map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
                   info.options.series[0].name = response.data.data[0].name;
                   // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
-
                   return info;
             },
             getCardIcon2(name){
-                console.log(name);
+                
                 return indicatorDescription.getCardIcon(name);
 
             },
+            
         },
   }
 </script>
@@ -580,5 +588,11 @@
 .highcharts-data-table tr:hover {
     background: #f1f7ff;
 }
+
+.stats-card {
+    height: 150px;
+    overflow-y: auto;
+}
+
 
 </style>
