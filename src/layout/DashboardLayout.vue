@@ -40,10 +40,10 @@
         <i class="nc-icon nc-tag-content"></i>
         <p>Lago di Como</p>
       </sidebar-link>
-      <sidebar-link to="/admin/overview">
+      <!-- <sidebar-link to="/admin/overview">
         <i class="nc-icon nc-globe-2"></i>
         <p>GIS</p>
-      </sidebar-link>
+      </sidebar-link> -->
       <!--sidebar-link to="/admin/maps">
         <i class="nc-icon nc-pin-3"></i>
         <p>Maps</p>

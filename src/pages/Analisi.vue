@@ -72,8 +72,29 @@
                             </div>
                         </div> -->
 
+                        <div v-if="series_data.length>0" class="container-fluid">
+                            <div v-for="ii in Array.from(Array(Object.keys(series_data).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="series_data[ii]"></highcharts>
+                                    </figure>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="series_data[ii+1]"></highcharts>
+                                    </figure>
+                                </div>
+                            </div>
+                            <div class="row" v-if="series_data.length%2">
+                                <div class="col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="series_data[series_data.length]"></highcharts>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
 
-                        <div v-if="Object.keys(series_data).length>0" class="row">
+                        <!-- <div v-if="Object.keys(series_data).length>0" class="row">
                             <div class="col-md-12">
                                     <highcharts :options="series_data"></highcharts> 
                             </div>
@@ -82,7 +103,7 @@
                         <div slot="footer">
                             <i v-if="Object.keys(series_data).length==0"
                                 class="fa fa-refresh fa-spin"></i>
-                        </div>
+                        </div> -->
                     </card>
                 </div>
             </div>
@@ -256,6 +277,7 @@
             last_value: null,
             series_data: {},
             allProcedure: this.$root.allProcedure,
+            // allProcedure: {},
             groupedProcedures: {},
             procedureInfos: {},
             variableInfo: {},
@@ -276,6 +298,7 @@
           series_data: {
              handler(val){
                // do stuff
+               
              },
              deep: true
           },
@@ -293,7 +316,8 @@
           },
           seriesBegin: {
               handler(value) {
-                  this.setSeries()
+                //   this.setSeries()
+                  
               }
           },
           variableInfo: {
@@ -311,7 +335,7 @@
             }).then((response)=>{
                 self.variableInfo = response;
             });
-
+            
             let prm = this.istsos.fetch({
                 procedures: this.analisysVariable,
                 eventtime: 'last',
@@ -320,7 +344,7 @@
                 // const info = self.istosToBullet(result);
                 // console.log(info);
                 // self.bulletOptions = info.options;
-               
+              
                 const info= {
                     message: result.data.data[0].featureOfInterest.name.split(':').at(-1),
                     data: result.data.data[0].result.DataArray.values[0][1].toFixed(2),
@@ -337,12 +361,12 @@
                 else{
                     info.title = indicatorDescription.indicatorDescription[info.name].title;
                     info.icon = indicatorDescription.indicatorDescription[info.name].icon;
-
                 }
                 self.cards = [info];
-
+            
             });
-           
+            
+           if(this.allProcedure!=undefined){
             this.groupedProcedures = this.allProcedure.reduce((acc, it) => {
 
                 let arr = it.name.split('_');
@@ -382,29 +406,38 @@
                 //     };
                 //     return acc;
                 // };
-            }, {});
+                
 
+                }, {});
+
+           };
+           
+           
             // this.setSeries(prm);
 
         },
         methods: {
             setBegin (value) {
-                console.log(value);
                 this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
             },
             setSeries (prm) {
                 var self = this;
+                // self.series_data = {};
                 self.series_data = {};
                 
                 let counter=0;
-                for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
+                
+                // if(this.groupedProcedures[self.procedureInfos[this.analisysVariable]]!=undefined){
+                    for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
+                    console.log(this.groupedProcedures)
                     this.istsos.fetchSeries(
                         procedure,
                         this.procedureInfos[procedure].observedproperties,
                         this.seriesBegin,
                         this.seriesEnd
                     ).then((response)=>{
-                        const result = self.istosToLine(response);
+                        const result = istsosToHighcharts.istosToLine(response);
+                        // const result = self.istosToLine(response);
                         if ( procedure!=self.analisysVariable ) {
                             result.options.series[0].visible = false;
                         } else {
@@ -443,35 +476,36 @@
                             }];
 
 
-                            if ( prm===undefined ) {
-                                prm = Promise.resolve();
-                            };
-                            (prm).then(()=>{
-                                self.bulletOptions.yAxis.plotBands[0].from = min([0, min(series)]);
-                                self.bulletOptions.yAxis.plotBands[0].to = variableAverage-3*variableStd;
+                            // if ( prm===undefined ) {
+                            //     prm = Promise.resolve();
+                            // };
+                            // (prm).then(()=>{
+                            //     self.bulletOptions.yAxis.plotBands[0].from = min([0, min(series)]);
+                            //     self.bulletOptions.yAxis.plotBands[0].to = variableAverage-3*variableStd;
 
-                                self.bulletOptions.yAxis.plotBands[1].from = variableAverage-3*variableStd;
-                                self.bulletOptions.yAxis.plotBands[1].to = variableAverage-variableStd;
-                                self.bulletOptions.yAxis.plotBands[1].label = {text: 'm-3σ'}
-                                self.bulletOptions.yAxis.plotBands[2].from = variableAverage-variableStd;
-                                self.bulletOptions.yAxis.plotBands[2].to = variableAverage+variableStd;
-                                self.bulletOptions.yAxis.plotBands[2].label = {text: 'm±σ'}
-                                self.bulletOptions.yAxis.plotBands[3].from = variableAverage+variableStd;
-                                self.bulletOptions.yAxis.plotBands[3].to = variableAverage+3*variableStd;
-                                self.bulletOptions.yAxis.plotBands[3].label = {text: 'm+3σ'}
-                                self.bulletOptions.series[0].data[0].target = series.slice(-1)[0];
+                            //     self.bulletOptions.yAxis.plotBands[1].from = variableAverage-3*variableStd;
+                            //     self.bulletOptions.yAxis.plotBands[1].to = variableAverage-variableStd;
+                            //     self.bulletOptions.yAxis.plotBands[1].label = {text: 'm-3σ'}
+                            //     self.bulletOptions.yAxis.plotBands[2].from = variableAverage-variableStd;
+                            //     self.bulletOptions.yAxis.plotBands[2].to = variableAverage+variableStd;
+                            //     self.bulletOptions.yAxis.plotBands[2].label = {text: 'm±σ'}
+                            //     self.bulletOptions.yAxis.plotBands[3].from = variableAverage+variableStd;
+                            //     self.bulletOptions.yAxis.plotBands[3].to = variableAverage+3*variableStd;
+                            //     self.bulletOptions.yAxis.plotBands[3].label = {text: 'm+3σ'}
+                            //     self.bulletOptions.series[0].data[0].target = series.slice(-1)[0];
 
-                                // self.bulletOptions.yAxis.plotBands[4].from = variableAverage+3*variableStd;
-                                // self.bulletOptions.yAxis.plotBands[4].to = max(series);
+                            //     // self.bulletOptions.yAxis.plotBands[4].from = variableAverage+3*variableStd;
+                            //     // self.bulletOptions.yAxis.plotBands[4].to = max(series);
 
-                            });
+                            // });
 
                         };
-                        
                         result.options.series[0].color = this.category_colors[counter];
                         counter = counter+1;
+                        
                         if ( !self.series_data.series ) {
-                            self.series_data = result.options;
+                            self.series_data = result.options.series;
+                            
                         } else {
                             self.series_data.series.push(result.options.series[0]);
                             self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
@@ -479,6 +513,8 @@
                        
                     });
                 };
+                // };
+               
             },
             istosToBullet (response) {
                 var self = this;

@@ -17,29 +17,30 @@
                     Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
                     vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
                 </div> -->
+                
                 <div class="col-8">
-                    <div class="row">
+                    <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
                         <div class="col-6">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                    <i :class="getCardIcon(cards[0].name)"
+                                    <i :class="getCardIcon(cards[ii].name)"
                                       data-toggle="tooltip"
-                                      title="cards[0].title||'no data'"></i>
+                                      title="cards[ii].title||'no data'"></i>
                                 </div>
                                 <div slot="content">
-                                    <p v-if="!cards[0].title" class="card-category placeholder-glow">
+                                    <p v-if="!cards[ii].title" class="card-category placeholder-glow">
                                       <span class="placeholder col-12"></span>
                                     </p>
-                                    <p v-else class="card-category">{{cards[0].title || "--"}}</p>
-                                    <h4 class="card-title">{{cards[0].data || "N.P."}} {{cards[0].uom || ""}}</h4>
-                                    <p class="card-category">{{cards[0].message || "--"}}</p>
+                                    <p v-else class="card-category">{{cards[ii].title || "--"}}</p>
+                                    <h4 class="card-title">{{cards[ii].data || "N.P."}} {{cards[ii].uom || ""}}</h4>
+                                    <p class="card-category">{{cards[ii].message || "--"}}</p>
                                 </div>
                                 <div slot="footer">
-                                    <i v-if="cards[0].data===null" class="fa fa-refresh fa-spin"></i>
-                                    <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                    <i v-if="cards[0].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[0].time && cards[0].time.date}}
-                                    <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
+                                    <i v-if="cards[ii].data===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="cards[ii].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                    <i v-if="cards[ii].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.date}}
+                                    <i v-if="cards[ii].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.time}}
                                 </div>
                             </stats-card>
                         </div>
@@ -47,180 +48,29 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                    <i :class="getCardIcon(cards[1].name)"
+                                    <i :class="getCardIcon(cards[ii+1].name)"
                                       data-toggle="tooltip"
-                                      title="cards[1].title||'no data'"></i>
+                                      title="cards[ii+1].title||'no data'"></i>
                                 </div>
                                 <div slot="content">
-                                    <p v-if="!cards[1].title" class="card-category placeholder-glow">
+                                    <p v-if="!cards[ii+1].title" class="card-category placeholder-glow">
                                       <span class="placeholder col-12"></span>
                                     </p>
-                                    <p v-else class="card-category">{{cards[1].title || "--"}}</p>
-                                    <h4 class="card-title">{{cards[1].data || "N.P."}} {{cards[1].uom || ""}}</h4>
-                                    <p class="card-category">{{cards[1].message || "--"}}</p>
+                                    <p v-else class="card-category">{{cards[ii+1].title || "--"}}</p>
+                                    <h4 class="card-title">{{cards[ii+1].data || "N.P."}} {{cards[ii+1].uom || ""}}</h4>
+                                    <p class="card-category">{{cards[ii+1].message || "--"}}</p>
                                 </div>
                                 <div slot="footer">
-                                    <i v-if="cards[1].data===null" class="fa fa-refresh fa-spin"></i>
-                                    <i v-if="cards[1].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                    <i v-if="cards[1].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[1].time && cards[1].time.date}}
-                                    <i v-if="cards[1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[1].time && cards[1].time.time}}
+                                    <i v-if="cards[ii+1].data===null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="cards[ii+1].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                    <i v-if="cards[ii+1].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.date}}
+                                    <i v-if="cards[ii+1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.time}}
                                 </div>
                             </stats-card>
                         </div>
                     </div>
-                  <div class="row">
-                      <div class="col-6">
-                          <stats-card>
-                              <div slot="header" class="icon-warning">
-                                <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                <i :class="getCardIcon(cards[2].name)"
-                                  data-toggle="tooltip"
-                                  title="cards[2].title||'no data'"></i>
-                              </div>
-                              <div slot="content">
-                                <p v-if="!cards[2].title" class="card-category placeholder-glow">
-                                  <span class="placeholder col-12"></span>
-                                </p>
-                                <p v-else class="card-category">{{cards[2].title || "--"}}</p>
-                                <h4 class="card-title">{{cards[2].data || "N.P."}} {{cards[2].uom || ""}}</h4>
-                                <p class="card-category">{{cards[2].message || "--"}}</p>
-                              </div>
-                              <div slot="footer">
-                                  <i v-if="cards[2].data===null" class="fa fa-refresh fa-spin"></i>
-                                  <i v-if="cards[2].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                  <i v-if="cards[2].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[2].time && cards[2].time.date}}
-                                  <i v-if="cards[2].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[2].time && cards[2].time.time}}
-                              </div>
-                          </stats-card>
-                          <!-- <stats-card>
-                              <div slot="header" class="icon-warning">
-                                <i class="fa fa-thermometer text-warning"
-                                  data-toggle="tooltip"
-                                  title="Temperatura superficiale"></i>
-                              </div>
-                              <div slot="content">
-                                <p class="card-category">Temperatura dell'acqua</p>
-                                <h4 class="card-title"><b>{{lastTemp04}}</b></h4>
-                                <p class="card-category">profondità: 40cm</p>
-                              </div>
-                              <div slot="footer">
-                                  <i v-if="lastTemp04Time===null" class="fa fa-refresh fa-spin"></i>
-                                  <i v-if="lastTemp04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.date}}
-                                  <i v-if="lastTemp04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastTemp04Time && lastTemp04Time.time}}
-                              </div>
-                          </stats-card> -->
-                      </div>
-                      <div class="col-6">
-                          <stats-card>
-                              <div slot="header" class="icon-warning">
-                                <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                <i :class="getCardIcon(cards[3].name)"
-                                  data-toggle="tooltip"
-                                  title="cards[3].title||'no data'"></i>
-                              </div>
-                              <div slot="content">
-                                <p v-if="!cards[3].title" class="card-category placeholder-glow">
-                                  <span class="placeholder col-12"></span>
-                                </p>
-                                <p v-else class="card-category">{{cards[3].title || "--"}}</p>
-                                <h4 class="card-title">{{cards[3].data || "N.P."}} {{cards[3].uom || ""}}</h4>
-                                <p class="card-category">{{cards[3].message || "--"}}</p>
-                              </div>
-                              <div slot="footer">
-                                  <i v-if="cards[3].data===null" class="fa fa-refresh fa-spin"></i>
-                                  <i v-if="cards[3].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                  <i v-if="cards[3].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[3].time && cards[3].time.date}}
-                                  <i v-if="cards[3].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[3].time && cards[3].time.time}}
-                              </div>
-                          </stats-card>
-                          <!-- <stats-card>
-                              <div slot="header" class="icon-warning">
-                                <i class="fa fa-flask text-primary"
-                                  data-toggle="tooltip"
-                                  title="Ossigeno disciolto"></i>
-                              </div>
-                              <div slot="content">
-                                <p class="card-category">Ossigeno disciolto</p>
-                                <h4 class="card-title"><b>{{lastO2s04}}</b></h4>
-                                <p class="card-category">profondità: 40cm</p>
-                              </div>
-                              <div slot="footer">
-                                  <i v-if="lastO2s04Time===null" class="fa fa-refresh fa-spin"></i>
-                                  <i v-if="lastO2s04Time" class="fa fa-calendar" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.date}}
-                                  <i v-if="lastO2s04Time" class="fa fa-clock-o" aria-hidden="true"></i>{{lastO2s04Time && lastO2s04Time.time}}
-                              </div>
-                          </stats-card> -->
-                      </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-6">
-                        <stats-card>
-                            <div slot="header" class="icon-warning">
-                              <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                              <i :class="getCardIcon(cards[4].name)"
-                                data-toggle="tooltip"
-                                title="cards[4].title||'no data'"></i>
-                            </div>
-                            <div slot="content">
-                              <p v-if="!cards[4].title" class="card-category placeholder-glow">
-                                <span class="placeholder col-12"></span>
-                              </p>
-                              <p v-else class="card-category">{{cards[4].title || "--"}}</p>
-                              <h4 class="card-title">{{cards[4].data || "N.P."}} {{cards[4].uom || ""}}</h4>
-                              <p class="card-category">{{cards[4].message || "--"}}</p>
-                            </div>
-                            <div slot="footer">
-                                <i v-if="cards[4].data===null" class="fa fa-refresh fa-spin"></i>
-                                <i v-if="cards[4].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                <i v-if="cards[4].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[4].time && cards[4].time.date}}
-                                <i v-if="cards[4].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[4].time && cards[4].time.time}}
-                            </div>
-                        </stats-card>
-                        <!-- <stats-card>
-                            <div slot="header" class="icon-warning">
-                              <i class="fa fa-tint text-primary"
-                                data-toggle="tooltip"
-                                title="Trasparenza acque"></i>
-                            </div>
-                            <div slot="content">
-                              <p class="card-category">Trasparenza</p>
-                              <h4 class="card-title"><b>{{lastSdtFig}}</b></h4>
-                              <p class="card-category">località: Figino</p>
-                            </div>
-                            <div slot="footer">
-                                <i v-if="lastSdtTime===null" class="fa fa-refresh fa-spin"></i>
-                                <i v-if="lastSdtTime" class="fa fa-calendar" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.date}}
-                                <i v-if="lastSdtTime" class="fa fa-clock-o" aria-hidden="true"></i>{{lastSdtTime && lastSdtTime.time}}
-                            </div>
-                        </stats-card> -->
-                    </div>
-                    <div class="col-6">
-                        <stats-card>
-                            <div slot="header" class="icon-warning">
-                                <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                <i :class="getCardIcon(cards[5].name)"
-                                    data-toggle="tooltip"
-                                    title="cards[5].title||'no data'"></i>
-                            </div>
-                            <div slot="content">
-                                <p v-if="!cards[5].title" class="card-category placeholder-glow">
-                                    <span class="placeholder col-12"></span>
-                                </p>
-                                <p v-else class="card-category">{{cards[5].title || "--"}}</p>
-                                <h4 class="card-title">{{cards[5].data || "N.P."}} {{cards[5].uom || ""}}</h4>
-                                <p class="card-category">{{cards[5].message || "--"}}</p>
-                            </div>
-                            <div slot="footer">
-                                <i v-if="cards[5].data===null" class="fa fa-refresh fa-spin"></i>
-                                <i v-if="cards[5].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                <i v-if="cards[5].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[5].time && cards[5].time.date}}
-                                <i v-if="cards[5].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[5].time && cards[5].time.time}}
-                            </div>
-                        </stats-card>
-                    </div>
-                  </div>
+                  
                 </div>
-
                 <div class="col-4">
                     <card style="height: 94%;">
                     <l-map
@@ -1051,13 +901,15 @@
             // };
 
 
-            let cards = [];
+            let cards = {};
             function updateCard(index, result) {
                 // self.cards[index].description = self.cards[index].description.substring(0, 27)
                 // const title = self.tableAllData.filter((el)=>{el.definition==result.urn})[0];
                 // cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27);
-
-                if(indicatorDescription.indicatorDescription[cards[index].name]==undefined){
+                if(cards[index]==undefined){
+                    cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
+                }
+                else if(indicatorDescription.indicatorDescription[cards[index].name]==undefined){
                 cards[index].title = cards[index].description.substring(0, 27);
                 }
                 else{
@@ -1080,8 +932,8 @@
             for (let ii = 0; ii < 6; ii++) {
                 if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
                     let info = self.features.features[self.selectedMarker].properties.names[ii];
-                    cards.push(info)
-                    // this.cards[ii] = info;
+                    // cards.push(info)
+                    cards[ii] = info;
 
                     cards[ii].data = null;
                     calls.push(this.istsos.fetchBy(
