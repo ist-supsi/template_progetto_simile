@@ -681,8 +681,6 @@
             var self = this;
             this.$root.whereAmI = 'Lago di Lugano';
 
-
-
             const good_names = [
                 "air-temperature",
                 "air-relative-humidity",
@@ -1024,10 +1022,11 @@
                 this.istsos.fetchObserverProperties(),
                 this.istsos.fetchProcedures()
             ]).then((results)=>{
-                self.allProcedures = results[1].data.data.reduce((obj, it)=>{
+                self.$root.allProcedures = results[1].data.data.reduce((obj, it)=>{
                     obj[it.name]=it;
                     return obj
                 }, {});
+                self.allProcedures = self.$root.allProcedures;
                 let tableAllData = results[0].data.data;
 
                 tableAllData.forEach((el => {

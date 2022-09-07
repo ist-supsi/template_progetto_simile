@@ -33,7 +33,8 @@ const SidebarPlugin = {
           sidebarStore: SidebarStore,
           dropdownVisible: false,
           istsos: new IstsosIO(proxyUrl, proxyServices),
-          whereAmI: ''
+          whereAmI: '',
+          allProcedures: null
         }
       }
     })

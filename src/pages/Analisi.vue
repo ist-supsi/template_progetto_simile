@@ -72,38 +72,18 @@
                             </div>
                         </div> -->
 
-                        <div v-if="series_data.length>0" class="container-fluid">
-                            <div v-for="ii in Array.from(Array(Object.keys(series_data).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
-                                <div class="col-lg-6 col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="series_data[ii]"></highcharts>
-                                    </figure>
-                                </div>
-                                <div class="col-lg-6 col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="series_data[ii+1]"></highcharts>
-                                    </figure>
-                                </div>
-                            </div>
-                            <div class="row" v-if="series_data.length%2">
-                                <div class="col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="series_data[series_data.length]"></highcharts>
-                                    </figure>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- <div v-if="Object.keys(series_data).length>0" class="row">
+                        <div v-if="Object.keys(series_data)!=null" class="row">
                             <div class="col-md-12">
+                                <figure style="min-width: 100%" class="highcharts-figure">
                                     <highcharts :options="series_data"></highcharts> 
+                                </figure>
                             </div>
                         </div>
 
                         <div slot="footer">
                             <i v-if="Object.keys(series_data).length==0"
                                 class="fa fa-refresh fa-spin"></i>
-                        </div> -->
+                        </div>
                     </card>
                 </div>
             </div>
@@ -132,35 +112,35 @@
 
     // loadBullet(Highcharts);
 
-    Highcharts.setOptions({
-        chart: {
-            inverted: true,
-            marginLeft: 135,
-            type: 'line'
-        },
-        title: {
-            text: null
-        },
-        legend: {
-            enabled: false
-        },
-        yAxis: {
-            gridLineWidth: 0
-        },
-        plotOptions: {
-            series: {
-                pointPadding: 0.25,
-                borderWidth: 0,
-                color: '#000'
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        exporting: {
-            enabled: false
-        }
-    });
+    // Highcharts.setOptions({
+    //     chart: {
+    //         inverted: true,
+    //         marginLeft: 135,
+    //         type: 'line'
+    //     },
+    //     title: {
+    //         text: null
+    //     },
+    //     legend: {
+    //         enabled: false
+    //     },
+    //     yAxis: {
+    //         gridLineWidth: 0
+    //     },
+    //     plotOptions: {
+    //         series: {
+    //             pointPadding: 0.25,
+    //             borderWidth: 0,
+    //             color: '#000'
+    //         }
+    //     },
+    //     credits: {
+    //         enabled: false
+    //     },
+    //     exporting: {
+    //         enabled: false
+    //     }
+    // });
 
     // const dataColor = '#4572A7'
 
@@ -255,7 +235,7 @@
         series: [{
             type: 'line',
             name: '',
-            data: [],
+            data: [1,2,3,],
             // color: dataColor
         }]
     };
@@ -276,8 +256,7 @@
         data () { return {
             last_value: null,
             series_data: {},
-            allProcedure: this.$root.allProcedure,
-            // allProcedure: {},
+            allProcedures: this.$root.allProcedures,
             groupedProcedures: {},
             procedureInfos: {},
             variableInfo: {},
@@ -298,7 +277,6 @@
           series_data: {
              handler(val){
                // do stuff
-               
              },
              deep: true
           },
@@ -316,9 +294,9 @@
           },
           seriesBegin: {
               handler(value) {
-                //   this.setSeries()
-                  
-              }
+                this.setSeries();       
+              },
+              deep: true
           },
           variableInfo: {
               handler(value) {
@@ -344,7 +322,7 @@
                 // const info = self.istosToBullet(result);
                 // console.log(info);
                 // self.bulletOptions = info.options;
-              
+     
                 const info= {
                     message: result.data.data[0].featureOfInterest.name.split(':').at(-1),
                     data: result.data.data[0].result.DataArray.values[0][1].toFixed(2),
@@ -366,8 +344,7 @@
             
             });
             
-           if(this.allProcedure!=undefined){
-            this.groupedProcedures = this.allProcedure.reduce((acc, it) => {
+            this.groupedProcedures = Object.values(this.allProcedures).reduce((acc, it) => {
 
                 let arr = it.name.split('_');
                 let key;
@@ -409,8 +386,6 @@
                 
 
                 }, {});
-
-           };
            
            
             // this.setSeries(prm);
@@ -422,21 +397,19 @@
             },
             setSeries (prm) {
                 var self = this;
-                // self.series_data = {};
                 self.series_data = {};
-                
                 let counter=0;
                 
                 // if(this.groupedProcedures[self.procedureInfos[this.analisysVariable]]!=undefined){
                     for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
-                    console.log(this.groupedProcedures)
+                    
                     this.istsos.fetchSeries(
                         procedure,
                         this.procedureInfos[procedure].observedproperties,
                         this.seriesBegin,
                         this.seriesEnd
                     ).then((response)=>{
-                        const result = istsosToHighcharts.istosToLine(response);
+                        const result = self.istosToLine(response);
                         // const result = self.istosToLine(response);
                         if ( procedure!=self.analisysVariable ) {
                             result.options.series[0].visible = false;
@@ -547,20 +520,26 @@
                   const dataArray = response.data.data[0].result.DataArray;
                   let info = {
                       // order: order,
+                      procedure: this.analisysVariable,
                       options: JSON.parse(JSON.stringify(LINE_DEFAULTS))
                   };
 
-                  info.options.yAxis.title.text = `Temperatura (${dataArray.field[1].uom})`
+                //   info.options.yAxis.title.text = `Temperatura (${dataArray.field[1].uom})`
                   info.uom = dataArray.field[1].uom;
+                  info.x = new Date(dataArray.values[0][0]);
                   // info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
                   // info.options.series[0].data[0].y = dataArray.values[0][1];
                   // info.value = dataArray.values[0][1];
-                  // info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
+                  info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
                   const coeff = 1000 * 60 * 1;
+                  info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
+                //   info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
                   info.options.series[0].data = dataArray.values.filter(el => el[1]!==null).map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
                   info.options.series[0].name = response.data.data[0].name;
+                  info.value = dataArray.values[0][1];
                   // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
                   return info;
+                
             },
             getCardIcon2(name){
                 
