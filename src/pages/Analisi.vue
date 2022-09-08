@@ -55,8 +55,8 @@
                                       <select @input="setBegin($event.target.value)" class="form-control">
                                           <option :value="7">Una settimana</option>
                                           <option :value="35">Un mese</option>
-                                          <option :value="371">Un anno</option>
-                                      </select>
+                                          <option :value="371">Un anno</option> 
+                                       </select> 
                                   </div>
                               </div>
 
@@ -72,11 +72,11 @@
                             </div>
                         </div> -->
 
-                        <div v-if="Object.keys(series_data)!=null" class="row">
+                        <div v-if="Object.keys(series_data).length>0" class="row" >
                             <div class="col-md-12">
-                                <figure style="min-width: 100%" class="highcharts-figure">
-                                    <highcharts :options="series_data"></highcharts> 
-                                </figure>
+                                
+                                    <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts> 
+                                
                             </div>
                         </div>
 
@@ -109,38 +109,91 @@
     import indicatorDescription  from '../indicatorDescription';
 
     import istsosToHighcharts from './istsosToHighcharts';
-
+    import exportingInit from 'highcharts/modules/exporting';
+    import stockInit from 'highcharts/modules/stock'
     // loadBullet(Highcharts);
+    
+    stockInit(Highcharts)
 
-    // Highcharts.setOptions({
-    //     chart: {
-    //         inverted: true,
-    //         marginLeft: 135,
-    //         type: 'line'
-    //     },
-    //     title: {
-    //         text: null
-    //     },
-    //     legend: {
-    //         enabled: false
-    //     },
-    //     yAxis: {
-    //         gridLineWidth: 0
-    //     },
-    //     plotOptions: {
-    //         series: {
-    //             pointPadding: 0.25,
-    //             borderWidth: 0,
-    //             color: '#000'
-    //         }
-    //     },
-    //     credits: {
-    //         enabled: false
-    //     },
-    //     exporting: {
-    //         enabled: false
-    //     }
-    // });
+    Highcharts.setOptions({
+        chart: {
+            zoomType: 'x',
+            inverted: false,
+        },
+        height: '400px',
+        time: {
+            timezone: 'Europe/Rome'
+        },
+        title: {
+            text: 'Serie temporale'
+        },
+        subtitle: {
+            text: document.ontouchstart === undefined ?
+            "clic e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        yAxis: {
+            gridLineWidth: 1,
+            title: {
+              text: ''
+            }
+        },
+        legend: {
+            enabled: true
+        },
+        plotOptions: {
+            line: {marker: {enabled: false}}
+        },
+        rangeSelector: {
+                inputPosition: {
+                align: 'left',
+                x: 0,
+                y: 0
+                 },
+                buttonPosition: {
+                    align: 'right',
+                    x: 0,
+                    y: 0
+                },
+                inputDateFormat: '%b %e, %Y %H:%M',
+                 buttons: [{
+                    type: 'month',
+                    count: 1,
+                    text: '1m',
+                    events: {
+                        click: function() {
+                            alert('Clicked button');
+                        }
+                    }
+                }, {
+                    type: 'month',
+                    count: 3,
+                    text: '3m'
+                }, {
+                    type: 'month',
+                    count: 6,
+                    text: '6m'
+                }, {
+                    type: 'ytd',
+                    text: 'YTD'
+                }, {
+                    type: 'year',
+                    count: 1,
+                    text: '1y'
+                }, {
+                    type: 'all',
+                    text: 'All'
+                }]
+        },
+        series: [{
+            type: 'line',
+            name: '',
+            data: [],
+            // color: dataColor
+        }]
+    });
 
     // const dataColor = '#4572A7'
 
@@ -201,10 +254,13 @@
     //     }
     // };
 
-    const LINE_DEFAULTS = {
+    
+
+    const LINE_DEFAULT_ANALISI = {
         chart: {
             zoomType: 'x',
-            inverted: false
+            inverted: false,
+            
         },
         height: '400px',
         time: {
@@ -232,6 +288,47 @@
         plotOptions: {
             line: {marker: {enabled: false}}
         },
+        rangeSelector: {
+                inputPosition: {
+                align: 'left',
+                x: 0,
+                y: 0
+                 },
+                buttonPosition: {
+                    align: 'right',
+                    x: 0,
+                    y: 0
+                },
+                inputDateFormat: '%b %e, %Y %H:%M',
+                 buttons: [{
+                    type: 'month',
+                    count: 1,
+                    text: '1m',
+                    events: {
+                        click: function() {
+                            alert('Clicked button');
+                        }
+                    }
+                }, {
+                    type: 'month',
+                    count: 3,
+                    text: '3m'
+                }, {
+                    type: 'month',
+                    count: 6,
+                    text: '6m'
+                }, {
+                    type: 'ytd',
+                    text: 'YTD'
+                }, {
+                    type: 'year',
+                    count: 1,
+                    text: '1y'
+                }, {
+                    type: 'all',
+                    text: 'All'
+                }]
+        },
         series: [{
             type: 'line',
             name: '',
@@ -249,7 +346,7 @@
             HighchartCard,
             NotifyButton,
             // BULLET_DEFAULTS,
-            // LINE_DEFAULTS,
+            LINE_DEFAULT_ANALISI,
             // ModalButton,
             // Modal
         },
@@ -277,6 +374,7 @@
           series_data: {
              handler(val){
                // do stuff
+            //    this.setSeries();
              },
              deep: true
           },
@@ -387,15 +485,16 @@
 
                 }, {});
            
-           
+        //    this.setBegin();
             // this.setSeries(prm);
 
         },
         methods: {
             setBegin (value) {
                 this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
+                console.log(this.seriesBegin);
             },
-            setSeries (prm) {
+            setSeries () {
                 var self = this;
                 self.series_data = {};
                 let counter=0;
@@ -410,6 +509,7 @@
                         this.seriesEnd
                     ).then((response)=>{
                         const result = self.istosToLine(response);
+                        
                         // const result = self.istosToLine(response);
                         if ( procedure!=self.analisysVariable ) {
                             result.options.series[0].visible = false;
@@ -476,8 +576,9 @@
                         result.options.series[0].color = this.category_colors[counter];
                         counter = counter+1;
                         
+                        console.log(result)
                         if ( !self.series_data.series ) {
-                            self.series_data = result.options.series;
+                            self.series_data = {series: result.options.series};
                             
                         } else {
                             self.series_data.series.push(result.options.series[0]);
@@ -521,7 +622,7 @@
                   let info = {
                       // order: order,
                       procedure: this.analisysVariable,
-                      options: JSON.parse(JSON.stringify(LINE_DEFAULTS))
+                      options: JSON.parse(JSON.stringify(LINE_DEFAULT_ANALISI))
                   };
 
                 //   info.options.yAxis.title.text = `Temperatura (${dataArray.field[1].uom})`

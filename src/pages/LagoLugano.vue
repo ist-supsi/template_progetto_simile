@@ -1114,7 +1114,7 @@
 
             const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
-                el['title']= indicatorDescription.indicatorDescription[el.name].title;
+                el['title'] = indicatorDescription.indicatorDescription[el.name].title;
                 return el;
             });
             const tableData = {
