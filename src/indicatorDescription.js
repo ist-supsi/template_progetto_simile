@@ -149,7 +149,7 @@ let indicatorDescription =
             tag:'CIPAIS',
         },
 
-        'concentrazione-di-azoto': {
+        'water-NTOT': {
             title : 'Concentrazione di azoto',
             description: `Valore medio annuo delle concentrazioni (medie sulla colonna d'acqua ponderate
             sui volumi) di N totale. La media annua è calcolata a parire dai valori 

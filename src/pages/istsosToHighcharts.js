@@ -1,4 +1,5 @@
 
+
 const category_colors = ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
     '#0d233a', '#77a1e5', '#8bbc21']
 
@@ -19,7 +20,7 @@ const LINE_DEFAULTS = {
         "clic e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
     },
     xAxis: {
-        type: 'datetime'
+        type: 'datetime',
     },
     yAxis: {
         gridLineWidth: 1,
@@ -41,17 +42,70 @@ const LINE_DEFAULTS = {
     }]
 };
 
+let STOCK_DEFAULTS = LINE_DEFAULTS
+STOCK_DEFAULTS['rangeSelector'] = {
+    inputPosition: {
+    align: 'left',
+    x: 0,
+    y: 0
+        },
+    buttonPosition: {
+        align: 'right',
+        x: 0,
+        y: 0
+    },
+    inputDateFormat: '%Y-%m-%d',
+        buttons: [{
+        type: 'month',
+        count: 1,
+        text: '1m',
+        events: {
+            // click: function() {
+            //     alert('Clicked button');
+            // }
+        }
+    }, {
+        type: 'month',
+        count: 3,
+        text: '3m'
+    }, {
+        type: 'month',
+        count: 6,
+        text: '6m'
+    }, {
+        type: 'ytd',
+        text: 'YTD'
+    }, {
+        type: 'year',
+        count: 1,
+        text: '1y'
+    }, {
+        type: 'all',
+        text: 'All'
+    }]
+} 
+
 function epochToTime(epoch) {
     const coeff = 1000 * 60 * 1;
     return (new Date(new Date(Math.round(new Date(epoch).getTime() / coeff) * coeff))).getTime()
 };
 
-function istosToLine (response, title) {
+function istosToLine (response, title, stock = false) {
       const dataArray = response.data.data[0].result.DataArray;
-      let info = {
-          // order: order,
-          options: JSON.parse(JSON.stringify(LINE_DEFAULTS))
-      };
+      let info;
+      if ( !stock ) {
+        info = {
+            // order: order,
+            options: JSON.parse(JSON.stringify(LINE_DEFAULTS))
+        };
+      }
+      else{
+        info = {
+            // order: order,
+            options: JSON.parse(JSON.stringify(STOCK_DEFAULTS))
+        };
+      }
+      
       // console.log(dataArray);
       if (title) { info.options.title = title; };
       info.options.yAxis.title.text = `${dataArray.field[1].name} (${dataArray.field[1].uom})`

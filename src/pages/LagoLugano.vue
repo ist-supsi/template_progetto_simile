@@ -159,25 +159,25 @@
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='cipais', active: selectedTab=='cipais'}"
                         id="profile" role="tabpanel" aria-labelledby="profile-tab">
                         <div v-if="dataCipais.length>0" class="container-fluid">
-                            <div v-for="ii in Array.from(Array(dataCipais.length), (n,i)=>i).filter(e=>!(e%2))" class="row">
+                            <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
                                 <div class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[ii]"></highcharts>
+                                        <highcharts :options="dataCipais[cc[0]]"></highcharts>
                                     </figure>
                                 </div>
-                                <div class="col-lg-6 col-sm-12">
+                                <div v-if="cc[1]" class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[ii+1]"></highcharts>
+                                        <highcharts :options="dataCipais[cc[1]]"></highcharts>
                                     </figure>
                                 </div>
                             </div>
-                            <div class="row" v-if="dataCipais.length%2">
+                            <!-- <div class="row" v-if="dataCipais.length%2">
                                 <div class="col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataCipais[dataCipais.length]"></highcharts>
                                     </figure>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
             </div>
@@ -834,6 +834,13 @@
         },
 
     methods: {
+        loopOnPairs (myarray) {
+            return myarray.reduce(function(result, value, index, array) {
+                if (index % 2 === 0)
+                    result.push(array.slice(index, index + 2));
+                return result;
+                }, []);
+        },
         getCardIcon (name) {
             if(indicatorDescription.indicatorDescription[name]==undefined || indicatorDescription.indicatorDescription[name].icon==undefined){
                 return 'fa fa-question-circle-o text-info';
@@ -875,8 +882,14 @@
 
                             }
                         }];
-
-                        result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                        
+                        if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+                            result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                        }
+                        else{
+                            result.options.title.text = info.description;
+                            console.log(info)
+                        }
                         result.options.subtitle.text = `${info.description} (${result.uom})`;
                         dataCipais.push(result.options);
                     });
