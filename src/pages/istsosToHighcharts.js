@@ -6,7 +6,11 @@ const category_colors = ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
 const LINE_DEFAULTS = {
     chart: {
         zoomType: 'x',
-        inverted: false
+        inverted: false,
+        lang: { 
+            months: ['gennaio', 'febbraio', 'marzo', 'aprile', 
+            'maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre']
+        }
     },
     height: '400px',
     time: {

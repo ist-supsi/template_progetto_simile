@@ -420,10 +420,18 @@
                 // const info = self.istosToBullet(result);
                 // console.log(info);
                 // self.bulletOptions = info.options;
+
+                let data;
+                if(result.data.data[0].result.DataArray.values[0][1]){
+                    data =result.data.data[0].result.DataArray.values[0][1].toFixed(2)
+                }
+                else{
+                    data=null;
+                };
      
                 const info= {
                     message: result.data.data[0].featureOfInterest.name.split(':').at(-1),
-                    data: result.data.data[0].result.DataArray.values[0][1].toFixed(2),
+                    data: data,
                     uom: result.data.data[0].result.DataArray.field[1].uom,
                     name:result.data.data[0].result.DataArray.field[1].name,
                 };

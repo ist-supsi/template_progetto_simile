@@ -71,7 +71,7 @@
                     </div>
                   
                 </div>
-                <div class="col-4">
+                <div class="col-4" style="height: 510px">
                     <card style="height: 94%;">
                     <l-map
                         v-if="showMap"
@@ -743,7 +743,7 @@
 
                 const features = Object.entries(reduced).map(([k, v], ii) => {
                     const coords = k.split(';').map(parseFloat);
-                    bounds.extend(L.latLng(coords[1], coords[0]));
+                    // bounds.extend(L.latLng(coords[1], coords[0]));
                     return {
                         "type": "Feature",
                         "properties": {
