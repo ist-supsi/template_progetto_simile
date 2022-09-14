@@ -17,7 +17,7 @@
                     Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
                     vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
                 </div> -->
-                
+
                 <div class="col-8">
                     <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
                         <div class="col-6">
@@ -69,7 +69,7 @@
                             </stats-card>
                         </div>
                     </div>
-                  
+
                 </div>
                 <div class="col-4" style="height: 510px">
                     <card style="height: 94%;">
@@ -132,7 +132,7 @@
                         aria-selected="true" @click="selectedTab='home'">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='cipais'}" id="profile-tab" data-toggle="tab"
+                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}" id="profile-tab" data-toggle="tab"
                         role="tab" aria-controls="profile"
                         aria-selected="false" @click="selectedTab='cipais'">Pannello CIPAIS</a>
                 </li>
@@ -235,6 +235,8 @@
     import {Chart} from 'highcharts-vue';
     import Highcharts from 'highcharts';
 
+    import IstsosIO from '../manageIstsosToken.js';
+
     import istsosToHighcharts from './istsosToHighcharts';
     import { mean,std,min,sqrt,max } from 'mathjs';
 
@@ -329,6 +331,7 @@
         data () {
             return {
                 // markers: [],
+                istsos: null,
                 selectedTab: 'home',
                 selectedCipaisProcedures: [],
                 cipaisData: [],
@@ -340,38 +343,6 @@
                 lastTemp04Time: null,
                 lastO2s04: '',
                 lastO2s04Time: null,
-                // lastTemp25: '',
-                // lastTemp25Time: null,
-                // lastTemp50: '',
-                // lastTemp50Time: null,
-                // lastTemp80: '',
-                // lastTemp80Time: null,
-                // lastTemp125: '',
-                // lastTemp125Time: null,
-                // lastTemp200: '',
-                // lastTemp200Time: null,
-                // lastO2c04: '',
-                // lastO2c04Time: null,
-                // lastO2c25: '',
-                // lastO2c25Time: null,
-                // lastO2c50: '',
-                // lastO2c50Time: null,
-                // lastO2c80: '',
-                // lastO2c80Time: null,
-                // lastO2c125: '',
-                // lastO2c125Time: null,
-                // lastO2c200: '',
-                // lastO2c200Time: null,
-                // lastO2s25: '',
-                // lastO2s25Time: null,
-                // lastO2s50: '',
-                // lastO2s50Time: null,
-                // lastO2s80: '',
-                // lastO2s80Time: null,
-                // lastO2s125: '',
-                // lastO2s125Time: null,
-                // lastO2s200Time: null,
-                // lastO2s200: '',
                 selected_temperature: 'TEMP_0_4',
                 selected_o2c: 'O2C_0_4',
                 last_temperature_data: {},
@@ -681,6 +652,8 @@
             var self = this;
             this.$root.whereAmI = 'Lago di Lugano';
 
+            this.istsos = this.ceresioIstosos;
+
             const good_names = [
                 "air-temperature",
                 "air-relative-humidity",
@@ -828,7 +801,7 @@
             })
 
             // TODO: DEPRECATE
-            this.populateCockpit();
+            // this.populateCockpit();
             this.$root.dropdownVisible = false;
 
         },
@@ -882,7 +855,7 @@
 
                             }
                         }];
-                        
+
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
                         }

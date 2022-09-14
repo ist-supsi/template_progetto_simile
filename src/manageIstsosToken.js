@@ -1,6 +1,8 @@
 
 import axios from 'axios';
 
+import config from '../config.js'
+
 const dataColor = '#4572A7'
 
 const TEMPERATURE_DEFAULTS = {
@@ -102,11 +104,12 @@ axios.interceptors.request.use(function (config) {
 // https://istsos.ddns.net/istsos/wa/istsos/services/<servizio>/observedproperties
 
 export default class IstsosIO {
-  constructor(proxyUrl, services) {
+  constructor(services, proxyEndpoint='index', baseUrl='https://istsos.ddns.net') {
     this.services = services;
     // this.formname = formname;
     // this.formkey = formkey;
-    this.proxy = proxyUrl;
+    this.proxy = `${window.location.protocol}//${config.istsosProxy.host}${config.istsosProxy.port}/${config.istsosProxy.name}/${proxyEndpoint}`;
+    this.baseUrl = baseUrl;
     this._tokenInfo = null;
     this._expiry = null;
     this._wait_for_me = null;
@@ -147,7 +150,7 @@ export default class IstsosIO {
   _call(params) {
       var self = this;
       const path = Object.entries({...(params||{})}).map((pair)=>pair.join('/')).join('/');
-      const url = new URL(`/istsos/wa/istsos/${path}`, 'https://istsos.ddns.net').toString();
+      const url = new URL(`/istsos/wa/istsos/${path}`, this.baseUrl).toString();
       return this._getToken().then((token) => {
           var config = {
               method: 'get',

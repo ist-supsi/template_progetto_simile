@@ -19,10 +19,8 @@ const SidebarStore = {
   }
 }
 
-// const proxyHost = window.location.hostname
-// const proxyUrl = window.location.protocol + '//' + proxyHost + ':8000/istsos/index';
-const proxyUrl = `${window.location.protocol}//${config.istsosProxy.host}${config.istsosProxy.port}/${config.istsosProxy.name}/index`
-const proxyServices = 'ceresiohourly'
+// const proxyUrl = `${window.location.protocol}//${config.istsosProxy.host}${config.istsosProxy.port}/${config.istsosProxy.name}/index`
+// const proxyServices = 'ceresiohourly'
 
 const SidebarPlugin = {
 
@@ -32,7 +30,10 @@ const SidebarPlugin = {
         return {
           sidebarStore: SidebarStore,
           dropdownVisible: false,
-          istsos: new IstsosIO(proxyUrl, proxyServices),
+          // istsos: new IstsosIO(proxyUrl, proxyServices),
+          ceresioIstosos: new IstsosIO(config.ceresioIstsos.endpoint, config.ceresioIstsos.proxyEndpoint, config.ceresioIstsos.baseUrl),
+          verbanoIstosos: new IstsosIO(config.verbanoIstsos.endpoint, config.verbanoIstsos.proxyEndpoint, config.verbanoIstsos.baseUrl),
+          larioIstosos: new IstsosIO(config.larioIstsos.endpoint, config.larioIstsos.proxyEndpoint, config.larioIstsos.baseUrl),
           whereAmI: '',
           allProcedures: null
         }

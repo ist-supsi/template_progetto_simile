@@ -12,16 +12,16 @@
                    <div class="row">
                      <!-- <div class="col-3 justify-content-center align-self-center"> -->
                       <!-- <div class="col-3 align-items-start">
-                      <div></div>    
+                      <div></div>
                         -->
 
                        <!-- <img src="img/simile.png" alt="" style="width: 100%;"> -->
-                        
+
                      <!-- </div> -->
                      <!-- <div class="col-9"><br /> -->
                      <!-- <h4 class="title">Il Progetto</h4>
                      <p class="description text-justify">
-                      Il progetto SIMILE mira alla salvaguardia dei laghi, risorsa fondamentale per il nostro territorio costantemente minacciata dai cambiamenti climatici e dagli interventi 
+                      Il progetto SIMILE mira alla salvaguardia dei laghi, risorsa fondamentale per il nostro territorio costantemente minacciata dai cambiamenti climatici e dagli interventi
                       dell’uomo sull’ambiente.
                        Attraverso la creazione di un sistema informativo avanzato, SIMILE si pone l’obiettivo di creare una politica di gestione dell’area dei grandi laghi subalpini e una strategia comune per migliorarne
                        l’attuale sistema di monitoraggio, per prevenire e affrontare eventuali situazioni di criticità. L’iniziativa, attraverso l’approccio partecipativo “Citizen Science”, intende coinvolgere cittadini,
@@ -53,23 +53,23 @@
                   <h4 class="title">Il Progetto<br />
                     <!-- <small>Lago Ceresio</small> -->
                   </h4>
-                  <p class="description text-justify">Il progetto SIMILE mira alla salvaguardia dei laghi, risorsa fondamentale per il nostro territorio costantemente minacciata dai cambiamenti climatici e dagli interventi 
+                  <p class="description text-justify">Il progetto SIMILE mira alla salvaguardia dei laghi, risorsa fondamentale per il nostro territorio costantemente minacciata dai cambiamenti climatici e dagli interventi
                       dell’uomo sull’ambiente.
                        Attraverso la creazione di un sistema informativo avanzato, SIMILE si pone l’obiettivo di creare una politica di gestione dell’area dei grandi laghi subalpini e una strategia comune per migliorarne
                        l’attuale sistema di monitoraggio, per prevenire e affrontare eventuali situazioni di criticità. L’iniziativa, attraverso l’approccio partecipativo “Citizen Science”, intende coinvolgere cittadini,
                        enti, associazioni e altri attori interessati al tema della gestione delle acque affinché possano contribuire alla formalizzazione di nuove linee guida per fare fronte alle sfide che l’ecosistema dei
                        laghi dovrà sostenere in futuro.</p>
-                
+
               </div>
             </card>
           </div>
         </div>
 
-      
+
          <!-- <div style="margin-left:15px; width:100%">
             <div class="row">
               <h4 class="title">Dettagli tecnici<br/>
-                <small>Lago Ceresio</small> 
+                <small>Lago Ceresio</small>
                </h4>
             </div>
           </div> -->
@@ -123,10 +123,10 @@
             </stats-card>
           </div>
         </div>
-          
+
 
   </div>
-    
+
   </div>
 
 </template>
@@ -157,7 +157,7 @@
     },
     mounted () {
       this.$root.whereAmI = '';
-      
+
        axios.get('https://api-simile.como.polimi.it/v1/observations/').then((response) => {
           this.responseData = response.data["data"]
           this.responseData.forEach(element => {
@@ -168,9 +168,9 @@
           });
         });
 
-        this.istsos._call({services: 'demo', observedproperties: ''}).then((response) => {
-            this.responseIstsosData = response.data["data"]
-        });
+        // this.istsos._call({services: 'demo', observedproperties: ''}).then((response) => {
+        //     this.responseIstsosData = response.data["data"]
+        // });
     },
     computed: {
       resultCount () {
