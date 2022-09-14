@@ -129,12 +129,18 @@
                 <li class="nav-item">
                     <a :class="{'nav-link': true, active: selectedTab=='home'}" id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
-                        aria-selected="true" @click="selectedTab='home'">Home</a>
+                        aria-selected="true" @click="selectedTab='home' ">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}" id="profile-tab" data-toggle="tab"
-                        role="tab" aria-controls="profile"
-                        aria-selected="false" @click="selectedTab='cipais'">Pannello CIPAIS</a>
+                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}" id="cipais-tab" data-toggle="tab"
+                        role="tab" aria-controls="cipais"
+                        aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', disabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
+                        role="tab" aria-controls="satellitari"
+                        aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -157,8 +163,17 @@
 
                     </div>
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='cipais', active: selectedTab=='cipais'}"
-                        id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
                         <div v-if="dataCipais.length>0" class="container-fluid">
+                            <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
+                            <p class="description text-justify">I dati degli “Indicatori CIPAIS” provengono dalle campagne limnologiche svolte sui laghi Maggiore e 
+                                Lugano e finanziate dalla Commissione internazionale per la protezione delle acque italo-svizzere 
+                                (CIPAIS). La Commissione si occupa di problemi quali l'inquinamento o altre alterazioni delle acque dei 
+                                laghi Maggiore e di Lugano, nonché dei corsi d'acqua che segnano il confine o che lo attraversano. Le 
+                                ricerche promosse dalla Commissione hanno lo scopo di proporre ai Governi contraenti i provvedimenti 
+                                necessari per il risanamento delle acque comuni e la prevenzione dell'insorgenza di ulteriori forme di 
+                                inquinamento. Contribuiscono inoltre ad integrare e approfondire le attività di monitoraggio e controllo 
+                                effettuate dalle Istituzioni locali. <br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
                                 <div class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
@@ -180,6 +195,28 @@
                             </div> -->
                         </div>
                     </div>
+
+                   
+                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
+                        id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
+                        <div v-if="dataSatellite.length>0" class="container-fluid">
+                            
+                            <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
+                               
+                                <div class="col-lg-6 col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="dataSatellite[cc[0]]"></highcharts>
+                                    </figure>
+                                </div>
+                                <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="dataSatellite[cc[1]]"></highcharts>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
             </div>
         </div>
     </div>
@@ -334,7 +371,9 @@
                 istsos: null,
                 selectedTab: 'home',
                 selectedCipaisProcedures: [],
+                selectedSatelliteProcedures: [],
                 cipaisData: [],
+                satelliteData:[],
                 selectedProc: null,
                 showDescription: true,
                 lastSdtFig: '',
@@ -351,7 +390,8 @@
                 series_o2c_data: {},
                 tableAllData: {},
                 allProcedures: {},
-                dataCipais:{},
+                dataCipais: {},
+                dataSatellite: {},
                 tableAllData2: {},
                 showModal: false,
                 tableData: {},
@@ -627,6 +667,12 @@
                 },
                 // deep: true
             },
+            selectedSatelliteProcedures: {
+                handler(val){
+                    this.loadSatelliteData();
+                },
+                // deep: true
+            },
             markerLayer: {
                 handler(val){
                     // do stuff
@@ -638,7 +684,10 @@
                     // do stuff
                     this.loadCardsData();
                     this.tableSetData();
-                    this.tableSetDataCipais();
+                    // this.tableSetDataCipais();
+                    // this.tableSetDataSatellite();
+                    // this.loadCipaisData();
+                    // this.loadSatelliteData();
                 },
             },
             cards: {
@@ -794,6 +843,9 @@
                 self.loadCardsData();
                 self.tableSetData();
                 self.tableSetDataCipais();
+                self.tableSetDataSatellite();
+                // self.loadCipaisData();
+                // self.loadSatelliteData();
 
                 // Set map bounds
                 self.bounds = bounds;
@@ -861,7 +913,7 @@
                         }
                         else{
                             result.options.title.text = info.description;
-                            console.log(info)
+                            
                         }
                         result.options.subtitle.text = `${info.description} (${result.uom})`;
                         dataCipais.push(result.options);
@@ -872,6 +924,60 @@
 
             Promise.all(prms).then(()=>{self.dataCipais=dataCipais});
 
+        },
+        loadSatelliteData () {
+            var self = this;
+            let dataSatellite = [];
+            let prms = [];
+            for (const proc of this.selectedSatelliteProcedures) {
+
+                const info = self.allProcedures[proc.procedure];
+                
+                if (info.samplingTime.beginposition && info.samplingTime.endposition) {
+                    const begin = new Date(info.samplingTime.beginposition);
+                    const end = new Date(info.samplingTime.endposition);
+                    console.log(info)
+                    const prm = this.istsos.fetchSeries(
+                        proc.procedure,
+                        info.observedproperties[0].definition,
+                        begin,
+                        end
+                    ).then(response=>{
+                        const result = istsosToHighcharts.istosToLine(response);
+                        // result.options.name = 'foo';
+                        const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+
+                        result.options.yAxis.plotLines = [{
+                            color: 'darkgrey',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: variableAverage,
+                            label: {
+                                text: 'media della serie',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            }
+                        }];
+
+                        if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+                            result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                        }
+                        else{
+                            result.options.title.text = info.description;
+                            
+                        }
+                        result.options.subtitle.text = `${info.description} (${result.uom})`;
+                        dataSatellite.push(result.options);
+                    
+                    });
+                    prms.push(prm);
+                    console.log(prm);
+                };
+            };
+
+            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
+           
         },
         loadCardsData () {
             var self = this;
@@ -1063,9 +1169,10 @@
 
             const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
                                 // self.features.features[self.selectedMarker].properties.names
+                                
             const filteredSortedData = this.tableAllData.data.filter(el=>{
 
-                if(!el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0]) ){
+                if(!el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0]) && !el.procedures[0].includes("SATELLITE") ){
                     return true;
                 }
                 else {
@@ -1122,80 +1229,86 @@
         tableSetDataCipais () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedCipaisProcedures = selectedProc.filter(el=>el.procedure.includes("CIPAIS"));
-
+                
         },
-        tableSetDataCipais_old () {
-
+        tableSetDataSatellite () {
             var self = this;
-
-            const substr = self.tableProps.search.toLowerCase();
-            const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
-            const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
-            const end = (this.tableProps.page||1)*this.tableProps.length-1;
-
-            const filteredSortedData = this.tableAllData.data.filter(el=>{
-                if (el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0])) {
-                        return true;
-                    } else {
-                        return false;
-            };}).filter(el=>{
-                if (self.tableProps.search.length==0) {
-                    return true;
-                } else if (el.description.toLowerCase().includes(substr)) {
-                    return true;
-                } else if (el.name.toLowerCase().includes(substr)) {
-                    return true;
-                } else {
-                    return false;
-                };
-            }).sort((item, other)=>{
-                let comparison;
-                if ( item[this.tableProps.column]<other[this.tableProps.column] ) {
-                    comparison = -1;
-                } else {
-                    comparison = 1
-                }
-                if ( this.tableProps.dir=='asc' ) {
-                    return comparison
-                } else {
-                    return comparison*-1
-                }
-            });
-
-            // TODO: Concordare la paginazione e la statistica dei risultati con
-            // il numero di dati filtrati.
-
-            const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
-            const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
-                el['title']= indicatorDescription.indicatorDescription[el.name].title;
-                return el;
-            });
-            const tableDataCipais = {
-                // payload: this.tableAllData.payload,
-                links: {},
-                meta: {
-                    current_page: this.tableProps.page,
-                    from: start+1,
-                    last_page: last_page,
-                    per_page: this.tableProps.length,
-                    total: filteredSortedData.length,
-                    to: Math.min(end+1, this.tableAllData.data.length)
-                },
-                data: slicedData
-            };
-            this.tableDataCipais = tableDataCipais;
-
+            const selectedProc = self.features.features[self.selectedMarker].properties.names;
+            self.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
+            
         },
+        // tableSetDataCipais_old () {
+
+        //     var self = this;
+
+        //     const substr = self.tableProps.search.toLowerCase();
+        //     const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
+        //     const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
+        //     const end = (this.tableProps.page||1)*this.tableProps.length-1;
+
+        //     const filteredSortedData = this.tableAllData.data.filter(el=>{
+        //         if (el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0])) {
+        //                 return true;
+        //             } else {
+        //                 return false;
+        //     };}).filter(el=>{
+        //         if (self.tableProps.search.length==0) {
+        //             return true;
+        //         } else if (el.description.toLowerCase().includes(substr)) {
+        //             return true;
+        //         } else if (el.name.toLowerCase().includes(substr)) {
+        //             return true;
+        //         } else {
+        //             return false;
+        //         };
+        //     }).sort((item, other)=>{
+        //         let comparison;
+        //         if ( item[this.tableProps.column]<other[this.tableProps.column] ) {
+        //             comparison = -1;
+        //         } else {
+        //             comparison = 1
+        //         }
+        //         if ( this.tableProps.dir=='asc' ) {
+        //             return comparison
+        //         } else {
+        //             return comparison*-1
+        //         }
+        //     });
+
+        //     // TODO: Concordare la paginazione e la statistica dei risultati con
+        //     // il numero di dati filtrati.
+
+        //     const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
+        //     const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
+        //         el['title']= indicatorDescription.indicatorDescription[el.name].title;
+        //         return el;
+        //     });
+        //     const tableDataCipais = {
+        //         // payload: this.tableAllData.payload,
+        //         links: {},
+        //         meta: {
+        //             current_page: this.tableProps.page,
+        //             from: start+1,
+        //             last_page: last_page,
+        //             per_page: this.tableProps.length,
+        //             total: filteredSortedData.length,
+        //             to: Math.min(end+1, this.tableAllData.data.length)
+        //         },
+        //         data: slicedData
+        //     };
+        //     this.tableDataCipais = tableDataCipais;
+
+        // },
         reloadTable (tableProps) {
             var self = this;
             this.tableProps = tableProps
             this.tableSetData();
         },
-        reloadTableCipais (tableProps) {
-            var self = this;
-            this.tableProps = tableProps
-            this.tableSetDataCipais();
-        },
+        // reloadTableCipais (tableProps) {
+        //     var self = this;
+        //     this.tableProps = tableProps
+        //     this.tableSetDataCipais();
+        // },
         populateCockpit () {
             var self = this;
             this.istsos.fetchLastTemetature('W_TEMP_0_4').then((result)=>{
@@ -1441,5 +1554,8 @@
 .table > tbody > tr > td:last-child,
 .table > tfoot > tr > td:last-child {
   width: auto;
+}
+.nav-link {
+  cursor: pointer
 }
 </style>

@@ -93,7 +93,7 @@ let indicatorDescription =
 
 
         'water-O2S': {
-            title : 'Ossigeno disciolto % di saturazione',
+            title : 'Ossigeno disciolto % S.',
             description: `L'ossigeno, oltre che come concentrazione, può essere espresso come % rispetto
             alla saturazione, ovvero la quantità di ossigeno presente rispetto al valore
             massimo, preso uguale a cento, che si può avere nelle stesse condizioni di 
