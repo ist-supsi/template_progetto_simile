@@ -115,6 +115,28 @@
     
     stockInit(Highcharts)
 
+    
+
+    Highcharts.setOptions({
+        lang: {
+            loading: 'Sto caricando...',
+            months: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+            weekdays: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Venerdì', 'Sabato', 'Domenica'],
+            shortMonths: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lugl', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
+            exportButtonTitle: "Esporta",
+            printButtonTitle: "Importa",
+            rangeSelectorFrom: "Da",
+            rangeSelectorTo: "A",
+            rangeSelectorZoom: "Periodo",
+            downloadPNG: 'Download immagine PNG',
+            downloadJPEG: 'Download immagine JPEG',
+            downloadPDF: 'Download documento PDF',
+            downloadSVG: 'Download immagine SVG',
+            printChart: 'Stampa grafico',
+            thousandsSep: ".",
+            decimalPoint: ','
+        }        
+});
     // Highcharts.setOptions({
     //     chart: {
     //         zoomType: 'x',
@@ -282,9 +304,9 @@
               text: ''
             }
         },
-        legend: {
-            enabled: true
-        },
+        // legend: {
+        //     enabled: true
+        // },
         plotOptions: {
             line: {marker: {enabled: false}}
         },
@@ -405,6 +427,7 @@
         },
         mounted() {
             var self = this;
+            this.istsos = this.$root.istsos;
 
             this.istsos.call({
                 procedures: this.analisysVariable
@@ -584,7 +607,7 @@
                         result.options.series[0].color = this.category_colors[counter];
                         counter = counter+1;
                         
-                        console.log(result)
+                        
                         if ( !self.series_data.series ) {
                             self.series_data = result.options;
                         } else {

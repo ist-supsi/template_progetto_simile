@@ -1,7 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#/admin/overview" :href="false">{{$root.whereAmI}}</a>
+      <!-- <a class="navbar-brand" href="#/admin/overview" :href="false">{{$root.whereAmI}}</a> -->
+      <a class="navbar-brand" :href="false">{{$root.whereAmI}}</a>
        <!-- <span class="navbar-brand mb-0 h1">prova</span> -->
       <button type="button"
               class="navbar-toggler navbar-toggler-right"

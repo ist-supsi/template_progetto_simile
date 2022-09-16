@@ -51,7 +51,7 @@ let indicatorDescription =
             tag:'CIPAIS',
         },
 
-        'pH': {
+        'water-pH': {
             title : 'pH',
             description: `Il pH è un valore numerico che indica l’acidità di una soluzione. Valori 
             compresi tra 6 e 9 sono in genere compatibili con la vita degli organismi 
@@ -64,7 +64,7 @@ let indicatorDescription =
             icon:'icon-ph',
         },
 
-        'conducibilità': {
+        'water-cond25': {
             title : 'Conducibilità',
             description: `La conducibilità indica la capacità dell’acqua di trasmettere elettricità e 
             dipende dagli ioni in soluzione, quindi aumenta all'aumentare della 
@@ -76,8 +76,8 @@ let indicatorDescription =
             icon:'icon-water_conduc',
         },
 
-        'ossigeno-disciolto-concentrazione': {
-            title : 'Ossigeno disciolto concentrazione',
+        'water-O2D': {
+            title : 'Ossigeno disciolto',
             description: `La presenza di ossigeno nelle acque deriva dallo scambio con l'atmosfera e 
             dai processi biologici operati dagli organismi acquatici (fotosintesi e 
             respirazione). Valori elevati si trovano solitamente nelle acque 
@@ -114,7 +114,7 @@ let indicatorDescription =
             icon:'icon-solidi_sospesi',
         },
 
-        'water-PTOT': {
+        'water-Pload': {
             title : 'Carico di fosforo',
             description: `Il carico di P è la quantità totale di questo elemento che si stima essere 
             apportata al lago nell'arco di un anno. Si calcola come somma degli apporti 
@@ -122,7 +122,18 @@ let indicatorDescription =
             areale non drenato. 
             `,
             // icon:'fa fa-line-chart text-primary',
-            icon:'icon-water_PTOT',
+            icon:'icon-water_pload',
+            tag:'CIPAIS',
+        },
+        'Pload': {
+            title : 'Carico di fosforo',
+            description: `Il carico di P è la quantità totale di questo elemento che si stima essere 
+            apportata al lago nell'arco di un anno. Si calcola come somma degli apporti 
+            dai singoli tributari, sulla base di concentrazioni e deflussi, e dall'eventuale
+            areale non drenato. 
+            `,
+            // icon:'fa fa-line-chart text-primary',
+            icon:'icon-water_pload',
             tag:'CIPAIS',
         },
 
@@ -134,18 +145,29 @@ let indicatorDescription =
             areale non drenato.
             `,
             // icon:'fa fa-flask text-primary',
-            icon:'icon-water_Nload',
+            icon:'icon-conc_azoto',
+            tag:'CIPAIS',
+        },
+        'NLoad': {
+            title : 'Carico di azoto',
+            description: `Il carico di N è la quantità totale di questo elemento che si stima essere 
+            apportata al lago nell'arco di un anno. Si calcola come somma degli apporti 
+            dai singoli tributari, sulla base di concentrazioni e deflussi, e dall'eventuale
+            areale non drenato.
+            `,
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-conc_azoto',
             tag:'CIPAIS',
         },
 
-        'water-Pload': {
+        'water-PTOT': {
             title : 'Concentrazione di fosforo',
             description: `Valore medio annuo delle concentrazioni (medie sulla colonna d'acqua ponderate
             sui volumi) di P totale. La media annua è calcolata a parire dai valori 
             ottenuti nei monitoraggi mensili o con altra frequenza temporale.
             `,
             // icon:'fa fa-file-powerpoint-o text-primary',
-            icon:'icon-water_pload',
+            icon:'icon-water_PTOT',
             tag:'CIPAIS',
         },
 
@@ -195,8 +217,29 @@ let indicatorDescription =
             // icon:'fa fa-flask text-primary',
             icon:'icon-water_PC',
         },
+        'water-PE': {
+            title : 'Altri pigmenti algali ficocianina e fitoplancton',
+            description: `Ficocianina e ficoeritrina sono sue pigmenti algali presenti nel fitoplancton 
+            ed in particolare nei cianobatteri. La loro misura può quindi essere utilizzata 
+            come indicatore della presenza e della densità di questo gruppo e il loro 
+            aumento temporale puo' essere un possibile segnale dello sviluppo di una 
+            fioritura di cianobatteri.
+            `,
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-water_PC',
+        },
 
         'water-Biovol': {
+            title : 'Biovolume del fitoplancton',
+            description: `Il biovolume totale del fitoplancton è indicativo della produttività algale 
+            complessiva di un lago. Il biovolume varia nel corso dell'anno, con i massimi 
+            di solito in corrispondenza dei mesi estivi. Viene misurato sulla base 
+            dei conteggi degli organismi fitoplanctonici presenti.
+            `,
+            // icon:'fa fa-circle text-primary',
+            icon:'icon-water_biovol',
+        },
+        'biovol': {
             title : 'Biovolume del fitoplancton',
             description: `Il biovolume totale del fitoplancton è indicativo della produttività algale 
             complessiva di un lago. Il biovolume varia nel corso dell'anno, con i massimi 
@@ -298,6 +341,14 @@ let indicatorDescription =
             icon:'icon-global_radiation',
         },
 
+        'water-TN': {
+            title : 'Media annua di N totale',
+            description: `Valore medio annuo delle concentrazioni (medie sulla colonna d'acqua ponderate sui volumi) di N totale.
+             La media annua è calcolata a parire dai valori ottenuti nei monitoraggi mensili o con altra frequenza temporale.
+            `,
+            // icon:'fa fa-bolt text-info',
+            icon:'icon-water_biovol',
+        },
     };
 
 //per accedere alle mie descrizioni

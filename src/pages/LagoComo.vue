@@ -129,12 +129,12 @@
                 <li class="nav-item">
                     <a :class="{'nav-link': true, active: selectedTab=='home'}" id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
-                        aria-selected="true" @click="selectedTab='home'">Home</a>
+                        aria-selected="true" @click="selectedTab='home'">Sensori</a>
                 </li>
                 <li class="nav-item">
                     <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}" id="profile-tab" data-toggle="tab"
                         role="tab" aria-controls="profile"
-                        aria-selected="false" @click="selectedTab='cipais'">Pannello CIPAIS</a>
+                        aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -650,9 +650,10 @@
         },
         mounted() {
             var self = this;
-            this.$root.whereAmI = 'Lago di Lugano';
+            this.$root.whereAmI = 'Lago di Como';
 
             this.istsos = this.larioIstosos;
+            this.$root.istsos = this.istsos;
 
             const good_names = [
                 "air-temperature",

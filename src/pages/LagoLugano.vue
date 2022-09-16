@@ -136,7 +136,6 @@
                         role="tab" aria-controls="cipais"
                         aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
                 </li>
-                
                 <li class="nav-item">
                     <a :class="{'nav-link': true, active: selectedTab=='satellitari', disabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
                         role="tab" aria-controls="satellitari"
@@ -700,8 +699,8 @@
         mounted() {
             var self = this;
             this.$root.whereAmI = 'Lago di Lugano';
-
             this.istsos = this.ceresioIstosos;
+            this.$root.istsos = this.istsos;
 
             const good_names = [
                 "air-temperature",
