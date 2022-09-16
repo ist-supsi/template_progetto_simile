@@ -103,8 +103,6 @@
                             :format="layer.format"
                             :opacity="layer.opacity"
                             layer-type="overlay"
-
-
                           ></l-wms-tile-layer>
 
                           <!-- <v-marker-cluster>
@@ -112,13 +110,18 @@
                             </v-marker>
                           </v-marker-cluster> -->
 
+                          <l-geo-json
+                              ref="areaLayer"
+                              :geojson="basins"
+                              :options = {pointToLayer: ()=>{}}
+                          />
 
                           <l-geo-json
                               ref="markerLayer"
                               :geojson="features"
                               :options="markerLayerOptions()"
-
                           />
+
                       </l-map>
                     </card>
                 </div>
@@ -231,6 +234,8 @@
     import Tab from '../components/Tab.vue';
     import CipaisLugano from '../components/CipaisLugano.vue';
     import TestChart from '../components/testChart.vue';
+
+    import lake_basins from './lake_basins.js'
 
     import {Chart} from 'highcharts-vue';
     import Highcharts from 'highcharts';
@@ -456,6 +461,7 @@
                   "type": "FeatureCollection",
                   "features": []
                 },
+                basins: lake_basins.ceresio,
                 url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
                 layers: [
@@ -932,33 +938,64 @@
                 self.cards = cards;
             })
         },
-
+        areaLayerOptions () {
+          var self = this;
+          return
+        },
         markerLayerOptions () {
             var self = this;
             return {
                 pointToLayer: function (feature, latlng) {
-                    let clr;
-                    if ( feature.properties.markerIndex == self.selectedMarker ) {
-                        clr = 'text-primary'
+                    const prefixes = feature.properties.names.reduce((prev, info) => {
+                        const name = info.procedure;
+                        const prefix = name.split('_')[0];
+                        if ( !prev.includes(prefix) ) { prev.push(prefix); }
+                        return prev;
+                    }, []);
+                    const suffixes = feature.properties.names.reduce((prev, info) => {
+                        const name = info.procedure;
+
+                        const suffix = name.split('_').at(-1);
+                        if ( !prev.includes(suffix) ) { prev.push(suffix); }
+                        return prev;
+                    }, []);
+
+                    if (!prefixes.every(prefix => prefix=='SATELLITE')) {
+                        let clr;
+                        if ( feature.properties.markerIndex == self.selectedMarker ) {
+                            clr = 'text-primary'
+                        } else {
+                            clr = 'text-secondary'
+                        };
+                        const fontAwesomeIcon = L.divIcon({
+                            html: `<i class="fa fa-map-marker fa-4x ${clr}"></i>`,
+                            iconSize: [40, 80],
+                            iconAnchor: [20, 40],
+                            className: ''
+                        });
+
+                        const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
+                            self.selectedMarker=feature.properties.markerIndex
+                        });
+
+                        if (feature.properties.names[0].message) {
+                            marker.bindTooltip(`<h6>${feature.properties.names[0].message}</h6>`)
+                        };
+
+                        return marker;
                     } else {
-                        clr = 'text-secondary'
-                    };
-                    const fontAwesomeIcon = L.divIcon({
-                        html: `<i class="fa fa-map-marker fa-4x ${clr}"></i>`,
-                        iconSize: [40, 80],
-                        iconAnchor: [20, 40],
-                        className: ''
-                    });
-
-                    const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
-                        self.selectedMarker=feature.properties.markerIndex
-                    });
-
-                    if (feature.properties.names[0].message) {
-                        marker.bindTooltip(`<h6>${feature.properties.names[0].message}</h6>`)
+                        return L.marker(latlng)
+                        // return feature;
+                        // const jsonpoly = self.basins.features.filter(feat => feat.properties.basin==suffixes[0])[0];
+                        // const poly = L.polygon(jsonpoly.geometry.coordinates, {
+                        //     weight: 1,
+                        //     fillOpacity: 0.7,
+                        //     color: 'blue',
+                        //     dashArray: '3'
+                        // });
+                        // return poly;
                     };
 
-                    return marker;
                 }
             }
         },

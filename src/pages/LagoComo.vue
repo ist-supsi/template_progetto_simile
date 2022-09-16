@@ -892,6 +892,7 @@
             var self = this;
             return {
                 pointToLayer: function (feature, latlng) {
+                  console.log(feature.properties.names.map(info=>info.procedure));
                     let clr;
                     if ( feature.properties.markerIndex == self.selectedMarker ) {
                         clr = 'text-primary'
