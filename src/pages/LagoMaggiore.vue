@@ -9,15 +9,8 @@
         <div class="container-fluid">
 
             <div class="row">
-                <!-- <div class="col-7">
-                    Lorem ipsum dolor sit amet. Ea dignissimos aspernatur et quaerat quia et quasi ipsa et voluptates debitis sit ipsum laudantium sed nobis accusantium quo quidem debitis.
-                    Non possimus dolorum qui dolores optio aut quasi dolorem. In adipisci voluptatem et consectetur sequi aut recusandae iste. Non nesciunt earum qui tempora maiores At dolorem sunt quo quia officiis.
-                    Sed facilis sunt in omnis dolor et consequatur autem aut ducimus nisi ea eius quibusdam et omnis quasi? Qui nobis mollitia eos perspiciatis asperiores et magni sequi? Non quos consequatur 33 sint facilis qui deserunt quae ex nemo illum et distinctio voluptas.<br><br>
-                    Ad libero obcaecati a atque quibusdam sed commodi iusto 33 maiores et minus debitis qui dolores dolor eum corrupti laudantium. Et exercitationem pariatur ut ipsa eveniet quo necessitatibus odit aut rerum harum et maiores odio et dolores amet ut inventore incidunt.
-                    Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
-                    vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
-                </div> -->
 
+                
                 <div class="col-8">
                     <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
                         <div class="col-6">
@@ -48,9 +41,9 @@
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                    <i :class="getCardIcon(cards[ii+1].name)"
+                                    <i :class="cards[ii+1] && getCardIcon(cards[ii+1].name)"
                                       data-toggle="tooltip"
-                                      title="cards[ii+1].title||'no data'"></i>
+                                      title="(cards[ii+1] && cards[ii+1].title)||'no data'"></i>
                                 </div>
                                 <div slot="content">
                                     <p v-if="!(cards[ii+1] && cards[ii+1].title)" class="card-category placeholder-glow">

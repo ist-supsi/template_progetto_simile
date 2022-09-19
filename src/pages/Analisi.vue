@@ -74,6 +74,7 @@
 
                         <div v-if="Object.keys(series_data).length>0" class="row" >
                             <div class="col-md-12">
+
                                     <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts> 
                                 
                             </div>
@@ -135,7 +136,8 @@
             printChart: 'Stampa grafico',
             thousandsSep: ".",
             decimalPoint: ','
-        }        
+        }      
+          
 });
     // Highcharts.setOptions({
     //     chart: {
@@ -563,21 +565,17 @@
 
                             // console.log(result);
                             result.options.yAxis.plotLines = [{
-                                color: 'darkgrey',
-                                dashStyle: 'ShortDash',
-                                width: 2,
-                                value: variableAverage
-                            },{
-                                color: 'darkgrey',
-                                dashStyle: 'DashDot',
-                                width: 2,
-                                value: variableAverage-3*self.variableStd
-                            },{
-                                color: 'darkgrey',
-                                dashStyle: 'DashDot',
-                                width: 2,
-                                value: variableAverage+3*self.variableStd
-                            }];
+                            color: 'darkgrey',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: variableAverage,
+                            label: {
+                                text: 'media della serie',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            }
+                        }];
 
 
                             // if ( prm===undefined ) {

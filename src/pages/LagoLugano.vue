@@ -59,6 +59,7 @@
                                     <p v-else class="card-category">{{cards[ii+1].title || "--"}}</p>
                                     <h4 class="card-title">{{cards[ii+1].data || "N.P."}} {{cards[ii+1].uom || ""}}</h4>
                                     <p class="card-category">{{cards[ii+1].message || "--"}}</p>
+                                    
                                 </div>
                                 <div slot="footer">
                                     <i v-if="cards[ii+1].data===null" class="fa fa-refresh fa-spin"></i>

@@ -613,7 +613,7 @@
                   scrollWheelZoom: false
                 },
                 showMap: true,
-                selectedMarker: 1,
+                selectedMarker: 4,
                 cards: [{}, {}, {}, {}, {}, {}],
                 selected: 'Serie storiche'
             }

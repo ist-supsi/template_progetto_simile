@@ -207,7 +207,7 @@ let indicatorDescription =
         },
 
         'water-PC': {
-            title : 'Altri pigmenti algali ficocianina e fitoplancton',
+            title : 'Altri pigmenti algali',
             description: `Ficocianina e ficoeritrina sono sue pigmenti algali presenti nel fitoplancton 
             ed in particolare nei cianobatteri. La loro misura può quindi essere utilizzata 
             come indicatore della presenza e della densità di questo gruppo e il loro 
@@ -218,7 +218,7 @@ let indicatorDescription =
             icon:'icon-water_PC',
         },
         'water-PE': {
-            title : 'Altri pigmenti algali ficocianina e fitoplancton',
+            title : 'Altri pigmenti algali',
             description: `Ficocianina e ficoeritrina sono sue pigmenti algali presenti nel fitoplancton 
             ed in particolare nei cianobatteri. La loro misura può quindi essere utilizzata 
             come indicatore della presenza e della densità di questo gruppo e il loro 
@@ -268,7 +268,7 @@ let indicatorDescription =
             icon:'icon-indice_IPAM',
         },
 
-        'cianobatteri': {
+        'water-Cyano': {
             title : 'cianobatteri',
             description: `I cianobatteri sono un gruppo di microrganismi fotosintetici che, in presenza 
             di particolari condizioni ambientali favorevoli, possono raggiungere densità
