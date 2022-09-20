@@ -43,8 +43,19 @@
             </div>
 
 
+            <div v-if="Object.keys(series_data).length>0" class="row" >
+                            <div class="col-md-12">
 
-            <div class="row">
+                                    <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts> 
+                                
+                            </div>
+                        </div>
+
+                        <div slot="footer">
+                            <i v-if="Object.keys(series_data).length==0"
+                                class="fa fa-refresh fa-spin"></i>
+                        </div>
+            <!-- <div class="row">
                 <div class="col-12">
                     <card>
                         <div class="row">
@@ -63,30 +74,10 @@
                             </div>
                         </div>
 
-<!--     
-                        <div v-if="Object.keys(bulletOptions).length>0" class="row">
-                            <div class="col-md-12">
-                              <figure class="highcharts-figure">
-                                  <highcharts id="bulletgraph" :options="bulletOptions"></highcharts>
-                                </figure>
-                            </div>
-                        </div> -->
-
-                        <div v-if="Object.keys(series_data).length>0" class="row" >
-                            <div class="col-md-12">
-
-                                    <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts> 
-                                
-                            </div>
-                        </div>
-
-                        <div slot="footer">
-                            <i v-if="Object.keys(series_data).length==0"
-                                class="fa fa-refresh fa-spin"></i>
-                        </div>
+                        
                     </card>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -517,15 +508,12 @@
                 
 
                 }, {});
-           
-        //    this.setBegin();
-            // this.setSeries(prm);
-
+                this.setBegin(35);
         },
         methods: {
             setBegin (value) {
                 this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
-                console.log(this.seriesBegin);
+                
             },
             setSeries () {
                 var self = this;

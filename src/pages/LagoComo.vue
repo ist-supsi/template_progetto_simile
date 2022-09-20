@@ -20,7 +20,7 @@
 
                 <div class="col-8">
                     <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
-                        <div class="col-6">
+                        <div class="col-6" :class="[(cards[ii+1] && cards[ii+1].title) ? 'col-6' : 'col-12']">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -44,7 +44,7 @@
                                 </div>
                             </stats-card>
                         </div>
-                        <div class="col-6">
+                        <div v-if="(cards[ii+1] && cards[ii+1].title)" class="col-6">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -449,8 +449,8 @@
                 // 45.98815472817849, 8.970311660582176
                 // minlat="45.9029678" minlon="8.8586625" maxlat="46.0363240" maxlon="9.1252600"/
                 bounds: latLngBounds([
-                  [45.72, 8.50],
-                  [46.18, 8.86]
+                [46.17, 9.06], 
+                [45.81, 9.39]
                 ]),
                 features: {
                   "type": "FeatureCollection",

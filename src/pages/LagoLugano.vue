@@ -166,6 +166,7 @@
                         id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
                         <div v-if="dataCipais.length>0" class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
+                            
                             <p class="description text-justify">I dati degli “Indicatori CIPAIS” provengono dalle campagne limnologiche svolte sui laghi Maggiore e 
                                 Lugano e finanziate dalla Commissione internazionale per la protezione delle acque italo-svizzere 
                                 (CIPAIS). La Commissione si occupa di problemi quali l'inquinamento o altre alterazioni delle acque dei 
@@ -199,7 +200,7 @@
                    
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
                         id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
-                        <div v-if="dataSatellite.length>0" class="container-fluid">
+                        <div v-if="dataSatellite.length>0" class="container-fluid">  
                             
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
                                
@@ -684,6 +685,7 @@
                     // do stuff
                     this.loadCardsData();
                     this.tableSetData();
+                    this.tableSetDataSatellite();
                     // this.tableSetDataCipais();
                     // this.tableSetDataSatellite();
                     // this.loadCipaisData();
@@ -929,7 +931,7 @@
             var self = this;
             let dataSatellite = [];
             let prms = [];
-            for (const proc of this.selectedSatelliteProcedures) {
+            for (const proc of self.selectedSatelliteProcedures) {
 
                 const info = self.allProcedures[proc.procedure];
                 
@@ -937,7 +939,7 @@
                     const begin = new Date(info.samplingTime.beginposition);
                     const end = new Date(info.samplingTime.endposition);
                     console.log(info)
-                    const prm = this.istsos.fetchSeries(
+                    const prm = self.istsos.fetchSeries(
                         proc.procedure,
                         info.observedproperties[0].definition,
                         begin,
@@ -969,10 +971,9 @@
                         }
                         result.options.subtitle.text = `${info.description} (${result.uom})`;
                         dataSatellite.push(result.options);
-                    
                     });
                     prms.push(prm);
-                    console.log(prm);
+                    
                 };
             };
 
@@ -1169,10 +1170,11 @@
 
             const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
                                 // self.features.features[self.selectedMarker].properties.names
+                            
                                 
             const filteredSortedData = this.tableAllData.data.filter(el=>{
 
-                if(!el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0]) && !el.procedures[0].includes("SATELLITE") ){
+                if(el.procedures[0] && !el.procedures[0].includes("CIPAIS") && !el.procedures[0].includes("SATELLITE") && selectedProc.includes(el.procedures[0]) ){
                     return true;
                 }
                 else {
@@ -1201,7 +1203,7 @@
                     return comparison*-1
                 }
             });
-
+           
             // TODO: Concordare la paginazione e la statistica dei risultati con
             // il numero di dati filtrati.
 
@@ -1222,19 +1224,20 @@
                     to: Math.min(end+1, this.tableAllData.data.length)
                 },
                 data: slicedData
+                
             };
             this.tableData = tableData;
-
+            console.log(tableData)
         },
         tableSetDataCipais () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedCipaisProcedures = selectedProc.filter(el=>el.procedure.includes("CIPAIS"));
-                
+            
         },
         tableSetDataSatellite () {
-            var self = this;
-            const selectedProc = self.features.features[self.selectedMarker].properties.names;
-            self.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
+            const selectedProc = this.features.features[this.selectedMarker].properties.names;
+            this.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
+            console.log(selectedProc)
             
         },
         // tableSetDataCipais_old () {
@@ -1303,6 +1306,8 @@
             var self = this;
             this.tableProps = tableProps
             this.tableSetData();
+            
+            
         },
         // reloadTableCipais (tableProps) {
         //     var self = this;

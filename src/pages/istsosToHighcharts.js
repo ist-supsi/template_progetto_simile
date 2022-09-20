@@ -30,9 +30,9 @@ const LINE_DEFAULTS = {
           text: ''
         }
     },
-    // legend: {
-    //     enabled: true
-    // },
+    legend: {
+         enabled: false
+    },
     plotOptions: {
         line: {marker: {enabled: false}}
     },
@@ -89,7 +89,7 @@ STOCK_DEFAULTS['rangeSelector'] = {
     {
         type: 'all',
         text: 'All'
-    }]
+    } ]
 } 
 
 function epochToTime(epoch) {
