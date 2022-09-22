@@ -127,7 +127,8 @@
             printChart: 'Stampa grafico',
             thousandsSep: ".",
             decimalPoint: ','
-        }      
+        }
+        
           
 });
     // Highcharts.setOptions({
@@ -508,7 +509,7 @@
                 
 
                 }, {});
-                this.setBegin(35);
+                // this.setBegin();
         },
         methods: {
             setBegin (value) {
