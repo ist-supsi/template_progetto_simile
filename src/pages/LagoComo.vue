@@ -20,7 +20,7 @@
 
                 <div class="col-8">
                     <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
-                        <div class="col-6">
+                        <div class="col-6" :class="[(cards[ii+1] && cards[ii+1].title) ? 'col-6' : 'col-12']">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -44,7 +44,7 @@
                                 </div>
                             </stats-card>
                         </div>
-                        <div class="col-6">
+                        <div v-if="(cards[ii+1] && cards[ii+1].title)" class="col-6">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -134,12 +134,12 @@
                 <li class="nav-item">
                     <a :class="{'nav-link': true, active: selectedTab=='home'}" id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
-                        aria-selected="true" @click="selectedTab='home'">Home</a>
+                        aria-selected="true" @click="selectedTab='home'">Sensori</a>
                 </li>
                 <li class="nav-item">
                     <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}" id="profile-tab" data-toggle="tab"
                         role="tab" aria-controls="profile"
-                        aria-selected="false" @click="selectedTab='cipais'">Pannello CIPAIS</a>
+                        aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -458,8 +458,8 @@
                 // 45.98815472817849, 8.970311660582176
                 // minlat="45.9029678" minlon="8.8586625" maxlat="46.0363240" maxlon="9.1252600"/
                 bounds: latLngBounds([
-                  [45.72, 8.50],
-                  [46.18, 8.86]
+                [46.17, 9.06],
+                [45.81, 9.39]
                 ]),
                 features: {
                   "type": "FeatureCollection",
@@ -623,7 +623,7 @@
                   scrollWheelZoom: false
                 },
                 showMap: true,
-                selectedMarker: 3,
+                selectedMarker: 4,
                 cards: [{}, {}, {}, {}, {}, {}],
                 selected: 'Serie storiche'
             }
@@ -660,9 +660,10 @@
         },
         mounted() {
             var self = this;
-            this.$root.whereAmI = 'Lago di Lugano';
+            this.$root.whereAmI = 'Lago di Como';
 
             this.istsos = this.larioIstosos;
+            this.$root.istsos = this.istsos;
 
             const good_names = [
                 "air-temperature",

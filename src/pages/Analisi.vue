@@ -43,8 +43,19 @@
             </div>
 
 
+            <div v-if="Object.keys(series_data).length>0" class="row" >
+                            <div class="col-md-12">
 
-            <div class="row">
+                                    <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts> 
+                                
+                            </div>
+                        </div>
+
+                        <div slot="footer">
+                            <i v-if="Object.keys(series_data).length==0"
+                                class="fa fa-refresh fa-spin"></i>
+                        </div>
+            <!-- <div class="row">
                 <div class="col-12">
                     <card>
                         <div class="row">
@@ -63,29 +74,10 @@
                             </div>
                         </div>
 
-<!--     
-                        <div v-if="Object.keys(bulletOptions).length>0" class="row">
-                            <div class="col-md-12">
-                              <figure class="highcharts-figure">
-                                  <highcharts id="bulletgraph" :options="bulletOptions"></highcharts>
-                                </figure>
-                            </div>
-                        </div> -->
-
-                        <div v-if="Object.keys(series_data).length>0" class="row" >
-                            <div class="col-md-12">
-                                    <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts> 
-                                
-                            </div>
-                        </div>
-
-                        <div slot="footer">
-                            <i v-if="Object.keys(series_data).length==0"
-                                class="fa fa-refresh fa-spin"></i>
-                        </div>
+                        
                     </card>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -115,6 +107,30 @@
     
     stockInit(Highcharts)
 
+    
+
+    Highcharts.setOptions({
+        lang: {
+            loading: 'Sto caricando...',
+            months: ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+            weekdays: ['Domenica', 'Lunedì', 'Martedì', 'Mercoledì', 'Venerdì', 'Sabato', 'Domenica'],
+            shortMonths: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lugl', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
+            exportButtonTitle: "Esporta",
+            printButtonTitle: "Importa",
+            rangeSelectorFrom: "Da",
+            rangeSelectorTo: "A",
+            rangeSelectorZoom: "Periodo",
+            downloadPNG: 'Download immagine PNG',
+            downloadJPEG: 'Download immagine JPEG',
+            downloadPDF: 'Download documento PDF',
+            downloadSVG: 'Download immagine SVG',
+            printChart: 'Stampa grafico',
+            thousandsSep: ".",
+            decimalPoint: ','
+        }
+        
+          
+});
     // Highcharts.setOptions({
     //     chart: {
     //         zoomType: 'x',
@@ -282,9 +298,9 @@
               text: ''
             }
         },
-        legend: {
-            enabled: true
-        },
+        // legend: {
+        //     enabled: true
+        // },
         plotOptions: {
             line: {marker: {enabled: false}}
         },
@@ -405,6 +421,7 @@
         },
         mounted() {
             var self = this;
+            this.istsos = this.$root.istsos;
 
             this.istsos.call({
                 procedures: this.analisysVariable
@@ -492,15 +509,12 @@
                 
 
                 }, {});
-           
-        //    this.setBegin();
-            // this.setSeries(prm);
-
+                // this.setBegin();
         },
         methods: {
             setBegin (value) {
                 this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
-                console.log(this.seriesBegin);
+                
             },
             setSeries () {
                 var self = this;
@@ -540,21 +554,17 @@
 
                             // console.log(result);
                             result.options.yAxis.plotLines = [{
-                                color: 'darkgrey',
-                                dashStyle: 'ShortDash',
-                                width: 2,
-                                value: variableAverage
-                            },{
-                                color: 'darkgrey',
-                                dashStyle: 'DashDot',
-                                width: 2,
-                                value: variableAverage-3*self.variableStd
-                            },{
-                                color: 'darkgrey',
-                                dashStyle: 'DashDot',
-                                width: 2,
-                                value: variableAverage+3*self.variableStd
-                            }];
+                            color: 'darkgrey',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: variableAverage,
+                            label: {
+                                text: 'media della serie',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            }
+                        }];
 
 
                             // if ( prm===undefined ) {
@@ -584,7 +594,7 @@
                         result.options.series[0].color = this.category_colors[counter];
                         counter = counter+1;
                         
-                        console.log(result)
+                        
                         if ( !self.series_data.series ) {
                             self.series_data = result.options;
                         } else {

@@ -23,9 +23,9 @@ const LINE_DEFAULTS = {
           text: ''
         }
     },
-    legend: {
-        enabled: true
-    },
+    // legend: {
+    //     enabled: true
+    // },
     plotOptions: {
         line: {marker: {enabled: false}}
     },

@@ -68,7 +68,7 @@
 
       </dashboard-content>
 
-      <content-footer></content-footer>
+      <!-- <content-footer></content-footer> -->
     </div>
   </div>
 </template>

@@ -122,6 +122,23 @@
               </div>
             </stats-card>
           </div>
+
+          <div class="col-xl-3 col-lg-6">
+            <stats-card>
+              <div slot="header" class="icon-success">
+                <i class="fa fa-thumbs-up  text-simile" aria-hidden="true"></i>
+                <!-- <i class="fa fa-thermometer-full text-simile"></i> -->
+              </div>
+              <div slot="content">
+                <p class="card-category">N. Osservazioni da sensori</p>
+                <h4 class="card-title">{{ resultCountIstsos }}</h4>
+              </div>
+              <div slot="footer">
+                <!-- <i class="fa fa-refresh"></i>Updated now -->
+              </div>
+            </stats-card>
+          </div>
+
         </div>
 
 

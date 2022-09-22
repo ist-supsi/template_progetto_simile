@@ -31,6 +31,7 @@ const SidebarPlugin = {
           sidebarStore: SidebarStore,
           dropdownVisible: false,
           // istsos: new IstsosIO(proxyUrl, proxyServices),
+          istsos: null,
           ceresioIstosos: new IstsosIO(config.ceresioIstsos.endpoint, config.ceresioIstsos.proxyEndpoint, config.ceresioIstsos.baseUrl),
           verbanoIstosos: new IstsosIO(config.verbanoIstsos.endpoint, config.verbanoIstsos.proxyEndpoint, config.verbanoIstsos.baseUrl),
           larioIstosos: new IstsosIO(config.larioIstsos.endpoint, config.larioIstsos.proxyEndpoint, config.larioIstsos.baseUrl),

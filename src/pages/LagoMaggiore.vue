@@ -9,18 +9,11 @@
         <div class="container-fluid">
 
             <div class="row">
-                <!-- <div class="col-7">
-                    Lorem ipsum dolor sit amet. Ea dignissimos aspernatur et quaerat quia et quasi ipsa et voluptates debitis sit ipsum laudantium sed nobis accusantium quo quidem debitis.
-                    Non possimus dolorum qui dolores optio aut quasi dolorem. In adipisci voluptatem et consectetur sequi aut recusandae iste. Non nesciunt earum qui tempora maiores At dolorem sunt quo quia officiis.
-                    Sed facilis sunt in omnis dolor et consequatur autem aut ducimus nisi ea eius quibusdam et omnis quasi? Qui nobis mollitia eos perspiciatis asperiores et magni sequi? Non quos consequatur 33 sint facilis qui deserunt quae ex nemo illum et distinctio voluptas.<br><br>
-                    Ad libero obcaecati a atque quibusdam sed commodi iusto 33 maiores et minus debitis qui dolores dolor eum corrupti laudantium. Et exercitationem pariatur ut ipsa eveniet quo necessitatibus odit aut rerum harum et maiores odio et dolores amet ut inventore incidunt.
-                    Ut voluptates molestias et voluptatem beatae id fugit velit et voluptas expedita? Incidunt sint qui officiis iusto At quidem quis. In maxime omnis et nulla eaque qui molestiae fugiat 33 reiciendis inventore qui reiciendis totam in fuga assumenda. Sed amet distinctio
-                    vel possimus amet At voluptas dolorem aut eaque internos. Ut ducimus tenetur et nihil quaerat ea nulla laudantium aut numquam possimus in cumque aliquam. Et perspiciatis earum cum tenetur ipsum est asperiores voluptate eum doloremque molestiae. Et saepe eius sed sapiente natus At laudantium magni.<br><br>
-                </div> -->
 
+                
                 <div class="col-8">
                     <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
-                        <div class="col-6">
+                        <div class="col-6" :class="[(cards[ii+1] && cards[ii+1].title) ? 'col-6' : 'col-12']">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -44,7 +37,7 @@
                                 </div>
                             </stats-card>
                         </div>
-                        <div class="col-6">
+                        <div v-if="(cards[ii+1] && cards[ii+1].title)" class="col-6">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -135,12 +128,17 @@
                 <li class="nav-item">
                     <a :class="{'nav-link': true, active: selectedTab=='home'}" id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
-                        aria-selected="true" @click="selectedTab='home'">Home</a>
+                        aria-selected="true" @click="selectedTab='home' ">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}" id="profile-tab" data-toggle="tab"
-                        role="tab" aria-controls="profile"
-                        aria-selected="false" @click="selectedTab='cipais'">Pannello CIPAIS</a>
+                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}" id="cipais-tab" data-toggle="tab"
+                        role="tab" aria-controls="cipais"
+                        aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
+                </li>
+                <li class="nav-item">
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', disabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
+                        role="tab" aria-controls="satellitari"
+                        aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -163,8 +161,18 @@
 
                     </div>
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='cipais', active: selectedTab=='cipais'}"
-                        id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
                         <div v-if="dataCipais.length>0" class="container-fluid">
+                            <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
+                            
+                            <p class="description text-justify">I dati degli “Indicatori CIPAIS” provengono dalle campagne limnologiche svolte sui laghi Maggiore e 
+                                Lugano e finanziate dalla Commissione internazionale per la protezione delle acque italo-svizzere 
+                                (CIPAIS). La Commissione si occupa di problemi quali l'inquinamento o altre alterazioni delle acque dei 
+                                laghi Maggiore e di Lugano, nonché dei corsi d'acqua che segnano il confine o che lo attraversano. Le 
+                                ricerche promosse dalla Commissione hanno lo scopo di proporre ai Governi contraenti i provvedimenti 
+                                necessari per il risanamento delle acque comuni e la prevenzione dell'insorgenza di ulteriori forme di 
+                                inquinamento. Contribuiscono inoltre ad integrare e approfondire le attività di monitoraggio e controllo 
+                                effettuate dalle Istituzioni locali. <br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
                                 <div class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
@@ -186,6 +194,28 @@
                             </div> -->
                         </div>
                     </div>
+
+                   
+                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
+                        id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
+                        <div v-if="dataSatellite.length>0" class="container-fluid">  
+                            
+                            <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
+                               
+                                <div class="col-lg-6 col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="dataSatellite[cc[0]]"></highcharts>
+                                    </figure>
+                                </div>
+                                <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+                                    <figure style="min-width: 100%" class="highcharts-figure">
+                                        <highcharts :options="dataSatellite[cc[1]]"></highcharts>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
             </div>
         </div>
     </div>
@@ -344,6 +374,7 @@
                 istsos: null,
                 selectedTab: 'home',
                 selectedCipaisProcedures: [],
+                selectedSatelliteProcedures: [],
                 cipaisData: [],
                 selectedProc: null,
                 showDescription: true,
@@ -362,6 +393,7 @@
                 tableAllData: {},
                 allProcedures: {},
                 dataCipais:{},
+                dataSatellite:{},
                 tableAllData2: {},
                 showModal: false,
                 tableData: {},
@@ -638,6 +670,13 @@
                 },
                 // deep: true
             },
+            selectedSatelliteProcedures: {
+                handler(val){
+                    this.loadSatelliteData();
+                },
+                // deep: true
+            },
+            
             markerLayer: {
                 handler(val){
                     // do stuff
@@ -650,6 +689,7 @@
                     this.loadCardsData();
                     this.tableSetData();
                     this.tableSetDataCipais();
+                    this.tableSetDataSatellite();
                 },
             },
             cards: {
@@ -661,9 +701,10 @@
         },
         mounted() {
             var self = this;
-            this.$root.whereAmI = 'Lago di Lugano';
+            this.$root.whereAmI = 'Lago Maggiore';
 
             this.istsos = this.verbanoIstosos;
+            this.$root.istsos = this.istsos;
 
             const good_names = [
                 "air-temperature",
@@ -762,6 +803,7 @@
                 self.loadCardsData();
                 self.tableSetData();
                 self.tableSetDataCipais();
+                self.tableSetDataSatellite();
 
                 // Set map bounds
                 self.bounds = bounds;
@@ -841,6 +883,113 @@
             Promise.all(prms).then(()=>{self.dataCipais=dataCipais});
 
         },
+        loadSatelliteData () {
+            var self = this;
+            let dataSatellite = [];
+            let prms = [];
+            for (const proc of self.selectedSatelliteProcedures) {
+
+                const info = self.allProcedures[proc.procedure];
+                
+                if (info.samplingTime.beginposition && info.samplingTime.endposition) {
+                    const begin = new Date(info.samplingTime.beginposition);
+                    const end = new Date(info.samplingTime.endposition);
+                    console.log(info)
+                    const prm = self.istsos.fetchSeries(
+                        proc.procedure,
+                        info.observedproperties[0].definition,
+                        begin,
+                        end
+                    ).then(response=>{
+                        const result = istsosToHighcharts.istosToLine(response);
+                        // result.options.name = 'foo';
+                        const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+
+                        result.options.yAxis.plotLines = [{
+                            color: 'darkgrey',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: variableAverage,
+                            label: {
+                                text: 'media della serie',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            }
+                        }];
+
+                        if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+                            result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                        }
+                        else{
+                            result.options.title.text = info.description;
+                            
+                        }
+                        result.options.subtitle.text = `${info.description} (${result.uom})`;
+                        dataSatellite.push(result.options);
+                    });
+                    prms.push(prm);
+                    
+                };
+            };
+
+            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
+           
+        },
+        
+        loadSatelliteData () {
+            var self = this;
+            let dataSatellite = [];
+            let prms = [];
+            for (const proc of self.selectedSatelliteProcedures) {
+
+                const info = self.allProcedures[proc.procedure];
+                
+                if (info.samplingTime.beginposition && info.samplingTime.endposition) {
+                    const begin = new Date(info.samplingTime.beginposition);
+                    const end = new Date(info.samplingTime.endposition);
+                    console.log(info)
+                    const prm = self.istsos.fetchSeries(
+                        proc.procedure,
+                        info.observedproperties[0].definition,
+                        begin,
+                        end
+                    ).then(response=>{
+                        const result = istsosToHighcharts.istosToLine(response);
+                        // result.options.name = 'foo';
+                        const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+
+                        result.options.yAxis.plotLines = [{
+                            color: 'darkgrey',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: variableAverage,
+                            label: {
+                                text: 'media della serie',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            }
+                        }];
+
+                        if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+                            result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                        }
+                        else{
+                            result.options.title.text = info.description;
+                            
+                        }
+                        result.options.subtitle.text = `${info.description} (${result.uom})`;
+                        dataSatellite.push(result.options);
+                    });
+                    prms.push(prm);
+                    
+                };
+            };
+
+            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
+           
+        },
         loadCardsData () {
             var self = this;
 
@@ -859,7 +1008,7 @@
                 // const title = self.tableAllData.filter((el)=>{el.definition==result.urn})[0];
                 // cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27);
                 if(cards[index]==undefined){
-                    cards[index].title = ''; //indicatorDescription.indicatorDescription[cards[index].name].title
+                    cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
                 } else if (indicatorDescription.indicatorDescription[cards[index].name]==undefined) {
                   cards[index].title = cards[index].description.substring(0, 27);
                 } else {
@@ -1039,12 +1188,7 @@
 
             const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
-                if (el.name in indicatorDescription.indicatorDescription) {
-                    el['title'] = indicatorDescription.indicatorDescription[el.name].title;
-                } else {
-                    el['title'] = '';
-                };
-                // el['title'] = indicatorDescription.indicatorDescription[el.name].title;
+                el['title'] = indicatorDescription.indicatorDescription[el.name].title;
                 return el;
             });
             const tableData = {
@@ -1068,16 +1212,22 @@
             this.selectedCipaisProcedures = selectedProc.filter(el=>el.procedure.includes("CIPAIS"));
 
         },
+        tableSetDataSatellite () {
+            const selectedProc = this.features.features[this.selectedMarker].properties.names;
+            this.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
+            console.log(selectedProc)
+            
+        },
         reloadTable (tableProps) {
             var self = this;
             this.tableProps = tableProps
             this.tableSetData();
         },
-        reloadTableCipais (tableProps) {
-            var self = this;
-            this.tableProps = tableProps
-            this.tableSetDataCipais();
-        },
+        // reloadTableCipais (tableProps) {
+        //     var self = this;
+        //     this.tableProps = tableProps
+        //     this.tableSetDataCipais();
+        // },
         populateCockpit () {
             var self = this;
             this.istsos.fetchLastTemetature('W_TEMP_0_4').then((result)=>{
@@ -1323,5 +1473,8 @@
 .table > tbody > tr > td:last-child,
 .table > tfoot > tr > td:last-child {
   width: auto;
+}
+.nav-link {
+  cursor: pointer
 }
 </style>
