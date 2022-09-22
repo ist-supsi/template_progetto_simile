@@ -113,13 +113,13 @@
                           <l-geo-json
                               ref="areaLayer"
                               :geojson="basins"
-                              :options = {pointToLayer: ()=>{}}
+                              :options = areaLayerOptions()
                           />
 
                           <l-geo-json
                               ref="markerLayer"
                               :geojson="features"
-                              :options="markerLayerOptions()"
+                              :options=markerLayerOptions()
                           />
 
                       </l-map>
@@ -241,6 +241,8 @@
     import Highcharts from 'highcharts';
 
     import IstsosIO from '../manageIstsosToken.js';
+
+    import sharedFunctions from './sharedFunctions.js';
 
     import istsosToHighcharts from './istsosToHighcharts';
     import { mean,std,min,sqrt,max } from 'mathjs';
@@ -653,6 +655,12 @@
                 },
                 deep: true
             },
+            // basins: {
+            //     handler(val){
+            //         // do stuff
+            //     },
+            //     deep: true
+            // },
         },
         mounted() {
             var self = this;
@@ -938,67 +946,8 @@
                 self.cards = cards;
             })
         },
-        areaLayerOptions () {
-          var self = this;
-          return
-        },
-        markerLayerOptions () {
-            var self = this;
-            return {
-                pointToLayer: function (feature, latlng) {
-                    const prefixes = feature.properties.names.reduce((prev, info) => {
-                        const name = info.procedure;
-                        const prefix = name.split('_')[0];
-                        if ( !prev.includes(prefix) ) { prev.push(prefix); }
-                        return prev;
-                    }, []);
-                    const suffixes = feature.properties.names.reduce((prev, info) => {
-                        const name = info.procedure;
-
-                        const suffix = name.split('_').at(-1);
-                        if ( !prev.includes(suffix) ) { prev.push(suffix); }
-                        return prev;
-                    }, []);
-
-                    if (!prefixes.every(prefix => prefix=='SATELLITE')) {
-                        let clr;
-                        if ( feature.properties.markerIndex == self.selectedMarker ) {
-                            clr = 'text-primary'
-                        } else {
-                            clr = 'text-secondary'
-                        };
-                        const fontAwesomeIcon = L.divIcon({
-                            html: `<i class="fa fa-map-marker fa-4x ${clr}"></i>`,
-                            iconSize: [40, 80],
-                            iconAnchor: [20, 40],
-                            className: ''
-                        });
-
-                        const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
-                            self.selectedMarker=feature.properties.markerIndex
-                        });
-
-                        if (feature.properties.names[0].message) {
-                            marker.bindTooltip(`<h6>${feature.properties.names[0].message}</h6>`)
-                        };
-
-                        return marker;
-                    } else {
-                        return L.marker(latlng)
-                        // return feature;
-                        // const jsonpoly = self.basins.features.filter(feat => feat.properties.basin==suffixes[0])[0];
-                        // const poly = L.polygon(jsonpoly.geometry.coordinates, {
-                        //     weight: 1,
-                        //     fillOpacity: 0.7,
-                        //     color: 'blue',
-                        //     dashArray: '3'
-                        // });
-                        // return poly;
-                    };
-
-                }
-            }
-        },
+        areaLayerOptions () { return sharedFunctions.areaLayerOptions(this) },
+        markerLayerOptions () { return sharedFunctions.markerLayerOptions(this) },
         removeMarker(index) {
             this.markers.splice(index, 1);
             },
