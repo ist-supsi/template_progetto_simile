@@ -1016,7 +1016,13 @@
                 };
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
                 cards[index].data = result.value;
-                cards[index].uom = result.uom;
+                if(result.uom=='null'){
+                    cards[index].uom = " "  
+                }
+                else{
+                    cards[index].uom = result.uom;
+                }
+                
                 if ( result.x ) {
                     cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
