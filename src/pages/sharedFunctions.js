@@ -4,7 +4,8 @@ function areaLayerOptions (self) {
       style: function (feature) {
           let color = '#6c757d'
           if ( feature.properties.markerIndex==self.selectedMarker ) {
-              color = '#1D62F0 '
+            //   color = '#1D62F0 '
+            color = '#ed595b'
           };
           return {
               color: color,
@@ -39,7 +40,8 @@ function markerLayerOptions (self) {
             if (!prefixes.every(prefix => prefix=='SATELLITE')) {
                 let clr;
                 if ( feature.properties.markerIndex == self.selectedMarker ) {
-                    clr = 'text-primary'
+                    // clr = 'text-primary'
+                    clr = 'text-danger'
                 } else {
                     clr = 'text-secondary'
                 };

@@ -47,10 +47,10 @@ let STOCK_DEFAULTS = LINE_DEFAULTS
 
 STOCK_DEFAULTS['rangeSelector'] = {
 
-    inputFields: {
-        startValue: new Date(2022, 7, 8),
-        endValue: new Date(2022, 8, 9),
-    },
+    // inputFields: {
+    //     startValue: new Date(2022, 7, 8),
+    //     endValue: new Date(2022, 8, 9),
+    // },
     inputPosition: {
         align: 'left',
         x: 0,

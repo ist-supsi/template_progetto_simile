@@ -937,59 +937,59 @@
 
         },
 
-        loadSatelliteData () {
-            var self = this;
-            let dataSatellite = [];
-            let prms = [];
-            for (const proc of self.selectedSatelliteProcedures) {
+        // loadSatelliteData () {
+        //     var self = this;
+        //     let dataSatellite = [];
+        //     let prms = [];
+        //     for (const proc of self.selectedSatelliteProcedures) {
 
-                const info = self.allProcedures[proc.procedure];
+        //         const info = self.allProcedures[proc.procedure];
 
-                if (info.samplingTime.beginposition && info.samplingTime.endposition) {
-                    const begin = new Date(info.samplingTime.beginposition);
-                    const end = new Date(info.samplingTime.endposition);
-                    console.log(info)
-                    const prm = self.istsos.fetchSeries(
-                        proc.procedure,
-                        info.observedproperties[0].definition,
-                        begin,
-                        end
-                    ).then(response=>{
-                        const result = istsosToHighcharts.istosToLine(response);
-                        // result.options.name = 'foo';
-                        const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+        //         if (info.samplingTime.beginposition && info.samplingTime.endposition) {
+        //             const begin = new Date(info.samplingTime.beginposition);
+        //             const end = new Date(info.samplingTime.endposition);
+        //             console.log(info)
+        //             const prm = self.istsos.fetchSeries(
+        //                 proc.procedure,
+        //                 info.observedproperties[0].definition,
+        //                 begin,
+        //                 end
+        //             ).then(response=>{
+        //                 const result = istsosToHighcharts.istosToLine(response);
+        //                 // result.options.name = 'foo';
+        //                 const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
 
-                        result.options.yAxis.plotLines = [{
-                            color: 'darkgrey',
-                            dashStyle: 'ShortDash',
-                            width: 2,
-                            value: variableAverage,
-                            label: {
-                                text: 'media della serie',
-                                align: 'center',
-                                style: {color: 'darkgrey'}
+        //                 result.options.yAxis.plotLines = [{
+        //                     color: 'darkgrey',
+        //                     dashStyle: 'ShortDash',
+        //                     width: 2,
+        //                     value: variableAverage,
+        //                     label: {
+        //                         text: 'media della serie',
+        //                         align: 'center',
+        //                         style: {color: 'darkgrey'}
 
-                            }
-                        }];
+        //                     }
+        //                 }];
 
-                        if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
-                            result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-                        }
-                        else{
-                            result.options.title.text = info.description;
+        //                 if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+        //                     result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+        //                 }
+        //                 else{
+        //                     result.options.title.text = info.description;
 
-                        }
-                        result.options.subtitle.text = `${info.description} (${result.uom})`;
-                        dataSatellite.push(result.options);
-                    });
-                    prms.push(prm);
+        //                 }
+        //                 result.options.subtitle.text = `${info.description} (${result.uom})`;
+        //                 dataSatellite.push(result.options);
+        //             });
+        //             prms.push(prm);
 
-                };
-            };
+        //         };
+        //     };
 
-            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
+        //     Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
 
-        },
+        // },
         loadCardsData () {
             var self = this;
 
