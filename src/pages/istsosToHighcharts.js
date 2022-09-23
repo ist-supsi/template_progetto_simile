@@ -4,7 +4,7 @@ const category_colors = ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
     '#0d233a', '#77a1e5', '#8bbc21']
 
 const LINE_DEFAULTS = {
-   
+
     chart: {
         zoomType: 'x',
         inverted: false,
@@ -22,7 +22,6 @@ const LINE_DEFAULTS = {
     },
     xAxis: {
         type: 'datetime',
-        
     },
     yAxis: {
         gridLineWidth: 1,
@@ -47,55 +46,57 @@ const LINE_DEFAULTS = {
 let STOCK_DEFAULTS = LINE_DEFAULTS
 
 STOCK_DEFAULTS['rangeSelector'] = {
-    
+
     inputFields: {
-        startValue: new Date(2017,1,1),
-        endValue: new Date(2022,9,9),
-    }, 
+        startValue: new Date(2022, 7, 8),
+        endValue: new Date(2022, 8, 9),
+    },
     inputPosition: {
-    align: 'left',
-    x: 0,
-    y: 0
-        },
+        align: 'left',
+        x: 0,
+        y: 0
+    },
     buttonPosition: {
         align: 'right',
         x: 0,
         y: 0
     },
     inputDateFormat: '%Y-%m-%d',
-        buttons: [{
-        type: 'month',
-        count: 1,
-        text: '1m',
-        events: {
+    buttons: [
+        {
+            type: 'month',
+            count: 1,
+            text: '1m',
+            events: {
             // click: function() {
             //     alert('Clicked button');
             // }
         }
-    }, {
-        type: 'month',
-        count: 3,
-        text: '3m'
-    }, 
-    // {
-    //     type: 'month',
-    //     count: 6,
-    //     text: '6m'
-    // }, 
-    {
-        type: 'ytd',
-        text: 'YTD'
-    },
-    // {
-    //     type: 'year',
-    //     count: 1,
-    //     text: '1y'
-    // }, 
-    {
-        type: 'all',
-        text: 'All'
-    } ]
-} 
+        }, {
+            type: 'month',
+            count: 3,
+            text: '3m'
+        },
+        // {
+        //     type: 'month',
+        //     count: 6,
+        //     text: '6m'
+        // },
+        {
+            type: 'ytd',
+            text: 'YTD'
+        },
+        // {
+        //     type: 'year',
+        //     count: 1,
+        //     text: '1y'
+        // },
+        {
+            type: 'all',
+            text: 'All'
+        }
+    ]
+}
 
 function epochToTime(epoch) {
     const coeff = 1000 * 60 * 1;
@@ -117,7 +118,7 @@ function istosToLine (response, title, stock = false) {
             options: JSON.parse(JSON.stringify(STOCK_DEFAULTS))
         };
       }
-      
+
       // console.log(dataArray);
       if (title) { info.options.title = title; };
       info.options.yAxis.title.text = `${dataArray.field[1].name} (${dataArray.field[1].uom})`

@@ -64,7 +64,6 @@ function markerLayerOptions (self) {
                 return marker;
             } else {
                 self.basins.features.map(feat => {
-                    console.log([feat.properties.basin, suffixes[0]]);
                     if ( feat.properties.basin==suffixes[0] ) {
                         feat.properties.markerIndex = feature.properties.markerIndex;
                     };
@@ -72,14 +71,6 @@ function markerLayerOptions (self) {
                 // TO BE REMOVED
                 // return L.marker(latlng)
                 // return feature;
-                // const jsonpoly = self.basins.features.filter(feat => feat.properties.basin==suffixes[0])[0];
-                // const poly = L.polygon(jsonpoly.geometry.coordinates, {
-                //     weight: 1,
-                //     fillOpacity: 0.7,
-                //     color: 'blue',
-                //     dashArray: '3'
-                // });
-                // return poly;
             };
 
         }
