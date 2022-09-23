@@ -127,8 +127,7 @@
             printChart: 'Stampa grafico',
             thousandsSep: ".",
             decimalPoint: ','
-        }
-        
+        },
           
 });
     // Highcharts.setOptions({
@@ -378,7 +377,7 @@
             cards: [{}],
             analisysVariable: this.$root.analisysVariable,
             analisysVariableUrn: this.$root.analisysVariableUrn,
-            seriesBegin: new Date(new Date().setDate(new Date().getDate() - 7)),
+            seriesBegin: new Date(new Date().setDate(new Date().getDate() - 35)),
             seriesEnd: new Date(),
             variableAverage: 0,
             variableStd: 0,
@@ -564,6 +563,7 @@
                                 style: {color: 'darkgrey'}
 
                             }
+                            
                         }];
 
 
