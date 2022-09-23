@@ -42,19 +42,40 @@
 
             </div>
 
+            <div class="row">
+              <div class="col-md-6">
+                <base-input type="date"
+                    label=""
+                    placeholder=""
+                    :max="seriesTo"
+                    helperText="Scarica i dati a partire dal"
+                    v-model="seriesFrom">
+                </base-input>
+              </div>
+              <div class="col-md-6">
+                <base-input type="date"
+                    label=""
+                    placeholder=""
+                    :min="seriesFrom"
+                    :max="(new Date()).toISOString().split('T')[0]"
+                    helperText="Scarica i dati fino al"
+                    v-model="seriesTo">
+                </base-input>
+              </div>
+            </div>
 
             <div v-if="Object.keys(series_data).length>0" class="row" >
-                            <div class="col-md-12">
+                <div class="col-md-12">
 
-                                    <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts>
+                        <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts>
 
-                            </div>
-                        </div>
+                </div>
+            </div>
 
-                        <div slot="footer">
-                            <i v-if="Object.keys(series_data).length==0"
-                                class="fa fa-refresh fa-spin"></i>
-                        </div>
+            <div slot="footer">
+                <i v-if="Object.keys(series_data).length==0"
+                    class="fa fa-refresh fa-spin"></i>
+            </div>
             <!-- <div class="row">
                 <div class="col-12">
                     <card>
@@ -82,6 +103,9 @@
     </div>
 </template>
 <script>
+
+    import Datepicker from 'vuejs-datepicker';
+
     import {Chart} from 'highcharts-vue';
     import Highcharts from 'highcharts';
     // import loadBullet from 'highcharts/modules/bullet.js';
@@ -225,6 +249,7 @@
             highcharts: Chart,
             HighchartCard,
             NotifyButton,
+            Datepicker
             // BULLET_DEFAULTS,
             // LINE_DEFAULT_ANALISI,
             // ModalButton,
@@ -242,7 +267,9 @@
             cards: [{}],
             analisysVariable: this.$root.analisysVariable,
             analisysVariableUrn: this.$root.analisysVariableUrn,
-            seriesBegin: new Date(new Date().setDate(new Date().getDate() - 365)),
+            seriesFrom: null,
+            seriesTo: null,
+            seriesBegin: new Date(new Date().setDate(new Date().getDate() - 185)),
             seriesEnd: new Date(),
             variableAverage: 0,
             variableStd: 0,
@@ -269,11 +296,29 @@
             },
             deep: true
           },
+          seriesFrom: {
+              handler(value) {
+                  this.seriesBegin = new Date(value);
+              },
+              // deep: true
+          },
           seriesBegin: {
               handler(value) {
                 this.setSeries();
               },
               deep: true
+          },
+          seriesEnd: {
+              handler(value) {
+                this.setSeries();
+              },
+              deep: true
+          },
+          seriesTo: {
+              handler(value) {
+                  this.seriesEnd = new Date(value);
+              },
+              // deep: true
           },
           variableInfo: {
               handler(value) {
@@ -285,6 +330,9 @@
         mounted() {
             var self = this;
             this.istsos = this.$root.istsos;
+
+            this.seriesFrom = this.seriesBegin.toISOString().split('T')[0]
+            this.seriesTo = this.seriesEnd.toISOString().split('T')[0]
 
             this.istsos.call({
                 procedures: this.analisysVariable
@@ -368,110 +416,54 @@
                 // if(this.groupedProcedures[self.procedureInfos[this.analisysVariable]]!=undefined){
                     for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
 
-                    console.log(procedure);
-                    this.istsos.fetchSeries(
-                        procedure,
-                        this.procedureInfos[procedure].observedproperties,
-                        this.seriesBegin,
-                        this.seriesEnd
-                    ).then((response)=>{
-                        const result = istsosToHighcharts.istosToLine(response, undefined, true);
-                        console.log(result);
+                        this.istsos.fetchSeries(
+                            procedure,
+                            this.procedureInfos[procedure].observedproperties,
+                            this.seriesBegin,
+                            this.seriesEnd
+                        ).then((response)=>{
+                            const result = istsosToHighcharts.istosToLine(response, undefined, true);
+                            console.log(result);
 
-                        if ( procedure!=self.analisysVariable ) {
-                            result.options.series[0].visible = false;
-                        } else {
-                            result.options.series[0].visible = true;
-                            const series = result.options.series[0].data.map((xy)=>xy[1]);
+                            if ( procedure!=self.analisysVariable ) {
+                                result.options.series[0].visible = false;
+                            } else {
+                                result.options.series[0].visible = true;
+                                const series = result.options.series[0].data.map((xy)=>xy[1]);
 
-                            const variableAverage = mean(series);
-                            const variableStd = sqrt(std(series));
+                                if ( series.length > 0 ) {
+                                    const variableAverage = mean(series);
+                                    // const variableStd = sqrt(std(series));
 
-                            result.options.yAxis.plotLines = [{
-                                color: 'darkgrey',
-                                dashStyle: 'ShortDash',
-                                width: 2,
-                                value: variableAverage,
-                                label: {
-                                    text: 'media della serie',
-                                    align: 'center',
-                                    style: {color: 'darkgrey'}
+                                    result.options.yAxis.plotLines = [{
+                                        color: 'darkgrey',
+                                        dashStyle: 'ShortDash',
+                                        width: 2,
+                                        value: variableAverage,
+                                        label: {
+                                            text: 'media della serie',
+                                            align: 'center',
+                                            style: {color: 'darkgrey'}
 
-                                }
-                            }];
+                                        }
+                                    }];
+                                };
+                            };
+                            result.options.series[0].color = this.category_colors[counter];
+                            counter = counter+1;
 
-                        };
-                        result.options.series[0].color = this.category_colors[counter];
-                        counter = counter+1;
-
-                        if ( !self.series_data.series ) {
-                            self.series_data = result.options;
-                        } else {
-                            self.series_data.series.push(result.options.series[0]);
-                            self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
-                        };
-                    });
-                };
-                // };
-
+                            if ( !self.series_data.series ) {
+                                self.series_data = result.options;
+                            } else {
+                                self.series_data.series.push(result.options.series[0]);
+                                self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
+                            };
+                        });
+                    };
+              // };
             },
-            // DEPRECATED
-            // istosToBullet (response) {
-            //     var self = this;
-            //     const dataArray = response.data.data[0].result.DataArray;
-            //
-            //     // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
-            //     // const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
-            //     // const coords = coords_[0].match(/[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?/gm)[0].split(',')
-            //
-            //     let info = {
-            //         // order: order,
-            //         procedure: this.analisysVariable,
-            //         options: JSON.parse(JSON.stringify(BULLET_DEFAULTS)),
-            //         // coords: coords.map(el=>parseFloat(el))
-            //     };
-            //
-            //     info.uom = dataArray.field[1].uom;
-            //     info.x = new Date(dataArray.values[0][0]);
-            //     // info.options.title.text = "Temperatura Superficiale";
-            //     // TODO: new Date(dataArray.values[0][0])) -> more human format!
-            //     info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
-            //
-            //     info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-            //     info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
-            //     info.value = dataArray.values[0][1];
-            //     return info;
-            // },
-            // istosToLine (response) {
-            //       var self = this;
-            //       const dataArray = response.data.data[0].result.DataArray;
-            //       let info = {
-            //           // order: order,
-            //           procedure: this.analisysVariable,
-            //           options: JSON.parse(JSON.stringify(LINE_DEFAULT_ANALISI))
-            //       };
-
-            //     //   info.options.yAxis.title.text = `Temperatura (${dataArray.field[1].uom})`
-            //       info.uom = dataArray.field[1].uom;
-            //       info.x = new Date(dataArray.values[0][0]);
-            //       // info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-            //       // info.options.series[0].data[0].y = dataArray.values[0][1];
-            //       // info.value = dataArray.values[0][1];
-            //       info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
-            //       const coeff = 1000 * 60 * 1;
-            //       info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
-            //     //   info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-            //       info.options.series[0].data = dataArray.values.filter(el => el[1]!==null).map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
-            //       info.options.series[0].name = response.data.data[0].name;
-            //       info.value = dataArray.values[0][1];
-            //       // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
-            //       return info;
-
-            // },
             getCardIcon2(name){
-
                 return indicatorDescription.getCardIcon(name);
-
             },
 
         },

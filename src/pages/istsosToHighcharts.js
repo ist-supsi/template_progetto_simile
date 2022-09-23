@@ -64,6 +64,11 @@ STOCK_DEFAULTS['rangeSelector'] = {
     inputDateFormat: '%Y-%m-%d',
     buttons: [
         {
+            type: 'week',
+            count: 2,
+            text: '2w'
+        },
+        {
             type: 'month',
             count: 1,
             text: '1m',
@@ -95,7 +100,8 @@ STOCK_DEFAULTS['rangeSelector'] = {
             type: 'all',
             text: 'All'
         }
-    ]
+    ],
+    selected: 2
 }
 
 function epochToTime(epoch) {
