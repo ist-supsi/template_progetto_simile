@@ -48,7 +48,7 @@
                     label=""
                     placeholder=""
                     :max="seriesTo"
-                    helperText="Scarica i dati a partire dal"
+                    helperText="Dati richiesti a partire dal"
                     v-model="seriesFrom">
                 </base-input>
               </div>
@@ -58,7 +58,7 @@
                     placeholder=""
                     :min="seriesFrom"
                     :max="(new Date()).toISOString().split('T')[0]"
-                    helperText="Scarica i dati fino al"
+                    helperText="Dati richiesti fino al"
                     v-model="seriesTo">
                 </base-input>
               </div>
@@ -104,8 +104,6 @@
 </template>
 <script>
 
-    import Datepicker from 'vuejs-datepicker';
-
     import {Chart} from 'highcharts-vue';
     import Highcharts from 'highcharts';
     // import loadBullet from 'highcharts/modules/bullet.js';
@@ -131,8 +129,6 @@
 
     stockInit(Highcharts)
 
-
-
     Highcharts.setOptions({
         lang: {
             loading: 'Sto caricando...',
@@ -141,9 +137,9 @@
             shortMonths: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lugl', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
             exportButtonTitle: "Esporta",
             printButtonTitle: "Importa",
-            rangeSelectorFrom: "Da",
-            rangeSelectorTo: "A",
-            rangeSelectorZoom: "Periodo",
+            rangeSelectorFrom: "Dati in dettaglio dal",
+            rangeSelectorTo: "fino al",
+            rangeSelectorZoom: "Lunghezza periodo in dettaglio",
             downloadPNG: 'Download immagine PNG',
             downloadJPEG: 'Download immagine JPEG',
             downloadPDF: 'Download documento PDF',
@@ -248,8 +244,7 @@
             StatsCard,
             highcharts: Chart,
             HighchartCard,
-            NotifyButton,
-            Datepicker
+            NotifyButton
             // BULLET_DEFAULTS,
             // LINE_DEFAULT_ANALISI,
             // ModalButton,
@@ -271,6 +266,7 @@
             seriesTo: null,
             seriesBegin: new Date(new Date().setDate(new Date().getDate() - 185)),
             seriesEnd: new Date(),
+            locked: false,
             variableAverage: 0,
             variableStd: 0,
             bulletOptions: {},
@@ -304,13 +300,20 @@
           },
           seriesBegin: {
               handler(value) {
-                this.setSeries();
+                  if (this.locked===false) {
+                      this.locked=true;
+                      this.setSeries();
+                  };
+
               },
               deep: true
           },
           seriesEnd: {
               handler(value) {
-                this.setSeries();
+                  if (this.locked===false) {
+                      this.locked=true;
+                      this.setSeries();
+                  };
               },
               deep: true
           },
@@ -401,17 +404,18 @@
                 return acc;
 
             }, {});
-            this.setSeries();
+            // this.setSeries();
         },
         methods: {
-            setBegin (value) {
-                this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
-
-            },
+            // setBegin (value) {
+            //     this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
+            // },
             setSeries () {
                 var self = this;
                 self.series_data = {};
                 let counter=0;
+
+                console.log(this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]);
 
                 // if(this.groupedProcedures[self.procedureInfos[this.analisysVariable]]!=undefined){
                     for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
@@ -423,12 +427,11 @@
                             this.seriesEnd
                         ).then((response)=>{
                             const result = istsosToHighcharts.istosToLine(response, undefined, true);
-                            console.log(result);
 
                             if ( procedure!=self.analisysVariable ) {
-                                result.options.series[0].visible = false;
+                                result.options.series[counter].visible = true;
                             } else {
-                                result.options.series[0].visible = true;
+                                result.options.series[counter].visible = true;
                                 const series = result.options.series[0].data.map((xy)=>xy[1]);
 
                                 if ( series.length > 0 ) {
@@ -449,8 +452,42 @@
                                     }];
                                 };
                             };
-                            result.options.series[0].color = this.category_colors[counter];
+                            result.options.series[counter].color = this.category_colors[counter];
                             counter = counter+1;
+
+                            if (procedure=='VENTO_VEL_MAX') {
+                                let timeout;
+                                result.options.chart.events = {render: function(event) {
+                                    // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
+                                    clearTimeout(timeout);
+                                    timeout = setTimeout(()=>{
+                                        //
+                                        const start = new Date(this.rangeSelector.minInput.max);
+                                        const end = new Date(this.rangeSelector.maxInput.min);
+                                        console.log(self.series_data.series[0].data.map(cc=>cc[0]).indexOf(start.getTime()));
+                                        // Promise.all([
+                                        //     // self.istsos.fetchSeries(
+                                        //     //     procedure,
+                                        //     //     this.procedureInfos[procedure].observedproperties,
+                                        //     //     start,
+                                        //     //     end
+                                        //     // ),
+                                        //     self.istsos.fetchSeries(
+                                        //         "VENTO_DIR",
+                                        //         "urn:ogc:def:parameter:x-istsos:1.0:meteo:wind:direction",
+                                        //         start,
+                                        //         end
+                                        //     ),
+                                        // ]).then(responses=>{
+                                        //     console.log(responses);
+                                        //
+                                        // })
+
+                                        console.log([this.rangeSelector.maxInput.min, this.rangeSelector.minInput.max]);
+                                    }, 1000);
+
+                                }};
+                            };
 
                             if ( !self.series_data.series ) {
                                 self.series_data = result.options;
@@ -458,6 +495,9 @@
                                 self.series_data.series.push(result.options.series[0]);
                                 self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
                             };
+
+                            self.locked = false; //
+
                         });
                     };
               // };

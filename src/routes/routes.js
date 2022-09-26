@@ -12,6 +12,8 @@ import LagoLugano from 'src/pages/LagoLugano.vue'
 
 import Analisi from 'src/pages/Analisi.vue'
 
+import WindbarbMokup from 'src/pages/WindbarbMokup.vue'
+
 //import Typography from 'src/pages/Typography.vue'
 //import Icons from 'src/pages/Icons.vue'
 import LagoComo from 'src/pages/LagoComo.vue'
@@ -92,6 +94,11 @@ const routes = [
         path: 'analisi',
         name: 'Analisi',
         component: Analisi
+      },
+      {
+        path: 'windbarb-mokup',
+        name: 'Windbarb Mokup',
+        component: WindbarbMokup
       },
       // {
       //   path: 'maps',
