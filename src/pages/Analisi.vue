@@ -66,14 +66,20 @@
 
             <div v-if="Object.keys(series_data).length>0" class="row" >
                 <div class="col-md-12">
-
                         <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts>
-
+                </div>
+            </div>
+            <div v-if="Object.keys(wind_data_options).length>0" class="row" >
+                <div class="col-md-8">
+                        <highcharts :options="wind_data_options"></highcharts>
+                </div>
+                <div class="col-md-8">
+                        <!-- <highcharts :options=""></highcharts> -->
                 </div>
             </div>
 
             <div slot="footer">
-                <i v-if="Object.keys(series_data).length==0"
+                <i v-if="Object.keys(wind_data_options).length==0"
                     class="fa fa-refresh fa-spin"></i>
             </div>
             <!-- <div class="row">
@@ -253,6 +259,7 @@
         data () { return {
             last_value: null,
             series_data: {},
+            wind_data_options: {},
             allProcedures: this.$root.allProcedures,
             groupedProcedures: {},
             procedureInfos: {},
@@ -458,13 +465,21 @@
                             if (procedure=='VENTO_VEL_MAX') {
                                 let timeout;
                                 result.options.chart.events = {render: function(event) {
+
                                     // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
                                     clearTimeout(timeout);
                                     timeout = setTimeout(()=>{
                                         //
-                                        const start = new Date(this.rangeSelector.minInput.max);
-                                        const end = new Date(this.rangeSelector.maxInput.min);
-                                        console.log(self.series_data.series[0].data.map(cc=>cc[0]).indexOf(start.getTime()));
+                                        const start_ts = this.rangeSelector.maxInput.min;
+                                        const end_ts = this.rangeSelector.minInput.max;
+                                        const end = new Date(end_ts);
+                                        const start = new Date(start_ts);
+
+                                        let startIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(start_ts);
+                                        if (startIndex==-1) { startIndex=0 };
+                                        let endIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(end_ts);
+                                        if (endIndex==-1) { endIndex=self.series_data.series[0].data.length };
+
                                         // Promise.all([
                                         //     // self.istsos.fetchSeries(
                                         //     //     procedure,
@@ -480,6 +495,8 @@
                                         //     ),
                                         // ]).then(responses=>{
                                         //     console.log(responses);
+                                        //     const response = responses[0];
+                                        //
                                         //
                                         // })
 
