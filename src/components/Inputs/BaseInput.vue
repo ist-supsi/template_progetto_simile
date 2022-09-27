@@ -31,7 +31,7 @@
         </div>
       </span>
     </slot>
-    <slot name="helperText"></slot>
+    <slot name="helperText"><small id="helperText" class="form-text text-muted">{{helperText}}</small></slot>
   </div>
 </template>
 <script>
@@ -54,6 +54,10 @@
       addonLeftIcon: {
         type: String,
         description: "Input icon on the left"
+      },
+      helperText: {
+        type: String,
+        description: "Helper text"
       },
     },
     model: {

@@ -137,9 +137,9 @@
                         aria-selected="true" @click="selectedTab='home'">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}" id="profile-tab" data-toggle="tab"
-                        role="tab" aria-controls="profile"
-                        aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', disabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
+                        role="tab" aria-controls="satellitari"
+                        aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -161,28 +161,23 @@
                         </div>
 
                     </div>
-                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='cipais', active: selectedTab=='cipais'}"
-                        id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        <div v-if="dataCipais.length>0" class="container-fluid">
-                            <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
+                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
+                        id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
+                        <div v-if="dataSatellite.length>0" class="container-fluid">
+
+                            <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
+
                                 <div class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[cc[0]]"></highcharts>
+                                        <highcharts :options="dataSatellite[cc[0]]"></highcharts>
                                     </figure>
                                 </div>
                                 <div v-if="cc[1]" class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[cc[1]]"></highcharts>
+                                        <highcharts :options="dataSatellite[cc[1]]"></highcharts>
                                     </figure>
                                 </div>
                             </div>
-                            <!-- <div class="row" v-if="dataCipais.length%2">
-                                <div class="col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[dataCipais.length]"></highcharts>
-                                    </figure>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
             </div>
@@ -343,6 +338,7 @@
                 istsos: null,
                 selectedTab: 'home',
                 selectedCipaisProcedures: [],
+                selectedSatelliteProcedures: [],
                 cipaisData: [],
                 selectedProc: null,
                 showDescription: true,
@@ -361,6 +357,7 @@
                 tableAllData: {},
                 allProcedures: {},
                 dataCipais:{},
+                dataSatellite:{},
                 tableAllData2: {},
                 showModal: false,
                 tableData: {},
@@ -637,6 +634,12 @@
                 },
                 // deep: true
             },
+            selectedSatelliteProcedures: {
+                handler(val){
+                    this.loadSatelliteData();
+                },
+                // deep: true
+            },
             markerLayer: {
                 handler(val){
                     // do stuff
@@ -649,6 +652,7 @@
                     this.loadCardsData();
                     this.tableSetData();
                     this.tableSetDataCipais();
+                    this.tableSetDataSatellite();
                 },
             },
             cards: {
@@ -841,6 +845,60 @@
             Promise.all(prms).then(()=>{self.dataCipais=dataCipais});
 
         },
+        loadSatelliteData () {
+            var self = this;
+            let dataSatellite = [];
+            let prms = [];
+            for (const proc of self.selectedSatelliteProcedures) {
+
+                const info = self.allProcedures[proc.procedure];
+
+                if (info.samplingTime.beginposition && info.samplingTime.endposition) {
+                    const begin = new Date(info.samplingTime.beginposition);
+                    const end = new Date(info.samplingTime.endposition);
+                    console.log(info)
+                    const prm = self.istsos.fetchSeries(
+                        proc.procedure,
+                        info.observedproperties[0].definition,
+                        begin,
+                        end
+                    ).then(response=>{
+                        const result = istsosToHighcharts.istosToLine(response);
+                        // result.options.name = 'foo';
+                        const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+
+                        result.options.yAxis.plotLines = [{
+                            color: 'darkgrey',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: variableAverage,
+                            label: {
+                                text: 'media della serie',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            }
+                        }];
+
+                        if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+                            result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                        }
+                        else{
+                            result.options.title.text = info.description;
+
+                        }
+                        result.options.subtitle.text = `${info.description} (${result.uom})`;
+                        dataSatellite.push(result.options);
+                    });
+                    prms.push(prm);
+
+                };
+            };
+
+            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
+
+        },
+
         loadCardsData () {
             var self = this;
 
@@ -1067,6 +1125,11 @@
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedCipaisProcedures = selectedProc.filter(el=>el.procedure.includes("CIPAIS"));
 
+        },
+        tableSetDataSatellite () {
+            const selectedProc = this.features.features[this.selectedMarker].properties.names;
+            this.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
+            
         },
         reloadTable (tableProps) {
             var self = this;

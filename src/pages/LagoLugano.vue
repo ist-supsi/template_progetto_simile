@@ -59,7 +59,7 @@
                                     <p v-else class="card-category">{{cards[ii+1].title || "--"}}</p>
                                     <h4 class="card-title">{{cards[ii+1].data || "N.P."}} {{cards[ii+1].uom || ""}}</h4>
                                     <p class="card-category">{{cards[ii+1].message || "--"}}</p>
-                                    
+
                                 </div>
                                 <div slot="footer">
                                     <i v-if="cards[ii+1].data===null" class="fa fa-refresh fa-spin"></i>
@@ -169,14 +169,14 @@
                         id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
                         <div v-if="dataCipais.length>0" class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
-                            
-                            <p class="description text-justify">I dati degli “Indicatori CIPAIS” provengono dalle campagne limnologiche svolte sui laghi Maggiore e 
-                                Lugano e finanziate dalla Commissione internazionale per la protezione delle acque italo-svizzere 
-                                (CIPAIS). La Commissione si occupa di problemi quali l'inquinamento o altre alterazioni delle acque dei 
-                                laghi Maggiore e di Lugano, nonché dei corsi d'acqua che segnano il confine o che lo attraversano. Le 
-                                ricerche promosse dalla Commissione hanno lo scopo di proporre ai Governi contraenti i provvedimenti 
-                                necessari per il risanamento delle acque comuni e la prevenzione dell'insorgenza di ulteriori forme di 
-                                inquinamento. Contribuiscono inoltre ad integrare e approfondire le attività di monitoraggio e controllo 
+
+                            <p class="description text-justify">I dati degli “Indicatori CIPAIS” provengono dalle campagne limnologiche svolte sui laghi Maggiore e
+                                Lugano e finanziate dalla Commissione internazionale per la protezione delle acque italo-svizzere
+                                (CIPAIS). La Commissione si occupa di problemi quali l'inquinamento o altre alterazioni delle acque dei
+                                laghi Maggiore e di Lugano, nonché dei corsi d'acqua che segnano il confine o che lo attraversano. Le
+                                ricerche promosse dalla Commissione hanno lo scopo di proporre ai Governi contraenti i provvedimenti
+                                necessari per il risanamento delle acque comuni e la prevenzione dell'insorgenza di ulteriori forme di
+                                inquinamento. Contribuiscono inoltre ad integrare e approfondire le attività di monitoraggio e controllo
                                 effettuate dalle Istituzioni locali. <br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
                                 <div class="col-lg-6 col-sm-12">
@@ -200,13 +200,13 @@
                         </div>
                     </div>
 
-                   
+
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
                         id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
-                        <div v-if="dataSatellite.length>0" class="container-fluid">  
-                            
+                        <div v-if="dataSatellite.length>0" class="container-fluid">
+
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
-                               
+
                                 <div class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[0]]"></highcharts>
@@ -929,7 +929,7 @@
                         }
                         else{
                             result.options.title.text = info.description;
-                            
+
                         }
                         result.options.subtitle.text = `${info.description} (${result.uom})`;
                         dataCipais.push(result.options);
@@ -948,7 +948,7 @@
             for (const proc of self.selectedSatelliteProcedures) {
 
                 const info = self.allProcedures[proc.procedure];
-                
+
                 if (info.samplingTime.beginposition && info.samplingTime.endposition) {
                     const begin = new Date(info.samplingTime.beginposition);
                     const end = new Date(info.samplingTime.endposition);
@@ -981,18 +981,18 @@
                         }
                         else{
                             result.options.title.text = info.description;
-                            
+
                         }
                         result.options.subtitle.text = `${info.description} (${result.uom})`;
                         dataSatellite.push(result.options);
                     });
                     prms.push(prm);
-                    
+
                 };
             };
 
             Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
-           
+
         },
         loadCardsData () {
             var self = this;
@@ -1156,8 +1156,8 @@
 
             const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
                                 // self.features.features[self.selectedMarker].properties.names
-                            
-                                
+
+
             const filteredSortedData = this.tableAllData.data.filter(el=>{
 
                 if(el.procedures[0] && !el.procedures[0].includes("CIPAIS") && !el.procedures[0].includes("SATELLITE") && selectedProc.includes(el.procedures[0]) ){
@@ -1189,7 +1189,7 @@
                     return comparison*-1
                 }
             });
-           
+
             // TODO: Concordare la paginazione e la statistica dei risultati con
             // il numero di dati filtrati.
 
@@ -1210,21 +1210,19 @@
                     to: Math.min(end+1, this.tableAllData.data.length)
                 },
                 data: slicedData
-                
+
             };
             this.tableData = tableData;
-            console.log(tableData)
         },
         tableSetDataCipais () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedCipaisProcedures = selectedProc.filter(el=>el.procedure.includes("CIPAIS"));
-            
+
         },
         tableSetDataSatellite () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
-            console.log(selectedProc)
-            
+
         },
         // tableSetDataCipais_old () {
 
@@ -1292,8 +1290,8 @@
             var self = this;
             this.tableProps = tableProps
             this.tableSetData();
-            
-            
+
+
         },
         // reloadTableCipais (tableProps) {
         //     var self = this;

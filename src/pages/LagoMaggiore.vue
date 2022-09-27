@@ -10,7 +10,7 @@
 
             <div class="row">
 
-                
+
                 <div class="col-8">
                     <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
                         <div class="col-6" :class="[(cards[ii+1] && cards[ii+1].title) ? 'col-6' : 'col-12']">
@@ -164,14 +164,14 @@
                         id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
                         <div v-if="dataCipais.length>0" class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
-                            
-                            <p class="description text-justify">I dati degli “Indicatori CIPAIS” provengono dalle campagne limnologiche svolte sui laghi Maggiore e 
-                                Lugano e finanziate dalla Commissione internazionale per la protezione delle acque italo-svizzere 
-                                (CIPAIS). La Commissione si occupa di problemi quali l'inquinamento o altre alterazioni delle acque dei 
-                                laghi Maggiore e di Lugano, nonché dei corsi d'acqua che segnano il confine o che lo attraversano. Le 
-                                ricerche promosse dalla Commissione hanno lo scopo di proporre ai Governi contraenti i provvedimenti 
-                                necessari per il risanamento delle acque comuni e la prevenzione dell'insorgenza di ulteriori forme di 
-                                inquinamento. Contribuiscono inoltre ad integrare e approfondire le attività di monitoraggio e controllo 
+
+                            <p class="description text-justify">I dati degli “Indicatori CIPAIS” provengono dalle campagne limnologiche svolte sui laghi Maggiore e
+                                Lugano e finanziate dalla Commissione internazionale per la protezione delle acque italo-svizzere
+                                (CIPAIS). La Commissione si occupa di problemi quali l'inquinamento o altre alterazioni delle acque dei
+                                laghi Maggiore e di Lugano, nonché dei corsi d'acqua che segnano il confine o che lo attraversano. Le
+                                ricerche promosse dalla Commissione hanno lo scopo di proporre ai Governi contraenti i provvedimenti
+                                necessari per il risanamento delle acque comuni e la prevenzione dell'insorgenza di ulteriori forme di
+                                inquinamento. Contribuiscono inoltre ad integrare e approfondire le attività di monitoraggio e controllo
                                 effettuate dalle Istituzioni locali. <br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
                                 <div class="col-lg-6 col-sm-12">
@@ -195,13 +195,13 @@
                         </div>
                     </div>
 
-                   
+
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
                         id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
-                        <div v-if="dataSatellite.length>0" class="container-fluid">  
-                            
+                        <div v-if="dataSatellite.length>0" class="container-fluid">
+
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
-                               
+
                                 <div class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[0]]"></highcharts>
@@ -676,7 +676,7 @@
                 },
                 // deep: true
             },
-            
+
             markerLayer: {
                 handler(val){
                     // do stuff
@@ -890,7 +890,7 @@
             for (const proc of self.selectedSatelliteProcedures) {
 
                 const info = self.allProcedures[proc.procedure];
-                
+
                 if (info.samplingTime.beginposition && info.samplingTime.endposition) {
                     const begin = new Date(info.samplingTime.beginposition);
                     const end = new Date(info.samplingTime.endposition);
@@ -923,73 +923,73 @@
                         }
                         else{
                             result.options.title.text = info.description;
-                            
+
                         }
                         result.options.subtitle.text = `${info.description} (${result.uom})`;
                         dataSatellite.push(result.options);
                     });
                     prms.push(prm);
-                    
+
                 };
             };
 
             Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
-           
+
         },
-        
-        loadSatelliteData () {
-            var self = this;
-            let dataSatellite = [];
-            let prms = [];
-            for (const proc of self.selectedSatelliteProcedures) {
 
-                const info = self.allProcedures[proc.procedure];
-                
-                if (info.samplingTime.beginposition && info.samplingTime.endposition) {
-                    const begin = new Date(info.samplingTime.beginposition);
-                    const end = new Date(info.samplingTime.endposition);
-                    console.log(info)
-                    const prm = self.istsos.fetchSeries(
-                        proc.procedure,
-                        info.observedproperties[0].definition,
-                        begin,
-                        end
-                    ).then(response=>{
-                        const result = istsosToHighcharts.istosToLine(response);
-                        // result.options.name = 'foo';
-                        const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+        // loadSatelliteData () {
+        //     var self = this;
+        //     let dataSatellite = [];
+        //     let prms = [];
+        //     for (const proc of self.selectedSatelliteProcedures) {
 
-                        result.options.yAxis.plotLines = [{
-                            color: 'darkgrey',
-                            dashStyle: 'ShortDash',
-                            width: 2,
-                            value: variableAverage,
-                            label: {
-                                text: 'media della serie',
-                                align: 'center',
-                                style: {color: 'darkgrey'}
+        //         const info = self.allProcedures[proc.procedure];
 
-                            }
-                        }];
+        //         if (info.samplingTime.beginposition && info.samplingTime.endposition) {
+        //             const begin = new Date(info.samplingTime.beginposition);
+        //             const end = new Date(info.samplingTime.endposition);
+        //             console.log(info)
+        //             const prm = self.istsos.fetchSeries(
+        //                 proc.procedure,
+        //                 info.observedproperties[0].definition,
+        //                 begin,
+        //                 end
+        //             ).then(response=>{
+        //                 const result = istsosToHighcharts.istosToLine(response);
+        //                 // result.options.name = 'foo';
+        //                 const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
 
-                        if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
-                            result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-                        }
-                        else{
-                            result.options.title.text = info.description;
-                            
-                        }
-                        result.options.subtitle.text = `${info.description} (${result.uom})`;
-                        dataSatellite.push(result.options);
-                    });
-                    prms.push(prm);
-                    
-                };
-            };
+        //                 result.options.yAxis.plotLines = [{
+        //                     color: 'darkgrey',
+        //                     dashStyle: 'ShortDash',
+        //                     width: 2,
+        //                     value: variableAverage,
+        //                     label: {
+        //                         text: 'media della serie',
+        //                         align: 'center',
+        //                         style: {color: 'darkgrey'}
 
-            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
-           
-        },
+        //                     }
+        //                 }];
+
+        //                 if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+        //                     result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+        //                 }
+        //                 else{
+        //                     result.options.title.text = info.description;
+
+        //                 }
+        //                 result.options.subtitle.text = `${info.description} (${result.uom})`;
+        //                 dataSatellite.push(result.options);
+        //             });
+        //             prms.push(prm);
+
+        //         };
+        //     };
+
+        //     Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
+
+        // },
         loadCardsData () {
             var self = this;
 
@@ -1016,7 +1016,13 @@
                 };
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
                 cards[index].data = result.value;
-                cards[index].uom = result.uom;
+                if(result.uom=='null'){
+                    cards[index].uom = " "  
+                }
+                else{
+                    cards[index].uom = result.uom;
+                }
+                
                 if ( result.x ) {
                     cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
@@ -1215,7 +1221,6 @@
         tableSetDataSatellite () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
-            console.log(selectedProc)
             
         },
         reloadTable (tableProps) {

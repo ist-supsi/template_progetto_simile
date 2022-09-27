@@ -4,7 +4,8 @@ function areaLayerOptions (self) {
       style: function (feature) {
           let color = '#6c757d'
           if ( feature.properties.markerIndex==self.selectedMarker ) {
-              color = '#1D62F0 '
+            //   color = '#1D62F0 '
+            color = '#ed595b'
           };
           return {
               color: color,
@@ -39,7 +40,8 @@ function markerLayerOptions (self) {
             if (!prefixes.every(prefix => prefix=='SATELLITE')) {
                 let clr;
                 if ( feature.properties.markerIndex == self.selectedMarker ) {
-                    clr = 'text-primary'
+                    // clr = 'text-primary'
+                    clr = 'text-danger'
                 } else {
                     clr = 'text-secondary'
                 };
@@ -64,7 +66,6 @@ function markerLayerOptions (self) {
                 return marker;
             } else {
                 self.basins.features.map(feat => {
-                    console.log([feat.properties.basin, suffixes[0]]);
                     if ( feat.properties.basin==suffixes[0] ) {
                         feat.properties.markerIndex = feature.properties.markerIndex;
                     };
@@ -72,14 +73,6 @@ function markerLayerOptions (self) {
                 // TO BE REMOVED
                 // return L.marker(latlng)
                 // return feature;
-                // const jsonpoly = self.basins.features.filter(feat => feat.properties.basin==suffixes[0])[0];
-                // const poly = L.polygon(jsonpoly.geometry.coordinates, {
-                //     weight: 1,
-                //     fillOpacity: 0.7,
-                //     color: 'blue',
-                //     dashArray: '3'
-                // });
-                // return poly;
             };
 
         }

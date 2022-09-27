@@ -1,8 +1,8 @@
 <template>
 
     <div class="content">
-        
-        
+
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-6">
@@ -11,7 +11,7 @@
                     </span>
                 </div>
 
-            
+
                         <div class="col-6">
                         <!-- <div class="alert alert-simile"> -->
                         <stats-card>
@@ -39,22 +39,49 @@
                         </stats-card>
                         <!-- </div> -->
                         </div>
-                
+
             </div>
 
+            <div class="row">
+              <div class="col-md-6">
+                <base-input type="date"
+                    label=""
+                    placeholder=""
+                    :max="seriesTo"
+                    helperText="Dati richiesti a partire dal"
+                    v-model="seriesFrom">
+                </base-input>
+              </div>
+              <div class="col-md-6">
+                <base-input type="date"
+                    label=""
+                    placeholder=""
+                    :min="seriesFrom"
+                    :max="(new Date()).toISOString().split('T')[0]"
+                    helperText="Dati richiesti fino al"
+                    v-model="seriesTo">
+                </base-input>
+              </div>
+            </div>
 
             <div v-if="Object.keys(series_data).length>0" class="row" >
-                            <div class="col-md-12">
+                <div class="col-md-12">
+                        <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts>
+                </div>
+            </div>
+            <div v-if="Object.keys(wind_data_options).length>0" class="row" >
+                <div class="col-md-8">
+                        <highcharts :options="wind_data_options"></highcharts>
+                </div>
+                <div class="col-md-8">
+                        <!-- <highcharts :options=""></highcharts> -->
+                </div>
+            </div>
 
-                                    <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts> 
-                                
-                            </div>
-                        </div>
-
-                        <div slot="footer">
-                            <i v-if="Object.keys(series_data).length==0"
-                                class="fa fa-refresh fa-spin"></i>
-                        </div>
+            <div slot="footer">
+                <i v-if="Object.keys(wind_data_options).length==0"
+                    class="fa fa-refresh fa-spin"></i>
+            </div>
             <!-- <div class="row">
                 <div class="col-12">
                     <card>
@@ -66,15 +93,15 @@
                                       <select @input="setBegin($event.target.value)" class="form-control">
                                           <option :value="7">Una settimana</option>
                                           <option :value="35">Un mese</option>
-                                          <option :value="371">Un anno</option> 
-                                       </select> 
+                                          <option :value="371">Un anno</option>
+                                       </select>
                                   </div>
                               </div>
 
                             </div>
                         </div>
 
-                        
+
                     </card>
                 </div>
             </div> -->
@@ -82,6 +109,7 @@
     </div>
 </template>
 <script>
+
     import {Chart} from 'highcharts-vue';
     import Highcharts from 'highcharts';
     // import loadBullet from 'highcharts/modules/bullet.js';
@@ -102,12 +130,10 @@
     import istsosToHighcharts from './istsosToHighcharts';
     import exportingInit from 'highcharts/modules/exporting';
     import stockInit from 'highcharts/modules/stock'
-    
-    // loadBullet(Highcharts);
-    
-    stockInit(Highcharts)
 
-    
+    // loadBullet(Highcharts);
+
+    stockInit(Highcharts)
 
     Highcharts.setOptions({
         lang: {
@@ -117,9 +143,9 @@
             shortMonths: ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lugl', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'],
             exportButtonTitle: "Esporta",
             printButtonTitle: "Importa",
-            rangeSelectorFrom: "Da",
-            rangeSelectorTo: "A",
-            rangeSelectorZoom: "Periodo",
+            rangeSelectorFrom: "Dati in dettaglio dal",
+            rangeSelectorTo: "fino al",
+            rangeSelectorZoom: "Lunghezza periodo in dettaglio",
             downloadPNG: 'Download immagine PNG',
             downloadJPEG: 'Download immagine JPEG',
             downloadPDF: 'Download documento PDF',
@@ -127,155 +153,15 @@
             printChart: 'Stampa grafico',
             thousandsSep: ".",
             decimalPoint: ','
-        },
-          
+        }
+
+
 });
-    // Highcharts.setOptions({
-    //     chart: {
-    //         zoomType: 'x',
-    //         inverted: false,
-    //     },
-    //     height: '400px',
-    //     time: {
-    //         timezone: 'Europe/Rome'
-    //     },
-    //     title: {
-    //         text: 'Serie temporale'
-    //     },
-    //     subtitle: {
-    //         text: document.ontouchstart === undefined ?
-    //         "clic e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
-    //     },
-    //     xAxis: {
-    //         type: 'datetime'
-    //     },
-    //     yAxis: {
-    //         gridLineWidth: 1,
-    //         title: {
-    //           text: ''
-    //         }
-    //     },
-    //     legend: {
-    //         enabled: true
-    //     },
-    //     plotOptions: {
-    //         line: {marker: {enabled: false}}
-    //     },
-    //     rangeSelector: {
-    //             inputPosition: {
-    //             align: 'left',
-    //             x: 0,
-    //             y: 0
-    //              },
-    //             buttonPosition: {
-    //                 align: 'right',
-    //                 x: 0,
-    //                 y: 0
-    //             },
-    //             inputDateFormat: '%b %e, %Y %H:%M',
-    //              buttons: [{
-    //                 type: 'month',
-    //                 count: 1,
-    //                 text: '1m',
-    //                 events: {
-    //                     click: function() {
-    //                         alert('Clicked button');
-    //                     }
-    //                 }
-    //             }, {
-    //                 type: 'month',
-    //                 count: 3,
-    //                 text: '3m'
-    //             }, {
-    //                 type: 'month',
-    //                 count: 6,
-    //                 text: '6m'
-    //             }, {
-    //                 type: 'ytd',
-    //                 text: 'YTD'
-    //             }, {
-    //                 type: 'year',
-    //                 count: 1,
-    //                 text: '1y'
-    //             }, {
-    //                 type: 'all',
-    //                 text: 'All'
-    //             }]
-    //     },
-    //     series: [{
-    //         type: 'line',
-    //         name: '',
-    //         data: [],
-    //         // color: dataColor
-    //     }]
-    // });
-
-    // const dataColor = '#4572A7'
-
-    // const dataColor = 'black'
-
-    // const BULLET_DEFAULTS = {
-    //     chart: {
-    //         marginTop: 40,
-    //     },
-    //     title: {
-    //         text: "Ultimo valore misurato"
-    //     },
-    //     subtitle: {style: {"color": "#666666", 'padding-bottom': '1.5em'}},
-    //     xAxis: {
-    //         categories: ['<span class="hc-cat-title">Temperature</span><br/>°C']
-    //     },
-    //     yAxis: {
-    //         plotBands: [
-    //             {
-    //                 from: 0,
-    //                 to: 0,
-    //                 color: 'lightgrey'
-    //             },
-    //             {
-    //                 from: 0,
-    //                 to: 0,
-    //                 color: 'rgb(116, 180, 202)',
-    //                 // label: {'text': 'm-3σ'},
-    //             }, {
-    //                 from: 0,
-    //                 to: 0,
-    //                 color: 'rgb(93, 133, 198)',
-    //                 // label: {text: 'm±σ'}
-
-    //             }, {
-    //                 from: 0,
-    //                 to: 0,
-    //                 color: 'rgb(68, 125, 99)',
-    //                 // label: {'text': 'm+3σ'},
-    //             }, {
-    //                 from: 0,
-    //                 to: 0,
-    //                 color: 'lightgrey',
-    //                 // label: {'text': 'm+3σ'},
-    //             }
-    //         ],
-    //         title: null
-    //     },
-    //     series: [{
-    //         data: [{
-    //             y: 0,
-    //             target: null,
-    //             color: dataColor
-    //         }]
-    //     }],
-    //     tooltip: {
-    //         pointFormat: '<b>{point.y}</b> (with target at {point.target})'
-    //     }
-    // };
-
-    
-
     const LINE_DEFAULT_ANALISI = {
         chart: {
             zoomType: 'x',
             inverted: false,
-            
+
         },
         height: '400px',
         time: {
@@ -303,47 +189,52 @@
         plotOptions: {
             line: {marker: {enabled: false}}
         },
-        rangeSelector: {
-                inputPosition: {
-                align: 'left',
-                x: 0,
-                y: 0
-                 },
-                buttonPosition: {
-                    align: 'right',
-                    x: 0,
-                    y: 0
-                },
-                inputDateFormat: '%b %e, %Y %H:%M',
-                 buttons: [{
-                    type: 'month',
-                    count: 1,
-                    text: '1m',
-                    events: {
-                        click: function() {
-                            alert('Clicked button');
-                        }
-                    }
-                }, {
-                    type: 'month',
-                    count: 3,
-                    text: '3m'
-                }, {
-                    type: 'month',
-                    count: 6,
-                    text: '6m'
-                }, {
-                    type: 'ytd',
-                    text: 'YTD'
-                }, {
-                    type: 'year',
-                    count: 1,
-                    text: '1y'
-                }, {
-                    type: 'all',
-                    text: 'All'
-                }]
-        },
+        // rangeSelector: {
+        //     inputFields: {
+        //         startValue: new Date(2022, 8, 15),
+        //     },
+        //     inputPosition: {
+        //     align: 'left',
+        //     x: 0,
+        //     y: 0
+        //      },
+        //     buttonPosition: {
+        //         align: 'right',
+        //         x: 0,
+        //         y: 0
+        //     },
+        //     inputDateFormat: '%b %e, %Y %H:%M',
+        //      buttons: [
+        //         {
+        //             type: 'month',
+        //             count: 1,
+        //             text: '1m',
+        //             events: {
+        //                 click: function() {
+        //                     alert('Clicked button');
+        //                 }
+        //             }
+        //         }, {
+        //             type: 'month',
+        //             count: 3,
+        //             text: '3m'
+        //         }, {
+        //             type: 'month',
+        //             count: 6,
+        //             text: '6m'
+        //         }, {
+        //             type: 'ytd',
+        //             text: 'YTD'
+        //         }, {
+        //             type: 'year',
+        //             count: 1,
+        //             text: '1y'
+        //         }, {
+        //             type: 'all',
+        //             text: 'All'
+        //         }
+        //     ]
+        // },
         series: [{
             type: 'line',
             name: '',
@@ -359,15 +250,16 @@
             StatsCard,
             highcharts: Chart,
             HighchartCard,
-            NotifyButton,
+            NotifyButton
             // BULLET_DEFAULTS,
-            LINE_DEFAULT_ANALISI,
+            // LINE_DEFAULT_ANALISI,
             // ModalButton,
             // Modal
         },
         data () { return {
             last_value: null,
             series_data: {},
+            wind_data_options: {},
             allProcedures: this.$root.allProcedures,
             groupedProcedures: {},
             procedureInfos: {},
@@ -377,8 +269,11 @@
             cards: [{}],
             analisysVariable: this.$root.analisysVariable,
             analisysVariableUrn: this.$root.analisysVariableUrn,
-            seriesBegin: new Date(new Date().setDate(new Date().getDate() - 35)),
+            seriesFrom: null,
+            seriesTo: null,
+            seriesBegin: new Date(new Date().setDate(new Date().getDate() - 185)),
             seriesEnd: new Date(),
+            locked: false,
             variableAverage: 0,
             variableStd: 0,
             bulletOptions: {},
@@ -389,7 +284,6 @@
           series_data: {
              handler(val){
                // do stuff
-            //    this.setSeries();
              },
              deep: true
           },
@@ -403,13 +297,38 @@
             handler(val){
 
             },
-             deep: true
+            deep: true
+          },
+          seriesFrom: {
+              handler(value) {
+                  this.seriesBegin = new Date(value);
+              },
+              // deep: true
           },
           seriesBegin: {
               handler(value) {
-                this.setSeries();       
+                  if (this.locked===false) {
+                      this.locked=true;
+                      this.setSeries();
+                  };
+
               },
               deep: true
+          },
+          seriesEnd: {
+              handler(value) {
+                  if (this.locked===false) {
+                      this.locked=true;
+                      this.setSeries();
+                  };
+              },
+              deep: true
+          },
+          seriesTo: {
+              handler(value) {
+                  this.seriesEnd = new Date(value);
+              },
+              // deep: true
           },
           variableInfo: {
               handler(value) {
@@ -422,12 +341,15 @@
             var self = this;
             this.istsos = this.$root.istsos;
 
+            this.seriesFrom = this.seriesBegin.toISOString().split('T')[0]
+            this.seriesTo = this.seriesEnd.toISOString().split('T')[0]
+
             this.istsos.call({
                 procedures: this.analisysVariable
             }).then((response)=>{
                 self.variableInfo = response;
             });
-            
+
             let prm = this.istsos.fetch({
                 procedures: this.analisysVariable,
                 eventtime: 'last',
@@ -444,7 +366,7 @@
                 else{
                     data=null;
                 };
-     
+
                 const info= {
                     message: result.data.data[0].featureOfInterest.name.split(':').at(-1),
                     data: data,
@@ -463,9 +385,9 @@
                     info.icon = indicatorDescription.indicatorDescription[info.name].icon;
                 }
                 self.cards = [info];
-            
+
             });
-            
+
             this.groupedProcedures = Object.values(this.allProcedures).reduce((acc, it) => {
 
                 let arr = it.name.split('_');
@@ -487,184 +409,120 @@
                     };
                 };
                 return acc;
-                // if ( arr.length<=2 ) {
-                //
-                //     acc[it.name] = [it.name];
-                //
-                //     return acc;
-                // } else {
-                //     const key = arr.slice(0, -2).join('_');
-                //     self.procedureInfos[it.name] = {
-                //         group: key,
-                //         observedproperties: it.observedproperties[0].definition
-                //     };
-                //     if ( key in acc ) {
-                //         acc[key].push(it.name);
-                //     } else {
-                //         acc[key] = [it.name];
-                //     };
-                //     return acc;
-                // };
-                
 
-                }, {});
-                // this.setBegin();
+            }, {});
+            // this.setSeries();
         },
         methods: {
-            setBegin (value) {
-                this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
-                
-            },
+            // setBegin (value) {
+            //     this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
+            // },
             setSeries () {
                 var self = this;
                 self.series_data = {};
                 let counter=0;
-                
+
+                console.log(this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]);
+
                 // if(this.groupedProcedures[self.procedureInfos[this.analisysVariable]]!=undefined){
                     for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
-                    
-                    this.istsos.fetchSeries(
-                        procedure,
-                        this.procedureInfos[procedure].observedproperties,
-                        this.seriesBegin,
-                        this.seriesEnd
-                    ).then((response)=>{
-                        const result = istsosToHighcharts.istosToLine(response, undefined, true);
-                        
-                        // const result = self.istosToLine(response);
-                        if ( procedure!=self.analisysVariable ) {
-                            result.options.series[0].visible = false;
-                        } else {
-                            result.options.series[0].visible = true;
-                            const series = result.options.series[0].data.map((xy)=>xy[1]);
 
-                            const variableAverage = mean(series);
-                            const variableStd = sqrt(std(series));
+                        this.istsos.fetchSeries(
+                            procedure,
+                            this.procedureInfos[procedure].observedproperties,
+                            this.seriesBegin,
+                            this.seriesEnd
+                        ).then((response)=>{
+                            const result = istsosToHighcharts.istosToLine(response, undefined, true);
 
-                            // if(series.length>0){
-                            // const variableAverage = mean(series);
-                            // const variableStd = sqrt(std(series));
-                            // }
-                            // else{
-                            // const variableAverage = null;
-                            // const variableStd = null;
-                            // }
+                            if ( procedure!=self.analisysVariable ) {
+                                result.options.series[counter].visible = true;
+                            } else {
+                                result.options.series[counter].visible = true;
+                                const series = result.options.series[0].data.map((xy)=>xy[1]);
 
+                                if ( series.length > 0 ) {
+                                    const variableAverage = mean(series);
+                                    // const variableStd = sqrt(std(series));
 
-                            // console.log(result);
-                            result.options.yAxis.plotLines = [{
-                            color: 'darkgrey',
-                            dashStyle: 'ShortDash',
-                            width: 2,
-                            value: variableAverage,
-                            label: {
-                                text: 'media della serie',
-                                align: 'center',
-                                style: {color: 'darkgrey'}
+                                    result.options.yAxis.plotLines = [{
+                                        color: 'darkgrey',
+                                        dashStyle: 'ShortDash',
+                                        width: 2,
+                                        value: variableAverage,
+                                        label: {
+                                            text: 'media della serie',
+                                            align: 'center',
+                                            style: {color: 'darkgrey'}
 
-                            }
-                            
-                        }];
+                                        }
+                                    }];
+                                };
+                            };
+                            result.options.series[counter].color = this.category_colors[counter];
+                            counter = counter+1;
 
+                            if (procedure=='VENTO_VEL_MAX') {
+                                let timeout;
+                                result.options.chart.events = {render: function(event) {
 
-                            // if ( prm===undefined ) {
-                            //     prm = Promise.resolve();
-                            // };
-                            // (prm).then(()=>{
-                            //     self.bulletOptions.yAxis.plotBands[0].from = min([0, min(series)]);
-                            //     self.bulletOptions.yAxis.plotBands[0].to = variableAverage-3*variableStd;
+                                    // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
+                                    clearTimeout(timeout);
+                                    timeout = setTimeout(()=>{
+                                        //
+                                        const start_ts = this.rangeSelector.maxInput.min;
+                                        const end_ts = this.rangeSelector.minInput.max;
+                                        const end = new Date(end_ts);
+                                        const start = new Date(start_ts);
 
-                            //     self.bulletOptions.yAxis.plotBands[1].from = variableAverage-3*variableStd;
-                            //     self.bulletOptions.yAxis.plotBands[1].to = variableAverage-variableStd;
-                            //     self.bulletOptions.yAxis.plotBands[1].label = {text: 'm-3σ'}
-                            //     self.bulletOptions.yAxis.plotBands[2].from = variableAverage-variableStd;
-                            //     self.bulletOptions.yAxis.plotBands[2].to = variableAverage+variableStd;
-                            //     self.bulletOptions.yAxis.plotBands[2].label = {text: 'm±σ'}
-                            //     self.bulletOptions.yAxis.plotBands[3].from = variableAverage+variableStd;
-                            //     self.bulletOptions.yAxis.plotBands[3].to = variableAverage+3*variableStd;
-                            //     self.bulletOptions.yAxis.plotBands[3].label = {text: 'm+3σ'}
-                            //     self.bulletOptions.series[0].data[0].target = series.slice(-1)[0];
+                                        let startIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(start_ts);
+                                        if (startIndex==-1) { startIndex=0 };
+                                        let endIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(end_ts);
+                                        if (endIndex==-1) { endIndex=self.series_data.series[0].data.length };
 
-                            //     // self.bulletOptions.yAxis.plotBands[4].from = variableAverage+3*variableStd;
-                            //     // self.bulletOptions.yAxis.plotBands[4].to = max(series);
+                                        // Promise.all([
+                                        //     // self.istsos.fetchSeries(
+                                        //     //     procedure,
+                                        //     //     this.procedureInfos[procedure].observedproperties,
+                                        //     //     start,
+                                        //     //     end
+                                        //     // ),
+                                        //     self.istsos.fetchSeries(
+                                        //         "VENTO_DIR",
+                                        //         "urn:ogc:def:parameter:x-istsos:1.0:meteo:wind:direction",
+                                        //         start,
+                                        //         end
+                                        //     ),
+                                        // ]).then(responses=>{
+                                        //     console.log(responses);
+                                        //     const response = responses[0];
+                                        //
+                                        //
+                                        // })
 
-                            // });
+                                        console.log([this.rangeSelector.maxInput.min, this.rangeSelector.minInput.max]);
+                                    }, 1000);
 
-                        };
-                        result.options.series[0].color = this.category_colors[counter];
-                        counter = counter+1;
-                        
-                        
-                        if ( !self.series_data.series ) {
-                            self.series_data = result.options;
-                        } else {
-                            self.series_data.series.push(result.options.series[0]);
-                            self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
-                        };
-                       
-                    });
-                };
-                // };
-               
+                                }};
+                            };
+
+                            if ( !self.series_data.series ) {
+                                self.series_data = result.options;
+                            } else {
+                                self.series_data.series.push(result.options.series[0]);
+                                self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
+                            };
+
+                            self.locked = false; //
+
+                        });
+                    };
+              // };
             },
-            istosToBullet (response) {
-                var self = this;
-                const dataArray = response.data.data[0].result.DataArray;
-
-                // console.log(dataArray); /profondità di [+-]?\d+(\.\d+)? m/gm
-                // const coords_ = response.data.data[0].featureOfInterest.geom.match(/<gml:Point srsName='EPSG:4326'><gml:coordinates>[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?<\/gml:coordinates><\/gml:Point>/gm);
-                // const coords = coords_[0].match(/[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?,[+-]?\d+(\.\d+)?/gm)[0].split(',')
-
-                let info = {
-                    // order: order,
-                    procedure: this.analisysVariable,
-                    options: JSON.parse(JSON.stringify(BULLET_DEFAULTS)),
-                    // coords: coords.map(el=>parseFloat(el))
-                };
-
-                info.uom = dataArray.field[1].uom;
-                info.x = new Date(dataArray.values[0][0]);
-                // info.options.title.text = "Temperatura Superficiale";
-                // TODO: new Date(dataArray.values[0][0])) -> more human format!
-                info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
-
-                info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-                info.options.series[0].data[0].y = parseFloat(dataArray.values[0][1].toPrecision(2));
-                info.value = dataArray.values[0][1];
-                return info;
-            },
-            // istosToLine (response) {
-            //       var self = this;
-            //       const dataArray = response.data.data[0].result.DataArray;
-            //       let info = {
-            //           // order: order,
-            //           procedure: this.analisysVariable,
-            //           options: JSON.parse(JSON.stringify(LINE_DEFAULT_ANALISI))
-            //       };
-
-            //     //   info.options.yAxis.title.text = `Temperatura (${dataArray.field[1].uom})`
-            //       info.uom = dataArray.field[1].uom;
-            //       info.x = new Date(dataArray.values[0][0]);
-            //       // info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-            //       // info.options.series[0].data[0].y = dataArray.values[0][1];
-            //       // info.value = dataArray.values[0][1];
-            //       info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
-            //       const coeff = 1000 * 60 * 1;
-            //       info.options.subtitle.text = `Valore rilevato al: ${dataArray.values[0][0]}`;
-            //     //   info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
-            //       info.options.series[0].data = dataArray.values.filter(el => el[1]!==null).map(el => [(new Date(new Date(Math.round(new Date(el[0]).getTime() / coeff) * coeff))).getTime(), parseFloat(el[1].toPrecision(3))]);
-            //       info.options.series[0].name = response.data.data[0].name;
-            //       info.value = dataArray.values[0][1];
-            //       // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
-            //       return info;
-                
-            // },
             getCardIcon2(name){
-                
                 return indicatorDescription.getCardIcon(name);
-
             },
-            
+
         },
   }
 </script>
