@@ -104,9 +104,85 @@ STOCK_DEFAULTS['rangeSelector'] = {
     selected: 2
 }
 
+const WINDBARB_DEFAULTS = {
+
+    title: {
+        text: 'Vento'
+    },
+
+    // subtitle: {
+    //     text: 'Source: ' +
+    //         '<a href="https://www.yr.no/nb/historikk/graf/1-137598/Norge/Vestland/Vik/Vik%C3%B8yri?q=2022-07-30"' +
+    //         'target="_blank">YR</a>'
+    // },
+
+    xAxis: {
+        type: 'datetime',
+        offset: 40
+    },
+
+    yAxis: {
+        title: {
+            text: 'Velocità del vento (m/s)'
+        }
+    },
+
+    plotOptions: {
+        series: {
+            pointStart: Date.UTC(2017, 0, 1, 0),
+            // pointInterval: 36e5
+        }
+    },
+    series: [
+      // {
+      //   type: 'windbarb',
+      //   data: [],
+      //   name: 'Wind',
+      //   // color: Highcharts.getOptions().colors[1],
+      //   showInLegend: false,
+      //   // tooltip: {valueSuffix: ' m/s'}
+      // },
+      {
+        type: 'area',
+        keys: ['x', 'y'], // wind direction is not used here
+        data: [],
+        // color: Highcharts.getOptions().colors[0],
+        // fillColor: {
+        //     linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+        //     stops: [
+        //         [0, Highcharts.getOptions().colors[0]],
+        //         [
+        //             1,
+        //             Highcharts.color(Highcharts.getOptions().colors[0])
+        //                 .setOpacity(0.25).get()
+        //         ]
+        //     ]
+        // },
+        name: 'Wind speed',
+        tooltip: {valueSuffix: ' m/s'},
+        states: {inactive: {opacity: 1}}
+    }]
+}
+
+function windbarb(data) {
+    let options = JSON.parse(JSON.stringify(WINDBARB_DEFAULTS));
+    // options['series'][0].data = data;
+    options['series'][1].data = data;
+    return options;
+};
+
 function epochToTime(epoch) {
     const coeff = 1000 * 60 * 1;
     return (new Date(new Date(Math.round(new Date(epoch).getTime() / coeff) * coeff))).getTime()
+};
+
+function istsosToSeries(response) {
+    const dataArray = response.data.data[0].result.DataArray;
+    return {
+        name: dataArray.field[1].name,
+        uom: dataArray.field[1].uom,
+        series: dataArray.values.filter(el=>el[1]!==null).map(el=>[epochToTime(el[0]), parseFloat(el[1].toPrecision(3))]),
+    }
 };
 
 function istosToLine (response, title, stock = false) {
@@ -150,4 +226,4 @@ function istosToLine (response, title, stock = false) {
       return info;
 }
 
-export default {istosToLine};
+export default {istosToLine, windbarb, istsosToSeries};

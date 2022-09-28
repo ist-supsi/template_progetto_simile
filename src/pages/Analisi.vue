@@ -69,6 +69,7 @@
                         <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts>
                 </div>
             </div>
+
             <div v-if="Object.keys(wind_data_options).length>0" class="row" >
                 <div class="col-md-8">
                         <highcharts :options="wind_data_options"></highcharts>
@@ -156,7 +157,7 @@
         }
 
 
-});
+    });
     const LINE_DEFAULT_ANALISI = {
         chart: {
             zoomType: 'x',
@@ -429,108 +430,102 @@
                 self.wind_data_options = {};
                 let counter=0;
 
-                console.log(this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]);
+                for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
 
-                // if(this.groupedProcedures[self.procedureInfos[this.analisysVariable]]!=undefined){
-                    for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
+                    this.istsos.fetchSeries(
+                        procedure,
+                        this.procedureInfos[procedure].observedproperties,
+                        this.seriesBegin,
+                        this.seriesEnd
+                    ).then((response)=>{
+                        let result = istsosToHighcharts.istosToLine(response, undefined, true);
 
-                        this.istsos.fetchSeries(
-                            procedure,
-                            this.procedureInfos[procedure].observedproperties,
-                            this.seriesBegin,
-                            this.seriesEnd
-                        ).then((response)=>{
-                            const result = istsosToHighcharts.istosToLine(response, undefined, true);
+                        if ( procedure!=self.analisysVariable ) {
+                            result.options.series[counter].visible = true;
+                        } else {
+                            result.options.series[counter].visible = true;
+                            const series = result.options.series[0].data.map((xy)=>xy[1]);
 
-                            if ( procedure!=self.analisysVariable ) {
-                                result.options.series[counter].visible = true;
-                            } else {
-                                result.options.series[counter].visible = true;
-                                const series = result.options.series[0].data.map((xy)=>xy[1]);
+                            if ( series.length > 0 ) {
+                                const variableAverage = mean(series);
+                                // const variableStd = sqrt(std(series));
 
-                                if ( series.length > 0 ) {
-                                    const variableAverage = mean(series);
-                                    // const variableStd = sqrt(std(series));
-
-                                    result.options.yAxis.plotLines = [{
-                                        color: 'darkgrey',
-                                        dashStyle: 'ShortDash',
-                                        width: 2,
-                                        value: variableAverage,
-                                        label: {
-                                            text: 'media della serie',
-                                            align: 'center',
-                                            style: {color: 'darkgrey'}
-
-                                        }
-                                    }];
-                                };
+                                result.options.yAxis.plotLines = [{
+                                    color: 'darkgrey',
+                                    dashStyle: 'ShortDash',
+                                    width: 2,
+                                    value: variableAverage,
+                                    label: {
+                                        text: 'media della serie',
+                                        align: 'center',
+                                        style: {color: 'darkgrey'}
+                                    }
+                                }];
                             };
-                            result.options.series[counter].color = this.category_colors[counter];
-                            counter = counter+1;
+                        };
+                        result.options.series[counter].color = this.category_colors[counter];
+                        counter = counter+1;
 
-                            if (procedure=='VENTO_VEL_MAX') {
+                        if (procedure=='VENTO_VEL_MAX') {
+
+                            this.istsos.fetchSeries(
+                                "VENTO_DIR",
+                                "urn:ogc:def:parameter:x-istsos:1.0:meteo:wind:direction",
+                                this.seriesBegin,
+                                this.seriesEnd
+                            ).then((response)=>{
+                                const windirData = istsosToHighcharts.istsosToSeries(response);
+
+                                let windataObj = {};
+                                for (const el of windirData.series) {
+                                    windataObj[el[0]] = el[1];
+                                };
+                                console.log(windataObj);
+                                console.log(result);
                                 let timeout;
                                 result.options.chart.events = {render: function(event) {
-
                                     // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
                                     clearTimeout(timeout);
                                     timeout = setTimeout(()=>{
-                                        //
                                         const start_ts = this.rangeSelector.maxInput.min;
                                         const end_ts = this.rangeSelector.minInput.max;
                                         const end = new Date(end_ts);
                                         const start = new Date(start_ts);
 
-                                        let startIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(start_ts);
+                                        let startIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(start.getTime());
                                         if (startIndex==-1) { startIndex=0 };
-                                        let endIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(end_ts);
+                                        let endIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(end.getTime());
                                         if (endIndex==-1) { endIndex=self.series_data.series[0].data.length };
 
-                                        Promise.all([
-                                            self.istsos.fetchSeries(
-                                                procedure,
-                                                this.procedureInfos[procedure].observedproperties,
-                                                start,
-                                                end
-                                            ),
-                                            self.istsos.fetchSeries(
-                                                "VENTO_DIR",
-                                                "urn:ogc:def:parameter:x-istsos:1.0:meteo:wind:direction",
-                                                start,
-                                                end
-                                            ),
-                                        ]).then(responses=>{
-                                            console.log(responses);
-                                            const response = responses[0];
-                                        })
-                                        
-                                        console.log([this.rangeSelector.maxInput.min, this.rangeSelector.minInput.max]);
+                                        let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex);
+                                        for ( const el of wind_data ) {
+                                            el.push(windataObj[el[0]]||null);
+                                        };
+                                        console.log(wind_data);
+                                        self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
                                     }, 1000);
-                                    
                                 }};
-                            };
-                            
-                            if ( !self.series_data.series ) {
-                                self.series_data = result.options;
-                            } else {
-                                self.series_data.series.push(result.options.series[0]);
-                                self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
-                            };
+                            });
+                        };
+                        if ( !self.series_data.series ) {
+                            self.series_data = result.options;
+                        } else {
+                            self.series_data.series.push(result.options.series[0]);
+                            self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
+                        };
+                    });
+                };
 
-                            self.locked = false; //
-                            // self.wind_data_options=result.options;
-                            self.wind_data_options=self.series_data
-                        });
-                    };
-              // };
+                self.locked = false; //
+                // self.wind_data_options=result.options;
+                // self.wind_data_options=self.series_data
             },
             getCardIcon2(name){
                 return indicatorDescription.getCardIcon(name);
-            },
+            }
+        }
+    };
 
-        },
-  }
 </script>
 <style>
 

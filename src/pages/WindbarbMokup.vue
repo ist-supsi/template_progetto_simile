@@ -1,7 +1,7 @@
 <template>
     <div class="row" >
         <div class="col-md-12">
-            <highcharts constructor-type="stockChart" :options="options"></highcharts>
+            <highcharts :options="options"></highcharts>
         </div>
     </div>
 </template>
