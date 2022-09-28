@@ -1,7 +1,7 @@
 <template>
     <div class="row" >
         <div class="col-md-12">
-            <highcharts :options="options"></highcharts>
+            <highcharts constructor-type="stockChart" :options="options"></highcharts>
         </div>
     </div>
 </template>
@@ -172,17 +172,17 @@
                     //     startValue: new Date(2022, 7, 8),
                     //     endValue: new Date(2022, 8, 9),
                     // },
-                    // inputPosition: {
-                    //     align: 'left',
-                    //     x: 0,
-                    //     y: 0
-                    // },
-                    // buttonPosition: {
-                    //     align: 'right',
-                    //     x: 0,
-                    //     y: 0
-                    // },
-                    // inputDateFormat: '%Y-%m-%d',
+                    inputPosition: {
+                        align: 'left',
+                        x: 0,
+                        y: 0
+                    },
+                    buttonPosition: {
+                        align: 'right',
+                        x: 0,
+                        y: 0
+                    },
+                    inputDateFormat: '%Y-%m-%d',
                     buttons: [
                         // {
                         //     type: 'week',
@@ -222,7 +222,7 @@
                             text: 'All'
                         }
                     ],
-                    inputEnabled: false
+                    inputEnabled: true
                 }
 
             };
