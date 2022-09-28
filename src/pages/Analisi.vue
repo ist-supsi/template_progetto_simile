@@ -506,6 +506,8 @@
                                     }, 1000);
                                 }};
                             });
+
+
                         };
                         if ( !self.series_data.series ) {
                             self.series_data = result.options;
