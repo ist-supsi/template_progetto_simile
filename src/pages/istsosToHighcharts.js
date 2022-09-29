@@ -1,7 +1,7 @@
-
+import Highcharts from 'highcharts';
 
 const category_colors = ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
-    '#0d233a', '#77a1e5', '#8bbc21']
+    '#0d233a', '#77a1e5', '#8bbc21'];
 
 const LINE_DEFAULTS = {
 
@@ -43,7 +43,7 @@ const LINE_DEFAULTS = {
     }]
 };
 
-let STOCK_DEFAULTS = LINE_DEFAULTS
+let STOCK_DEFAULTS = LINE_DEFAULTS;
 
 STOCK_DEFAULTS['rangeSelector'] = {
 
@@ -102,7 +102,7 @@ STOCK_DEFAULTS['rangeSelector'] = {
         }
     ],
     selected: 2
-}
+};
 
 const WINDBARB_DEFAULTS = {
 
@@ -134,39 +134,105 @@ const WINDBARB_DEFAULTS = {
         }
     },
     series: [
-      // {
-      //   type: 'windbarb',
-      //   data: [],
-      //   name: 'Wind',
-      //   // color: Highcharts.getOptions().colors[1],
-      //   showInLegend: false,
-      //   // tooltip: {valueSuffix: ' m/s'}
-      // },
+      {
+        type: 'windbarb',
+        data: [],
+        name: 'Wind',
+        color: Highcharts.getOptions().colors[1],
+        showInLegend: false,
+        // tooltip: {valueSuffix: ' m/s'}
+      },
       {
         type: 'area',
         keys: ['x', 'y'], // wind direction is not used here
         data: [],
-        // color: Highcharts.getOptions().colors[0],
-        // fillColor: {
-        //     linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-        //     stops: [
-        //         [0, Highcharts.getOptions().colors[0]],
-        //         [
-        //             1,
-        //             Highcharts.color(Highcharts.getOptions().colors[0])
-        //                 .setOpacity(0.25).get()
-        //         ]
-        //     ]
-        // },
+        color: Highcharts.getOptions().colors[0],
+        fillColor: {
+            linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+            stops: [
+                [0, Highcharts.getOptions().colors[0]],
+                [
+                    1,
+                    Highcharts.color(Highcharts.getOptions().colors[0])
+                        .setOpacity(0.25).get()
+                ]
+            ]
+        },
         name: 'Wind speed',
         tooltip: {valueSuffix: ' m/s'},
         states: {inactive: {opacity: 1}}
     }]
-}
+};
+
+const dirNames = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+const nameByDirs = dirNames.map((nn,i)=>[nn, i]).reduce((pp, cc)=>{
+    const b = dirNames.length;
+    pp[cc[1]*(360/b)] = cc[0];
+    return pp
+}, {});
+
+const POLAR_DEFAULT = {
+
+    chart: {
+        polar: true
+    },
+
+    title: {
+        text: 'Highcharts Polar Chart'
+    },
+
+    subtitle: {
+        text: 'Also known as Radar Chart'
+    },
+
+    pane: {
+        startAngle: 0,
+        endAngle: 360
+    },
+
+    xAxis: {
+        tickInterval: 22.5,
+        min: 0,
+        max: 360,
+        labels: {
+            // format: '{value}°'
+            formatter: (x)=>nameByDirs[x.value]
+        }
+    },
+
+    yAxis: {
+        min: 0
+    },
+
+    plotOptions: {
+        series: {
+            pointStart: -12.25,
+            pointInterval: 22.5
+        },
+        column: {
+            pointPadding: 0,
+            groupPadding: 0
+        },
+        areaspline: {marker: {enabled: false}}
+    },
+
+    series: [{
+        type: 'areaspline',
+        name: '',
+        data: [],
+        pointPlacement: 'between'
+    }]
+};
+
+function polar(data) {
+    let options = {...POLAR_DEFAULT};
+    options.series[0].data = data;
+    return options;
+};
 
 function windbarb(data) {
     let options = JSON.parse(JSON.stringify(WINDBARB_DEFAULTS));
-    // options['series'][0].data = data;
+    options['series'][0].data = data;
     options['series'][1].data = data;
     return options;
 };
@@ -226,4 +292,4 @@ function istosToLine (response, title, stock = false) {
       return info;
 }
 
-export default {istosToLine, windbarb, istsosToSeries};
+export default {istosToLine, windbarb, istsosToSeries, polar};

@@ -64,18 +64,18 @@
               </div>
             </div>
 
-            <div v-if="Object.keys(series_data).length>0" class="row" >
+            <div v-if="Object.keys(series_data).length>0" class="row mb-4" >
                 <div class="col-md-12">
                         <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts>
                 </div>
             </div>
 
-            <div v-if="Object.keys(wind_data_options).length>0" class="row" >
+            <div v-if="Object.keys(wind_data_options).length>0" class="row mb-4" >
                 <div class="col-md-8">
                         <highcharts :options="wind_data_options"></highcharts>
                 </div>
-                <div class="col-md-8">
-                        <!-- <highcharts :options=""></highcharts> -->
+                <div class="col-md-4">
+                        <highcharts :options="wind_freq_options"></highcharts>
                 </div>
             </div>
 
@@ -113,6 +113,7 @@
 
     import {Chart} from 'highcharts-vue';
     import Highcharts from 'highcharts';
+    import More from 'highcharts/highcharts-more'
     // import loadBullet from 'highcharts/modules/bullet.js';
 
     import ChartCard from 'src/components/Cards/ChartCard.vue'
@@ -133,7 +134,7 @@
     import stockInit from 'highcharts/modules/stock'
 
     // loadBullet(Highcharts);
-
+    More(Highcharts)
     stockInit(Highcharts)
 
     Highcharts.setOptions({
@@ -261,6 +262,7 @@
             last_value: null,
             series_data: {},
             wind_data_options: {},
+            wind_freq_options: {},
             allProcedures: this.$root.allProcedures,
             groupedProcedures: {},
             procedureInfos: {},
@@ -426,17 +428,17 @@
             // },
             setSeries () {
                 var self = this;
-                self.series_data = {};
-                self.wind_data_options = {};
+                this.series_data = {};
+                this.wind_data_options = {};
                 let counter=0;
 
                 for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
-
+                    //
                     this.istsos.fetchSeries(
                         procedure,
-                        this.procedureInfos[procedure].observedproperties,
-                        this.seriesBegin,
-                        this.seriesEnd
+                        self.procedureInfos[procedure].observedproperties,
+                        self.seriesBegin,
+                        self.seriesEnd
                     ).then((response)=>{
                         let result = istsosToHighcharts.istosToLine(response, undefined, true);
 
@@ -468,53 +470,86 @@
 
                         if (procedure=='VENTO_VEL_MAX') {
 
-                            this.istsos.fetchSeries(
+                            console.log(['TEST!', self.seriesBegin]);
+
+                            let windPromise = this.istsos.fetchSeries(
                                 "VENTO_DIR",
                                 "urn:ogc:def:parameter:x-istsos:1.0:meteo:wind:direction",
-                                this.seriesBegin,
-                                this.seriesEnd
-                            ).then((response)=>{
-                                const windirData = istsosToHighcharts.istsosToSeries(response);
+                                self.seriesBegin,
+                                self.seriesEnd
+                            )
 
-                                let windataObj = {};
-                                for (const el of windirData.series) {
-                                    windataObj[el[0]] = el[1];
-                                };
-                                console.log(windataObj);
-                                console.log(result);
-                                let timeout;
-                                result.options.chart.events = {render: function(event) {
-                                    // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
-                                    clearTimeout(timeout);
-                                    timeout = setTimeout(()=>{
-                                        const start_ts = this.rangeSelector.maxInput.min;
-                                        const end_ts = this.rangeSelector.minInput.max;
+                            let timeout;
+                            result.options.chart.events = {render: function(event) {
+                                var evt = this;
+                                // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
+                                clearTimeout(timeout);
+                                timeout = setTimeout(()=>{
+                                    windPromise.then((response)=>{
+                                        const windirData = istsosToHighcharts.istsosToSeries(response);
+
+                                        let windataObj = {};
+                                        for (const el of windirData.series) {
+                                            windataObj[el[0]] = el[1];
+                                        };
+
+                                        const start_ts = evt.rangeSelector.maxInput.min;
+                                        const end_ts = evt.rangeSelector.minInput.max;
                                         const end = new Date(end_ts);
                                         const start = new Date(start_ts);
 
-                                        let startIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(start.getTime());
-                                        if (startIndex==-1) { startIndex=0 };
-                                        let endIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(end.getTime());
-                                        if (endIndex==-1) { endIndex=self.series_data.series[0].data.length };
+                                        const sd = self.series_data.series[0].data.map(cc=>( Math.abs(start-(new Date(cc[0]))) ));
+                                        const ed = self.series_data.series[0].data.map(cc=>( Math.abs(end-(new Date(cc[0]))) ));
 
-                                        let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex);
-                                        for ( const el of wind_data ) {
-                                            el.push(windataObj[el[0]]||null);
-                                        };
-                                        console.log(wind_data);
+                                        const startIndex = sd.indexOf(Math.min(...sd));
+                                        const endIndex = ed.indexOf(Math.min(...ed));
+
+                                        // let startIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(start.getTime());
+                                        // if (startIndex==-1) { startIndex=0 };
+                                        // let endIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(end.getTime());
+                                        // if (endIndex==-1) { endIndex=self.series_data.series[0].data.length };
+
+                                        let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
+
                                         self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
-                                    }, 1000);
-                                }};
-                            });
+                                        self.wind_data_options.title.text = 'Velocità del vento';
+                                        self.wind_data_options['subtitle'] = {
+                                            text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
+                                        };
 
+                                        const b = 16;
+                                        const dirs = Array(b+1).fill(0).map((_, i) => [i*(360/b), 0]);
+
+                                        const freqs = wind_data.reduce((pp, cc)=>{
+                                            const mm = dirs.map(d=>Math.abs(d[0]-cc[2]));
+                                            let ii = mm.indexOf(min(mm));
+                                            if (ii==(mm.length-1)) {ii=0};
+                                            pp[ii][1] = pp[ii][1]+1;
+                                            return pp
+                                        }, [...dirs]).slice(0, dirs.length-1).map(vv=>vv[1]);
+
+                                        let wind_freq_options = istsosToHighcharts.polar(freqs);
+
+                                        wind_freq_options.title.text = 'Frequenza della direzione';
+                                        wind_freq_options.subtitle.text = '';
+                                          wind_freq_options.series[0].name = 'Frequenza'
+
+                                        self.wind_freq_options = wind_freq_options;
+
+                                    });
+                                });
+
+                            }};
 
                         };
+
                         if ( !self.series_data.series ) {
                             self.series_data = result.options;
                         } else {
                             self.series_data.series.push(result.options.series[0]);
                             self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
                         };
+
                     });
                 };
 
