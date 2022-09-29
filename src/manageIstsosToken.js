@@ -122,9 +122,9 @@ export default class IstsosIO {
     return axios.post(this.proxy, bodyFormData, {
         headers: {"Content-Type": "multipart/form-data" }
     }).then(response => {
-      self._tokenInfo = response.data;
-      self._expiry = Date.now() + response.data["expires_in"] * 1000
-      return self._tokenInfo.access_token;
+        self._tokenInfo = response.data;
+        self._expiry = Date.now() + response.data["expires_in"] * 1000
+        return self._tokenInfo.access_token;
     });
   };
   _getToken() {

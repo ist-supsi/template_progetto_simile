@@ -46,7 +46,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 mt-4">
             <card>
               <div class="typo-line">
                 <!-- <p class="longtext"><span class="category"><b><i>DETTAGLI TECNICI</i></b></span><br> -->
@@ -131,7 +131,7 @@
               </div>
               <div slot="content">
                 <p class="card-category">N. Osservazioni da sensori</p>
-                <h4 class="card-title">{{ resultCountIstsos }}</h4>
+                <h4 class="card-title">{{ resultMeasuresCountIstsos }}</h4>
               </div>
               <div slot="footer">
                 <!-- <i class="fa fa-refresh"></i>Updated now -->
@@ -166,9 +166,10 @@
     data () {
       return {
         whereAmI: 'Home',
-        src: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/view/map/?repository=dorota&project=cartografia_simile',
+        // src: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/view/map/?repository=dorota&project=cartografia_simile',
         responseData: [],
         countMeasures: 0,
+        measuresCountIstsos: null,
         responseIstsosData: []
       }
     },
@@ -180,14 +181,32 @@
           this.responseData.forEach(element => {
               //console.log(element)
               if(element.hasOwnProperty('measures')){
-                this.countMeasures += Object.keys(element["measures"]).length
+                  this.countMeasures += Object.keys(element["measures"]).length
               }
           });
         });
 
-        // this.istsos._call({services: 'demo', observedproperties: ''}).then((response) => {
-        //     this.responseIstsosData = response.data["data"]
-        // });
+        Promise.all([
+            this.ceresioIstosos._call({services: 'ceresiohourly', observedproperties: ''}),
+            this.verbanoIstosos._call({services: 'maggiorelive', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} }),
+            this.larioIstosos._call({services: 'lariolive', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} })
+        ]).then(responses=>{
+            let responseIstsosData = [];
+            responses.forEach((response)=>{responseIstsosData = responseIstsosData.concat(response.data.data)});
+            this.responseIstsosData = responseIstsosData;
+        })
+
+        // TODO:
+        Promise.all([
+            this.ceresioIstosos._call({services: 'ceresiohourly', operations: 'getobservation', 'count': ''}),
+            // ...
+        ]).then(responses=>{
+            console.log(responses);
+            // let responseIstsosData = [];
+            // responses.forEach((response)=>{responseIstsosData = responseIstsosData.concat(response.data.data)});
+            // this.responseIstsosData = responseIstsosData;
+        }).catch(err=>{console.log(err);})
+
     },
     computed: {
       resultCount () {
@@ -198,6 +217,9 @@
       },
       resultCountIstsos () {
         return this.responseIstsosData && this.responseIstsosData.length
+      },
+      resultMeasuresCountIstsos () {
+          return this.measuresCountIstsos || 'N.P.'
       }
 
     }
