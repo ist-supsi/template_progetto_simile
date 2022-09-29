@@ -133,6 +133,9 @@ const WINDBARB_DEFAULTS = {
             // pointInterval: 36e5
         }
     },
+    legend: {
+         enabled: false
+    },
     series: [
       {
         type: 'windbarb',
@@ -214,6 +217,10 @@ const POLAR_DEFAULT = {
             groupPadding: 0
         },
         areaspline: {marker: {enabled: false}}
+    },
+
+    legend: {
+         enabled: false
     },
 
     series: [{

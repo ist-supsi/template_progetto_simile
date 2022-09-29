@@ -198,14 +198,17 @@
 
         // TODO:
         Promise.all([
-            this.ceresioIstosos._call({services: 'ceresiohourly', operations: 'getobservation', 'count': ''}),
+            this.ceresioIstosos._call({services: 'ceresiohourly', operations: 'getobservation/count'}),
             // ...
         ]).then(responses=>{
             console.log(responses);
+            this.measuresCountIstsos = responses.reduce((pp, cc)=>{
+                return pp+cc.data.data.count
+            }, 0)
             // let responseIstsosData = [];
             // responses.forEach((response)=>{responseIstsosData = responseIstsosData.concat(response.data.data)});
             // this.responseIstsosData = responseIstsosData;
-        }).catch(err=>{console.log(err);})
+        })
 
     },
     computed: {
