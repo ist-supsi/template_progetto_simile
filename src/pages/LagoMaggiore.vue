@@ -126,7 +126,8 @@
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='home'}" id="home-tab" data-toggle="tab"
+                    <a :class="{'nav-link': true, active: selectedTab=='home', disabled: tableData.data}"
+                        id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
                         aria-selected="true" @click="selectedTab='home' ">Sensori</a>
                 </li>
@@ -501,138 +502,7 @@
                 url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
                 basins: lake_basins.verbano,
-                layers: [
-                  {
-                    name: 'Maschera',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Maschera',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Aree naturali poligonali Svizzera',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Aree_naturali_poligonali_Svizzera',
-                    opacity: .5,
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  // {
-                  //   name: 'Aree protette Piemonte',
-                  //   visible: true,
-                  //   format: 'image/png',
-                  //   layers: 'Aree_protette_Piemonte',
-                  //   transparent: true/*,
-                  //   attribution: "Weather data © 2012 IEM Nexrad"*/
-                  // },
-                  {
-                    name: 'Aree protette poligonali Lombardia',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Aree_protette_poligonali_Lombardia',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Aree naturali puntuali Svizzera',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Aree_naturali_puntuali_Svizzera',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Aree protette puntuali Lombardia',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Aree_protette_puntuali_Lombardia',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Reticolo idrografico',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Reticolo_idrografico',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Laghi',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Laghi',
-                    opacity: .5,
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  // {
-                  //   name: 'Strade',
-                  //   visible: true,
-                  //   format: 'image/png',
-                  //   layers: 'Strade',
-                  //   transparent: true/*,
-                  //   attribution: "Weather data © 2012 IEM Nexrad"*/
-                  // },
-                  // {
-                  //   name: 'Ferrovie',
-                  //   visible: true,
-                  //   format: 'image/png',
-                  //   layers: 'Ferrovie',
-                  //   transparent: true/*,
-                  //   attribution: "Weather data © 2012 IEM Nexrad"*/
-                  // },
-                  {
-                    name: 'Limiti amministrativi',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Limiti_amministrativi',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Uso di suolo (CORINE_2018)',
-                    visible: false,
-                    format: 'image/png',
-                    layers: 'Uso_di_suolo_CORINE_2018',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Stato delle rive',
-                    visible: false,
-                    format: 'image/png',
-                    layers: 'Stato_delle_rive',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Depuratori con capacità > 2000 AE',
-                    visible: false,
-                    format: 'image/png',
-                    layers: 'Depuratori_con_capacita_greater_2000_AE',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Punti prelievo d\'acqua',
-                    visible: false,
-                    format: 'image/png',
-                    layers: 'Punti_prelievo_d_acqua',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Bacini idrografici',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Bacini_idrografici',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                }
-                ],
+                layers: sharedFunctions.map_layers,
                 markerLayer: {
                     name: 'Marker',
                     visible: true,
@@ -690,6 +560,13 @@
                     this.tableSetData();
                     this.tableSetDataCipais();
                     this.tableSetDataSatellite();
+                    if ( this.tableData.data && this.tableData.data.length>0 ) {
+                        this.selectedTab='home'
+                    } else if ( this.selectedSatelliteProcedures.length>0 ) {
+                        this.selectedTab='satellitari'
+                    } else {
+                        this.selectedTab='cipais'
+                    };
                 },
             },
             cards: {
@@ -1017,12 +894,12 @@
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
                 cards[index].data = result.value;
                 if(result.uom=='null'){
-                    cards[index].uom = " "  
+                    cards[index].uom = " "
                 }
                 else{
                     cards[index].uom = result.uom;
                 }
-                
+
                 if ( result.x ) {
                     cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
@@ -1221,7 +1098,7 @@
         tableSetDataSatellite () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
-            
+
         },
         reloadTable (tableProps) {
             var self = this;

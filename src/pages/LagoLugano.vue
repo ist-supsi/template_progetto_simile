@@ -122,6 +122,18 @@
                               :geojson="features"
                               :options=markerLayerOptions()
                           />
+                          <l-control class="example-custom-control">
+                            <div class="input-group input-group-sm mb-3">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Località selezionata: </span>
+                              </div>
+                              <select class="form-control" v-model="selectedMarker">
+                                  <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                      {{ getLocLabel(feature) }}
+                                  </option>
+                              </select>
+                            </div>
+                          </l-control>
 
                       </l-map>
                     </card>
@@ -131,12 +143,14 @@
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='home'}" id="home-tab" data-toggle="tab"
+                    <a :class="{'nav-link': true, active: selectedTab=='home', disabled: tableData.data}"
+                        id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
-                        aria-selected="true" @click="selectedTab='home' ">Sensori</a>
+                        aria-selected="true" @click="selectedTab='home'">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}" id="cipais-tab" data-toggle="tab"
+                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}"
+                        id="cipais-tab" data-toggle="tab"
                         role="tab" aria-controls="cipais"
                         aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
                 </li>
@@ -252,7 +266,7 @@
 
 
     import { latLngBounds, latLng } from "leaflet";
-    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson } from "vue2-leaflet";
+    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LControl } from "vue2-leaflet";
 
     import 'leaflet/dist/leaflet.css';
 
@@ -356,6 +370,7 @@
     // ChartCard,
     StatsCard,
     LMap,
+    LControl,
     LTileLayer,
     "l-wms-tile-layer": LWMSTileLayer,
     LGeoJson,
@@ -507,138 +522,7 @@
                 basins: lake_basins.ceresio,
                 url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
-                layers: [
-                  {
-                    name: 'Maschera',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Maschera',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Aree naturali poligonali Svizzera',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Aree_naturali_poligonali_Svizzera',
-                    opacity: .5,
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  // {
-                  //   name: 'Aree protette Piemonte',
-                  //   visible: true,
-                  //   format: 'image/png',
-                  //   layers: 'Aree_protette_Piemonte',
-                  //   transparent: true/*,
-                  //   attribution: "Weather data © 2012 IEM Nexrad"*/
-                  // },
-                  {
-                    name: 'Aree protette poligonali Lombardia',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Aree_protette_poligonali_Lombardia',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Aree naturali puntuali Svizzera',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Aree_naturali_puntuali_Svizzera',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Aree protette puntuali Lombardia',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Aree_protette_puntuali_Lombardia',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Reticolo idrografico',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Reticolo_idrografico',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Laghi',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Laghi',
-                    opacity: .5,
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  // {
-                  //   name: 'Strade',
-                  //   visible: true,
-                  //   format: 'image/png',
-                  //   layers: 'Strade',
-                  //   transparent: true/*,
-                  //   attribution: "Weather data © 2012 IEM Nexrad"*/
-                  // },
-                  // {
-                  //   name: 'Ferrovie',
-                  //   visible: true,
-                  //   format: 'image/png',
-                  //   layers: 'Ferrovie',
-                  //   transparent: true/*,
-                  //   attribution: "Weather data © 2012 IEM Nexrad"*/
-                  // },
-                  {
-                    name: 'Limiti amministrativi',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Limiti_amministrativi',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Uso di suolo (CORINE_2018)',
-                    visible: false,
-                    format: 'image/png',
-                    layers: 'Uso_di_suolo_CORINE_2018',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Stato delle rive',
-                    visible: false,
-                    format: 'image/png',
-                    layers: 'Stato_delle_rive',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Depuratori con capacità > 2000 AE',
-                    visible: false,
-                    format: 'image/png',
-                    layers: 'Depuratori_con_capacita_greater_2000_AE',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Punti prelievo d\'acqua',
-                    visible: false,
-                    format: 'image/png',
-                    layers: 'Punti_prelievo_d_acqua',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                  },
-                  {
-                    name: 'Bacini idrografici',
-                    visible: true,
-                    format: 'image/png',
-                    layers: 'Bacini_idrografici',
-                    transparent: true/*,
-                    attribution: "Weather data © 2012 IEM Nexrad"*/
-                }
-                ],
+                layers: sharedFunctions.map_layers,
                 markerLayer: {
                     name: 'Marker',
                     visible: true,
@@ -668,10 +552,15 @@
             }
         },
         watch: {
+            features: {
+                handler(val){
+                    // do stuff
+                },
+                deep: true
+            },
             selectedCipaisProcedures: {
                 handler(val){
                     // do stuff
-                    // TODO: load cipais data
                     this.loadCipaisData();
                 },
                 // deep: true
@@ -693,11 +582,19 @@
                     // do stuff
                     this.loadCardsData();
                     this.tableSetData();
+                    // DEPRERCATED??
                     this.tableSetDataSatellite();
                     // this.tableSetDataCipais();
                     // this.tableSetDataSatellite();
                     // this.loadCipaisData();
                     // this.loadSatelliteData();
+                    if ( this.tableData.data && this.tableData.data.length>0 ) {
+                        this.selectedTab='home'
+                    } else if ( this.selectedSatelliteProcedures.length>0 ) {
+                        this.selectedTab='satellitari'
+                    } else {
+                        this.selectedTab='cipais'
+                    };
                 },
             },
             cards: {
@@ -875,6 +772,10 @@
         },
 
     methods: {
+        getLocLabel (feature) {
+            // basins.features.filter(()=>{})
+            return feature.properties.names[0].message || 'N.P.'
+        },
         loopOnPairs (myarray) {
             return myarray.reduce(function(result, value, index, array) {
                 if (index % 2 === 0)
@@ -1115,7 +1016,6 @@
                     const begins = ff.map(proc=>proc.samplingTime.beginposition);
                     const begin = begins.length ? Math.min(...begins.map(bb=>(Date.parse(bb)))) : 0;
                     const end = ends.length ? Math.min(...ends.map(bb=>(Date.parse(bb)))) : 0;
-
 
                     if ( begin && end ) {
                         const diffTime = Math.abs(end - begin);

@@ -118,7 +118,8 @@ const WINDBARB_DEFAULTS = {
 
     xAxis: {
         type: 'datetime',
-        offset: 40
+        offset: 40,
+        // format: '{value}'
     },
 
     yAxis: {
@@ -143,6 +144,7 @@ const WINDBARB_DEFAULTS = {
         name: 'Wind',
         color: Highcharts.getOptions().colors[1],
         showInLegend: false,
+
         // tooltip: {valueSuffix: ' m/s'}
       },
       {

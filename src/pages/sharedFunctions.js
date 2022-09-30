@@ -1,4 +1,137 @@
 
+const map_layers = [
+    {
+      name: 'Maschera',
+      visible: true,
+      format: 'image/png',
+      layers: 'Maschera',
+      transparent: true/*,
+      attribution: "Weather data © 2012 IEM Nexrad"*/
+    },
+    // {
+    //   name: 'Aree naturali poligonali Svizzera',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Aree_naturali_poligonali_Svizzera',
+    //   opacity: .5,
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
+    // {
+    //   name: 'Aree protette Piemonte',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Aree_protette_Piemonte',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
+    // {
+    //   name: 'Aree protette poligonali Lombardia',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Aree_protette_poligonali_Lombardia',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
+    // {
+    //   name: 'Aree naturali puntuali Svizzera',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Aree_naturali_puntuali_Svizzera',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
+    // {
+    //   name: 'Aree protette puntuali Lombardia',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Aree_protette_puntuali_Lombardia',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
+    {
+      name: 'Reticolo idrografico',
+      visible: true,
+      format: 'image/png',
+      layers: 'Reticolo_idrografico',
+      transparent: true/*,
+      attribution: "Weather data © 2012 IEM Nexrad"*/
+    },
+    {
+      name: 'Laghi',
+      visible: true,
+      format: 'image/png',
+      layers: 'Laghi',
+      opacity: .5,
+      transparent: true/*,
+      attribution: "Weather data © 2012 IEM Nexrad"*/
+    },
+    // {
+    //   name: 'Strade',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Strade',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
+    // {
+    //   name: 'Ferrovie',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Ferrovie',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
+    {
+      name: 'Limiti amministrativi',
+      visible: true,
+      format: 'image/png',
+      layers: 'Limiti_amministrativi',
+      transparent: true/*,
+      attribution: "Weather data © 2012 IEM Nexrad"*/
+    },
+  //   {
+  //     name: 'Uso di suolo (CORINE_2018)',
+  //     visible: false,
+  //     format: 'image/png',
+  //     layers: 'Uso_di_suolo_CORINE_2018',
+  //     transparent: true/*,
+  //     attribution: "Weather data © 2012 IEM Nexrad"*/
+  //   },
+  //   {
+  //     name: 'Stato delle rive',
+  //     visible: false,
+  //     format: 'image/png',
+  //     layers: 'Stato_delle_rive',
+  //     transparent: true/*,
+  //     attribution: "Weather data © 2012 IEM Nexrad"*/
+  //   },
+  //   {
+  //     name: 'Depuratori con capacità > 2000 AE',
+  //     visible: false,
+  //     format: 'image/png',
+  //     layers: 'Depuratori_con_capacita_greater_2000_AE',
+  //     transparent: true/*,
+  //     attribution: "Weather data © 2012 IEM Nexrad"*/
+  //   },
+  //   {
+  //     name: 'Punti prelievo d\'acqua',
+  //     visible: false,
+  //     format: 'image/png',
+  //     layers: 'Punti_prelievo_d_acqua',
+  //     transparent: true/*,
+  //     attribution: "Weather data © 2012 IEM Nexrad"*/
+  //   },
+    {
+      name: 'Bacini idrografici',
+      visible: true,
+      format: 'image/png',
+      layers: 'Bacini_idrografici',
+      transparent: true/*,
+      attribution: "Weather data © 2012 IEM Nexrad"*/
+  }
+]
+
 function areaLayerOptions (self) {
   return {
       style: function (feature) {
@@ -16,6 +149,7 @@ function areaLayerOptions (self) {
           layer.bindTooltip(`<h6>${feature.properties.label}</h6>`, {sticky: true})
           layer.on('click', ee => {
               self.selectedMarker=feature.properties.markerIndex
+              self.selectedTab='satellitari'
           })
       },
   }
@@ -53,9 +187,8 @@ function markerLayerOptions (self) {
                 });
 
                 const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
-                    self.selectedMarker=feature.properties.markerIndex
+                    self.selectedMarker=feature.properties.markerIndex;
                 });
-
 
                 if (feature.properties.names[0].message) {
                     marker.bindTooltip(`<h6>${feature.properties.names[0].message}</h6>`)
@@ -79,4 +212,4 @@ function markerLayerOptions (self) {
     }
 }
 
-export default {areaLayerOptions, markerLayerOptions};
+export default {areaLayerOptions, markerLayerOptions, map_layers};
