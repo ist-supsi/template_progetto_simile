@@ -311,7 +311,9 @@ let indicatorDescription =
 
         'wind-direction': {
             title : 'Direzione del vento',
-            description: `Direzione del vento
+            description: `Direzione e velocità del vento possono essere di supporto all'interpretazione 
+            degli altri parametri limnologici rilevati: in partcolare ilvento svolge 
+            un ruolo importante nelle dinamiche di stratificazione e mescolamento dei laghi.
             `,
             // icon:'fa fa-flag text-info',
             icon:'icon-wind_direction',

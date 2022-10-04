@@ -2,7 +2,10 @@
     <div class="content">
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
-                        <h5>Stato Attuale</h5>
+                    <div >
+                        <h5>Stato Attuale: {{ cards[0].message }}</h5>
+                    </div>
+                        
                 </div>
             </div>
 
@@ -74,6 +77,7 @@
                 </div>
                 <div class="col-4" style="height: 510px">
                     <card style="height: 94%;">
+                      
                     <l-map
                         v-if="showMap"
                         :zoom="currentZoom"
@@ -122,7 +126,7 @@
                               :geojson="features"
                               :options=markerLayerOptions()
                           />
-                          <l-control class="example-custom-control">
+                          <!-- <l-control class="example-custom-control">
                             <div class="input-group input-group-sm mb-3">
                               <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Località selezionata: </span>
@@ -133,9 +137,24 @@
                                   </option>
                               </select>
                             </div>
+                          </l-control> -->
+                          <l-control position="bottomright">
+                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=1">
+                            Figino
+                            </button>
+                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=0">
+                            Gandria
+                            </button>
+                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=3">
+                            Ceresio Sud
+                            </button>
+                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=2">
+                            Ceresio Nord
+                            </button>
                           </l-control>
-
+                       
                       </l-map>
+                     
                     </card>
                 </div>
             </div>
@@ -1446,5 +1465,13 @@
 }
 .nav-link {
   cursor: pointer
+}
+.button {
+    background-color: #9f51f3;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap;
+    color: #fff;
+  
 }
 </style>
