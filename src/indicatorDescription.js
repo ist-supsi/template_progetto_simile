@@ -40,7 +40,7 @@ let indicatorDescription =
         },
 
         'water-depth': {
-            title : 'Massima profondità di mescolamento',
+            title : 'Profondità mescolamento',
             description: `La massima profondità di mescolamento alla circolazione tardo-invernale 
             (tra febbraio e marzo) indica lo strato rimescolato, ovvero lo strato delle 
             acque interessate da omogenizzazione termica e ridistribuzione di ossigeno e 

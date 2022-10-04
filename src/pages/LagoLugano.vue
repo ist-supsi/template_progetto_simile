@@ -71,6 +71,7 @@
                                     <i v-if="cards[ii+1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.time}}
                                 </div>
                             </stats-card>
+                            
                         </div>
                     </div>
 
@@ -129,7 +130,7 @@
                           <!-- <l-control class="example-custom-control">
                             <div class="input-group input-group-sm mb-3">
                               <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Località selezionata: </span>
+                                <span class="input-group-text" id="inputGroup-sizing-default">Località: </span>
                               </div>
                               <select class="form-control" v-model="selectedMarker">
                                   <option v-for="feature in features.features" :value="feature.properties.markerIndex">
@@ -138,7 +139,21 @@
                               </select>
                             </div>
                           </l-control> -->
-                          <l-control position="bottomright">
+                        <!-- <l-control>
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Dropdown button
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                   <li><a class="dropdown-item" href="#">Action</a></li> 
+                                   <li><a class="dropdown-item" href="#">Another action</a></li> 
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                </ul>
+                                </div>
+                        </l-control> -->
+                          
+
+                          <!-- <l-control position="bottomright">
                             <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=1">
                             Figino
                             </button>
@@ -151,14 +166,14 @@
                             <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=2">
                             Ceresio Nord
                             </button>
-                          </l-control>
+                          </l-control> -->
                        
                       </l-map>
                      
                     </card>
                 </div>
             </div>
-
+           
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
@@ -692,7 +707,8 @@
                     result.data.features,
                     approxPosition,
                     collectNames
-                );
+                
+                ); console.log(result.data.features)
                 let bounds = L.latLngBounds([]);
 
                 const features = Object.entries(reduced).map(([k, v], ii) => {
@@ -1466,12 +1482,5 @@
 .nav-link {
   cursor: pointer
 }
-.button {
-    background-color: #9f51f3;
-    cursor: pointer;
-    font-weight: bold;
-    white-space: nowrap;
-    color: #fff;
-  
-}
+
 </style>
