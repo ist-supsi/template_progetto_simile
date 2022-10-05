@@ -137,16 +137,20 @@
                                   <option v-for="feature in features.features" :value="feature.properties.markerIndex">
                                       {{ getLocLabel(feature) }}
                                   </option>
+
                               </select>
                             </div>
                           </l-control> -->
                         
                           <l-control>
                             <select class="dropdown" id="località" v-model="selectedMarker">
-                                <option value ="1" selected="selected" >Figino</option>
+                                <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                      {{ getLocLabel(feature) }}
+                                  </option>
+                                <!-- <option value ="1" selected="selected" >Figino</option>
                                 <option value ="0" >Gandria</option>
                                 <option value ="3" >Ceresio Sud</option>
-                                <option value ="2" >Ceresio Nord</option>
+                                <option value ="2" >Ceresio Nord</option> -->
                             </select>
                           </l-control>
                           
@@ -811,7 +815,14 @@
         },
         getLocLabel (feature) {
             // basins.features.filter(()=>{})
-            return feature.properties.names[0].message || 'N.P.'
+            const labels = [
+                'Gandria',
+                'Figino',
+                'Ceresio Nord',
+                'Ceresio Sud'
+            ]
+            // return feature.properties.names[0].message || 'N.P.'
+            return labels[feature.properties.markerIndex];
         },
         loopOnPairs (myarray) {
             return myarray.reduce(function(result, value, index, array) {

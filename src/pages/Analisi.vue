@@ -154,7 +154,9 @@
             downloadSVG: 'Download immagine SVG',
             printChart: 'Stampa grafico',
             thousandsSep: ".",
-            decimalPoint: ','
+            decimalPoint: ',',
+            week:'settimana',
+            from:'dal'
         }
 
 
@@ -516,10 +518,21 @@
                                         self.wind_data_options['subtitle'] = {
                                             text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
                                         };
+                                    //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano Timestamp e direzione 
+                                    //     const allowedProperties = ['geometry.coordinates[0]', 'geometry.coordinates[0]'];
+
+                                    //     const allKeys = Object.keys(wind_data);
+                                    //     const freqs =allKeys.reduce((next, key)=> {
+                                    //         if(allowedProperties.includes(key)){
+                                    //         return { ...next, [key]: wind_data[key]};
+                                    //     } else {
+                                    //         return next;
+                                    //     }
+                                    // } , {});
 
                                         const b = 16;
                                         const dirs = Array(b+1).fill(0).map((_, i) => [i*(360/b), 0]);
-
+                                        
                                         const freqs = wind_data.reduce((pp, cc)=>{
                                             const mm = dirs.map(d=>Math.abs(d[0]-cc[2]));
                                             let ii = mm.indexOf(min(mm));
@@ -529,7 +542,7 @@
                                         }, [...dirs]).slice(0, dirs.length-1).map(vv=>vv[1]);
 
                                         let wind_freq_options = istsosToHighcharts.polar(freqs);
-
+                                        console.log(wind_freq_options)
                                         wind_freq_options.title.text = 'Frequenza della direzione';
                                         wind_freq_options.subtitle.text = '';
                                           wind_freq_options.series[0].name = 'Frequenza'

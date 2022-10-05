@@ -226,7 +226,8 @@ const POLAR_DEFAULT = {
     },
 
     series: [{
-        type: 'areaspline',
+        // type: 'areaspline',
+        type: 'scatter',
         name: '',
         data: [],
         pointPlacement: 'between'
