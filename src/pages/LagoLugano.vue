@@ -77,6 +77,7 @@
 
                 </div>
                 <div class="col-4" style="height: 510px">
+                    
                     <card style="height: 94%;">
                       
                     <l-map
@@ -139,18 +140,15 @@
                               </select>
                             </div>
                           </l-control> -->
-                        <!-- <l-control>
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Dropdown button
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                   <li><a class="dropdown-item" href="#">Action</a></li> 
-                                   <li><a class="dropdown-item" href="#">Another action</a></li> 
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                                </ul>
-                                </div>
-                        </l-control> -->
+                        
+                          <l-control>
+                            <select class="dropdown" id="località" v-model="selectedMarker">
+                                <option value ="1" selected="selected" >Figino</option>
+                                <option value ="0" >Gandria</option>
+                                <option value ="3" >Ceresio Sud</option>
+                                <option value ="2" >Ceresio Nord</option>
+                            </select>
+                          </l-control>
                           
 
                           <!-- <l-control position="bottomright">
@@ -799,6 +797,7 @@
                 self.bounds = bounds;
 
             })
+  
 
             // TODO: DEPRECATE
             // this.populateCockpit();
@@ -807,6 +806,9 @@
         },
 
     methods: {
+        onChange(event) {
+            return event.target.value;
+        },
         getLocLabel (feature) {
             // basins.features.filter(()=>{})
             return feature.properties.names[0].message || 'N.P.'
