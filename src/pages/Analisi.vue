@@ -75,7 +75,7 @@
                         <highcharts :options="wind_data_options"></highcharts>
                 </div>
                 <div class="col-md-4">
-                        <highcharts :options="wind_freq_options"></highcharts>
+                        <highcharts :options="wind_series"></highcharts>
                 </div>
             </div>
 
@@ -264,7 +264,8 @@
             last_value: null,
             series_data: {},
             wind_data_options: {},
-            wind_freq_options: {},
+            // wind_freq_options: {},
+            wind_series: {},
             allProcedures: this.$root.allProcedures,
             groupedProcedures: {},
             procedureInfos: {},
@@ -518,8 +519,9 @@
                                         self.wind_data_options['subtitle'] = {
                                             text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
                                         };
-                                    //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano Timestamp e direzione 
-                                    //     const allowedProperties = ['geometry.coordinates[0]', 'geometry.coordinates[0]'];
+                                    //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano  direzione e velocità 
+                                    
+                                    //     const allowedProperties = ['dato1', 'dato2'];
 
                                     //     const allKeys = Object.keys(wind_data);
                                     //     const freqs =allKeys.reduce((next, key)=> {
@@ -529,25 +531,28 @@
                                     //         return next;
                                     //     }
                                     // } , {});
-
-                                        const b = 16;
-                                        const dirs = Array(b+1).fill(0).map((_, i) => [i*(360/b), 0]);
+                                        const wind_series = wind_data.map((el)=> el.slice(1).reverse());
                                         
-                                        const freqs = wind_data.reduce((pp, cc)=>{
-                                            const mm = dirs.map(d=>Math.abs(d[0]-cc[2]));
-                                            let ii = mm.indexOf(min(mm));
-                                            if (ii==(mm.length-1)) {ii=0};
-                                            pp[ii][1] = pp[ii][1]+1;
-                                            return pp
-                                        }, [...dirs]).slice(0, dirs.length-1).map(vv=>vv[1]);
+                                        self.wind_series =istsosToHighcharts.polar(wind_series);
 
-                                        let wind_freq_options = istsosToHighcharts.polar(freqs);
-                                        console.log(wind_freq_options)
-                                        wind_freq_options.title.text = 'Frequenza della direzione';
-                                        wind_freq_options.subtitle.text = '';
-                                          wind_freq_options.series[0].name = 'Frequenza'
+                                        // const b = 16;
+                                        // const dirs = Array(b+1).fill(0).map((_, i) => [i*(360/b), 0]);
+                                        // console.log(wind_data);
+                                        // const freqs = wind_data.reduce((pp, cc)=>{
+                                        //     const mm = dirs.map(d=>Math.abs(d[0]-cc[2]));
+                                        //     let ii = mm.indexOf(min(mm));
+                                        //     if (ii==(mm.length-1)) {ii=0};
+                                        //     pp[ii][1] = pp[ii][1]+1;
+                                        //     return pp
+                                        // }, [...dirs]).slice(0, dirs.length-1).map(vv=>vv[1]);
 
-                                        self.wind_freq_options = wind_freq_options;
+                                        // let wind_freq_options = istsosToHighcharts.polar(freqs);
+                                        // console.log(wind_freq_options)
+                                        // wind_freq_options.title.text = 'Frequenza della direzione';
+                                        // wind_freq_options.subtitle.text = '';
+                                        //   wind_freq_options.series[0].name = 'Frequenza'
+
+                                        // self.wind_freq_options = wind_freq_options;
 
                                     });
                                 });

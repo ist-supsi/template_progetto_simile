@@ -2,7 +2,10 @@
     <div class="content">
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
-                        <h5>Stato Attuale</h5>
+                    <div >
+                        <h5>Stato Attuale: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
+                    </div>
+                        
                 </div>
             </div>
 
@@ -27,7 +30,7 @@
                                     </p>
                                     <p v-else class="card-category">{{(cards[ii] && cards[ii].title) || "--"}}</p>
                                     <h4 class="card-title">{{(cards[ii] && cards[ii].data) || "N.P."}} {{(cards[ii] && cards[ii].uom) || ""}}</h4>
-                                    <p class="card-category">{{(cards[ii] && cards[ii].message) || "--"}}</p>
+                                    <p class="card-category">{{(cards[ii].message && guessLocLabel(cards[ii].message)) || "--"}}</p>
                                 </div>
                                 <div slot="footer">
                                     <i v-if="!cards[ii] || cards[ii].data===null" class="fa fa-refresh fa-spin"></i>
@@ -51,7 +54,7 @@
                                     </p>
                                     <p v-else class="card-category">{{(cards[ii+1] && cards[ii+1].title) || "--"}}</p>
                                     <h4 class="card-title">{{(cards[ii+1] && cards[ii+1].data) || "N.P."}} {{(cards[ii+1] && cards[ii+1].uom) || ""}}</h4>
-                                    <p class="card-category">{{(cards[ii+1] && cards[ii+1].message) || "--"}}</p>
+                                    <p class="card-category">{{(cards[ii+1].message && guessLocLabel(cards[ii+1].message)) || "--"}}</p>
                                 </div>
                                 <div slot="footer">
                                     <i v-if="!cards[ii+1] || cards[ii+1].data===null" class="fa fa-refresh fa-spin"></i>
@@ -117,7 +120,23 @@
                               :options="markerLayerOptions()"
 
                           />
-
+                          <l-control>
+                            <button type="button" class="btn btn-outline-info btn-primary btn-sm" @click="this.displayInfo">
+                            i
+                            </button>
+                          </l-control>
+                         
+                          <l-control position="bottomright">
+                            <select class="dropdown" id="località" v-model="selectedMarker" style="width: 100px; height: 25px">
+                                <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                      {{ guessLocLabel(feature.properties.foi_name) }}
+                                  </option>
+                                <!-- <option value ="1" selected="selected" >Figino</option>
+                                <option value ="0" >Gandria</option>
+                                <option value ="3" >Ceresio Sud</option>
+                                <option value ="2" >Ceresio Nord</option> -->
+                            </select>
+                          </l-control>
                       </l-map>
                     </card>
                 </div>
@@ -248,7 +267,7 @@
 
 
     import { latLngBounds, latLng } from "leaflet";
-    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson } from "vue2-leaflet";
+    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LControl } from "vue2-leaflet";
 
     import 'leaflet/dist/leaflet.css';
 
@@ -355,6 +374,7 @@
     LTileLayer,
     "l-wms-tile-layer": LWMSTileLayer,
     LGeoJson,
+    LControl,
     LControlLayers,
     highcharts: Chart,
     // HighchartCard,
@@ -627,6 +647,7 @@
                     procedure: b.properties.name,
                     urn: b.properties.observedproperties[0].def,
                     description: b.properties.description,
+                    foi_name: b.properties.foi_name
 
                 }
             };
@@ -636,6 +657,9 @@
                 this.istsos.fetchGeometryCollection(),
             ]).then(results=>{
                 const result = results[1];
+
+                console.log(result);
+                result.data.features.forEach(el=>{console.log(el.properties.foi_name)});
                 const reduced = groupBy(
                     result.data.features,
                     approxPosition,
@@ -650,6 +674,7 @@
                         "type": "Feature",
                         "properties": {
                             markerIndex: ii,
+                            foi_name: Object.values(v)[0].foi_name,
                             names: Object.entries(v).sort((a, b) => {
                                 const ia = good_names.indexOf(a[0]);
                                 const ib = good_names.indexOf(b[0]);
@@ -694,6 +719,9 @@
         },
 
     methods: {
+        guessLocLabel(foi_name){
+            return sharedFunctions.guessLocLabel(foi_name);
+        },
         loopOnPairs (myarray) {
             return myarray.reduce(function(result, value, index, array) {
                 if (index % 2 === 0)
@@ -967,6 +995,20 @@
                  })
           }
 
+        },
+        displayInfo (data) {
+          const horizontalAlign = 'center';
+          const verticalAlign = 'top';
+          
+          this.$notifications.notify(
+                {
+                    message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
+                    
+                    icon: 'nc-icon nc-quote',
+                    horizontalAlign: horizontalAlign,
+                    verticalAlign: verticalAlign,
+                    type: 'primary',
+                 })
         },
         updateSelectedModal(data) {
             this.selectedRow = data;

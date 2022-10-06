@@ -183,11 +183,11 @@ const POLAR_DEFAULT = {
     },
 
     title: {
-        text: 'Highcharts Polar Chart'
+        text: 'Rosa dei venti'
     },
 
     subtitle: {
-        text: 'Also known as Radar Chart'
+        text: 'Distribuzione velocità e direzione del vento'
     },
 
     pane: {
@@ -196,7 +196,7 @@ const POLAR_DEFAULT = {
     },
 
     xAxis: {
-        tickInterval: 22.5,
+        // tickInterval: 22.5,
         min: 0,
         max: 360,
         labels: {

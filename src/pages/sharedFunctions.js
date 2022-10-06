@@ -146,7 +146,8 @@ function areaLayerOptions (self) {
           }
       },
       onEachFeature: function (feature, layer) {
-          layer.bindTooltip(`<h6>${feature.properties.label}</h6>`, {sticky: true})
+        console.log(feature.properties)
+          layer.bindTooltip(`<h6>${guessLocLabel(feature.properties.label)}</h6>`, {sticky: true})
           layer.on('click', ee => {
               self.selectedMarker=feature.properties.markerIndex
               self.selectedTab='satellitari'
@@ -154,7 +155,37 @@ function areaLayerOptions (self) {
       },
   }
 }
+function guessLocLabel (foi_name){
+    const locLabel= {
+        FIGINO:'Figino',
+        GANDRIA:'Gandria',
+        MELIDE:'Melide',
+        lugano_basin_north:'Bacino Nord',
+        lugano_basin_south:'Bacino Sud',
+        'Ceresio Nord':'Bacino Nord',
+        'Ceresio Sud': 'Bacino Sud',
+        DERVIO:'Dervio',
+        MANDELLO:'Mandello',
+        lake_como_east_basin:'Bacino Est',
+        lake_como_west_basin:'Bacino Ovest',
+        lake_como_north_basin:'Bacino Nord',
+        GHIFFA:'Ghiffa',
+        PALLANZA:'Pallanza',
+        PALLANZA_D:'Pallanza',
+        PALLANZA_S:'Pallanza',
+        Pallanza_D:'Pallanza',
+        Pallanza_S:'Pallanza',
+        maggiore:'Bacino Completo',
 
+    }
+    if(foi_name.split('_')[0] in locLabel){
+        return locLabel[foi_name.split('_')[0]]
+    }
+    else if(foi_name in locLabel){
+        return locLabel[foi_name]
+    }
+    else return foi_name
+};
 function markerLayerOptions (self) {
     return {
         pointToLayer: function (feature, latlng) {
@@ -190,11 +221,8 @@ function markerLayerOptions (self) {
                     self.selectedMarker=feature.properties.markerIndex;
                 });
 
-                if (feature.properties.names[0].message) {
-                    marker.bindTooltip(`<h6>${feature.properties.names[0].message}</h6>`)
-                } else {
-                    marker.bindTooltip('<h6>Click me!</h6>')
-                };
+                console.log(feature.properties);
+                marker.bindTooltip(`<h6>${guessLocLabel(feature.properties.foi_name)}</h6>`)
 
                 return marker;
             } else {
@@ -212,4 +240,4 @@ function markerLayerOptions (self) {
     }
 }
 
-export default {areaLayerOptions, markerLayerOptions, map_layers};
+export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel};
