@@ -13,15 +13,15 @@ const proxyConf = {
 };
 
 const config = {
-    istsosProxy: devProxyConf,
+    istsosProxy: proxyConf,
     verbanoIstsos: {
         proxyEndpoint: 'verbano',
-        baseUrl: 'http://150.145.35.198:2000',
+        baseUrl: 'https://istsos.irsa.cnr.it',
         endpoint:  'maggiorelive'
     },
     larioIstsos: {
         proxyEndpoint: 'lario',
-        baseUrl: 'http://150.145.35.198:2000',
+        baseUrl: 'https://istsos.irsa.cnr.it',
         endpoint:  'lariolive'
     },
     ceresioIstsos: {
