@@ -413,7 +413,7 @@
                 series_o2c_data: {},
                 tableAllData: {},
                 allProcedures: {},
-                dataCipais:{},
+                dataCipais:[],
                 dataSatellite:{},
                 tableAllData2: {},
                 showModal: false,

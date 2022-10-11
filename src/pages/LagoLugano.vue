@@ -22,8 +22,9 @@
                 </div> -->
 
                 <div class="col-8">
+                    
                     <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
-                        <div class="col-6">
+                        <div v-if="cards[ii]" :class="[cards[ii+1] ? 'col-6' : 'col-12']">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -47,7 +48,7 @@
                                 </div>
                             </stats-card>
                         </div>
-                        <div class="col-6">
+                        <div v-if="cards[ii+1]" class="col-6">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -183,45 +184,73 @@
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='home', disabled: tableData.data}"
+                    <a :class="{'nav-link': true, active: selectedTab=='home', enabled: tableData.data}"
                         id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
                         aria-selected="true" @click="selectedTab='home'">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}"
+                    <a :class="{'nav-link': true, active: selectedTab=='cipais', enabled: selectedCipaisProcedures.length==0}"
                         id="cipais-tab" data-toggle="tab"
                         role="tab" aria-controls="cipais"
-                        aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
+                        aria-selected="true" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', disabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}" 
+                        id="satellitari-tab" data-toggle="tab"
                         role="tab" aria-controls="satellitari"
-                        aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
+                        aria-selected="true" @click="selectedTab='satellitari'">Dati satellitari</a>
                 </li>
             </ul>
+
             <div class="tab-content" id="myTabContent">
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='home', active: selectedTab=='home'}"
                         id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}">
-                            <h4>Misure disponibili</h4>
-                            <div class="row">
-                                <div class="col-12">
-                                    <data-table
-                                        :columns="tableColumns2"
-                                        :data="tableData"
-                                        :per-page="[5, 10, 15]"
-                                        @on-table-props-changed="reloadTable"
-                                        >
-                                    </data-table>
-                                </div>
-                            </div>
-                        </div>
+                        
 
+                            <!-- <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}"> -->
+                                <div v-if="tableData.data==0">
+                                    <h4>Non sono presenti misure disponibili per la stazione selezionata</h4>
+                                </div>
+                                <div v-else>
+                                    <h4>Cosa sono i dati da sensori</h4>
+
+                                    <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe 
+                                    (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza 
+                                    elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa 
+                                    tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali 
+                                    (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
+                                    I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
+                                    I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi 
+                                    di laboratorio. </p> 
+                                        
+                                    <h4>Misure disponibili:</h4>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <data-table
+                                                :columns="tableColumns2"
+                                                :data="tableData"
+                                                :per-page="[5, 10, 15]"
+                                                @on-table-props-changed="reloadTable"
+                                                >
+                                            </data-table>
+                                        </div>
+                                       
+                                    </div>
+                                     
+                                </div>
+                                       
+                                
+                            
+                        <!-- </div> -->
+                            
                     </div>
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='cipais', active: selectedTab=='cipais'}"
                         id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
-                        <div v-if="dataCipais.length>0" class="container-fluid">
+                        <div v-if="dataCipais.length==0">
+                            <h4>Non sono presenti indicatori CIPAIS per la stazione selezionata</h4>
+                        </div>
+                        <div v-else class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
 
                             <p class="description text-justify">I dati degli “Indicatori CIPAIS” provengono dalle campagne limnologiche svolte sui laghi Maggiore e
@@ -232,7 +261,8 @@
                                 necessari per il risanamento delle acque comuni e la prevenzione dell'insorgenza di ulteriori forme di
                                 inquinamento. Contribuiscono inoltre ad integrare e approfondire le attività di monitoraggio e controllo
                                 effettuate dalle Istituzioni locali. <br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
-                            <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
+                             
+                                <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
                                 <div class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataCipais[cc[0]]"></highcharts>
@@ -243,15 +273,10 @@
                                         <highcharts :options="dataCipais[cc[1]]"></highcharts>
                                     </figure>
                                 </div>
-                            </div>
-                            <!-- <div class="row" v-if="dataCipais.length%2">
-                                <div class="col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[dataCipais.length]"></highcharts>
-                                    </figure>
                                 </div>
-                            </div> -->
                         </div>
+                        
+                        
                     </div>
 
 
@@ -272,6 +297,9 @@
                                     </figure>
                                 </div>
                             </div>
+                        </div>
+                        <div v-else>
+                            <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
                         </div>
                     </div>
 
@@ -453,7 +481,7 @@
                 series_o2c_data: {},
                 tableAllData: {},
                 allProcedures: {},
-                dataCipais: {},
+                dataCipais: [],
                 dataSatellite: {},
                 tableAllData2: {},
                 showModal: false,
@@ -624,10 +652,11 @@
                     this.tableSetData();
                     // DEPRERCATED??
                     this.tableSetDataSatellite();
-                    // this.tableSetDataCipais();
+                    this.tableSetDataCipais();
                     // this.tableSetDataSatellite();
                     // this.loadCipaisData();
                     // this.loadSatelliteData();
+
                     if ( this.tableData.data && this.tableData.data.length>0 ) {
                         this.selectedTab='home'
                     } else if ( this.selectedSatelliteProcedures.length>0 ) {
