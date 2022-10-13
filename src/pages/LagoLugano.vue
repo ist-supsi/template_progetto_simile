@@ -143,14 +143,18 @@
                             </div>
                           </l-control> -->
                         
-                          <l-control>
+                          <!-- <l-control>
                             <button type="button" class="btn btn-outline-info btn-primary btn-sm" @click="this.displayInfo">
                             i
                             </button>
-                          </l-control>
+                          </l-control> -->
                          
                           <l-control position="bottomright">
-                            <select class="dropdown" id="località" v-model="selectedMarker" style="width: 100px; height: 25px">
+                            
+                            <button type="button" class="btn-primary btn-sm" @click="this.displayInfo">
+                                  <a class="text-info">info</a>
+                                </button>
+                            <select class="dropdown" id="località" v-model="selectedMarker" style="width: 100px; height: 32px">
                                 <option v-for="feature in features.features" :value="feature.properties.markerIndex">
                                       {{ guessLocLabel(feature.properties.foi_name) }}
                                   </option>
@@ -247,9 +251,9 @@
                     </div>
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='cipais', active: selectedTab=='cipais'}"
                         id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
-                        <div v-if="dataCipais.length==0">
-                            <h4>Non sono presenti indicatori CIPAIS per la stazione selezionata</h4>
-                        </div>
+                            <div v-if="dataCipais.length==0">
+                                <h4>Non sono presenti indicatori CIPAIS per la stazione selezionata</h4>
+                            </div>
                         <div v-else class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
 
@@ -263,16 +267,16 @@
                                 effettuate dalle Istituzioni locali. <br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
                              
                                 <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
-                                <div class="col-lg-6 col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[cc[0]]"></highcharts>
-                                    </figure>
-                                </div>
-                                <div v-if="cc[1]" class="col-lg-6 col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[cc[1]]"></highcharts>
-                                    </figure>
-                                </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <figure style="min-width: 100%" class="highcharts-figure">
+                                            <highcharts :options="dataCipais[cc[0]]"></highcharts>
+                                        </figure>
+                                    </div>
+                                    <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+                                        <figure style="min-width: 100%" class="highcharts-figure">
+                                            <highcharts :options="dataCipais[cc[1]]"></highcharts>
+                                        </figure>
+                                    </div>
                                 </div>
                         </div>
                         
@@ -287,8 +291,37 @@
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
                                 <div class="col-lg-6 col-sm-12">
+                                    
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[0]]"></highcharts>
+                                        <!-- Button trigger modal -->
+                                            <ModalButton> 
+                                                <Modal>
+
+                                                </Modal>
+                                            </ModalButton>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ...
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            </div>
+
                                     </figure>
                                 </div>
                                 <div v-if="cc[1]" class="col-lg-6 col-sm-12">
@@ -310,6 +343,8 @@
 
 </template>
 <script>
+    import Modal from 'src/components/Modal.vue';
+    import ModalButton from 'src/components/ModalButton.vue';
     // import {Chart} from 'highcharts-vue';
     // import Highcharts from 'highcharts';
     // import loadBullet from 'highcharts/modules/bullet.js';
@@ -337,7 +372,6 @@
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LControl } from "vue2-leaflet";
 
     import 'leaflet/dist/leaflet.css';
-
     // import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
     // import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
 
@@ -434,28 +468,30 @@
 
     export default {
         components: {
-    LTable,
-    // ChartCard,
-    StatsCard,
-    LMap,
-    LControl,
-    LTileLayer,
-    "l-wms-tile-layer": LWMSTileLayer,
-    LGeoJson,
-    LControlLayers,
-    highcharts: Chart,
-    // HighchartCard,
-    NotifyButton,
-    // 'v-marker-cluster': Vue2LeafletMarkerCluster,
-    // 'v-marker': Vue2LeafletMarker,
-    // ModalButton,
-    // Modal
-    // SimileIcon,
-    TabNav,
-    Tab,
-    CipaisLugano,
-    TestChart
-},
+        LTable,
+        // ChartCard,
+        StatsCard,
+        LMap,
+        LControl,
+        LTileLayer,
+        "l-wms-tile-layer": LWMSTileLayer,
+        LGeoJson,
+        LControlLayers,
+        highcharts: Chart,
+        // HighchartCard,
+        NotifyButton,
+        Modal,
+        ModalButton,
+        // 'v-marker-cluster': Vue2LeafletMarkerCluster,
+        // 'v-marker': Vue2LeafletMarker,
+        // ModalButton,
+        // Modal
+        // SimileIcon,
+        TabNav,
+        Tab,
+        CipaisLugano,
+        TestChart
+        },
         data () {
             return {
                 // markers: [],
@@ -741,7 +777,7 @@
             ]).then(results=>{
                 const result = results[1];
                 
-                result.data.features.forEach(el=>{console.log(el.properties.foi_name)});
+                // result.data.features.forEach(el=>{console.log(el.properties.foi_name)});
 
                 const reduced = groupBy(
                     result.data.features,
@@ -846,7 +882,6 @@
             // TODO: DEPRECATE
             // this.populateCockpit();
             this.$root.dropdownVisible = false;
-
         },
 
     methods: {
@@ -1084,6 +1119,20 @@
 
         },
         displayInfo (data) {
+          const horizontalAlign = 'center';
+          const verticalAlign = 'top';
+          
+          this.$notifications.notify(
+                {
+                    message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
+                    
+                    icon: 'nc-icon nc-quote',
+                    horizontalAlign: horizontalAlign,
+                    verticalAlign: verticalAlign,
+                    type: 'primary',
+                 })
+        },
+        displayModal (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
           

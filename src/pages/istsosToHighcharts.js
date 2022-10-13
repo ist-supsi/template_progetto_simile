@@ -302,4 +302,34 @@ function istosToLine (response, title, stock = false) {
       return info;
 }
 
-export default {istosToLine, windbarb, istsosToSeries, polar};
+function popUpGraph(existingChart) {
+    var options = existingChart.options;
+    var popupChart = new Highcharts.Chart(Highcharts.merge(options, {
+       chart: {
+          renderTo: 'popup_chart',
+          height: 300,
+          width: 700,
+          zoomType: 'x',
+          events: {
+             load: istosToLine,
+             click: istosToLine
+          }
+       }
+    }));
+
+    $("#dialog").dialog({
+       autoOpen: false,
+       height: 350,
+       width: 750,
+       modal: true,
+       show: 'blind',
+       close: function(event, ui) {
+          popupChart.destroy();
+       }
+    });
+
+    $("#dialog").dialog("open");
+
+ }
+
+export default {istosToLine, windbarb, istsosToSeries, polar, popUpGraph};

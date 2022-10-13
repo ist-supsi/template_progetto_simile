@@ -146,7 +146,7 @@ function areaLayerOptions (self) {
           }
       },
       onEachFeature: function (feature, layer) {
-        console.log(feature.properties)
+        
           layer.bindTooltip(`<h6>${guessLocLabel(feature.properties.label)}</h6>`, {sticky: true})
           layer.on('click', ee => {
               self.selectedMarker=feature.properties.markerIndex
@@ -221,7 +221,6 @@ function markerLayerOptions (self) {
                     self.selectedMarker=feature.properties.markerIndex;
                 });
 
-                console.log(feature.properties);
                 marker.bindTooltip(`<h6>${guessLocLabel(feature.properties.foi_name)}</h6>`)
 
                 return marker;

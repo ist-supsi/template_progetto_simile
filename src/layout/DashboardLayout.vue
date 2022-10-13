@@ -40,26 +40,37 @@
         <i class="nc-icon nc-tag-content"></i>
         <p>Lago di Como</p>
       </sidebar-link>
-      <!-- <sidebar-link to="/admin/overview">
-        <i class="nc-icon nc-globe-2"></i>
-        <p>GIS</p>
-      </sidebar-link> -->
-      <!--sidebar-link to="/admin/maps">
+
+      <sidebar-link to="/admin/lago-como">
+        <i class="nc-icon nc-tag-content"></i>
+        <p>Altre risorse del Progetto</p>
+        <a class="dropdown-item" target="_blank" alt="foo" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB APP SIMILE</a>
+            <a class="dropdown-item" target="_blank" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB GIS DATI SAT</a>
+      </sidebar-link>
+
+      <!-- <base-dropdown title="Altre risorse del progetto">
+            <a class="dropdown-item" target="_blank" alt="foo" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB APP SIMILE</a>
+            <a class="dropdown-item" target="_blank" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB GIS DATI SAT</a>
+      </base-dropdown> -->
+
+      
+      <!-- <sidebar-link to="/admin/maps">
         <i class="nc-icon nc-pin-3"></i>
         <p>Maps</p>
-      </sidebar-link-->
+      </sidebar-link> -->
       <!--sidebar-link to="/admin/notifications">
         <i class="nc-icon nc-bell-55"></i>
         <p>Notifications</p>
       </sidebar-link-->
 
-      <!--template slot="bottom-links">
+      <!-- <template slot="bottom-links">
         <sidebar-link class="active"
                       to="/admin/upgrade">
           <i class="nc-icon nc-alien-33"></i>
           <p>Upgrade to PRO</p>
         </sidebar-link>
-      </template-->
+      </template> -->
+
     </side-bar>
     <div class="main-panel">
       <top-navbar></top-navbar>

@@ -6,17 +6,16 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-6">
-                    <span height="200px"><H3>Descrizione</H3>
+                    <span height="200px"><h3>Descrizione</h3>
                       {{ description }}
                     </span>
                 </div>
 
 
                         <div class="col-6">
-                        <!-- <div class="alert alert-simile"> -->
+                    
                         <stats-card>
                             <div slot="header" class="icon-warning">
-                                <!-- <i class="nc-icon nc-chart text-warning"></i> -->
                                 <i :class="getCardIcon2(cards[0].name)"
                                     data-toggle="tooltip"
                                     title="cards[0].title||'no data'"></i>
@@ -37,7 +36,7 @@
                                 <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
                             </div>
                         </stats-card>
-                        <!-- </div> -->
+                        
                         </div>
 
             </div>
@@ -109,17 +108,18 @@
         </div>
     </div>
 </template>
+
 <script>
 
-    import {Chart} from 'highcharts-vue';
+    import { Chart } from 'highcharts-vue';
     import Highcharts from 'highcharts';
-    import More from 'highcharts/highcharts-more'
+    import More from 'highcharts/highcharts-more';
     // import loadBullet from 'highcharts/modules/bullet.js';
 
-    import ChartCard from 'src/components/Cards/ChartCard.vue'
-    import HighchartCard from 'src/components/Cards/HighchartCard.vue'
-    import StatsCard from 'src/components/Cards/StatsCard.vue'
-    import LTable from 'src/components/Table.vue'
+    import ChartCard from 'src/components/Cards/ChartCard.vue';
+    import HighchartCard from 'src/components/Cards/HighchartCard.vue';
+    import StatsCard from 'src/components/Cards/StatsCard.vue';
+    import LTable from 'src/components/Table.vue';
 
     // import Modal from 'src/components/Modal.vue';
     // import ModalButton from 'src/components/ModalButton.vue';
@@ -131,8 +131,8 @@
 
     import istsosToHighcharts from './istsosToHighcharts';
     import exportingInit from 'highcharts/modules/exporting';
-    import stockInit from 'highcharts/modules/stock'
-
+    import stockInit from 'highcharts/modules/stock';
+    console.log("Uncaught SyntaxError: Unexpected token '<'");
     // loadBullet(Highcharts);
     More(Highcharts)
     stockInit(Highcharts)
@@ -353,8 +353,8 @@
             var self = this;
             this.istsos = this.$root.istsos;
 
-            this.seriesFrom = this.seriesBegin.toISOString().split('T')[0]
-            this.seriesTo = this.seriesEnd.toISOString().split('T')[0]
+            this.seriesFrom = this.seriesBegin.toISOString().split('T')[0];
+            this.seriesTo = this.seriesEnd.toISOString().split('T')[0];
 
             this.istsos.call({
                 procedures: this.analisysVariable
@@ -473,7 +473,7 @@
 
                         if (procedure=='VENTO_VEL_MAX') {
 
-                            console.log(['TEST!', self.seriesBegin]);
+                            // console.log(['TEST!', self.seriesBegin]);
 
                             let windPromise = this.istsos.fetchSeries(
                                 "VENTO_DIR",
@@ -501,8 +501,8 @@
                                         const end = new Date(end_ts);
                                         const start = new Date(start_ts);
 
-                                        const sd = self.series_data.series[0].data.map(cc=>( Math.abs(start-(new Date(cc[0]))) ));
-                                        const ed = self.series_data.series[0].data.map(cc=>( Math.abs(end-(new Date(cc[0]))) ));
+                                        const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
+                                        const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
 
                                         const startIndex = sd.indexOf(Math.min(...sd));
                                         const endIndex = ed.indexOf(Math.min(...ed));
@@ -519,18 +519,18 @@
                                         self.wind_data_options['subtitle'] = {
                                             text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
                                         };
-                                    //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano  direzione e velocità 
-                                    
-                                    //     const allowedProperties = ['dato1', 'dato2'];
+                                        //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano  direzione e velocità 
+                                        
+                                        //     const allowedProperties = ['dato1', 'dato2'];
 
-                                    //     const allKeys = Object.keys(wind_data);
-                                    //     const freqs =allKeys.reduce((next, key)=> {
-                                    //         if(allowedProperties.includes(key)){
-                                    //         return { ...next, [key]: wind_data[key]};
-                                    //     } else {
-                                    //         return next;
-                                    //     }
-                                    // } , {});
+                                        //     const allKeys = Object.keys(wind_data);
+                                        //     const freqs =allKeys.reduce((next, key)=> {
+                                        //         if(allowedProperties.includes(key)){
+                                        //         return { ...next, [key]: wind_data[key]};
+                                        //     } else {
+                                        //         return next;
+                                        //     }
+                                        // } , {});
                                         const wind_series = wind_data.map((el)=> el.slice(1).reverse());
                                         
                                         self.wind_series =istsosToHighcharts.polar(wind_series);
@@ -558,9 +558,7 @@
                                 });
 
                             }};
-
                         };
-
                         if ( !self.series_data.series ) {
                             self.series_data = result.options;
                         } else {
@@ -582,17 +580,16 @@
     };
 
 </script>
+
 <style>
 
 #bulletgraph {
     height: 130px;
 }
-
 .hc-cat-title {
     font-size: 13px;
     font-weight: bold;
 }
-
 .highcharts-figure,
 .highcharts-data-table table {
     min-width: 320px;
