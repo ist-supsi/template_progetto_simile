@@ -42,10 +42,10 @@
       </sidebar-link>
 
       <sidebar-link to="/admin/lago-como">
-        <i class="nc-icon nc-tag-content"></i>
-        <p>Altre risorse del Progetto</p>
-        <a class="dropdown-item" target="_blank" alt="foo" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB APP SIMILE</a>
-            <a class="dropdown-item" target="_blank" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB GIS DATI SAT</a>
+        <i class="nc-icon nc-planet"></i>
+        <p>Altre risorse:</p>
+        <a class="dropdown-item text-white" target="_blank" alt="foo" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB APP SIMILE</a>
+            <a class="dropdown-item text-white" target="_blank" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB GIS DATI SAT</a>
       </sidebar-link>
 
       <!-- <base-dropdown title="Altre risorse del progetto">

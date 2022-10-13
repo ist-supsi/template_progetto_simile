@@ -132,7 +132,7 @@
     import istsosToHighcharts from './istsosToHighcharts';
     import exportingInit from 'highcharts/modules/exporting';
     import stockInit from 'highcharts/modules/stock';
-    console.log("Uncaught SyntaxError: Unexpected token '<'");
+    
     // loadBullet(Highcharts);
     More(Highcharts)
     stockInit(Highcharts)
@@ -513,8 +513,9 @@
                                         // if (endIndex==-1) { endIndex=self.series_data.series[0].data.length };
 
                                         let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
-
+                                        console.log(wind_data);
                                         self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
+                                        
                                         self.wind_data_options.title.text = 'Velocità del vento';
                                         self.wind_data_options['subtitle'] = {
                                             text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
