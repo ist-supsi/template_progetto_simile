@@ -43,7 +43,9 @@ const LINE_DEFAULTS = {
     }]
 };
 
-let STOCK_DEFAULTS = LINE_DEFAULTS;
+let STOCK_DEFAULTS = {...LINE_DEFAULTS, legend: {
+     enabled: true
+}};
 
 STOCK_DEFAULTS['rangeSelector'] = {
 
@@ -137,6 +139,11 @@ const WINDBARB_DEFAULTS = {
     legend: {
          enabled: false
     },
+    windbarb: {
+      // animation: false
+      animationLimit: 999,
+      // grouping: false
+    },
     series: [
       {
         type: 'windbarb',
@@ -148,7 +155,7 @@ const WINDBARB_DEFAULTS = {
         // tooltip: {valueSuffix: ' m/s'}
       },
       {
-        type: 'area',
+        type: 'line',
         keys: ['x', 'y'], // wind direction is not used here
         data: [],
         color: Highcharts.getOptions().colors[0],
@@ -169,12 +176,30 @@ const WINDBARB_DEFAULTS = {
     }]
 };
 
-const dirNames = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+const dirNames = ['N',
+    'NNE',
+    'NE',
+    'ENE',
+    'E',
+    'ESE',
+    'SE',
+    'SSE',
+    'S',
+    'SSW',
+    'SW',
+    'WSW',
+    'W',
+    'WNW',
+    'NW',
+    'NNW'
+];
 const nameByDirs = dirNames.map((nn,i)=>[nn, i]).reduce((pp, cc)=>{
     const b = dirNames.length;
     pp[cc[1]*(360/b)] = cc[0];
     return pp
 }, {});
+
+const polar_base_interval = 22.5
 
 const POLAR_DEFAULT = {
 
@@ -196,7 +221,7 @@ const POLAR_DEFAULT = {
     },
 
     xAxis: {
-        // tickInterval: 22.5,
+        tickInterval: polar_base_interval,
         min: 0,
         max: 360,
         labels: {
@@ -211,8 +236,8 @@ const POLAR_DEFAULT = {
 
     plotOptions: {
         series: {
-            pointStart: -12.25,
-            pointInterval: 22.5
+            pointStart: polar_base_interval/(-2),
+            pointInterval: polar_base_interval
         },
         column: {
             pointPadding: 0,
@@ -241,7 +266,7 @@ function polar(data) {
 };
 
 function windbarb(data) {
-    let options = JSON.parse(JSON.stringify(WINDBARB_DEFAULTS));
+    let options = {...WINDBARB_DEFAULTS};
     options['series'][0].data = data;
     options['series'][1].data = data;
     return options;

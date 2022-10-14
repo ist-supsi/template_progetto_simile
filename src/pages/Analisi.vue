@@ -13,7 +13,7 @@
 
 
                         <div class="col-6">
-                    
+
                         <stats-card>
                             <div slot="header" class="icon-warning">
                                 <i :class="getCardIcon2(cards[0].name)"
@@ -36,7 +36,7 @@
                                 <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
                             </div>
                         </stats-card>
-                        
+
                         </div>
 
             </div>
@@ -132,7 +132,6 @@
     import istsosToHighcharts from './istsosToHighcharts';
     import exportingInit from 'highcharts/modules/exporting';
     import stockInit from 'highcharts/modules/stock';
-    console.log("Uncaught SyntaxError: Unexpected token '<'");
     // loadBullet(Highcharts);
     More(Highcharts)
     stockInit(Highcharts)
@@ -279,10 +278,11 @@
             seriesTo: null,
             seriesBegin: new Date(new Date().setDate(new Date().getDate() - 185)),
             seriesEnd: new Date(),
-            locked: false,
+            // locked: false,
             variableAverage: 0,
             variableStd: 0,
             bulletOptions: {},
+            setDataTimeout: null,
             category_colors: ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
                 '#0d233a', '#77a1e5', '#8bbc21']
         }},
@@ -319,20 +319,13 @@
           },
           seriesBegin: {
               handler(value) {
-                  if (this.locked===false) {
-                      this.locked=true;
-                      this.setSeries();
-                  };
-
+                  this._setSeries();
               },
               deep: true
           },
           seriesEnd: {
               handler(value) {
-                  if (this.locked===false) {
-                      this.locked=true;
-                      this.setSeries();
-                  };
+                  this._setSeries();
               },
               deep: true
           },
@@ -362,7 +355,7 @@
                 self.variableInfo = response;
             });
 
-            let prm = this.istsos.fetch({
+            this.istsos.fetch({
                 procedures: this.analisysVariable,
                 eventtime: 'last',
                 observedproperties: this.analisysVariableUrn
@@ -429,6 +422,11 @@
             // setBegin (value) {
             //     this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
             // },
+            _setSeries () {
+                var self = this;
+                clearTimeout(this.setDataTimeout);
+                this.setDataTimeout = setTimeout(()=>{self.setSeries ()})
+            },
             setSeries () {
                 var self = this;
                 this.series_data = {};
@@ -445,6 +443,11 @@
                     ).then((response)=>{
                         let result = istsosToHighcharts.istosToLine(response, undefined, true);
 
+                        // TODO:
+                        // 1. verificare il raggruppamento delle procedure nella pagina del Como
+                        // 2. rimuovere la proprietà legend enabled nel caso di una sola provedura graficata
+
+                        // console.log([result.options.series, counter]);
                         if ( procedure!=self.analisysVariable ) {
                             result.options.series[counter].visible = true;
                         } else {
@@ -468,7 +471,7 @@
                                 }];
                             };
                         };
-                        result.options.series[counter].color = this.category_colors[counter];
+                        // result.options.series[counter].color = this.category_colors[counter];
                         counter = counter+1;
 
                         if (procedure=='VENTO_VEL_MAX') {
@@ -514,13 +517,28 @@
 
                                         let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
 
+                                        const wind_series = wind_data.map((el)=> el.slice(1).reverse());
+
+                                        // *************************************
+                                        // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
+                                        // valori ho introdotto questo workaround per limitare la serie al massimo consentito
+                                        // issue aperta: https://github.com/highcharts/highcharts/issues/17851
+                                        const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+                                        const series_excess = wind_data.length-1000;
+                                        if ( series_excess>0 ) {
+                                            for (let i = 0; i < series_excess; i++) {
+                                                wind_data.splice(random(1, wind_data.length-1), 1)
+                                            }
+                                        };
+                                        // *************************************
+
                                         self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
                                         self.wind_data_options.title.text = 'Velocità del vento';
                                         self.wind_data_options['subtitle'] = {
                                             text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
                                         };
-                                        //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano  direzione e velocità 
-                                        
+                                        //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano  direzione e velocità
+
                                         //     const allowedProperties = ['dato1', 'dato2'];
 
                                         //     const allKeys = Object.keys(wind_data);
@@ -531,8 +549,8 @@
                                         //         return next;
                                         //     }
                                         // } , {});
-                                        const wind_series = wind_data.map((el)=> el.slice(1).reverse());
-                                        
+
+
                                         self.wind_series =istsosToHighcharts.polar(wind_series);
 
                                         // const b = 16;
@@ -567,6 +585,7 @@
                         };
 
                     });
+                    break;
                 };
 
                 self.locked = false; //
