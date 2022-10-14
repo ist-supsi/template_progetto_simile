@@ -153,7 +153,7 @@
                           <l-control position="bottomright">
                             
                             <button type="button" class="btn-primary btn-sm" @click="this.displayInfo">
-                                  <a class="text-info">info</a>
+                                  <a class="text-white">info</a>
                                 </button>
                             <select class="dropdown" id="località" v-model="selectedMarker" style="width: 100px; height: 32px">
                                 <option v-for="feature in features.features" :value="feature.properties.markerIndex">
@@ -303,10 +303,10 @@
                                                         <div :class="modalClasses" id="reject" role="dialog">
                                                             <div class="modal-dialog">
                                                                 <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <!-- <h4 class="modal-title"></h4> -->
+                                                                    <!-- <div class="modal-header">
+                                                                         <h4 class="modal-title"></h4>
                                                                         <button type="button" class="close" @click="toggle()">&times;</button>
-                                                                    </div>
+                                                                    </div> -->
                                                                     <div class="modal-body"> 
                                                                         <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[0]]"></highcharts>
                                                                     </div>
@@ -327,7 +327,25 @@
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[1]]"></highcharts>
                                         <!--  modal -->
-                                       
+                                        <div class="container py-2" id="app">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <a role="button" class="btn btn-primary" @click="toggle()">Vedi dettaglio</a>
+                                                        <div :class="modalClasses" id="reject" role="dialog">
+                                                            <div class="modal-dialog modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body"> 
+                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[1]]"></highcharts>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-primary" @click="toggle()">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <!-- Modal -->
                                     </figure>
                                 </div>
@@ -1619,5 +1637,7 @@
 .nav-link {
   cursor: pointer
 }
+.modal { overflow: auto !important;}
+
 
 </style>

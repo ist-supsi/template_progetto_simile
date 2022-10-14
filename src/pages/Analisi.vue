@@ -7,7 +7,8 @@
             <div class="row">
                 <div class="col-6">
                     <span height="200px"><h3>Descrizione</h3>
-                      {{ description }}
+                      <!-- {{ description }} -->
+                      {{cards[0].description}} 
                     </span>
                 </div>
 
@@ -384,6 +385,7 @@
                     data: data,
                     uom: result.data.data[0].result.DataArray.field[1].uom,
                     name:result.data.data[0].result.DataArray.field[1].name,
+                    description:'',
                 };
                 // self.cards[0].message = result.data.data[0].featureOfInterest.name.split(':').at(-1);
                 // self.cards[0].data = result.data.data[0].result.DataArray.values[0][1].toFixed(2);
@@ -391,10 +393,12 @@
 
                 if(indicatorDescription.indicatorDescription[info.name]==undefined){
                     info.title = 'N.P.';
+                    info.description = 'N.P.';
                 }
                 else{
                     info.title = indicatorDescription.indicatorDescription[info.name].title;
                     info.icon = indicatorDescription.indicatorDescription[info.name].icon;
+                    info.description = indicatorDescription.indicatorDescription[info.name].breveDescrizione;
                 }
                 self.cards = [info];
 
@@ -513,7 +517,7 @@
                                         // if (endIndex==-1) { endIndex=self.series_data.series[0].data.length };
 
                                         let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
-                                        console.log(wind_data);
+                                        
                                         self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
                                         
                                         self.wind_data_options.title.text = 'Velocità del vento';
