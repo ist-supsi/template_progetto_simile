@@ -41,7 +41,7 @@
         <p>Lago di Como</p>
       </sidebar-link>
 
-      <sidebar-link to="/admin/lago-como">
+      <sidebar-link target="_blank" to=" ">
         <i class="nc-icon nc-planet"></i>
         <p>Altre risorse:</p>
         <a class="dropdown-item text-white" target="_blank" alt="foo" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB APP SIMILE</a>

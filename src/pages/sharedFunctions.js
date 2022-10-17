@@ -49,14 +49,14 @@ const map_layers = [
     //   transparent: true/*,
     //   attribution: "Weather data © 2012 IEM Nexrad"*/
     // },
-    {
-      name: 'Reticolo idrografico',
-      visible: true,
-      format: 'image/png',
-      layers: 'Reticolo_idrografico',
-      transparent: true/*,
-      attribution: "Weather data © 2012 IEM Nexrad"*/
-    },
+    // {
+    //   name: 'Reticolo idrografico',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Reticolo_idrografico',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
     {
       name: 'Laghi',
       visible: true,
@@ -82,14 +82,14 @@ const map_layers = [
     //   transparent: true/*,
     //   attribution: "Weather data © 2012 IEM Nexrad"*/
     // },
-    {
-      name: 'Limiti amministrativi',
-      visible: true,
-      format: 'image/png',
-      layers: 'Limiti_amministrativi',
-      transparent: true/*,
-      attribution: "Weather data © 2012 IEM Nexrad"*/
-    },
+    // {
+    //   name: 'Limiti amministrativi',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Limiti_amministrativi',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
   //   {
   //     name: 'Uso di suolo (CORINE_2018)',
   //     visible: false,
@@ -122,20 +122,20 @@ const map_layers = [
   //     transparent: true/*,
   //     attribution: "Weather data © 2012 IEM Nexrad"*/
   //   },
-    {
-      name: 'Bacini idrografici',
-      visible: true,
-      format: 'image/png',
-      layers: 'Bacini_idrografici',
-      transparent: true/*,
-      attribution: "Weather data © 2012 IEM Nexrad"*/
-  }
+//     {
+//       name: 'Bacini idrografici',
+//       visible: true,
+//       format: 'image/png',
+//       layers: 'Bacini_idrografici',
+//       transparent: true/*,
+//       attribution: "Weather data © 2012 IEM Nexrad"*/
+//   }
 ]
 
 function areaLayerOptions (self) {
   return {
       style: function (feature) {
-          let color = '#6c757d'
+          let color = '#406e96'
           if ( feature.properties.markerIndex==self.selectedMarker ) {
             //   color = '#1D62F0 '
             color = '#ed595b'
@@ -143,6 +143,7 @@ function areaLayerOptions (self) {
           return {
               color: color,
               fillColor: color,
+              fillOpacity:0.1,
           }
       },
       onEachFeature: function (feature, layer) {

@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
                     <div >
-                        <h5>Stato Attuale: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
+                        <h5>Località Osservata: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
                     </div>
                         
                 </div>
@@ -86,6 +86,10 @@
                         v-if="showMap"
                         :zoom="currentZoom"
                         :bounds="bounds"
+                        :maxBounds="[
+                            [45.58,8.0255],
+                            [47.428, 9.950]
+                        ]"
                         :options="mapOptions"
                         @update:center="centerUpdate"
                         @update:zoom="zoomUpdate"
@@ -646,7 +650,8 @@
                   "features": []
                 },
                 basins: lake_basins.ceresio,
-                url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                // url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
                 layers: sharedFunctions.map_layers,
                 markerLayer: {
