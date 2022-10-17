@@ -38,6 +38,8 @@ let indicatorDescription =
             // icon:'fa fa-tint text-primary',
             icon:'icon-water_SDT',
             tag:'CIPAIS',
+            limite:null,
+            obiettivo:null,
            
         },
 
@@ -52,7 +54,9 @@ let indicatorDescription =
             // icon:'fa fa-arrows-v text-primary',
             icon:'icon-water-depht',
             tag:'CIPAIS',
-            reverse: true,
+            limite:null,
+            obiettivo:null,
+            reversed: true,
         },
 
         'water-pH': {
@@ -135,6 +139,8 @@ let indicatorDescription =
             // icon:'fa fa-line-chart text-primary',
             icon:'icon-water_pload',
             tag:'CIPAIS',
+            limite:null,
+            obiettivo:null,
         },
         'Pload': {
             title : 'Carico di fosforo',
@@ -148,6 +154,8 @@ let indicatorDescription =
             // icon:'fa fa-line-chart text-primary',
             icon:'icon-water_pload',
             tag:'CIPAIS',
+            limite:null,
+            obiettivo:null,
         },
 
         'water-Nload': {
@@ -162,6 +170,8 @@ let indicatorDescription =
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
             tag:'CIPAIS',
+            limite:null,
+            obiettivo:null,
         },
         'NLoad': {
             title : 'Carico di azoto',
@@ -175,6 +185,8 @@ let indicatorDescription =
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
             tag:'CIPAIS',
+            limite:null,
+            obiettivo:null,
         },
 
         'water-PTOT': {
@@ -187,6 +199,8 @@ let indicatorDescription =
             // icon:'fa fa-file-powerpoint-o text-primary',
             icon:'icon-water_PTOT',
             tag:'CIPAIS',
+            limite:70,
+            obiettivo:100,
         },
 
         'water-NTOT': {
@@ -199,6 +213,8 @@ let indicatorDescription =
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
             tag:'CIPAIS',
+            limite:null,
+            obiettivo:null,
         },
 
         'indice-LTLeco': {
