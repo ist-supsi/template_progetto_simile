@@ -1,9 +1,10 @@
 <template>
     <div class="content">
+        <div :class="backdropClasses"></div>
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
                     <div >
-                        <h5>Stato Attuale: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
+                        <h5>Località Osservata: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
                     </div>
                         
                 </div>
@@ -85,6 +86,10 @@
                         v-if="showMap"
                         :zoom="currentZoom"
                         :bounds="bounds"
+                        :maxBounds="[
+                            [45.58,8.0255],
+                            [47.428, 9.950]
+                        ]"
                         :options="mapOptions"
                         @update:center="centerUpdate"
                         @update:zoom="zoomUpdate"
@@ -152,7 +157,7 @@
                           <l-control position="bottomright">
                             
                             <button type="button" class="btn-primary btn-sm" @click="this.displayInfo">
-                                  <a class="text-info">info</a>
+                                  <a class="text-white">info</a>
                                 </button>
                             <select class="dropdown" id="località" v-model="selectedMarker" style="width: 100px; height: 32px">
                                 <option v-for="feature in features.features" :value="feature.properties.markerIndex">
@@ -294,39 +299,58 @@
                                     
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[0]]"></highcharts>
-                                        <!-- Button trigger modal -->
-                                            <ModalButton> 
-                                                <Modal>
-
-                                                </Modal>
-                                            </ModalButton>
-
+                                        <!--  modal -->
+                                            <div class="container py-2" id="app">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <a role="button" class="btn btn-primary" @click="toggle()">Vedi dettaglio</a>
+                                                        <div :class="modalClasses" id="reject" role="dialog">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <!-- <div class="modal-header">
+                                                                         <h4 class="modal-title"></h4>
+                                                                        <button type="button" class="close" @click="toggle()">&times;</button>
+                                                                    </div> -->
+                                                                    <div class="modal-body"> 
+                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[0]]"></highcharts>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-primary" @click="toggle()">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <!-- Modal -->
-                                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    ...
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                                </div>
-                                                </div>
-                                            </div>
-                                            </div>
 
                                     </figure>
                                 </div>
                                 <div v-if="cc[1]" class="col-lg-6 col-sm-12">
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[1]]"></highcharts>
+                                        <!--  modal -->
+                                        <div class="container py-2" id="app">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <a role="button" class="btn btn-primary" @click="toggle()">Vedi dettaglio</a>
+                                                        <div :class="modalClasses" id="reject" role="dialog">
+                                                            <div class="modal-dialog modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body"> 
+                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[1]]"></highcharts>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-primary" @click="toggle()">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal -->
                                     </figure>
                                 </div>
                             </div>
@@ -495,6 +519,8 @@
         data () {
             return {
                 // markers: [],
+                backdropClasses: [],
+                modalClasses: ['modal','fade'],
                 istsos: null,
                 selectedTab: 'home',
                 selectedCipaisProcedures: [],
@@ -624,7 +650,8 @@
                   "features": []
                 },
                 basins: lake_basins.ceresio,
-                url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                // url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
                 layers: sharedFunctions.map_layers,
                 markerLayer: {
@@ -885,6 +912,20 @@
         },
 
     methods: {
+        toggle() {
+
+            if( this.modalClasses.includes('show')){
+                this.modalClasses.pop()
+                this.modalClasses.pop()
+                this.backdropClasses=[]
+            }
+            else {
+                this.modalClasses.push('d-block')
+                this.modalClasses.push('show')
+                this.backdropClasses=['modal-backdrop', 'fade', 'show']
+            }
+            
+    },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
         },
@@ -1601,5 +1642,7 @@
 .nav-link {
   cursor: pointer
 }
+.modal { overflow: auto !important;}
+
 
 </style>
