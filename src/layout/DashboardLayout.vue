@@ -45,7 +45,7 @@
         <i class="nc-icon nc-planet"></i>
         <p>Altre risorse:</p>
         <a class="dropdown-item text-white" target="_blank" alt="foo" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB APP SIMILE</a>
-            <a class="dropdown-item text-white" target="_blank" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB GIS DATI SAT</a>
+            <a class="dropdown-item text-white" target="_blank" rel="noopener noreferrer" href="https://www.webgis.eo.simile.polimi.it/#">WEB GIS DATI SAT</a>
       </sidebar-link>
 
       <!-- <base-dropdown title="Altre risorse del progetto">
