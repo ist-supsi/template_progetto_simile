@@ -53,7 +53,7 @@
             <a class="dropdown-item" target="_blank" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB GIS DATI SAT</a>
       </base-dropdown> -->
 
-      
+
       <!-- <sidebar-link to="/admin/maps">
         <i class="nc-icon nc-pin-3"></i>
         <p>Maps</p>

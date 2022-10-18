@@ -6,7 +6,7 @@
                     <div >
                         <h5>Località Osservata: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
                     </div>
-                        
+
                 </div>
             </div>
 
@@ -23,7 +23,7 @@
                 </div> -->
 
                 <div class="col-8">
-                    
+
                     <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
                         <div v-if="cards[ii]" :class="[cards[ii+1] ? 'col-6' : 'col-12']">
                             <stats-card>
@@ -73,15 +73,15 @@
                                     <i v-if="cards[ii+1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.time}}
                                 </div>
                             </stats-card>
-                            
+
                         </div>
                     </div>
 
                 </div>
                 <div class="col-4" style="height: 510px">
-                    
+
                     <card style="height: 94%;">
-                      
+
                     <l-map
                         v-if="showMap"
                         :zoom="currentZoom"
@@ -94,102 +94,59 @@
                         @update:center="centerUpdate"
                         @update:zoom="zoomUpdate"
                         style="height: 100%;"
-
+                        ref="map"
                       >
-                      <l-tile-layer
-                          :url="url"
-                          :attribution="attribution"
+
+                      <l-wms-tile-layer
+                        v-for="layer in layers"
+                        :key="layer.name"
+                        :base-url="wmsUrl"
+                        :layers="layer.layers"
+                        :visible="layer.visible"
+                        :name="layer.name"
+                        :transparent="layer.transparent"
+                        :format="layer.format"
+                        :opacity="layer.opacity"
+                        layer-type="overlay"
+                      ></l-wms-tile-layer>
+
+                      <l-geo-json
+                          ref="areaLayer"
+                          :geojson="basins"
+                          :options = areaLayerOptions()
                       />
-                        <!-- <l-tile-layer
-                          :url="url"
-                          :attribution="attribution"
-                        ></l-tile-layer> -->
-                        <!-- <l-control-layers /> -->
-                          <l-wms-tile-layer
-                            v-for="layer in layers"
-                            :key="layer.name"
-                            :base-url="wmsUrl"
-                            :layers="layer.layers"
-                            :visible="layer.visible"
-                            :name="layer.name"
-                            :transparent="layer.transparent"
-                            :format="layer.format"
-                            :opacity="layer.opacity"
-                            layer-type="overlay"
-                          ></l-wms-tile-layer>
 
-                          <!-- <v-marker-cluster>
-                            <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">
-                            </v-marker>
-                          </v-marker-cluster> -->
+                      <l-geo-json
+                          ref="markerLayer"
+                          :geojson="features"
+                          :options=markerLayerOptions()
+                      />
 
-                          <l-geo-json
-                              ref="areaLayer"
-                              :geojson="basins"
-                              :options = areaLayerOptions()
-                          />
+                      <l-control position="bottomright">
+                        <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                            <button class="btn btn-info" type="button"
+                                @click="this.displayInfo"
+                            >
+                                <i aria-hidden="true" class="fa fa-info-circle" title="Scopri come interagire con la mappa"></i></button>
+                          </div>
+                          <select class="custom-select" id="inputGroupSelect03"
+                              aria-label="Example select with button addon" v-model="selectedMarker"
+                              title="Scegli una località o un'area da analizzare"
+                              >
+                            <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                  {{ guessLocLabel(feature.properties.foi_name) }}
+                              </option>
+                          </select>
+                        </div>
+                      </l-control>
 
-                          <l-geo-json
-                              ref="markerLayer"
-                              :geojson="features"
-                              :options=markerLayerOptions()
-                          />
-                          <!-- <l-control class="example-custom-control">
-                            <div class="input-group input-group-sm mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Località: </span>
-                              </div>
-                              <select class="form-control" v-model="selectedMarker">
-                                  <option v-for="feature in features.features" :value="feature.properties.markerIndex">
-                                      {{ getLocLabel(feature) }}
-                                  </option>
+                  </l-map>
 
-                              </select>
-                            </div>
-                          </l-control> -->
-                        
-                          <!-- <l-control>
-                            <button type="button" class="btn btn-outline-info btn-primary btn-sm" @click="this.displayInfo">
-                            i
-                            </button>
-                          </l-control> -->
-                         
-                          <l-control position="bottomright">
-                            
-                            <button type="button" class="btn-primary btn-sm" @click="this.displayInfo">
-                                  <a class="text-white">info</a>
-                                </button>
-                            <select class="dropdown" id="località" v-model="selectedMarker" style="width: 100px; height: 32px">
-                                <option v-for="feature in features.features" :value="feature.properties.markerIndex">
-                                      {{ guessLocLabel(feature.properties.foi_name) }}
-                                  </option>
-                                <!-- <option value ="1" selected="selected" >Figino</option>
-                                <option value ="0" >Gandria</option>
-                                <option value ="3" >Ceresio Sud</option>
-                                <option value ="2" >Ceresio Nord</option> -->
-                            </select>
-                          </l-control>
-                          <!-- <l-control position="bottomright">
-                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=1">
-                            Figino
-                            </button>
-                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=0">
-                            Gandria
-                            </button>
-                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=3">
-                            Ceresio Sud
-                            </button>
-                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=2">
-                            Ceresio Nord
-                            </button>
-                          </l-control> -->
-                       
-                      </l-map>
-                     
-                    </card>
-                </div>
+                </card>
             </div>
-           
+        </div>
+
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
@@ -205,7 +162,7 @@
                         aria-selected="true" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}" 
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}"
                         id="satellitari-tab" data-toggle="tab"
                         role="tab" aria-controls="satellitari"
                         aria-selected="true" @click="selectedTab='satellitari'">Dati satellitari</a>
@@ -215,7 +172,7 @@
             <div class="tab-content" id="myTabContent">
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='home', active: selectedTab=='home'}"
                         id="home" role="tabpanel" aria-labelledby="home-tab">
-                        
+
 
                             <!-- <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}"> -->
                                 <div v-if="tableData.data==0">
@@ -224,15 +181,15 @@
                                 <div v-else>
                                     <h4>Cosa sono i dati da sensori</h4>
 
-                                    <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe 
-                                    (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza 
-                                    elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa 
-                                    tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali 
+                                    <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
+                                    (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
+                                    elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
+                                    tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
                                     (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
                                     I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
-                                    I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi 
-                                    di laboratorio. </p> 
-                                        
+                                    I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
+                                    di laboratorio. </p>
+
                                     <h4>Misure disponibili:</h4>
                                     <div class="row">
                                         <div class="col-12">
@@ -244,15 +201,15 @@
                                                 >
                                             </data-table>
                                         </div>
-                                       
+
                                     </div>
-                                     
+
                                 </div>
-                                       
-                                
-                            
+
+
+
                         <!-- </div> -->
-                            
+
                     </div>
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='cipais', active: selectedTab=='cipais'}"
                         id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
@@ -270,7 +227,7 @@
                                 necessari per il risanamento delle acque comuni e la prevenzione dell'insorgenza di ulteriori forme di
                                 inquinamento. Contribuiscono inoltre ad integrare e approfondire le attività di monitoraggio e controllo
                                 effettuate dalle Istituzioni locali. <br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
-                             
+
                                 <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
                                     <div class="col-lg-6 col-sm-12">
                                         <figure style="min-width: 100%" class="highcharts-figure">
@@ -284,8 +241,8 @@
                                     </div>
                                 </div>
                         </div>
-                        
-                        
+
+
                     </div>
 
 
@@ -296,7 +253,7 @@
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
                                 <div class="col-lg-6 col-sm-12">
-                                    
+
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[0]]"></highcharts>
                                         <!--  modal -->
@@ -311,7 +268,7 @@
                                                                          <h4 class="modal-title"></h4>
                                                                         <button type="button" class="close" @click="toggle()">&times;</button>
                                                                     </div> -->
-                                                                    <div class="modal-body"> 
+                                                                    <div class="modal-body">
                                                                         <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[0]]"></highcharts>
                                                                     </div>
                                                                     <div class="modal-footer">
@@ -338,7 +295,7 @@
                                                         <div :class="modalClasses" id="reject" role="dialog">
                                                             <div class="modal-dialog modal-lg">
                                                                 <div class="modal-content">
-                                                                    <div class="modal-body"> 
+                                                                    <div class="modal-body">
                                                                         <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[1]]"></highcharts>
                                                                     </div>
                                                                     <div class="modal-footer">
@@ -651,9 +608,10 @@
                 },
                 basins: lake_basins.ceresio,
                 // url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
+                // url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
                 layers: sharedFunctions.map_layers,
+                baseLayers: sharedFunctions.base_layers,
                 markerLayer: {
                     name: 'Marker',
                     visible: true,
@@ -668,7 +626,7 @@
 
                     }
                 },
-                attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                // attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 currentZoom: 10.5,
                 //currentCenter: latLng(47.41322, -1.219482),
                 showParagraph: false,
@@ -748,6 +706,8 @@
             this.istsos = this.ceresioIstosos;
             this.$root.istsos = this.istsos;
 
+            sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
+
             const good_names = [
                 "air-temperature",
                 "air-relative-humidity",
@@ -796,28 +756,28 @@
 
                 }
             };
-            
+
 
             Promise.all([
                 this.tableFetchData2(),
                 this.istsos.fetchGeometryCollection(),
             ]).then(results=>{
                 const result = results[1];
-                
+
                 // result.data.features.forEach(el=>{console.log(el.properties.foi_name)});
 
                 const reduced = groupBy(
                     result.data.features,
                     approxPosition,
                     collectNames
-                
-                ); 
+
+                );
                 let bounds = L.latLngBounds([]);
 
                 const features = Object.entries(reduced).map(([k, v], ii) => {
                     const coords = k.split(';').map(parseFloat);
                     // bounds.extend(L.latLng(coords[1], coords[0]));
-                    
+
                     return {
                         "type": "Feature",
                         "properties": {
@@ -904,7 +864,7 @@
                 self.bounds = bounds;
 
             })
-  
+
 
             // TODO: DEPRECATE
             // this.populateCockpit();
@@ -924,7 +884,7 @@
                 this.modalClasses.push('show')
                 this.backdropClasses=['modal-backdrop', 'fade', 'show']
             }
-            
+
     },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
@@ -1162,11 +1122,11 @@
         displayInfo (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
-          
+
           this.$notifications.notify(
                 {
                     message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
-                    
+
                     icon: 'nc-icon nc-quote',
                     horizontalAlign: horizontalAlign,
                     verticalAlign: verticalAlign,
@@ -1176,11 +1136,11 @@
         displayModal (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
-          
+
           this.$notifications.notify(
                 {
                     message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
-                    
+
                     icon: 'nc-icon nc-quote',
                     horizontalAlign: horizontalAlign,
                     verticalAlign: verticalAlign,
@@ -1644,5 +1604,33 @@
 }
 .modal { overflow: auto !important;}
 
+.input-group > .form-control, .input-group > .form-control-plaintext, .input-group > .custom-select, .input-group > .custom-file {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    -webkit-box-flex: 1;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    margin-bottom: 0;
+    height: auto;
+}
+
+.btn {
+    border-width: 2px;
+    background-color: #eeeeee;
+    font-weight: 400;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    padding: 8px 16px;
+    border-color: #888888;
+    color: #888888;
+    /* fill-opacity: 0; */
+}
+
+.btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
+    background-color: #eeeeee;
+    color: #42d0ed;
+    border-color: #42d0ed;
+}
 
 </style>

@@ -5,7 +5,7 @@
                     <div >
                         <h5>Stato Attuale: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
                     </div>
-                        
+
                 </div>
             </div>
 
@@ -77,17 +77,9 @@
                         @update:center="centerUpdate"
                         @update:zoom="zoomUpdate"
                         style="height: 100%;"
-
+                        ref="map"
                       >
-                      <l-tile-layer
-                          :url="url"
-                          :attribution="attribution"
-                      />
-                        <!-- <l-tile-layer
-                          :url="url"
-                          :attribution="attribution"
-                        ></l-tile-layer> -->
-                        <!-- <l-control-layers /> -->
+
                           <l-wms-tile-layer
                             v-for="layer in layers"
                             :key="layer.name"
@@ -103,11 +95,6 @@
 
                           ></l-wms-tile-layer>
 
-                          <!-- <v-marker-cluster>
-                            <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">
-                            </v-marker>
-                          </v-marker-cluster> -->
-
                           <l-geo-json
                               ref="areaLayer"
                               :geojson="basins"
@@ -120,22 +107,23 @@
                               :options="markerLayerOptions()"
 
                           />
-                          <l-control>
-                            <button type="button" class="btn btn-outline-info btn-primary btn-sm" @click="this.displayInfo">
-                            i
-                            </button>
-                          </l-control>
-                         
                           <l-control position="bottomright">
-                            <select class="dropdown" id="località" v-model="selectedMarker" style="width: 100px; height: 25px">
+                            <div class="input-group input-group-sm mb-3">
+                              <div class="input-group-prepend">
+                                <button class="btn btn-info" type="button"
+                                    @click="this.displayInfo"
+                                >
+                                    <i aria-hidden="true" class="fa fa-info-circle" title="Scopri come interagire con la mappa"></i></button>
+                              </div>
+                              <select class="custom-select" id="inputGroupSelect03"
+                                  aria-label="Example select with button addon" v-model="selectedMarker"
+                                  title="Scegli una località o un'area da analizzare"
+                                  >
                                 <option v-for="feature in features.features" :value="feature.properties.markerIndex">
                                       {{ guessLocLabel(feature.properties.foi_name) }}
                                   </option>
-                                <!-- <option value ="1" selected="selected" >Figino</option>
-                                <option value ="0" >Gandria</option>
-                                <option value ="3" >Ceresio Sud</option>
-                                <option value ="2" >Ceresio Nord</option> -->
-                            </select>
+                              </select>
+                            </div>
                           </l-control>
                       </l-map>
                     </card>
@@ -603,6 +591,8 @@
             this.istsos = this.verbanoIstosos;
             this.$root.istsos = this.istsos;
 
+            sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
+
             const good_names = [
                 "air-temperature",
                 "air-relative-humidity",
@@ -999,11 +989,11 @@
         displayInfo (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
-          
+
           this.$notifications.notify(
                 {
                     message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
-                    
+
                     icon: 'nc-icon nc-quote',
                     horizontalAlign: horizontalAlign,
                     verticalAlign: verticalAlign,

@@ -1,4 +1,25 @@
 
+// const base_layers = [
+//     {
+//       name: 'Classic',
+//       visible: true,
+//       format: 'image/png',
+//       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+//       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+//       transparent: true/*,
+//       attribution: "Weather data © 2012 IEM Nexrad"*/
+//     },
+//     {
+//       name: 'Light',
+//       visible: true,
+//       format: 'image/png',
+//       url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
+//       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+//       transparent: true/*,
+//       attribution: "Weather data © 2012 IEM Nexrad"*/
+//     },
+// ]
+
 const map_layers = [
     {
       name: 'Maschera',
@@ -132,6 +153,71 @@ const map_layers = [
 //   }
 ]
 
+
+const base_layers = {
+    classic: {
+        label: 'Openstreetmap',
+        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        options: {
+            attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+            minZoom: 0
+        }
+    },
+    tonerLite: {
+        label: 'Toner lite',
+        url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}',
+        options: {
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            subdomains: 'abcd',
+          	minZoom: 0,
+          	maxZoom: 20,
+          	ext: 'png'
+        }
+    },
+    satellite: {
+        label: 'Satellite',
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        options: {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }
+    },
+    terrain: {
+        label: 'Terrain',
+        url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}',
+        options: {
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            subdomains: 'abcd',
+            minZoom: 0,
+            maxZoom: 18,
+            ext: 'png'
+        }
+    },
+    light: {
+        label: 'Light grey',
+        url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
+        options: {
+            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+            maxZoom: 20,
+            minZoom: 0
+        }
+    },
+};
+
+
+function addBaseLayers(map) {
+
+    let layers = {}
+    for (const [key, info] of Object.entries(base_layers)) {
+        const layer = L.tileLayer(info.url, info.options);
+        // map.addLayer(layer);
+        layers[info.label] = layer;
+    };
+    L.control.layers(layers).addTo(map);
+    map.addLayer(layers['Light grey']);
+
+};
+
 function areaLayerOptions (self) {
   return {
       style: function (feature) {
@@ -147,7 +233,7 @@ function areaLayerOptions (self) {
           }
       },
       onEachFeature: function (feature, layer) {
-        
+
           layer.bindTooltip(`<h6>${guessLocLabel(feature.properties.label)}</h6>`, {sticky: true})
           layer.on('click', ee => {
               self.selectedMarker=feature.properties.markerIndex
@@ -240,4 +326,4 @@ function markerLayerOptions (self) {
     }
 }
 
-export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel};
+export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel, addBaseLayers};
