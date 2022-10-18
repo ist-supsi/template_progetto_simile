@@ -263,7 +263,11 @@
         data () { return {
             last_value: null,
             series_data: {},
-            wind_data_options: {},
+            wind_data_options: {plotOptions: {
+                windbarb: {
+                   turboThreshold: Infinity
+                }
+            }},
             // wind_freq_options: {},
             wind_series: {},
             allProcedures: this.$root.allProcedures,
@@ -434,7 +438,11 @@
             setSeries () {
                 var self = this;
                 this.series_data = {};
-                this.wind_data_options = {};
+                this.wind_data_options = {plotOptions: {
+            		    windbarb: {
+                  	   turboThreshold: Infinity
+                     }
+                }};
                 let counter=0;
 
                 for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
@@ -453,9 +461,11 @@
 
                         // console.log([result.options.series, counter]);
                         if ( procedure!=self.analisysVariable ) {
-                            result.options.series[counter].visible = true;
+                            result.options.series[counter].visible = false;
+                            result.options.legend.enabled = true;
                         } else {
                             result.options.series[counter].visible = true;
+                            result.options.legend.enabled = false;
                             const series = result.options.series[0].data.map((xy)=>xy[1]);
 
                             if ( series.length > 0 ) {
@@ -527,13 +537,13 @@
                                         // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
                                         // valori ho introdotto questo workaround per limitare la serie al massimo consentito
                                         // issue aperta: https://github.com/highcharts/highcharts/issues/17851
-                                        const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-                                        const series_excess = wind_data.length-1000;
-                                        if ( series_excess>0 ) {
-                                            for (let i = 0; i < series_excess; i++) {
-                                                wind_data.splice(random(1, wind_data.length-1), 1)
-                                            }
-                                        };
+                                        // const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+                                        // const series_excess = wind_data.length-1000;
+                                        // if ( series_excess>0 ) {
+                                        //     for (let i = 0; i < series_excess; i++) {
+                                        //         wind_data.splice(random(1, wind_data.length-1), 1)
+                                        //     }
+                                        // };
                                         // *************************************
 
                                         self.wind_data_options = istsosToHighcharts.windbarb(wind_data);

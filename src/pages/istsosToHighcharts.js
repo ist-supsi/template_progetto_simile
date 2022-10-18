@@ -143,6 +143,7 @@ const WINDBARB_DEFAULTS = {
       // animation: false
       animationLimit: 999,
       // grouping: false
+      turboThreshold: Infinity
     },
     series: [
       {
