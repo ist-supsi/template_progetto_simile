@@ -401,6 +401,16 @@ let indicatorDescription =
             // icon:'fa fa-bolt text-info',
             icon:'icon-water_biovol',
         },
+
+        'water-TSS': {
+            title : 'Concentrazione media di Clo',
+            description: `Concentrazione media di Clorofilla-a e di Solidi Totali Sospesi (TSS)
+            `,
+            breveDescrizione:`Concentrazione media di Clorofilla-a e di Solidi Totali Sospesi (TSS)`,
+            // icon:'fa fa-bolt text-info',
+            icon:'icon-water_CHl_a',
+        },
+
     };
 
 //per accedere alle mie descrizioni

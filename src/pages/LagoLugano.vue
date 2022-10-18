@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
                     <div >
-                        <h5>Dati relativi a: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
+                        <h5>{{ cards[0].message && guessLocTitle(cards[0].message) }}</h5>
                     </div>
 
                 </div>
@@ -45,7 +45,8 @@
                                     <i v-if="cards[ii].data===null" class="fa fa-refresh fa-spin"></i>
                                     <i v-if="cards[ii].data===undefined" class="fa fa-exclamation-triangle"></i>
                                     <i v-if="cards[ii].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.date}}
-                                    <i v-if="cards[ii].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.time}}
+                                    <i v-if="cards[ii].time && cards[ii].time.time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.time}}
+
                                 </div>
                             </stats-card>
                         </div>
@@ -70,7 +71,7 @@
                                     <i v-if="cards[ii+1].data===null" class="fa fa-refresh fa-spin"></i>
                                     <i v-if="cards[ii+1].data===undefined" class="fa fa-exclamation-triangle"></i>
                                     <i v-if="cards[ii+1].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.date}}
-                                    <i v-if="cards[ii+1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.time}}
+                                    <i v-if="cards[ii+1].time && cards[ii+1].time.time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.time}}
                                 </div>
                             </stats-card>
 
@@ -891,6 +892,9 @@
     },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
+        },
+        guessLocTitle(foi_name){
+            return sharedFunctions.guessLocTitle(foi_name);
         },
         onChange(event) {
             return event.target.value;

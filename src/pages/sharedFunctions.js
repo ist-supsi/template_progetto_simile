@@ -273,6 +273,37 @@ function guessLocLabel (foi_name){
     }
     else return foi_name
 };
+function guessLocTitle (foi_name){
+    const locTitle= {
+        FIGINO:'Dati relativi alla località di Figino',
+        GANDRIA:'Dati relativi alla località di Gandria',
+        MELIDE:'Dati relativi alla località di Melide',
+        lugano_basin_north:'Dati satellitari relativi al Bacino Nord',
+        lugano_basin_south:'Dati satellitari relativi al Bacino Sud',
+        'Ceresio Nord':'Dati satellitari relativi al Bacino Nord',
+        'Ceresio Sud': 'Dati satellitari relativi al Bacino Sud',
+        DERVIO:'Dati relativi alla località di Dervio',
+        MANDELLO:'Dati relativi alla località di Mandello',
+        lake_como_east_basin:'Dati satellitari relativi al Bacino Est',
+        lake_como_west_basin:'Dati satellitari relativi al Bacino Ovest',
+        lake_como_north_basin:'Dati satellitari relativi al Bacino Nord',
+        GHIFFA:'Dati relativi alla località di Ghiffa',
+        PALLANZA:'Dati relativi alla località di Pallanza',
+        PALLANZA_D:'Dati relativi alla località di Pallanza',
+        PALLANZA_S:'Dati relativi alla località di Pallanza',
+        Pallanza_D:'Dati relativi alla località di Pallanza',
+        Pallanza_S:'Dati relativi alla località di Pallanza',
+        maggiore:'Dati satellitari relativi al Bacino Completo',
+
+    }
+    if(foi_name.split('_')[0] in locTitle){
+        return locTitle[foi_name.split('_')[0]]
+    }
+    else if(foi_name in locTitle){
+        return locTitle[foi_name]
+    }
+    else return foi_name
+};
 function markerLayerOptions (self) {
     return {
         pointToLayer: function (feature, latlng) {
@@ -326,4 +357,4 @@ function markerLayerOptions (self) {
     }
 }
 
-export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel, addBaseLayers};
+export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel, addBaseLayers, guessLocTitle};

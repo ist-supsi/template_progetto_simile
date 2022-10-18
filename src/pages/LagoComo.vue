@@ -3,7 +3,7 @@
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
                     <div >
-                        <h5>Stato Attuale: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
+                        <h5>{{ cards[0].message && guessLocTitle(cards[0].message) }}</h5>
                     </div>
 
                 </div>
@@ -139,13 +139,13 @@
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='home', disabled: tableData.data}"
+                    <a :class="{'nav-link': true, active: selectedTab=='home', enabled: tableData.data}"
                         id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
                         aria-selected="true" @click="selectedTab='home'">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', disabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
                         role="tab" aria-controls="satellitari"
                         aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
                 </li>
@@ -153,40 +153,113 @@
             <div class="tab-content" id="myTabContent">
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='home', active: selectedTab=='home'}"
                         id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}">
-                            <h4>Misure disponibili</h4>
-                            <div class="row">
-                                <div class="col-12">
-                                    <data-table
-                                        :columns="tableColumns2"
-                                        :data="tableData"
-                                        :per-page="[5, 10, 15]"
-                                        @on-table-props-changed="reloadTable"
-                                        >
-                                    </data-table>
+
+                        <div v-if="tableData.data==0">
+                                    <h4>Non sono presenti misure disponibili per la stazione selezionata</h4>
                                 </div>
-                            </div>
-                        </div>
+                                <div v-else>
+                                    <h4>Cosa sono i dati da sensori</h4>
+
+                                    <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
+                                    (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
+                                    elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
+                                    tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
+                                    (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
+                                    I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
+                                    I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
+                                    di laboratorio. </p>
+
+                                    <h4>Misure disponibili:</h4>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <data-table
+                                                :columns="tableColumns2"
+                                                :data="tableData"
+                                                :per-page="[5, 10, 15]"
+                                                @on-table-props-changed="reloadTable"
+                                                >
+                                            </data-table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
 
                     </div>
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
                         id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
                         <div v-if="dataSatellite.length>0" class="container-fluid">
+                            <h4>Cosa sono i dati satellitari</h4>
 
+                            <p class="description text-justify">I dati satellitari sono ricavati da analisi di immagini satellitari </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
                                 <div class="col-lg-6 col-sm-12">
+
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[0]]"></highcharts>
+                                        <!--  modal -->
+                                            <div class="container py-2" id="app">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <a role="button" class="btn btn-primary" @click="toggle()">Vedi dettaglio</a>
+                                                        <div :class="modalClasses" id="reject" role="dialog">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <!-- <div class="modal-header">
+                                                                         <h4 class="modal-title"></h4>
+                                                                        <button type="button" class="close" @click="toggle()">&times;</button>
+                                                                    </div> -->
+                                                                    <div class="modal-body">
+                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[0]]"></highcharts>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-primary" @click="toggle()">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal -->
+
                                     </figure>
                                 </div>
                                 <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[1]]"></highcharts>
+                                        <!--  modal -->
+                                        <div class="container py-2" id="app">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <a role="button" class="btn btn-primary" @click="toggle()">Vedi dettaglio</a>
+                                                        <div :class="modalClasses" id="reject" role="dialog">
+                                                            <div class="modal-dialog modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body">
+                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[1]]"></highcharts>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-primary" @click="toggle()">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal -->
                                     </figure>
                                 </div>
                             </div>
                         </div>
+                        <div v-else>
+                            <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
+                        </div>
+                    
                     </div>
             </div>
         </div>
@@ -229,8 +302,8 @@
     // import "leaflet.markercluster/dist/MarkerCluster.css";
     // import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
-    // import Modal from 'src/components/Modal.vue';
-    // import ModalButton from 'src/components/ModalButton.vue';
+    import Modal from 'src/components/Modal.vue';
+    import ModalButton from 'src/components/ModalButton.vue';
     import NotifyButton from 'src/components/NotifyButton.vue';
     import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
     import indicatorDescription from '../indicatorDescription';
@@ -333,8 +406,8 @@
     NotifyButton,
     // 'v-marker-cluster': Vue2LeafletMarkerCluster,
     // 'v-marker': Vue2LeafletMarker,
-    // ModalButton,
-    // Modal
+    ModalButton,
+    Modal,
     // SimileIcon,
     TabNav,
     Tab,
@@ -344,6 +417,8 @@
         data () {
             return {
                 // markers: [],
+                backdropClasses: [],
+                modalClasses: ['modal','fade'],
                 istsos: null,
                 selectedTab: 'home',
                 selectedCipaisProcedures: [],
@@ -671,8 +746,25 @@
         },
 
     methods: {
+        toggle() {
+
+            if( this.modalClasses.includes('show')){
+                this.modalClasses.pop()
+                this.modalClasses.pop()
+                this.backdropClasses=[]
+            }
+            else {
+                this.modalClasses.push('d-block')
+                this.modalClasses.push('show')
+                this.backdropClasses=['modal-backdrop', 'fade', 'show']
+            }
+
+            },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
+        },
+        guessLocTitle(foi_name){
+            return sharedFunctions.guessLocTitle(foi_name);
         },
         loopOnPairs (myarray) {
             return myarray.reduce(function(result, value, index, array) {
@@ -821,12 +913,21 @@
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
-                if ( result.x ) {
-                    cards[index].time = {
-                        date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                        time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                    };
-                };
+                
+                if ( result.x){
+
+                    if(indicatorDescription.indicatorDescription[cards[index].name].tag =='CIPAIS'){
+                        cards[index].time = {
+                        date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
+                        }
+                    }
+                    else{
+                        cards[index].time = {
+                            date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                            time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                        }
+                    }
+                    }
 
                 cards[index].message = result.locationUrn.split(':').at(-1);
             };
@@ -890,6 +991,20 @@
 
         },
         displayInfo (data) {
+          const horizontalAlign = 'center';
+          const verticalAlign = 'top';
+
+          this.$notifications.notify(
+                {
+                    message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
+
+                    icon: 'nc-icon nc-quote',
+                    horizontalAlign: horizontalAlign,
+                    verticalAlign: verticalAlign,
+                    type: 'primary',
+                 })
+        },
+        displayModal (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
 
@@ -1295,5 +1410,38 @@
 .table > tbody > tr > td:last-child,
 .table > tfoot > tr > td:last-child {
   width: auto;
+}
+.nav-link {
+  cursor: pointer
+}
+.modal { overflow: auto !important;}
+
+.input-group > .form-control, .input-group > .form-control-plaintext, .input-group > .custom-select, .input-group > .custom-file {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    -webkit-box-flex: 1;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    margin-bottom: 0;
+    height: auto;
+}
+
+.btn {
+    border-width: 2px;
+    background-color: #eeeeee;
+    font-weight: 400;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    padding: 8px 16px;
+    border-color: #888888;
+    color: #888888;
+    /* fill-opacity: 0; */
+}
+
+.btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
+    background-color: #eeeeee;
+    color: #42d0ed;
+    border-color: #42d0ed;
 }
 </style>
