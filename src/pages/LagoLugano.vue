@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
                     <div >
-                        <h5>Località Osservata: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
+                        <h5>Dati relativi a: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
                     </div>
 
                 </div>
@@ -249,7 +249,9 @@
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
                         id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
                         <div v-if="dataSatellite.length>0" class="container-fluid">
+                            <h4>Cosa sono i dati satellitari</h4>
 
+                            <p class="description text-justify">I dati satellitari sono ricavati da analisi di immagini satellitari </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
                                 <div class="col-lg-6 col-sm-12">
@@ -285,6 +287,7 @@
                                     </figure>
                                 </div>
                                 <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[1]]"></highcharts>
                                         <!--  modal -->
@@ -938,19 +941,40 @@
                         const result = istsosToHighcharts.istosToLine(response);
                         // result.options.name = 'foo';
                         const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+                        console.log(proc.name);
+                        result.options.yAxis.plotLines = []
+                        result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
 
-                        result.options.yAxis.plotLines = [{
-                            color: 'darkgrey',
-                            dashStyle: 'ShortDash',
+                        if(indicatorDescription.indicatorDescription[proc.name].limite!=null){
+                            result.options.yAxis.plotLines.push({
+                            color: 'yellow',
+                            dashStyle: 'Solid',
                             width: 2,
-                            value: variableAverage,
+                            value: indicatorDescription.indicatorDescription[proc.name].limite,
                             label: {
-                                text: 'media della serie',
+                                text: 'Limite',
                                 align: 'center',
                                 style: {color: 'darkgrey'}
 
-                            }
-                        }];
+                            },
+
+                        })
+                        }
+                        if(indicatorDescription.indicatorDescription[proc.name].obiettivo!=null){
+                            result.options.yAxis.plotLines.push({
+                            color: 'green',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: indicatorDescription.indicatorDescription[proc.name].obiettivo,
+                            label: {
+                                text: 'Obiettivo',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            },
+
+                        })
+                        }
 
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
@@ -1049,15 +1073,24 @@
                     cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
                 }
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
+
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
-                if ( result.x ) {
-                    cards[index].time = {
-                        date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                        time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                    };
-                };
 
+                if ( result.x){
+
+                    if(indicatorDescription.indicatorDescription[cards[index].name].tag =='CIPAIS'){
+                        cards[index].time = {
+                        date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
+                        }
+                    }
+                    else{
+                        cards[index].time = {
+                            date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                            time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                        }
+                    }
+                }
                 cards[index].message = result.locationUrn.split(':').at(-1);
             };
 
