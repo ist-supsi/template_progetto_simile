@@ -1,4 +1,25 @@
 
+// const base_layers = [
+//     {
+//       name: 'Classic',
+//       visible: true,
+//       format: 'image/png',
+//       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+//       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+//       transparent: true/*,
+//       attribution: "Weather data © 2012 IEM Nexrad"*/
+//     },
+//     {
+//       name: 'Light',
+//       visible: true,
+//       format: 'image/png',
+//       url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
+//       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+//       transparent: true/*,
+//       attribution: "Weather data © 2012 IEM Nexrad"*/
+//     },
+// ]
+
 const map_layers = [
     {
       name: 'Maschera',
@@ -49,14 +70,14 @@ const map_layers = [
     //   transparent: true/*,
     //   attribution: "Weather data © 2012 IEM Nexrad"*/
     // },
-    {
-      name: 'Reticolo idrografico',
-      visible: true,
-      format: 'image/png',
-      layers: 'Reticolo_idrografico',
-      transparent: true/*,
-      attribution: "Weather data © 2012 IEM Nexrad"*/
-    },
+    // {
+    //   name: 'Reticolo idrografico',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Reticolo_idrografico',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
     {
       name: 'Laghi',
       visible: true,
@@ -82,14 +103,14 @@ const map_layers = [
     //   transparent: true/*,
     //   attribution: "Weather data © 2012 IEM Nexrad"*/
     // },
-    {
-      name: 'Limiti amministrativi',
-      visible: true,
-      format: 'image/png',
-      layers: 'Limiti_amministrativi',
-      transparent: true/*,
-      attribution: "Weather data © 2012 IEM Nexrad"*/
-    },
+    // {
+    //   name: 'Limiti amministrativi',
+    //   visible: true,
+    //   format: 'image/png',
+    //   layers: 'Limiti_amministrativi',
+    //   transparent: true/*,
+    //   attribution: "Weather data © 2012 IEM Nexrad"*/
+    // },
   //   {
   //     name: 'Uso di suolo (CORINE_2018)',
   //     visible: false,
@@ -122,20 +143,85 @@ const map_layers = [
   //     transparent: true/*,
   //     attribution: "Weather data © 2012 IEM Nexrad"*/
   //   },
-    {
-      name: 'Bacini idrografici',
-      visible: true,
-      format: 'image/png',
-      layers: 'Bacini_idrografici',
-      transparent: true/*,
-      attribution: "Weather data © 2012 IEM Nexrad"*/
-  }
+//     {
+//       name: 'Bacini idrografici',
+//       visible: true,
+//       format: 'image/png',
+//       layers: 'Bacini_idrografici',
+//       transparent: true/*,
+//       attribution: "Weather data © 2012 IEM Nexrad"*/
+//   }
 ]
+
+
+const base_layers = {
+    classic: {
+        label: 'Openstreetmap',
+        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        options: {
+            attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+            minZoom: 0
+        }
+    },
+    tonerLite: {
+        label: 'Toner lite',
+        url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}',
+        options: {
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            subdomains: 'abcd',
+          	minZoom: 0,
+          	maxZoom: 20,
+          	ext: 'png'
+        }
+    },
+    satellite: {
+        label: 'Satellite',
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        options: {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        }
+    },
+    terrain: {
+        label: 'Terrain',
+        url: 'https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.{ext}',
+        options: {
+            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            subdomains: 'abcd',
+            minZoom: 0,
+            maxZoom: 18,
+            ext: 'png'
+        }
+    },
+    light: {
+        label: 'Light grey',
+        url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
+        options: {
+            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+            maxZoom: 20,
+            minZoom: 0
+        }
+    },
+};
+
+
+function addBaseLayers(map) {
+
+    let layers = {}
+    for (const [key, info] of Object.entries(base_layers)) {
+        const layer = L.tileLayer(info.url, info.options);
+        // map.addLayer(layer);
+        layers[info.label] = layer;
+    };
+    L.control.layers(layers).addTo(map);
+    map.addLayer(layers['Light grey']);
+
+};
 
 function areaLayerOptions (self) {
   return {
       style: function (feature) {
-          let color = '#6c757d'
+          let color = '#406e96'
           if ( feature.properties.markerIndex==self.selectedMarker ) {
             //   color = '#1D62F0 '
             color = '#ed595b'
@@ -143,10 +229,11 @@ function areaLayerOptions (self) {
           return {
               color: color,
               fillColor: color,
+              fillOpacity:0.1,
           }
       },
       onEachFeature: function (feature, layer) {
-        console.log(feature.properties)
+
           layer.bindTooltip(`<h6>${guessLocLabel(feature.properties.label)}</h6>`, {sticky: true})
           layer.on('click', ee => {
               self.selectedMarker=feature.properties.markerIndex
@@ -186,6 +273,37 @@ function guessLocLabel (foi_name){
     }
     else return foi_name
 };
+function guessLocTitle (foi_name){
+    const locTitle= {
+        FIGINO:'Dati relativi alla località di Figino',
+        GANDRIA:'Dati relativi alla località di Gandria',
+        MELIDE:'Dati relativi alla località di Melide',
+        lugano_basin_north:'Dati satellitari relativi al Bacino Nord',
+        lugano_basin_south:'Dati satellitari relativi al Bacino Sud',
+        'Ceresio Nord':'Dati satellitari relativi al Bacino Nord',
+        'Ceresio Sud': 'Dati satellitari relativi al Bacino Sud',
+        DERVIO:'Dati relativi alla località di Dervio',
+        MANDELLO:'Dati relativi alla località di Mandello',
+        lake_como_east_basin:'Dati satellitari relativi al Bacino Est',
+        lake_como_west_basin:'Dati satellitari relativi al Bacino Ovest',
+        lake_como_north_basin:'Dati satellitari relativi al Bacino Nord',
+        GHIFFA:'Dati relativi alla località di Ghiffa',
+        PALLANZA:'Dati relativi alla località di Pallanza',
+        PALLANZA_D:'Dati relativi alla località di Pallanza',
+        PALLANZA_S:'Dati relativi alla località di Pallanza',
+        Pallanza_D:'Dati relativi alla località di Pallanza',
+        Pallanza_S:'Dati relativi alla località di Pallanza',
+        maggiore:'Dati satellitari relativi al Bacino Completo',
+
+    }
+    if(foi_name.split('_')[0] in locTitle){
+        return locTitle[foi_name.split('_')[0]]
+    }
+    else if(foi_name in locTitle){
+        return locTitle[foi_name]
+    }
+    else return foi_name
+};
 function markerLayerOptions (self) {
     return {
         pointToLayer: function (feature, latlng) {
@@ -221,7 +339,6 @@ function markerLayerOptions (self) {
                     self.selectedMarker=feature.properties.markerIndex;
                 });
 
-                console.log(feature.properties);
                 marker.bindTooltip(`<h6>${guessLocLabel(feature.properties.foi_name)}</h6>`)
 
                 return marker;
@@ -240,4 +357,4 @@ function markerLayerOptions (self) {
     }
 }
 
-export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel};
+export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel, addBaseLayers, guessLocTitle};

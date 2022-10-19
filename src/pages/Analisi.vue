@@ -6,17 +6,17 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-6">
-                    <span height="200px"><H3>Descrizione</H3>
-                      {{ description }}
+                    <span height="200px"><h3>Descrizione</h3>
+                      <!-- {{ description }} -->
+                      {{cards[0].description}}
                     </span>
                 </div>
 
 
                         <div class="col-6">
-                        <!-- <div class="alert alert-simile"> -->
+
                         <stats-card>
                             <div slot="header" class="icon-warning">
-                                <!-- <i class="nc-icon nc-chart text-warning"></i> -->
                                 <i :class="getCardIcon2(cards[0].name)"
                                     data-toggle="tooltip"
                                     title="cards[0].title||'no data'"></i>
@@ -37,7 +37,7 @@
                                 <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
                             </div>
                         </stats-card>
-                        <!-- </div> -->
+
                         </div>
 
             </div>
@@ -109,17 +109,18 @@
         </div>
     </div>
 </template>
+
 <script>
 
-    import {Chart} from 'highcharts-vue';
+    import { Chart } from 'highcharts-vue';
     import Highcharts from 'highcharts';
-    import More from 'highcharts/highcharts-more'
+    import More from 'highcharts/highcharts-more';
     // import loadBullet from 'highcharts/modules/bullet.js';
 
-    import ChartCard from 'src/components/Cards/ChartCard.vue'
-    import HighchartCard from 'src/components/Cards/HighchartCard.vue'
-    import StatsCard from 'src/components/Cards/StatsCard.vue'
-    import LTable from 'src/components/Table.vue'
+    import ChartCard from 'src/components/Cards/ChartCard.vue';
+    import HighchartCard from 'src/components/Cards/HighchartCard.vue';
+    import StatsCard from 'src/components/Cards/StatsCard.vue';
+    import LTable from 'src/components/Table.vue';
 
     // import Modal from 'src/components/Modal.vue';
     // import ModalButton from 'src/components/ModalButton.vue';
@@ -131,8 +132,7 @@
 
     import istsosToHighcharts from './istsosToHighcharts';
     import exportingInit from 'highcharts/modules/exporting';
-    import stockInit from 'highcharts/modules/stock'
-
+    import stockInit from 'highcharts/modules/stock';
     // loadBullet(Highcharts);
     More(Highcharts)
     stockInit(Highcharts)
@@ -263,7 +263,11 @@
         data () { return {
             last_value: null,
             series_data: {},
-            wind_data_options: {},
+            wind_data_options: {plotOptions: {
+                windbarb: {
+                   turboThreshold: Infinity
+                }
+            }},
             // wind_freq_options: {},
             wind_series: {},
             allProcedures: this.$root.allProcedures,
@@ -279,10 +283,11 @@
             seriesTo: null,
             seriesBegin: new Date(new Date().setDate(new Date().getDate() - 185)),
             seriesEnd: new Date(),
-            locked: false,
+            // locked: false,
             variableAverage: 0,
             variableStd: 0,
             bulletOptions: {},
+            setDataTimeout: null,
             category_colors: ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
                 '#0d233a', '#77a1e5', '#8bbc21']
         }},
@@ -319,20 +324,13 @@
           },
           seriesBegin: {
               handler(value) {
-                  if (this.locked===false) {
-                      this.locked=true;
-                      this.setSeries();
-                  };
-
+                  this._setSeries();
               },
               deep: true
           },
           seriesEnd: {
               handler(value) {
-                  if (this.locked===false) {
-                      this.locked=true;
-                      this.setSeries();
-                  };
+                  this._setSeries();
               },
               deep: true
           },
@@ -353,8 +351,8 @@
             var self = this;
             this.istsos = this.$root.istsos;
 
-            this.seriesFrom = this.seriesBegin.toISOString().split('T')[0]
-            this.seriesTo = this.seriesEnd.toISOString().split('T')[0]
+            this.seriesFrom = this.seriesBegin.toISOString().split('T')[0];
+            this.seriesTo = this.seriesEnd.toISOString().split('T')[0];
 
             this.istsos.call({
                 procedures: this.analisysVariable
@@ -362,7 +360,7 @@
                 self.variableInfo = response;
             });
 
-            let prm = this.istsos.fetch({
+            this.istsos.fetch({
                 procedures: this.analisysVariable,
                 eventtime: 'last',
                 observedproperties: this.analisysVariableUrn
@@ -384,6 +382,7 @@
                     data: data,
                     uom: result.data.data[0].result.DataArray.field[1].uom,
                     name:result.data.data[0].result.DataArray.field[1].name,
+                    description:'',
                 };
                 // self.cards[0].message = result.data.data[0].featureOfInterest.name.split(':').at(-1);
                 // self.cards[0].data = result.data.data[0].result.DataArray.values[0][1].toFixed(2);
@@ -391,10 +390,12 @@
 
                 if(indicatorDescription.indicatorDescription[info.name]==undefined){
                     info.title = 'N.P.';
+                    info.description = 'N.P.';
                 }
                 else{
                     info.title = indicatorDescription.indicatorDescription[info.name].title;
                     info.icon = indicatorDescription.indicatorDescription[info.name].icon;
+                    info.description = indicatorDescription.indicatorDescription[info.name].breveDescrizione;
                 }
                 self.cards = [info];
 
@@ -429,10 +430,19 @@
             // setBegin (value) {
             //     this.seriesBegin = new Date(new Date().setDate(new Date().getDate() - value));
             // },
+            _setSeries () {
+                var self = this;
+                clearTimeout(this.setDataTimeout);
+                this.setDataTimeout = setTimeout(()=>{self.setSeries ()})
+            },
             setSeries () {
                 var self = this;
                 this.series_data = {};
-                this.wind_data_options = {};
+                this.wind_data_options = {plotOptions: {
+            		    windbarb: {
+                  	   turboThreshold: Infinity
+                     }
+                }};
                 let counter=0;
 
                 for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
@@ -445,10 +455,17 @@
                     ).then((response)=>{
                         let result = istsosToHighcharts.istosToLine(response, undefined, true);
 
+                        // TODO:
+                        // 1. verificare il raggruppamento delle procedure nella pagina del Como
+                        // 2. rimuovere la proprietà legend enabled nel caso di una sola provedura graficata
+
+                        // console.log([result.options.series, counter]);
                         if ( procedure!=self.analisysVariable ) {
-                            result.options.series[counter].visible = true;
+                            result.options.series[counter].visible = false;
+                            result.options.legend.enabled = true;
                         } else {
                             result.options.series[counter].visible = true;
+                            result.options.legend.enabled = false;
                             const series = result.options.series[0].data.map((xy)=>xy[1]);
 
                             if ( series.length > 0 ) {
@@ -468,12 +485,12 @@
                                 }];
                             };
                         };
-                        result.options.series[counter].color = this.category_colors[counter];
+                        // result.options.series[counter].color = this.category_colors[counter];
                         counter = counter+1;
 
                         if (procedure=='VENTO_VEL_MAX') {
 
-                            console.log(['TEST!', self.seriesBegin]);
+                            // console.log(['TEST!', self.seriesBegin]);
 
                             let windPromise = this.istsos.fetchSeries(
                                 "VENTO_DIR",
@@ -501,8 +518,8 @@
                                         const end = new Date(end_ts);
                                         const start = new Date(start_ts);
 
-                                        const sd = self.series_data.series[0].data.map(cc=>( Math.abs(start-(new Date(cc[0]))) ));
-                                        const ed = self.series_data.series[0].data.map(cc=>( Math.abs(end-(new Date(cc[0]))) ));
+                                        const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
+                                        const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
 
                                         const startIndex = sd.indexOf(Math.min(...sd));
                                         const endIndex = ed.indexOf(Math.min(...ed));
@@ -514,25 +531,41 @@
 
                                         let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
 
+                                        const wind_series = wind_data.map((el)=> el.slice(1).reverse());
+
+                                        // *************************************
+                                        // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
+                                        // valori ho introdotto questo workaround per limitare la serie al massimo consentito
+                                        // issue aperta: https://github.com/highcharts/highcharts/issues/17851
+                                        // const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+                                        // const series_excess = wind_data.length-1000;
+                                        // if ( series_excess>0 ) {
+                                        //     for (let i = 0; i < series_excess; i++) {
+                                        //         wind_data.splice(random(1, wind_data.length-1), 1)
+                                        //     }
+                                        // };
+                                        // *************************************
+
                                         self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
+
                                         self.wind_data_options.title.text = 'Velocità del vento';
                                         self.wind_data_options['subtitle'] = {
                                             text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
                                         };
-                                    //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano  direzione e velocità 
-                                    
-                                    //     const allowedProperties = ['dato1', 'dato2'];
+                                        //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano  direzione e velocità
 
-                                    //     const allKeys = Object.keys(wind_data);
-                                    //     const freqs =allKeys.reduce((next, key)=> {
-                                    //         if(allowedProperties.includes(key)){
-                                    //         return { ...next, [key]: wind_data[key]};
-                                    //     } else {
-                                    //         return next;
-                                    //     }
-                                    // } , {});
-                                        const wind_series = wind_data.map((el)=> el.slice(1).reverse());
-                                        
+                                        //     const allowedProperties = ['dato1', 'dato2'];
+
+                                        //     const allKeys = Object.keys(wind_data);
+                                        //     const freqs =allKeys.reduce((next, key)=> {
+                                        //         if(allowedProperties.includes(key)){
+                                        //         return { ...next, [key]: wind_data[key]};
+                                        //     } else {
+                                        //         return next;
+                                        //     }
+                                        // } , {});
+
+
                                         self.wind_series =istsosToHighcharts.polar(wind_series);
 
                                         // const b = 16;
@@ -558,9 +591,7 @@
                                 });
 
                             }};
-
                         };
-
                         if ( !self.series_data.series ) {
                             self.series_data = result.options;
                         } else {
@@ -569,6 +600,7 @@
                         };
 
                     });
+                    break;
                 };
 
                 self.locked = false; //
@@ -582,17 +614,16 @@
     };
 
 </script>
+
 <style>
 
 #bulletgraph {
     height: 130px;
 }
-
 .hc-cat-title {
     font-size: 13px;
     font-weight: bold;
 }
-
 .highcharts-figure,
 .highcharts-data-table table {
     min-width: 320px;

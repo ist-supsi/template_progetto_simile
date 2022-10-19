@@ -1,11 +1,12 @@
 <template>
     <div class="content">
+        <div :class="backdropClasses"></div>
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
                     <div >
-                        <h5>Stato Attuale: {{ cards[0].message && guessLocLabel(cards[0].message) }}</h5>
+                        <h5>{{ cards[0].message && guessLocTitle(cards[0].message) }}</h5>
                     </div>
-                        
+
                 </div>
             </div>
 
@@ -22,8 +23,9 @@
                 </div> -->
 
                 <div class="col-8">
+
                     <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
-                        <div class="col-6">
+                        <div v-if="cards[ii]" :class="[cards[ii+1] ? 'col-6' : 'col-12']">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -43,11 +45,12 @@
                                     <i v-if="cards[ii].data===null" class="fa fa-refresh fa-spin"></i>
                                     <i v-if="cards[ii].data===undefined" class="fa fa-exclamation-triangle"></i>
                                     <i v-if="cards[ii].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.date}}
-                                    <i v-if="cards[ii].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.time}}
+                                    <i v-if="cards[ii].time && cards[ii].time.time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.time}}
+
                                 </div>
                             </stats-card>
                         </div>
-                        <div class="col-6">
+                        <div v-if="cards[ii+1]" class="col-6">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
@@ -68,160 +71,153 @@
                                     <i v-if="cards[ii+1].data===null" class="fa fa-refresh fa-spin"></i>
                                     <i v-if="cards[ii+1].data===undefined" class="fa fa-exclamation-triangle"></i>
                                     <i v-if="cards[ii+1].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.date}}
-                                    <i v-if="cards[ii+1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.time}}
+                                    <i v-if="cards[ii+1].time && cards[ii+1].time.time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.time}}
                                 </div>
                             </stats-card>
-                            
+
                         </div>
                     </div>
 
                 </div>
                 <div class="col-4" style="height: 510px">
-                    
+
                     <card style="height: 94%;">
-                      
+
                     <l-map
                         v-if="showMap"
                         :zoom="currentZoom"
                         :bounds="bounds"
+                        :maxBounds="[
+                            [45.58,8.0255],
+                            [47.428, 9.950]
+                        ]"
                         :options="mapOptions"
                         @update:center="centerUpdate"
                         @update:zoom="zoomUpdate"
                         style="height: 100%;"
-
+                        ref="map"
                       >
-                      <l-tile-layer
-                          :url="url"
-                          :attribution="attribution"
+
+                      <l-wms-tile-layer
+                        v-for="layer in layers"
+                        :key="layer.name"
+                        :base-url="wmsUrl"
+                        :layers="layer.layers"
+                        :visible="layer.visible"
+                        :name="layer.name"
+                        :transparent="layer.transparent"
+                        :format="layer.format"
+                        :opacity="layer.opacity"
+                        layer-type="overlay"
+                      ></l-wms-tile-layer>
+
+                      <l-geo-json
+                          ref="areaLayer"
+                          :geojson="basins"
+                          :options = areaLayerOptions()
                       />
-                        <!-- <l-tile-layer
-                          :url="url"
-                          :attribution="attribution"
-                        ></l-tile-layer> -->
-                        <!-- <l-control-layers /> -->
-                          <l-wms-tile-layer
-                            v-for="layer in layers"
-                            :key="layer.name"
-                            :base-url="wmsUrl"
-                            :layers="layer.layers"
-                            :visible="layer.visible"
-                            :name="layer.name"
-                            :transparent="layer.transparent"
-                            :format="layer.format"
-                            :opacity="layer.opacity"
-                            layer-type="overlay"
-                          ></l-wms-tile-layer>
 
-                          <!-- <v-marker-cluster>
-                            <v-marker v-for="feat in features.features" :lat-lng="feat.geometry.coordinates.slice(0, 2)">
-                            </v-marker>
-                          </v-marker-cluster> -->
+                      <l-geo-json
+                          ref="markerLayer"
+                          :geojson="features"
+                          :options=markerLayerOptions()
+                      />
 
-                          <l-geo-json
-                              ref="areaLayer"
-                              :geojson="basins"
-                              :options = areaLayerOptions()
-                          />
+                      <l-control position="bottomright">
+                        <div class="input-group input-group-sm mb-3">
+                          <div class="input-group-prepend">
+                            <button class="btn btn-info" type="button"
+                                @click="this.displayInfo"
+                            >
+                                <i aria-hidden="true" class="fa fa-info-circle" title="Scopri come interagire con la mappa"></i></button>
+                          </div>
+                          <select class="custom-select" id="inputGroupSelect03"
+                              aria-label="Example select with button addon" v-model="selectedMarker"
+                              title="Scegli una località o un'area da analizzare"
+                              >
+                            <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                  {{ guessLocLabel(feature.properties.foi_name) }}
+                              </option>
+                          </select>
+                        </div>
+                      </l-control>
 
-                          <l-geo-json
-                              ref="markerLayer"
-                              :geojson="features"
-                              :options=markerLayerOptions()
-                          />
-                          <!-- <l-control class="example-custom-control">
-                            <div class="input-group input-group-sm mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Località: </span>
-                              </div>
-                              <select class="form-control" v-model="selectedMarker">
-                                  <option v-for="feature in features.features" :value="feature.properties.markerIndex">
-                                      {{ getLocLabel(feature) }}
-                                  </option>
+                  </l-map>
 
-                              </select>
-                            </div>
-                          </l-control> -->
-                        
-                          <l-control>
-                            <button type="button" class="btn btn-outline-info btn-primary btn-sm" @click="this.displayInfo">
-                            i
-                            </button>
-                          </l-control>
-                         
-                          <l-control position="bottomright">
-                            <select class="dropdown" id="località" v-model="selectedMarker" style="width: 100px; height: 25px">
-                                <option v-for="feature in features.features" :value="feature.properties.markerIndex">
-                                      {{ guessLocLabel(feature.properties.foi_name) }}
-                                  </option>
-                                <!-- <option value ="1" selected="selected" >Figino</option>
-                                <option value ="0" >Gandria</option>
-                                <option value ="3" >Ceresio Sud</option>
-                                <option value ="2" >Ceresio Nord</option> -->
-                            </select>
-                          </l-control>
-                          <!-- <l-control position="bottomright">
-                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=1">
-                            Figino
-                            </button>
-                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=0">
-                            Gandria
-                            </button>
-                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=3">
-                            Ceresio Sud
-                            </button>
-                            <button type="button" class="btn btn-light btn-sm btn-block active" @click="selectedMarker=2">
-                            Ceresio Nord
-                            </button>
-                          </l-control> -->
-                       
-                      </l-map>
-                     
-                    </card>
-                </div>
+                </card>
             </div>
-           
+        </div>
+
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='home', disabled: tableData.data}"
+                    <a :class="{'nav-link': true, active: selectedTab=='home', enabled: tableData.data}"
                         id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
                         aria-selected="true" @click="selectedTab='home'">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='cipais', disabled: selectedCipaisProcedures.length==0}"
+                    <a :class="{'nav-link': true, active: selectedTab=='cipais', enabled: selectedCipaisProcedures.length==0}"
                         id="cipais-tab" data-toggle="tab"
                         role="tab" aria-controls="cipais"
-                        aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
+                        aria-selected="true" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', disabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}"
+                        id="satellitari-tab" data-toggle="tab"
                         role="tab" aria-controls="satellitari"
-                        aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
+                        aria-selected="true" @click="selectedTab='satellitari'">Dati satellitari</a>
                 </li>
             </ul>
+
             <div class="tab-content" id="myTabContent">
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='home', active: selectedTab=='home'}"
                         id="home" role="tabpanel" aria-labelledby="home-tab">
-                        <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}">
-                            <h4>Misure disponibili</h4>
-                            <div class="row">
-                                <div class="col-12">
-                                    <data-table
-                                        :columns="tableColumns2"
-                                        :data="tableData"
-                                        :per-page="[5, 10, 15]"
-                                        @on-table-props-changed="reloadTable"
-                                        >
-                                    </data-table>
+
+
+                            <!-- <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}"> -->
+                                <div v-if="tableData.data==0">
+                                    <h4>Non sono presenti misure disponibili per la stazione selezionata</h4>
                                 </div>
-                            </div>
-                        </div>
+                                <div v-else>
+                                    <h4>Cosa sono i dati da sensori</h4>
+
+                                    <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
+                                    (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
+                                    elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
+                                    tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
+                                    (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
+                                    I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
+                                    I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
+                                    di laboratorio. </p>
+
+                                    <h4>Misure disponibili:</h4>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <data-table
+                                                :columns="tableColumns2"
+                                                :data="tableData"
+                                                :per-page="[5, 10, 15]"
+                                                @on-table-props-changed="reloadTable"
+                                                >
+                                            </data-table>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+
+                        <!-- </div> -->
 
                     </div>
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='cipais', active: selectedTab=='cipais'}"
                         id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
-                        <div v-if="dataCipais.length>0" class="container-fluid">
+                            <div v-if="dataCipais.length==0">
+                                <h4>Non sono presenti indicatori CIPAIS per la stazione selezionata</h4>
+                            </div>
+                        <div v-else class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
 
                             <p class="description text-justify">I dati degli “Indicatori CIPAIS” provengono dalle campagne limnologiche svolte sui laghi Maggiore e
@@ -232,46 +228,96 @@
                                 necessari per il risanamento delle acque comuni e la prevenzione dell'insorgenza di ulteriori forme di
                                 inquinamento. Contribuiscono inoltre ad integrare e approfondire le attività di monitoraggio e controllo
                                 effettuate dalle Istituzioni locali. <br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
-                            <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
-                                <div class="col-lg-6 col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[cc[0]]"></highcharts>
-                                    </figure>
+
+                                <div v-for="cc in loopOnPairs(Array.from(Array(dataCipais.length), (n,i)=>i))" class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <figure style="min-width: 100%" class="highcharts-figure">
+                                            <highcharts :options="dataCipais[cc[0]]"></highcharts>
+                                        </figure>
+                                    </div>
+                                    <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+                                        <figure style="min-width: 100%" class="highcharts-figure">
+                                            <highcharts :options="dataCipais[cc[1]]"></highcharts>
+                                        </figure>
+                                    </div>
                                 </div>
-                                <div v-if="cc[1]" class="col-lg-6 col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[cc[1]]"></highcharts>
-                                    </figure>
-                                </div>
-                            </div>
-                            <!-- <div class="row" v-if="dataCipais.length%2">
-                                <div class="col-sm-12">
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataCipais[dataCipais.length]"></highcharts>
-                                    </figure>
-                                </div>
-                            </div> -->
                         </div>
+
+
                     </div>
 
 
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
                         id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
                         <div v-if="dataSatellite.length>0" class="container-fluid">
+                            <h4>Cosa sono i dati satellitari</h4>
 
+                            <p class="description text-justify">I dati satellitari sono ricavati da analisi di immagini satellitari </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
                                 <div class="col-lg-6 col-sm-12">
+
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[0]]"></highcharts>
+                                        <!--  modal -->
+                                            <div class="container py-2" id="app">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <a role="button" class="btn btn-primary" @click="toggle()">Vedi dettaglio</a>
+                                                        <div :class="modalClasses" id="reject" role="dialog">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <!-- <div class="modal-header">
+                                                                         <h4 class="modal-title"></h4>
+                                                                        <button type="button" class="close" @click="toggle()">&times;</button>
+                                                                    </div> -->
+                                                                    <div class="modal-body">
+                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[0]]"></highcharts>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-primary" @click="toggle()">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal -->
+
                                     </figure>
                                 </div>
                                 <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[1]]"></highcharts>
+                                        <!--  modal -->
+                                        <div class="container py-2" id="app">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <a role="button" class="btn btn-primary" @click="toggle()">Vedi dettaglio</a>
+                                                        <div :class="modalClasses" id="reject" role="dialog">
+                                                            <div class="modal-dialog modal-lg">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-body">
+                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[1]]"></highcharts>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-primary" @click="toggle()">Close</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Modal -->
                                     </figure>
                                 </div>
                             </div>
+                        </div>
+                        <div v-else>
+                            <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
                         </div>
                     </div>
 
@@ -282,6 +328,8 @@
 
 </template>
 <script>
+    import Modal from 'src/components/Modal.vue';
+    import ModalButton from 'src/components/ModalButton.vue';
     // import {Chart} from 'highcharts-vue';
     // import Highcharts from 'highcharts';
     // import loadBullet from 'highcharts/modules/bullet.js';
@@ -309,7 +357,6 @@
     import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LControl } from "vue2-leaflet";
 
     import 'leaflet/dist/leaflet.css';
-
     // import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
     // import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
 
@@ -406,31 +453,35 @@
 
     export default {
         components: {
-    LTable,
-    // ChartCard,
-    StatsCard,
-    LMap,
-    LControl,
-    LTileLayer,
-    "l-wms-tile-layer": LWMSTileLayer,
-    LGeoJson,
-    LControlLayers,
-    highcharts: Chart,
-    // HighchartCard,
-    NotifyButton,
-    // 'v-marker-cluster': Vue2LeafletMarkerCluster,
-    // 'v-marker': Vue2LeafletMarker,
-    // ModalButton,
-    // Modal
-    // SimileIcon,
-    TabNav,
-    Tab,
-    CipaisLugano,
-    TestChart
-},
+        LTable,
+        // ChartCard,
+        StatsCard,
+        LMap,
+        LControl,
+        LTileLayer,
+        "l-wms-tile-layer": LWMSTileLayer,
+        LGeoJson,
+        LControlLayers,
+        highcharts: Chart,
+        // HighchartCard,
+        NotifyButton,
+        Modal,
+        ModalButton,
+        // 'v-marker-cluster': Vue2LeafletMarkerCluster,
+        // 'v-marker': Vue2LeafletMarker,
+        // ModalButton,
+        // Modal
+        // SimileIcon,
+        TabNav,
+        Tab,
+        CipaisLugano,
+        TestChart
+        },
         data () {
             return {
                 // markers: [],
+                backdropClasses: [],
+                modalClasses: ['modal','fade'],
                 istsos: null,
                 selectedTab: 'home',
                 selectedCipaisProcedures: [],
@@ -453,7 +504,7 @@
                 series_o2c_data: {},
                 tableAllData: {},
                 allProcedures: {},
-                dataCipais: {},
+                dataCipais: [],
                 dataSatellite: {},
                 tableAllData2: {},
                 showModal: false,
@@ -560,9 +611,11 @@
                   "features": []
                 },
                 basins: lake_basins.ceresio,
-                url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                // url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                // url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
                 layers: sharedFunctions.map_layers,
+                baseLayers: sharedFunctions.base_layers,
                 markerLayer: {
                     name: 'Marker',
                     visible: true,
@@ -577,7 +630,7 @@
 
                     }
                 },
-                attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+                // attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 currentZoom: 10.5,
                 //currentCenter: latLng(47.41322, -1.219482),
                 showParagraph: false,
@@ -624,10 +677,11 @@
                     this.tableSetData();
                     // DEPRERCATED??
                     this.tableSetDataSatellite();
-                    // this.tableSetDataCipais();
+                    this.tableSetDataCipais();
                     // this.tableSetDataSatellite();
                     // this.loadCipaisData();
                     // this.loadSatelliteData();
+
                     if ( this.tableData.data && this.tableData.data.length>0 ) {
                         this.selectedTab='home'
                     } else if ( this.selectedSatelliteProcedures.length>0 ) {
@@ -655,6 +709,8 @@
             this.$root.whereAmI = 'Lago di Lugano';
             this.istsos = this.ceresioIstosos;
             this.$root.istsos = this.istsos;
+
+            sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
 
             const good_names = [
                 "air-temperature",
@@ -704,28 +760,28 @@
 
                 }
             };
-            
+
 
             Promise.all([
                 this.tableFetchData2(),
                 this.istsos.fetchGeometryCollection(),
             ]).then(results=>{
                 const result = results[1];
-                
-                result.data.features.forEach(el=>{console.log(el.properties.foi_name)});
+
+                // result.data.features.forEach(el=>{console.log(el.properties.foi_name)});
 
                 const reduced = groupBy(
                     result.data.features,
                     approxPosition,
                     collectNames
-                
-                ); 
+
+                );
                 let bounds = L.latLngBounds([]);
 
                 const features = Object.entries(reduced).map(([k, v], ii) => {
                     const coords = k.split(';').map(parseFloat);
                     // bounds.extend(L.latLng(coords[1], coords[0]));
-                    
+
                     return {
                         "type": "Feature",
                         "properties": {
@@ -812,17 +868,33 @@
                 self.bounds = bounds;
 
             })
-  
+
 
             // TODO: DEPRECATE
             // this.populateCockpit();
             this.$root.dropdownVisible = false;
-
         },
 
     methods: {
+        toggle() {
+
+            if( this.modalClasses.includes('show')){
+                this.modalClasses.pop()
+                this.modalClasses.pop()
+                this.backdropClasses=[]
+            }
+            else {
+                this.modalClasses.push('d-block')
+                this.modalClasses.push('show')
+                this.backdropClasses=['modal-backdrop', 'fade', 'show']
+            }
+
+    },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
+        },
+        guessLocTitle(foi_name){
+            return sharedFunctions.guessLocTitle(foi_name);
         },
         onChange(event) {
             return event.target.value;
@@ -873,19 +945,40 @@
                         const result = istsosToHighcharts.istosToLine(response);
                         // result.options.name = 'foo';
                         const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+                        console.log(proc.name);
+                        result.options.yAxis.plotLines = []
+                        result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
 
-                        result.options.yAxis.plotLines = [{
-                            color: 'darkgrey',
-                            dashStyle: 'ShortDash',
+                        if(indicatorDescription.indicatorDescription[proc.name].limite!=null){
+                            result.options.yAxis.plotLines.push({
+                            color: 'yellow',
+                            dashStyle: 'Solid',
                             width: 2,
-                            value: variableAverage,
+                            value: indicatorDescription.indicatorDescription[proc.name].limite,
                             label: {
-                                text: 'media della serie',
+                                text: 'Limite',
                                 align: 'center',
                                 style: {color: 'darkgrey'}
 
-                            }
-                        }];
+                            },
+
+                        })
+                        }
+                        if(indicatorDescription.indicatorDescription[proc.name].obiettivo!=null){
+                            result.options.yAxis.plotLines.push({
+                            color: 'green',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: indicatorDescription.indicatorDescription[proc.name].obiettivo,
+                            label: {
+                                text: 'Obiettivo',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            },
+
+                        })
+                        }
 
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
@@ -984,15 +1077,24 @@
                     cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
                 }
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
+
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
-                if ( result.x ) {
-                    cards[index].time = {
-                        date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                        time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-                    };
-                };
 
+                if ( result.x){
+
+                    if(indicatorDescription.indicatorDescription[cards[index].name].tag =='CIPAIS'){
+                        cards[index].time = {
+                        date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
+                        }
+                    }
+                    else{
+                        cards[index].time = {
+                            date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                            time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                        }
+                    }
+                }
                 cards[index].message = result.locationUrn.split(':').at(-1);
             };
 
@@ -1057,11 +1159,25 @@
         displayInfo (data) {
           const horizontalAlign = 'center';
           const verticalAlign = 'top';
-          
+
           this.$notifications.notify(
                 {
                     message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
-                    
+
+                    icon: 'nc-icon nc-quote',
+                    horizontalAlign: horizontalAlign,
+                    verticalAlign: verticalAlign,
+                    type: 'primary',
+                 })
+        },
+        displayModal (data) {
+          const horizontalAlign = 'center';
+          const verticalAlign = 'top';
+
+          this.$notifications.notify(
+                {
+                    message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
+
                     icon: 'nc-icon nc-quote',
                     horizontalAlign: horizontalAlign,
                     verticalAlign: verticalAlign,
@@ -1522,6 +1638,36 @@
 }
 .nav-link {
   cursor: pointer
+}
+.modal { overflow: auto !important;}
+
+.input-group > .form-control, .input-group > .form-control-plaintext, .input-group > .custom-select, .input-group > .custom-file {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    -webkit-box-flex: 1;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    margin-bottom: 0;
+    height: auto;
+}
+
+.btn {
+    border-width: 2px;
+    background-color: #eeeeee;
+    font-weight: 400;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    padding: 8px 16px;
+    border-color: #888888;
+    color: #888888;
+    /* fill-opacity: 0; */
+}
+
+.btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
+    background-color: #eeeeee;
+    color: #42d0ed;
+    border-color: #42d0ed;
 }
 
 </style>

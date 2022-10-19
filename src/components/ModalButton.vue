@@ -9,13 +9,19 @@
     </button>
 </template>
 <script>
+
     export default {
         props: {
             data: {},
             name: {},
-            click: {},
+            click: {
+                type: Function,
+                default: () => {}
+            },
             meta: {},
             classes: {},
         },
+        
     }
+    
 </script>
