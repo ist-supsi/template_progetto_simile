@@ -13,7 +13,7 @@ const proxyConf = {
 };
 
 const config = {
-    istsosProxy: proxyConf,
+    istsosProxy: devProxyConf,
     verbanoIstsos: {
         proxyEndpoint: 'verbano',
         baseUrl: 'https://istsos.irsa.cnr.it',
