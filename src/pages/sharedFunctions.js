@@ -233,9 +233,9 @@ function areaLayerOptions (self) {
           }
       },
       onEachFeature: function (feature, layer) {
-
           layer.bindTooltip(`<h6>${guessLocLabel(feature.properties.label)}</h6>`, {sticky: true})
           layer.on('click', ee => {
+              console.log(feature.properties);
               self.selectedMarker=feature.properties.markerIndex
               self.selectedTab='satellitari'
           })
@@ -344,7 +344,11 @@ function markerLayerOptions (self) {
                 return marker;
             } else {
                 self.basins.features.map(feat => {
-                    if ( feat.properties.basin==suffixes[0] ) {
+                    // console.log(feat);
+                    // console.log(feature.properties.markerIndex);
+                    console.log(feat.properties.basin);
+                    console.log(suffixes);
+                    if ( feat.properties.basin.startsWith(suffixes[0]) ) {
                         feat.properties.markerIndex = feature.properties.markerIndex;
                     };
                 });
