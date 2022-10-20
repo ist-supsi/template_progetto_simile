@@ -1,4 +1,6 @@
 
+import config from '../../config.js'
+
 // const base_layers = [
 //     {
 //       name: 'Classic',
@@ -199,7 +201,8 @@ const base_layers = {
         options: {
             attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
             maxZoom: 20,
-            minZoom: 0
+            minZoom: 0,
+            apikey: config.apikeys.stadiamaps
         }
     },
 };
@@ -233,7 +236,6 @@ function areaLayerOptions (self) {
           }
       },
       onEachFeature: function (feature, layer) {
-
           layer.bindTooltip(`<h6>${guessLocLabel(feature.properties.label)}</h6>`, {sticky: true})
           layer.on('click', ee => {
               self.selectedMarker=feature.properties.markerIndex
@@ -345,7 +347,7 @@ function markerLayerOptions (self) {
                 return marker;
             } else {
                 self.basins.features.map(feat => {
-                    if ( feat.properties.basin==suffixes[0] ) {
+                    if ( feat.properties.basin.startsWith(suffixes[0]) ) {
                         feat.properties.markerIndex = feature.properties.markerIndex;
                     };
                 });

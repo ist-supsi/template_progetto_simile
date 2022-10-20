@@ -16,18 +16,21 @@ const config = {
     istsosProxy: devProxyConf,
     verbanoIstsos: {
         proxyEndpoint: 'verbano',
-        baseUrl: 'http://150.145.35.198:2000',
+        baseUrl: 'https://istsos.irsa.cnr.it',
         endpoint:  'maggiorelive'
     },
     larioIstsos: {
         proxyEndpoint: 'lario',
-        baseUrl: 'http://150.145.35.198:2000',
+        baseUrl: 'https://istsos.irsa.cnr.it',
         endpoint:  'lariolive'
     },
     ceresioIstsos: {
         proxyEndpoint: 'index',
         baseUrl: 'https://istsos.ddns.net',
         endpoint:  'ceresiohourly'
+    },
+    apikeys: {
+        stadiamaps: "5215a8ea-9563-412f-ae94-686f868a6fa3"
     }
 };
 
