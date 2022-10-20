@@ -69,6 +69,12 @@
                         <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts>
                 </div>
             </div>
+            <div v-else-if="data_loading" class="row mb-4" >
+                <div class="col-md-12">
+                  <i v-if="wind_data_loading"
+                      class="fa fa-refresh fa-spin"></i>
+                </div>
+            </div>
 
             <div v-if="Object.keys(wind_data_options).length>0" class="row mb-4" >
                 <div class="col-md-8">
@@ -78,11 +84,17 @@
                         <highcharts :options="wind_series"></highcharts>
                 </div>
             </div>
-
-            <div slot="footer">
-                <i v-if="Object.keys(wind_data_options).length==0"
-                    class="fa fa-refresh fa-spin"></i>
+            <div v-else-if="wind_data_loading" class="row mb-4" >
+                <div class="col-md-12">
+                  <i class="fa fa-refresh fa-spin"></i>
+                </div>
             </div>
+
+
+            <!-- <div slot="footer">
+                <i v-if="wind_data_loading"
+                    class="fa fa-refresh fa-spin"></i>
+            </div> -->
             <!-- <div class="row">
                 <div class="col-12">
                     <card>
@@ -161,91 +173,6 @@
 
 
     });
-    const LINE_DEFAULT_ANALISI = {
-        chart: {
-            zoomType: 'x',
-            inverted: false,
-
-        },
-        height: '400px',
-        time: {
-            timezone: 'Europe/Rome'
-        },
-        title: {
-            text: 'Serie temporale'
-        },
-        subtitle: {
-            text: document.ontouchstart === undefined ?
-            "clic e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        yAxis: {
-            gridLineWidth: 1,
-            title: {
-              text: ''
-            }
-        },
-        // legend: {
-        //     enabled: true
-        // },
-        plotOptions: {
-            line: {marker: {enabled: false}}
-        },
-        // rangeSelector: {
-        //     inputFields: {
-        //         startValue: new Date(2022, 8, 15),
-        //     },
-        //     inputPosition: {
-        //     align: 'left',
-        //     x: 0,
-        //     y: 0
-        //      },
-        //     buttonPosition: {
-        //         align: 'right',
-        //         x: 0,
-        //         y: 0
-        //     },
-        //     inputDateFormat: '%b %e, %Y %H:%M',
-        //      buttons: [
-        //         {
-        //             type: 'month',
-        //             count: 1,
-        //             text: '1m',
-        //             events: {
-        //                 click: function() {
-        //                     alert('Clicked button');
-        //                 }
-        //             }
-        //         }, {
-        //             type: 'month',
-        //             count: 3,
-        //             text: '3m'
-        //         }, {
-        //             type: 'month',
-        //             count: 6,
-        //             text: '6m'
-        //         }, {
-        //             type: 'ytd',
-        //             text: 'YTD'
-        //         }, {
-        //             type: 'year',
-        //             count: 1,
-        //             text: '1y'
-        //         }, {
-        //             type: 'all',
-        //             text: 'All'
-        //         }
-        //     ]
-        // },
-        series: [{
-            type: 'line',
-            name: '',
-            data: [1,2,3,],
-            // color: dataColor
-        }]
-    };
 
     export default {
         components: {
@@ -263,11 +190,14 @@
         data () { return {
             last_value: null,
             series_data: {},
-            wind_data_options: {plotOptions: {
-                windbarb: {
-                   turboThreshold: Infinity
-                }
-            }},
+            data_loading: false,
+            wind_data_options: {},
+            wind_data_loading: false,
+            // wind_data_options: {plotOptions: {
+            //     windbarb: {
+            //        turboThreshold: Infinity
+            //     }
+            // }},
             // wind_freq_options: {},
             wind_series: {},
             allProcedures: this.$root.allProcedures,
@@ -377,6 +307,7 @@
                     data=null;
                 };
 
+                console.log(result.data.data);
                 const info= {
                     message: result.data.data[0].featureOfInterest.name.split(':').at(-1),
                     data: data,
@@ -435,18 +366,22 @@
                 clearTimeout(this.setDataTimeout);
                 this.setDataTimeout = setTimeout(()=>{self.setSeries ()})
             },
+            // has_wind_data () {
+            //     return !!this.wind_data_options.series
+            // },
             setSeries () {
                 var self = this;
                 this.series_data = {};
-                this.wind_data_options = {plotOptions: {
-            		    windbarb: {
-                  	   turboThreshold: Infinity
-                     }
-                }};
+                // this.wind_data_options = {plotOptions: {
+            		//     windbarb: {
+                //   	   turboThreshold: Infinity
+                //      }
+                // }};
                 let counter=0;
 
                 for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
                     //
+                    this.data_loading = true;
                     this.istsos.fetchSeries(
                         procedure,
                         self.procedureInfos[procedure].observedproperties,
@@ -489,8 +424,13 @@
                         counter = counter+1;
 
                         if (procedure=='VENTO_VEL_MAX') {
-
-                            // console.log(['TEST!', self.seriesBegin]);
+                            self.wind_data_loading = true;
+                            //
+                            this.wind_data_options = {plotOptions: {
+                        		    windbarb: {
+                              	   turboThreshold: Infinity
+                                 }
+                            }};
 
                             let windPromise = this.istsos.fetchSeries(
                                 "VENTO_DIR",
@@ -566,7 +506,7 @@
                                         // } , {});
 
 
-                                        self.wind_series =istsosToHighcharts.polar(wind_series);
+                                        self.wind_series = istsosToHighcharts.polar(wind_series);
 
                                         // const b = 16;
                                         // const dirs = Array(b+1).fill(0).map((_, i) => [i*(360/b), 0]);
@@ -586,7 +526,7 @@
                                         //   wind_freq_options.series[0].name = 'Frequenza'
 
                                         // self.wind_freq_options = wind_freq_options;
-
+                                        self.wind_data_loading = false;
                                     });
                                 });
 
