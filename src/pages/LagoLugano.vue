@@ -195,12 +195,14 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <data-table
+                                                class="table table-striped"
                                                 :columns="tableColumns2"
                                                 :data="tableData"
                                                 :per-page="[5, 10, 15]"
                                                 @on-table-props-changed="reloadTable"
                                                 >
                                             </data-table>
+                                            
                                         </div>
 
                                     </div>
@@ -252,7 +254,12 @@
                         <div v-if="dataSatellite.length>0" class="container-fluid">
                             <h4>Cosa sono i dati satellitari</h4>
 
-                            <p class="description text-justify">I dati satellitari sono ricavati da analisi di immagini satellitari </p>
+                            <p class="description text-justify">I grafici rappresentano le serie storiche di alcune statistiche derivate da immagini 
+                                satellitari per ognuno dei parametri di qualità delle acque dei laghi (concentrazione di clorofilla-a, solidi sospesi 
+                                totali e temperatura superficiale). Le statistiche che vengono calcolate sono la media, il primo e il terzo quartile, 
+                                e la deviazione standard. I laghi possono essere divisi in più bacini, e per ogni bacino vengono calcolate le statistiche
+                                 dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le immagini acquisite 
+                                 dalle missioni ESA Sentinel-3 e NASA Landsat 8. Le mappe complete sono disponibili al seguente <a href="https://www.webgis.eo.simile.polimi.it/" target="_blank"> link</a> </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
                                 <div class="col-lg-6 col-sm-12">
@@ -682,6 +689,7 @@
                     // this.loadCipaisData();
                     // this.loadSatelliteData();
                     this.selectedTabObs();
+                   
                 },
             },
             cards: {
@@ -888,7 +896,7 @@
                         this.selectedTab='home'
                     } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length>0 ) {
                         this.selectedTab='satellitari'
-                    } else {
+                    } else if(this.selectedCipaisProcedures && this.selectedCipaisProcedure.length>0) {
                         this.selectedTab='cipais'
                     };
         },
@@ -1246,6 +1254,7 @@
             const substr = self.tableProps.search.toLowerCase();
 
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
+            
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
 
             const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
