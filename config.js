@@ -30,8 +30,7 @@ const config = {
         endpoint:  'ceresiohourly'
     },
     apikeys: {
-        stadiamaps: "5215a8ea-9563-412f-ae94-686f868a6fa3",
-        wrong: 'xxx'
+        stadiamaps: "5215a8ea-9563-412f-ae94-686f868a6fa3"
     }
 };
 
