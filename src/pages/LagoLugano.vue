@@ -681,14 +681,7 @@
                     // this.tableSetDataSatellite();
                     // this.loadCipaisData();
                     // this.loadSatelliteData();
-
-                    if ( this.tableData.data && this.tableData.data.length>0 ) {
-                        this.selectedTab='home'
-                    } else if ( this.selectedSatelliteProcedures.length>0 ) {
-                        this.selectedTab='satellitari'
-                    } else {
-                        this.selectedTab='cipais'
-                    };
+                    this.selectedTabObs();
                 },
             },
             cards: {
@@ -889,7 +882,16 @@
                 this.backdropClasses=['modal-backdrop', 'fade', 'show']
             }
 
-    },
+        },
+        selectedTabObs(){
+            if ( this.tableData.data && this.tableData.data.length>0 ) {
+                        this.selectedTab='home'
+                    } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length>0 ) {
+                        this.selectedTab='satellitari'
+                    } else {
+                        this.selectedTab='cipais'
+                    };
+        },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
         },

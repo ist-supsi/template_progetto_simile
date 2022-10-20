@@ -238,6 +238,7 @@ function areaLayerOptions (self) {
           layer.on('click', ee => {
               self.selectedMarker=feature.properties.markerIndex
               self.selectedTab='satellitari'
+              console.log(self.selectedMarker)
           })
       },
   }
