@@ -882,9 +882,9 @@
                             color: 'yellow',
                             dashStyle: 'Solid',
                             width: 2,
-                            value: indicatorDescription.indicatorDescription[proc.name].limite,
+                            value: indicatorDescription.indicatorDescription[proc.name].limite.maggiore,
                             label: {
-                                text: 'Limite',
+                                text: 'Soglia critica',
                                 align: 'center',
                                 style: {color: 'darkgrey'}
 
@@ -897,7 +897,7 @@
                             color: 'green',
                             dashStyle: 'ShortDash',
                             width: 2,
-                            value: indicatorDescription.indicatorDescription[proc.name].obiettivo,
+                            value: indicatorDescription.indicatorDescription[proc.name].obiettivo.maggiore,
                             label: {
                                 text: 'Obiettivo',
                                 align: 'center',
