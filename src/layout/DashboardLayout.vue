@@ -41,7 +41,7 @@
         <p>Lago di Como</p>
       </sidebar-link>
 
-      <sidebar-link target="_blank"  to="#">
+      <sidebar-link target="_blank"  to="/admin/home">
         <i class="nc-icon nc-planet"></i>
 
           <p title="Altre risorse del progetto Simile">
@@ -51,7 +51,7 @@
           <a alt="foo" 
           class="dropdown-item active" 
           target="_blank" 
-          aria-current="false"
+         
           rel="noopener noreferrer" 
           href="https://simile.como.polimi.it/SimileWebAdministrator2/">
           WEB APP SIMILE
@@ -61,7 +61,7 @@
           target="_blank" 
           
           rel="noopener noreferrer" 
-          href="https://www.webgis.eo.simile.polimi.it/#">
+          href="https://www.webgis.eo.simile.polimi.it/">
           WEB GIS DATI SAT
           </a>
       </sidebar-link>
@@ -143,9 +143,7 @@
 }
 .dropdown-item.active
 {
-
   background-color:transparent;
-  
 }
 
 </style>
