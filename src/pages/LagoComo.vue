@@ -145,8 +145,13 @@
                         aria-selected="true" @click="selectedTab='home'">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}"
-                        id="satellitari-tab" data-toggle="tab"
+                    <a :class="{'nav-link': true, active: selectedTab=='arpa', enabled: selectedArpaProcedures.length==0}"
+                        id="arpa-tab" data-toggle="tab"
+                        role="tab" aria-controls="arpa"
+                        aria-selected="true" @click="selectedTab='arpa'">Indicatori ARPA</a>
+                </li>
+                <li class="nav-item">
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
                         role="tab" aria-controls="satellitari"
                         aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
                 </li>
@@ -188,12 +193,46 @@
 
 
                     </div>
+                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='arpa', active: selectedTab=='arpa'}"
+                        id="arpa" role="tabpanel" aria-labelledby="arpa-tab">
+                            <div v-if="dataArpa.length==0">
+                                <h4>Non sono presenti indicatori ARPA per la stazione selezionata</h4>
+                            </div>
+                        <div v-else class="container-fluid">
+                            <h4>Cosa sono i dati degli Indicatori ARPA</h4>
+
+                            <p class="description text-justify">I dati degli “Indicatori ARPA” .....<br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
+
+                                <div v-for="cc in loopOnPairs(Array.from(Array(dataArpa.length), (n,i)=>i))" class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <figure style="min-width: 100%" class="highcharts-figure">
+                                            <highcharts :options="dataArpa[cc[0]]"></highcharts>
+                                        </figure>
+                                    </div>
+                                    <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+                                        <figure style="min-width: 100%" class="highcharts-figure">
+                                            <highcharts :options="dataArpa[cc[1]]"></highcharts>
+                                        </figure>
+                                    </div>
+                                </div>
+                        </div>
+
+
+                    </div>
+
+
+
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
                         id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
                         <div v-if="dataSatellite.length>0" class="container-fluid">
                             <h4>Cosa sono i dati satellitari</h4>
 
-                            <p class="description text-justify">I dati satellitari sono ricavati da analisi di immagini satellitari </p>
+                            <p class="description text-justify">I grafici rappresentano le serie storiche di alcune statistiche derivate da immagini
+                                satellitari per ognuno dei parametri di qualità delle acque dei laghi (concentrazione di clorofilla-a, solidi sospesi
+                                totali e temperatura superficiale). Le statistiche che vengono calcolate sono la media, il primo e il terzo quartile,
+                                e la deviazione standard. I laghi possono essere divisi in più bacini, e per ogni bacino vengono calcolate le statistiche
+                                 dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le immagini acquisite
+                                 dalle missioni ESA Sentinel-3 e NASA Landsat 8. Le mappe complete sono disponibili al seguente <a href="https://www.webgis.eo.simile.polimi.it/" target="_blank"> link</a> </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
                                 <div class="col-lg-6 col-sm-12">
@@ -422,9 +461,9 @@
                 modalClasses: ['modal','fade'],
                 istsos: null,
                 selectedTab: 'home',
-                selectedCipaisProcedures: [],
+                selectedArpaProcedures: [],
                 selectedSatelliteProcedures: [],
-                cipaisData: [],
+                arpaData: [],
                 selectedProc: null,
                 showDescription: true,
                 lastSdtFig: '',
@@ -441,12 +480,12 @@
                 series_o2c_data: {},
                 tableAllData: {},
                 allProcedures: {},
-                dataCipais:{},
+                dataArpa:{},
                 dataSatellite:{},
                 tableAllData2: {},
                 showModal: false,
                 tableData: {},
-                tableDataCipais:{},
+                tableDataArpa:{},
                 tableData2: {},
                 tableProps: {
                     page: 1,
@@ -580,11 +619,11 @@
             }
         },
         watch: {
-            selectedCipaisProcedures: {
+            selectedArpaProcedures: {
                 handler(val){
                     // do stuff
                     // TODO: load cipais data
-                    this.loadCipaisData();
+                    this.loadArpaData();
                 },
                 // deep: true
             },
@@ -605,15 +644,9 @@
                     // do stuff
                     this.loadCardsData();
                     this.tableSetData();
-                    this.tableSetDataCipais();
+                    this.tableSetDataArpa();
                     this.tableSetDataSatellite();
-                    if ( this.tableData.data && this.tableData.data.length>0 ) {
-                        this.selectedTab='home'
-                    } else if ( this.selectedSatelliteProcedures.length>0 ) {
-                        this.selectedTab='satellitari'
-                    } else {
-                        this.selectedTab='cipais'
-                    };
+                    this.selectedTabObs();
                 },
             },
             cards: {
@@ -733,7 +766,7 @@
                 };
                 self.loadCardsData();
                 self.tableSetData();
-                self.tableSetDataCipais();
+                self.tableSetDataArpa();
 
                 // Set map bounds
                 self.bounds = bounds;
@@ -761,6 +794,15 @@
             }
 
             },
+        selectedTabObs(){
+            if ( this.tableData.data && this.tableData.data.length>0 ) {
+                        this.selectedTab='home'
+                    } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length>0 ) {
+                        this.selectedTab='satellitari'
+                    } else if(this.selectedArpaProcedures && this.selectedArpaProcedure.length>0) {
+                        this.selectedTab='arpa'
+                    };
+        },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
         },
@@ -781,11 +823,11 @@
                 return indicatorDescription.indicatorDescription[name].icon;
             };
         },
-        loadCipaisData () {
+        loadArpaData () {
             var self = this;
-            let dataCipais = [];
+            let dataArpa = [];
             let prms = [];
-            for (const proc of this.selectedCipaisProcedures) {
+            for (const proc of this.selectedArpaProcedures) {
 
                 const info = self.allProcedures[proc.procedure];
 
@@ -803,35 +845,55 @@
                         // result.options.name = 'foo';
                         const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
 
-                        result.options.yAxis.plotLines = [{
-                            color: 'darkgrey',
-                            dashStyle: 'ShortDash',
+                        result.options.yAxis.plotLines = []
+                        result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
+
+                        if(indicatorDescription.indicatorDescription[proc.name].limite!=null){
+                            result.options.yAxis.plotLines.push({
+                            color: 'yellow',
+                            dashStyle: 'Solid',
                             width: 2,
-                            value: variableAverage,
+                            value: indicatorDescription.indicatorDescription[proc.name].limite,
                             label: {
-                                text: 'media della serie',
+                                text: 'Limite',
                                 align: 'center',
                                 style: {color: 'darkgrey'}
 
-                            }
-                        }];
+                            },
+
+                        })
+                        }
+                        if(indicatorDescription.indicatorDescription[proc.name].obiettivo!=null){
+                            result.options.yAxis.plotLines.push({
+                            color: 'green',
+                            dashStyle: 'ShortDash',
+                            width: 2,
+                            value: indicatorDescription.indicatorDescription[proc.name].obiettivo,
+                            label: {
+                                text: 'Obiettivo',
+                                align: 'center',
+                                style: {color: 'darkgrey'}
+
+                            },
+
+                        })
+                        }
 
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
                         }
                         else{
                             result.options.title.text = info.description;
-                            console.log(info)
+
                         }
                         result.options.subtitle.text = `${info.description} (${result.uom})`;
-                        dataCipais.push(result.options);
+                        dataArpa.push(result.options);
                     });
                     prms.push(prm);
                 };
             };
 
-            Promise.all(prms).then(()=>{self.dataCipais=dataCipais});
-
+            Promise.all(prms).then(()=>{self.dataArpa=dataArpa});
         },
         loadSatelliteData () {
             var self = this;
@@ -844,7 +906,7 @@
                 if (info.samplingTime.beginposition && info.samplingTime.endposition) {
                     const begin = new Date(info.samplingTime.beginposition);
                     const end = new Date(info.samplingTime.endposition);
-                    console.log(info)
+
                     const prm = self.istsos.fetchSeries(
                         proc.procedure,
                         info.observedproperties[0].definition,
@@ -917,7 +979,7 @@
 
                 if ( result.x){
 
-                    if(indicatorDescription.indicatorDescription[cards[index].name].tag =='CIPAIS'){
+                    if(indicatorDescription.indicatorDescription[cards[index].name].tag =='ARPA'){
                         cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
                         }
@@ -1087,7 +1149,7 @@
             const filteredSortedData = this.tableAllData.data.filter(el=>{
 
 
-                if(el.procedures[0] && !el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0]) ){
+                if(el.procedures[0] && !el.procedures[0].includes("ARPA") && selectedProc.includes(el.procedures[0]) ){
                     return true;
                 }
                 else {
@@ -1146,9 +1208,9 @@
             this.tableData = tableData;
 
         },
-        tableSetDataCipais () {
+        tableSetDataArpa () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
-            this.selectedCipaisProcedures = selectedProc.filter(el=>el.procedure.includes("CIPAIS"));
+            this.selectedArpaProcedures = selectedProc.filter(el=>el.procedure.includes("ARPA"));
 
         },
         tableSetDataSatellite () {
@@ -1161,10 +1223,10 @@
             this.tableProps = tableProps
             this.tableSetData();
         },
-        reloadTableCipais (tableProps) {
+        reloadTableArpa (tableProps) {
             var self = this;
             this.tableProps = tableProps
-            this.tableSetDataCipais();
+            this.tableSetDataArpa();
         },
         populateCockpit () {
             var self = this;

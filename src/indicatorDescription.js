@@ -38,8 +38,14 @@ let indicatorDescription =
             // icon:'fa fa-tint text-primary',
             icon:'icon-water_SDT',
             tag:'CIPAIS',
-            limite:null,
-            obiettivo:null,
+            limite : {
+                maggiore:5,
+                lugano:5
+            },
+            obiettivo : {
+                maggiore:null,
+                lugano:null
+            },
            
         },
 
@@ -54,8 +60,14 @@ let indicatorDescription =
             // icon:'fa fa-arrows-v text-primary',
             icon:'icon-water-depht',
             tag:'CIPAIS',
-            limite:null,
-            obiettivo:null,
+            limite : {
+                maggiore:null,
+                lugano:null
+            },
+            obiettivo : {
+                maggiore:100,
+                lugano:60
+            },
             reversed: true,
         },
 
@@ -139,8 +151,14 @@ let indicatorDescription =
             // icon:'fa fa-line-chart text-primary',
             icon:'icon-water_pload',
             tag:'CIPAIS',
-            limite:null,
-            obiettivo:null,
+            limite : {
+                maggiore:200,
+                lugano:18
+            },
+            obiettivo : {
+                maggiore:null,
+                lugano:null
+            },
         },
         'Pload': {
             title : 'Carico di fosforo',
@@ -154,8 +172,14 @@ let indicatorDescription =
             // icon:'fa fa-line-chart text-primary',
             icon:'icon-water_pload',
             tag:'CIPAIS',
-            limite:null,
-            obiettivo:null,
+            limite : {
+                maggiore:200,
+                lugano:18
+            },
+            obiettivo : {
+                maggiore:null,
+                lugano:null
+            },
         },
 
         'water-Nload': {
@@ -170,8 +194,14 @@ let indicatorDescription =
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
             tag:'CIPAIS',
-            limite:null,
-            obiettivo:null,
+            limite : {
+                maggiore:null,
+                lugano:null
+            },
+            obiettivo : {
+                maggiore:null,
+                lugano:null
+            },
         },
         'NLoad': {
             title : 'Carico di azoto',
@@ -185,8 +215,14 @@ let indicatorDescription =
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
             tag:'CIPAIS',
-            limite:null,
-            obiettivo:null,
+            limite : {
+                maggiore:null,
+                lugano:null
+            },
+            obiettivo : {
+                maggiore:null,
+                lugano:null
+            },
         },
 
         'water-PTOT': {
@@ -199,8 +235,14 @@ let indicatorDescription =
             // icon:'fa fa-file-powerpoint-o text-primary',
             icon:'icon-water_PTOT',
             tag:'CIPAIS',
-            limite:70,
-            obiettivo:100,
+            limite : {
+                maggiore:null,
+                lugano:30
+            },
+            obiettivo : {
+                maggiore:10,
+                lugano:null
+            },
         },
 
         'water-NTOT': {
@@ -213,8 +255,14 @@ let indicatorDescription =
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
             tag:'CIPAIS',
-            limite:null,
-            obiettivo:null,
+            limite : {
+                maggiore:null,
+                lugano:null
+            },
+            obiettivo : {
+                maggiore:null,
+                lugano:null
+            },
         },
 
         'indice-LTLeco': {
@@ -278,6 +326,15 @@ let indicatorDescription =
             breveDescrizione:`Valore medio annuo del biovolume fitoplanctonico`,
             // icon:'fa fa-circle text-primary',
             icon:'icon-water_biovol',
+            tag:'CIPAIS',
+            limite : {
+                maggiore:null,
+                lugano:null
+            },
+            obiettivo : {
+                maggiore:null,
+                lugano:null
+            },
         },
         'biovol': {
             title : 'Biovolume del fitoplancton',
@@ -289,6 +346,15 @@ let indicatorDescription =
             breveDescrizione:`Valore medio annuo del biovolume fitoplanctonico`,
             // icon:'fa fa-circle text-primary',
             icon:'icon-water_biovol',
+            tag:'CIPAIS',
+            limite : {
+                maggiore:null,
+                lugano:null
+            },
+            obiettivo : {
+                maggiore:null,
+                lugano:null
+            },
         },
 
         'indice-IPAM-fitoplancton': {

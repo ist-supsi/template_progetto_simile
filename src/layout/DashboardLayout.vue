@@ -41,12 +41,40 @@
         <p>Lago di Como</p>
       </sidebar-link>
 
-      <sidebar-link target="_blank" to=" ">
+      <sidebar-link target="_blank"  to="#">
         <i class="nc-icon nc-planet"></i>
-        <p title="Altre risorse del progetto Simile">Altre risorse</p>
-        <a alt="foo" class="dropdown-item text-white" target="_blank" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB APP SIMILE</a>
-            <a class="dropdown-item text-white" target="_blank" rel="noopener noreferrer" href="https://www.webgis.eo.simile.polimi.it/#">WEB GIS DATI SAT</a>
+
+          <p title="Altre risorse del progetto Simile">
+            Altre risorse
+          </p>
+
+          <a alt="foo" 
+          class="dropdown-item active" 
+          target="_blank" 
+          aria-current="false"
+          rel="noopener noreferrer" 
+          href="https://simile.como.polimi.it/SimileWebAdministrator2/">
+          WEB APP SIMILE
+          </a>
+          
+          <a class="dropdown-item active" 
+          target="_blank" 
+          
+          rel="noopener noreferrer" 
+          href="https://www.webgis.eo.simile.polimi.it/#">
+          WEB GIS DATI SAT
+          </a>
       </sidebar-link>
+      
+
+      <!-- <sidebar-link target="_blank" to="" href="https://simile.como.polimi.it/SimileWebAdministrator2/">
+        
+        <p>&nbsp &nbsp &nbsp WEB APP SIMILE</p>
+      </sidebar-link>
+      <sidebar-link target="_blank" to="" href="https://www.webgis.eo.simile.polimi.it/#">
+        
+        <p>WEB GIS DATI</p>
+      </sidebar-link> -->
 
       <!-- <base-dropdown title="Altre risorse del progetto">
             <a class="dropdown-item" target="_blank" alt="foo" rel="noopener noreferrer" href="https://simile.como.polimi.it/SimileWebAdministrator2/">WEB APP SIMILE</a>
@@ -109,9 +137,15 @@
 
 </script>
 <style>
-.dropdown-item:hover
+.dropdown-item.active:hover
 {
-  background-color: #e9ecef52;
+  background-color: #b3b3b452;
+}
+.dropdown-item.active
+{
+
+  background-color:transparent;
+  
 }
 
 </style>

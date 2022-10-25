@@ -253,7 +253,12 @@
                         <div v-if="dataSatellite.length>0" class="container-fluid">
                             <h4>Cosa sono i dati satellitari</h4>
 
-                            <p class="description text-justify">I dati satellitari sono ricavati da analisi di immagini satellitari </p>
+                            <p class="description text-justify">I grafici rappresentano le serie storiche di alcune statistiche derivate da immagini
+                                satellitari per ognuno dei parametri di qualità delle acque dei laghi (concentrazione di clorofilla-a, solidi sospesi
+                                totali e temperatura superficiale). Le statistiche che vengono calcolate sono la media, il primo e il terzo quartile,
+                                e la deviazione standard. I laghi possono essere divisi in più bacini, e per ogni bacino vengono calcolate le statistiche
+                                 dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le immagini acquisite
+                                 dalle missioni ESA Sentinel-3 e NASA Landsat 8. Le mappe complete sono disponibili al seguente <a href="https://www.webgis.eo.simile.polimi.it/" target="_blank"> link</a> </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
                                 <div class="col-lg-6 col-sm-12">
@@ -888,7 +893,16 @@
                 this.backdropClasses=['modal-backdrop', 'fade', 'show']
             }
 
-    },
+        },
+        selectedTabObs(){
+            if ( this.tableData.data && this.tableData.data.length>0 ) {
+                        this.selectedTab='home'
+                    } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length>0 ) {
+                        this.selectedTab='satellitari'
+                    } else if(this.selectedCipaisProcedures && this.selectedCipaisProcedure.length>0) {
+                        this.selectedTab='cipais'
+                    };
+        },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
         },
@@ -946,6 +960,7 @@
                         const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
                         console.log(proc.name);
                         result.options.yAxis.plotLines = []
+
                         if (indicatorDescription.indicatorDescription[proc.name]) {
                             result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
                             if(indicatorDescription.indicatorDescription[proc.name].limite!=null){
@@ -974,6 +989,7 @@
                             });};
                         } else {
                             result.options.yAxis.reversed=false;
+
                         }
 
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
@@ -1240,6 +1256,7 @@
             const substr = self.tableProps.search.toLowerCase();
 
             const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
+
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
 
             const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
