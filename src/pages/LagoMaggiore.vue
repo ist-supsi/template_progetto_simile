@@ -23,7 +23,7 @@
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
                                     <i :class="getCardIcon(cards[ii].name)"
                                       data-toggle="tooltip"
-                                      title="cards[ii].title||'no data'"></i>
+                                      :title="cards[ii].title||'no data'"></i>
                                 </div>
                                 <div slot="content">
                                     <p v-if="!(cards[ii] && cards[ii].title)" class="card-category placeholder-glow">
@@ -47,7 +47,7 @@
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
                                     <i :class="getCardIcon(cards[ii+1].name)"
                                       data-toggle="tooltip"
-                                      title="cards[ii+1].title||'no data'"></i>
+                                      :title="cards[ii+1].title||'no data'"></i>
                                 </div>
                                 <div slot="content">
                                     <p v-if="!cards[ii+1].title" class="card-category placeholder-glow">
@@ -141,13 +141,13 @@
                         aria-selected="true" @click="selectedTab='home' ">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='cipais', enabled: selectedCipaisProcedures.length==0}" 
+                    <a :class="{'nav-link': true, active: selectedTab=='cipais', enabled: selectedCipaisProcedures.length==0}"
                         id="cipais-tab" data-toggle="tab"
                         role="tab" aria-controls="cipais"
                         aria-selected="false" @click="selectedTab='cipais'">Indicatori CIPAIS</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}" 
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}"
                         id="satellitari-tab" data-toggle="tab"
                         role="tab" aria-controls="satellitari"
                         aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
@@ -156,40 +156,37 @@
             <div class="tab-content" id="myTabContent">
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='home', active: selectedTab=='home'}"
                         id="home" role="tabpanel" aria-labelledby="home-tab">
-                       
-                        <div v-if="tableData.data==0">
-                                    <h4>Non sono presenti misure disponibili per la stazione selezionata</h4>
-                                </div>
-                                <div v-else>
-                                    <h4>Cosa sono i dati da sensori</h4>
 
-                                    <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
-                                    (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
-                                    elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
-                                    tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
-                                    (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
-                                    I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
-                                    I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
-                                    di laboratorio. </p>
+                        <div v-if="!(tableData.meta && tableData.meta.total>0)">
+                            <h4>Non sono disponibili misure da sensore per la stazione selezionata</h4>
+                        </div>
+                        <div v-else>
+                            <h4>Cosa sono i dati da sensori</h4>
 
-                                    <h4>Misure disponibili:</h4>
-                                    
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <data-table
-                                                class="table table-striped"
-                                                :columns="tableColumns2"
-                                                :data="tableData"
-                                                :per-page="[5, 10, 15]"
-                                                @on-table-props-changed="reloadTable"
-                                               
-                                                >
-                                            </data-table>
-                                        </div>
+                            <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
+                            (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
+                            elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
+                            tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
+                            (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
+                            I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
+                            I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
+                            di laboratorio. </p>
 
-                                    </div>
+                            <h4>Misure disponibili:</h4>
 
-                                </div>
+                        </div>
+                        <div :class="{'row': true, 'd-none': !(tableData.meta && tableData.meta.total>0)}">
+                            <div class="col-12">
+                                <data-table
+                                    :columns="tableColumns2"
+                                    :data="tableData"
+                                    :per-page="[5, 10, 15]"
+                                    @on-table-props-changed="reloadTable"
+                                    >
+                                </data-table>
+                            </div>
+
+                        </div>
 
 
                     </div>
@@ -232,11 +229,11 @@
                         <div v-if="dataSatellite.length>0" class="container-fluid">
                             <h4>Cosa sono i dati satellitari</h4>
 
-                            <p class="description text-justify">I grafici rappresentano le serie storiche di alcune statistiche derivate da immagini 
-                                satellitari per ognuno dei parametri di qualità delle acque dei laghi (concentrazione di clorofilla-a, solidi sospesi 
-                                totali e temperatura superficiale). Le statistiche che vengono calcolate sono la media, il primo e il terzo quartile, 
+                            <p class="description text-justify">I grafici rappresentano le serie storiche di alcune statistiche derivate da immagini
+                                satellitari per ognuno dei parametri di qualità delle acque dei laghi (concentrazione di clorofilla-a, solidi sospesi
+                                totali e temperatura superficiale). Le statistiche che vengono calcolate sono la media, il primo e il terzo quartile,
                                 e la deviazione standard. I laghi possono essere divisi in più bacini, e per ogni bacino vengono calcolate le statistiche
-                                 dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le immagini acquisite 
+                                 dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le immagini acquisite
                                  dalle missioni ESA Sentinel-3 e NASA Landsat 8. Le mappe complete sono disponibili al seguente <a href="https://www.webgis.eo.simile.polimi.it/" target="_blank"> link</a> </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
@@ -304,7 +301,7 @@
                         <div v-else>
                             <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
                         </div>
-                    
+
                     </div>
 
             </div>
@@ -873,7 +870,7 @@
                         const result = istsosToHighcharts.istosToLine(response);
                         // result.options.name = 'foo';
                         const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
-                        
+
                         result.options.yAxis.plotLines = []
                         result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
 
@@ -1263,7 +1260,7 @@
 
             // TODO: Concordare la paginazione e la statistica dei risultati con
             // il numero di dati filtrati.
-            
+
             const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
                     if(indicatorDescription.indicatorDescription[el.name].title==undefined){
@@ -1274,7 +1271,7 @@
                         el['title'] = indicatorDescription.indicatorDescription[el.name].title;
                         return el;
                     }
-                
+
             });
             const tableData = {
                 // payload: this.tableAllData.payload,

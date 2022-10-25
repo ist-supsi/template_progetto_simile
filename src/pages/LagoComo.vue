@@ -160,37 +160,36 @@
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='home', active: selectedTab=='home'}"
                         id="home" role="tabpanel" aria-labelledby="home-tab">
 
-                        <div v-if="tableData.data==0">
-                                    <h4>Non sono presenti misure disponibili per la stazione selezionata</h4>
-                                </div>
-                                <div v-else>
-                                    <h4>Cosa sono i dati da sensori</h4>
+                        <div v-if="!(tableData.meta && tableData.meta.total>0)">
+                            <h4>Non sono disponibili misure da sensore per la stazione selezionata</h4>
+                        </div>
+                        <div v-else>
+                            <h4>Cosa sono i dati da sensori</h4>
 
-                                    <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
-                                    (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
-                                    elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
-                                    tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
-                                    (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
-                                    I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
-                                    I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
-                                    di laboratorio. </p>
+                            <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
+                            (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
+                            elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
+                            tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
+                            (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
+                            I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
+                            I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
+                            di laboratorio. </p>
 
-                                    <h4>Misure disponibili:</h4>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <data-table
-                                                class="table table-striped"
-                                                :columns="tableColumns2"
-                                                :data="tableData"
-                                                :per-page="[5, 10, 15]"
-                                                @on-table-props-changed="reloadTable"
-                                                >
-                                            </data-table>
-                                        </div>
+                            <h4>Misure disponibili:</h4>
 
-                                    </div>
+                        </div>
+                        <div :class="{'row': true, 'd-none': !(tableData.meta && tableData.meta.total>0)}">
+                            <div class="col-12">
+                                <data-table
+                                    :columns="tableColumns2"
+                                    :data="tableData"
+                                    :per-page="[5, 10, 15]"
+                                    @on-table-props-changed="reloadTable"
+                                    >
+                                </data-table>
+                            </div>
 
-                                </div>
+                        </div>
 
 
                     </div>
@@ -228,11 +227,11 @@
                         <div v-if="dataSatellite.length>0" class="container-fluid">
                             <h4>Cosa sono i dati satellitari</h4>
 
-                            <p class="description text-justify">I grafici rappresentano le serie storiche di alcune statistiche derivate da immagini 
-                                satellitari per ognuno dei parametri di qualità delle acque dei laghi (concentrazione di clorofilla-a, solidi sospesi 
-                                totali e temperatura superficiale). Le statistiche che vengono calcolate sono la media, il primo e il terzo quartile, 
+                            <p class="description text-justify">I grafici rappresentano le serie storiche di alcune statistiche derivate da immagini
+                                satellitari per ognuno dei parametri di qualità delle acque dei laghi (concentrazione di clorofilla-a, solidi sospesi
+                                totali e temperatura superficiale). Le statistiche che vengono calcolate sono la media, il primo e il terzo quartile,
                                 e la deviazione standard. I laghi possono essere divisi in più bacini, e per ogni bacino vengono calcolate le statistiche
-                                 dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le immagini acquisite 
+                                 dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le immagini acquisite
                                  dalle missioni ESA Sentinel-3 e NASA Landsat 8. Le mappe complete sono disponibili al seguente <a href="https://www.webgis.eo.simile.polimi.it/" target="_blank"> link</a> </p>
                             <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
@@ -300,7 +299,7 @@
                         <div v-else>
                             <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
                         </div>
-                    
+
                     </div>
             </div>
         </div>
@@ -845,7 +844,7 @@
                         const result = istsosToHighcharts.istosToLine(response);
                         // result.options.name = 'foo';
                         const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
-                        
+
                         result.options.yAxis.plotLines = []
                         result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
 
@@ -907,7 +906,7 @@
                 if (info.samplingTime.beginposition && info.samplingTime.endposition) {
                     const begin = new Date(info.samplingTime.beginposition);
                     const end = new Date(info.samplingTime.endposition);
-                    
+
                     const prm = self.istsos.fetchSeries(
                         proc.procedure,
                         info.observedproperties[0].definition,
@@ -977,7 +976,7 @@
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
-                
+
                 if ( result.x){
 
                     if(indicatorDescription.indicatorDescription[cards[index].name].tag =='ARPA'){
@@ -1183,12 +1182,12 @@
             // TODO: Concordare la paginazione e la statistica dei risultati con
             // il numero di dati filtrati.
 
-            const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
+            const last_page = Math.floor(filteredSortedData.length/this.tableProps.length);
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
                 if (el.name in indicatorDescription.indicatorDescription) {
                     el['title'] = indicatorDescription.indicatorDescription[el.name].title;
                 } else {
-                    el['title'] = '';
+                    el['title'] = '*** '+el.name+' ***';
                 };
                 // el['title'] = indicatorDescription.indicatorDescription[el.name].title;
                 return el;
@@ -1212,7 +1211,7 @@
         tableSetDataArpa () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedArpaProcedures = selectedProc.filter(el=>el.procedure.includes("ARPA"));
-            
+
         },
         tableSetDataSatellite () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
