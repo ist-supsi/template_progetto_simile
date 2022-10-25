@@ -145,7 +145,8 @@
                         aria-selected="true" @click="selectedTab='home'">Sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
+                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}"
+                        id="satellitari-tab" data-toggle="tab"
                         role="tab" aria-controls="satellitari"
                         aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
                 </li>
@@ -154,36 +155,36 @@
                     <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='home', active: selectedTab=='home'}"
                         id="home" role="tabpanel" aria-labelledby="home-tab">
 
-                        <div v-if="tableData.data==0">
-                                    <h4>Non sono presenti misure disponibili per la stazione selezionata</h4>
-                                </div>
-                                <div v-else>
-                                    <h4>Cosa sono i dati da sensori</h4>
+                        <div v-if="!(tableData.meta && tableData.meta.total>0)">
+                            <h4>Non sono disponibili misure da sensore per la stazione selezionata</h4>
+                        </div>
+                        <div v-else>
+                            <h4>Cosa sono i dati da sensori</h4>
 
-                                    <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
-                                    (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
-                                    elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
-                                    tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
-                                    (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
-                                    I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
-                                    I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
-                                    di laboratorio. </p>
+                            <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
+                            (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
+                            elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
+                            tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
+                            (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
+                            I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
+                            I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
+                            di laboratorio. </p>
 
-                                    <h4>Misure disponibili:</h4>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <data-table
-                                                :columns="tableColumns2"
-                                                :data="tableData"
-                                                :per-page="[5, 10, 15]"
-                                                @on-table-props-changed="reloadTable"
-                                                >
-                                            </data-table>
-                                        </div>
+                            <h4>Misure disponibili:</h4>
 
-                                    </div>
+                        </div>
+                        <div :class="{'row': true, 'd-none': !(tableData.meta && tableData.meta.total>0)}">
+                            <div class="col-12">
+                                <data-table
+                                    :columns="tableColumns2"
+                                    :data="tableData"
+                                    :per-page="[5, 10, 15]"
+                                    @on-table-props-changed="reloadTable"
+                                    >
+                                </data-table>
+                            </div>
 
-                                </div>
+                        </div>
 
 
                     </div>
@@ -259,7 +260,7 @@
                         <div v-else>
                             <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
                         </div>
-                    
+
                     </div>
             </div>
         </div>
@@ -913,7 +914,7 @@
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
-                
+
                 if ( result.x){
 
                     if(indicatorDescription.indicatorDescription[cards[index].name].tag =='CIPAIS'){
@@ -1119,12 +1120,12 @@
             // TODO: Concordare la paginazione e la statistica dei risultati con
             // il numero di dati filtrati.
 
-            const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
+            const last_page = Math.floor(filteredSortedData.length/this.tableProps.length);
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
                 if (el.name in indicatorDescription.indicatorDescription) {
                     el['title'] = indicatorDescription.indicatorDescription[el.name].title;
                 } else {
-                    el['title'] = '';
+                    el['title'] = '*** '+el.name+' ***';
                 };
                 // el['title'] = indicatorDescription.indicatorDescription[el.name].title;
                 return el;

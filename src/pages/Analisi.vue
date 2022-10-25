@@ -19,7 +19,7 @@
                             <div slot="header" class="icon-warning">
                                 <i :class="getCardIcon2(cards[0].name)"
                                     data-toggle="tooltip"
-                                    title="cards[0].title||'no data'"></i>
+                                    :title="cards[0].title||'no data'"></i>
 
                             </div>
                             <div slot="content">
@@ -34,7 +34,10 @@
                                 <i v-if="cards[0].data===null" class="fa fa-refresh fa-spin"></i>
                                 <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i>
                                 <i v-if="cards[0].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[0].time && cards[0].time.date}}
-                                <i v-if="cards[0].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
+                                <i v-if="cards[0].time" class="fa fa-clock-o"
+                                    data-toggle="tooltip"
+                                    :title="`approximately ${cards[0].time.from_now}`"
+                                    aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
                             </div>
                         </stats-card>
 
@@ -146,6 +149,9 @@
     import exportingInit from 'highcharts/modules/exporting';
     import stockInit from 'highcharts/modules/stock';
     // loadBullet(Highcharts);
+
+    import sharedFunctions from './sharedFunctions.js';
+
     More(Highcharts)
     stockInit(Highcharts)
 
@@ -300,17 +306,24 @@
                 // self.bulletOptions = info.options;
 
                 let data;
+                let time;
                 if(result.data.data[0].result.DataArray.values[0][1]){
-                    data =result.data.data[0].result.DataArray.values[0][1].toFixed(2)
+                    data = result.data.data[0].result.DataArray.values[0][1].toFixed(2);
+                    time = new Date(result.data.data[0].result.DataArray.values[0][0])
                 }
                 else{
                     data=null;
+                    time=null;
                 };
-
-                console.log(result.data.data);
+                // console.log(result.data.data);
                 const info= {
                     message: result.data.data[0].featureOfInterest.name.split(':').at(-1),
                     data: data,
+                    time: time && {
+                        date: time.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
+                        time: time.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'}),
+                        from_now: sharedFunctions.fromNow(time)
+                    },
                     uom: result.data.data[0].result.DataArray.field[1].uom,
                     name:result.data.data[0].result.DataArray.field[1].name,
                     description:'',

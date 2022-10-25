@@ -175,37 +175,38 @@
                         id="home" role="tabpanel" aria-labelledby="home-tab">
 
 
-                            <!-- <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}"> -->
-                                <div v-if="tableData.data==0">
-                                    <h4>Non sono presenti misure disponibili per la stazione selezionata</h4>
-                                </div>
-                                <div v-else>
-                                    <h4>Cosa sono i dati da sensori</h4>
 
-                                    <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
-                                    (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
-                                    elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
-                                    tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
-                                    (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
-                                    I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
-                                    I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
-                                    di laboratorio. </p>
+                        <!-- <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}"> -->
+                        <div v-if="!(tableData.meta && tableData.meta.total>0)">
+                            <h4>Non sono disponibili misure da sensore per la stazione selezionata</h4>
+                        </div>
+                        <div v-else>
+                            <h4>Cosa sono i dati da sensori</h4>
 
-                                    <h4>Misure disponibili:</h4>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <data-table
-                                                :columns="tableColumns2"
-                                                :data="tableData"
-                                                :per-page="[5, 10, 15]"
-                                                @on-table-props-changed="reloadTable"
-                                                >
-                                            </data-table>
-                                        </div>
+                            <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
+                            (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
+                            elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
+                            tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
+                            (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
+                            I sensori sono soggetti a periodiche operazioni di manutenzione (pulizia, calibrazione).
+                            I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
+                            di laboratorio. </p>
 
-                                    </div>
+                            <h4>Misure disponibili:</h4>
+                        </div>
+                        <div :class="{'row': true, 'd-none': !(tableData.meta && tableData.meta.total>0)}">
+                            <div class="col-12">
+                                <data-table
+                                    :columns="tableColumns2"
+                                    :data="tableData"
+                                    :per-page="[5, 10, 15]"
+                                    @on-table-props-changed="reloadTable"
+                                    >
+                                </data-table>
+                            </div>
 
-                                </div>
+                        </div>
+
 
 
 
@@ -681,7 +682,6 @@
                     // this.tableSetDataSatellite();
                     // this.loadCipaisData();
                     // this.loadSatelliteData();
-
                     if ( this.tableData.data && this.tableData.data.length>0 ) {
                         this.selectedTab='home'
                     } else if ( this.selectedSatelliteProcedures.length>0 ) {
@@ -749,15 +749,14 @@
                 const lat = (a.geometry.coordinates[1]/ff).toFixed(0)*ff;
                 return `${lon};${lat}`;
             };
-            const collectNames = (b)=>{
 
+            const collectNames = (b)=>{
                 return {
                     name: b.properties.observedproperties[0].name,
                     procedure: b.properties.name,
                     urn: b.properties.observedproperties[0].def,
                     description: b.properties.description,
                     foi_name: b.properties.foi_name
-
                 }
             };
 
@@ -947,37 +946,34 @@
                         const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
                         console.log(proc.name);
                         result.options.yAxis.plotLines = []
-                        result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
-
-                        if(indicatorDescription.indicatorDescription[proc.name].limite!=null){
-                            result.options.yAxis.plotLines.push({
-                            color: 'yellow',
-                            dashStyle: 'Solid',
-                            width: 2,
-                            value: indicatorDescription.indicatorDescription[proc.name].limite,
-                            label: {
-                                text: 'Limite',
-                                align: 'center',
-                                style: {color: 'darkgrey'}
-
-                            },
-
-                        })
-                        }
-                        if(indicatorDescription.indicatorDescription[proc.name].obiettivo!=null){
-                            result.options.yAxis.plotLines.push({
-                            color: 'green',
-                            dashStyle: 'ShortDash',
-                            width: 2,
-                            value: indicatorDescription.indicatorDescription[proc.name].obiettivo,
-                            label: {
-                                text: 'Obiettivo',
-                                align: 'center',
-                                style: {color: 'darkgrey'}
-
-                            },
-
-                        })
+                        if (indicatorDescription.indicatorDescription[proc.name]) {
+                            result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
+                            if(indicatorDescription.indicatorDescription[proc.name].limite!=null){
+                                result.options.yAxis.plotLines.push({
+                                color: 'yellow',
+                                dashStyle: 'Solid',
+                                width: 2,
+                                value: indicatorDescription.indicatorDescription[proc.name].limite,
+                                label: {
+                                    text: 'Limite',
+                                    align: 'center',
+                                    style: {color: 'darkgrey'}
+                                }});
+                            };
+                            if(indicatorDescription.indicatorDescription[proc.name].obiettivo!=null){
+                                result.options.yAxis.plotLines.push({
+                                color: 'green',
+                                dashStyle: 'ShortDash',
+                                width: 2,
+                                value: indicatorDescription.indicatorDescription[proc.name].obiettivo,
+                                label: {
+                                    text: 'Obiettivo',
+                                    align: 'center',
+                                    style: {color: 'darkgrey'}
+                                }
+                            });};
+                        } else {
+                            result.options.yAxis.reversed=false;
                         }
 
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
@@ -1081,9 +1077,9 @@
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
 
-                if ( result.x){
+                if (result.x){
 
-                    if(indicatorDescription.indicatorDescription[cards[index].name].tag =='CIPAIS'){
+                    if(indicatorDescription.indicatorDescription[cards[index].name] && indicatorDescription.indicatorDescription[cards[index].name].tag =='CIPAIS'){
                         cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
                         }
