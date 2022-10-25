@@ -1,10 +1,17 @@
 <template>
+  
   <div class="content">
+    
     <div class="container-fluid">
+     
         <div class="row">
+          
           <div class="col-12">
+            
             <card>
+              
               <div class="typo-line">
+                
                 <!-- <h4 class="title">Il Progetto<br />
                 </h4> -->
                 <!-- <p class="longtext"><span class="category"><b><i>IL PROGETTO</i></b></span><br></p> -->
@@ -143,12 +150,13 @@
 
 
   </div>
-
+  <disclaimer-message />
   </div>
 
 </template>
 <script>
   import Card from 'src/components/Cards/Card.vue'
+  import disclaimerMessage from '../components/disclaimerMessage.vue'
   import StatsCard from 'src/components/Cards/StatsCard.vue'
   import LuganoCard from './UserProfile/LuganoCard.vue'
   import ComoCard from './UserProfile/ComoCard.vue'
@@ -161,7 +169,8 @@
       LuganoCard,
       ComoCard,
       MaggioreCard,
-      StatsCard
+      StatsCard,
+      disclaimerMessage
     },
     data () {
       return {
