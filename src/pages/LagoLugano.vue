@@ -963,24 +963,24 @@
 
                         if (indicatorDescription.indicatorDescription[proc.name]) {
                             result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
-                            if(indicatorDescription.indicatorDescription[proc.name].limite!=null){
+                            if(indicatorDescription.indicatorDescription[proc.name].limite.lugano!=null){
                                 result.options.yAxis.plotLines.push({
                                 color: 'yellow',
                                 dashStyle: 'Solid',
                                 width: 2,
-                                value: indicatorDescription.indicatorDescription[proc.name].limite,
+                                value: indicatorDescription.indicatorDescription[proc.name].limite.lugano,
                                 label: {
                                     text: 'Limite',
                                     align: 'center',
                                     style: {color: 'darkgrey'}
                                 }});
                             };
-                            if(indicatorDescription.indicatorDescription[proc.name].obiettivo!=null){
+                            if(indicatorDescription.indicatorDescription[proc.name].obiettivo.lugano!=null){
                                 result.options.yAxis.plotLines.push({
                                 color: 'green',
                                 dashStyle: 'ShortDash',
                                 width: 2,
-                                value: indicatorDescription.indicatorDescription[proc.name].obiettivo,
+                                value: indicatorDescription.indicatorDescription[proc.name].obiettivo.lugano,
                                 label: {
                                     text: 'Obiettivo',
                                     align: 'center',

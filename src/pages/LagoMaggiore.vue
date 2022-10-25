@@ -874,7 +874,7 @@
                         result.options.yAxis.plotLines = []
                         result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
 
-                        if(indicatorDescription.indicatorDescription[proc.name].limite!=null){
+                        if(indicatorDescription.indicatorDescription[proc.name].limite.maggiore!=null){
                             result.options.yAxis.plotLines.push({
                             color: 'yellow',
                             dashStyle: 'Solid',
@@ -889,7 +889,7 @@
 
                         })
                         }
-                        if(indicatorDescription.indicatorDescription[proc.name].obiettivo!=null){
+                        if(indicatorDescription.indicatorDescription[proc.name].obiettivo.maggiore!=null){
                             result.options.yAxis.plotLines.push({
                             color: 'green',
                             dashStyle: 'ShortDash',
