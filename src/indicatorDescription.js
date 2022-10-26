@@ -376,6 +376,25 @@ let indicatorDescription =
             icon:'icon-indice_IPAM',
         },
 
+        'IPAM': {
+            title : 'Indice IPAM fitoplancton',
+            description: `L’indice IPAM rappresenta il metodo italiano di valutazione del fitoplancton. 
+            La valutazione viene effettuata sulla base dei valori di un anno di 
+            campionamento. Si basa sulla media dei valori di due indici, l’Indice medio 
+            di biomassa e l’Indice di composizione (PTI - Phytoplancton Trophic Index).
+            Il calcolo di questi due indici si basa a sua volta su più componenti: 
+            concentrazione media di clorofilla a, biovolume medio, PTIot o PTIspecies 
+            in base alla tipologia, percentuale di cianobatteri per le acque eutrofe.
+            L’IPAM può quindi essere considerato un indice prevalentemente trofico.
+            Concorre insieme agli indici LFI, MTIspecies/MacroIMMI, LTLeco, SQA inquinanti
+            specifici, alla definizione dello Stato Ecologico del Corpo Idrico Corpo Idrico
+            superficiale (CI) lacustre.
+            `,
+            breveDescrizione:`Valore dell'indice IPAM`,
+            // icon:'fa fa-italic text-primary',
+            icon:'icon-indice_IPAM',
+        },
+
         'water-Cyano': {
             title : 'Cianobatteri',
             description: `I cianobatteri sono un gruppo di microrganismi fotosintetici che, in presenza 
