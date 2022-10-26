@@ -203,7 +203,7 @@ let indicatorDescription =
                 lugano:null
             },
         },
-        'NLoad': {
+        'Nload': {
             title : 'Carico di azoto',
             description: `Il carico di N è la quantità totale di questo elemento che si stima essere 
             apportata al lago nell'arco di un anno. Si calcola come somma degli apporti 
@@ -476,7 +476,14 @@ let indicatorDescription =
             // icon:'fa fa-bolt text-info',
             icon:'icon-global_radiation',
         },
-
+        'solar-radiation': {
+            title : 'Radiazione globali',
+            description: `Radiazione globali
+            `,
+            breveDescrizione:``,
+            // icon:'fa fa-bolt text-info',
+            icon:'icon-global_radiation',
+        },
         'water-TN': {
             title : 'Media annua di N totale',
             description: `Valore medio annuo delle concentrazioni (medie sulla colonna d'acqua ponderate sui volumi) di N totale.
@@ -485,6 +492,16 @@ let indicatorDescription =
             breveDescrizione:``,
             // icon:'fa fa-bolt text-info',
             icon:'icon-water_biovol',
+            tag:'CIPAIS',
+            limite : {
+                maggiore:null,
+                lugano:null
+            },
+            obiettivo : {
+                maggiore:null,
+                lugano:null
+            },
+            
         },
 
         'water-TSS': {
@@ -498,7 +515,8 @@ let indicatorDescription =
 
     };
 
-//per accedere alle mie descrizioni
+indicatorDescription['NLoad'] = indicatorDescription['Nload'];
+    //per accedere alle mie descrizioni
 //var indicatorID1 =indicatorDescription["indicatorID1"]; 
 //var indicatorID2 =indicatorDescription["indicatorID2"];
 

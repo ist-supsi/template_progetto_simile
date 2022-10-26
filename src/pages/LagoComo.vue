@@ -243,9 +243,9 @@
                                             <div class="container py-2" id="app">
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <a role="button" class="btn btn-primary" @click="toggle()">Vedi dettaglio</a>
-                                                        <div :class="modalClasses" id="reject" role="dialog">
-                                                            <div class="modal-dialog">
+                                                        <a role="button" class="btn btn-primary" @click="toggle(cc[0])">Vedi dettaglio</a>
+                                                        <div :class="modalClasses[cc[0]]" id="reject" role="dialog">
+                                                            <div class="modal-dialog modal-lg">
                                                                 <div class="modal-content">
                                                                     <!-- <div class="modal-header">
                                                                          <h4 class="modal-title"></h4>
@@ -255,7 +255,7 @@
                                                                         <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[0]]"></highcharts>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-primary" @click="toggle()">Close</button>
+                                                                        <button type="button" class="btn btn-primary" @click="toggle(cc[0])">Close</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -275,15 +275,15 @@
                                         <div class="container py-2" id="app">
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <a role="button" class="btn btn-primary" @click="toggle()">Vedi dettaglio</a>
-                                                        <div :class="modalClasses" id="reject" role="dialog">
+                                                        <a role="button" class="btn btn-primary" @click="toggle(cc[1])">Vedi dettaglio</a>
+                                                        <div :class="modalClasses[cc[1]]" id="reject" role="dialog">
                                                             <div class="modal-dialog modal-lg">
                                                                 <div class="modal-content">
                                                                     <div class="modal-body">
                                                                         <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[1]]"></highcharts>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-primary" @click="toggle()">Close</button>
+                                                                        <button type="button" class="btn btn-primary" @click="toggle(cc[1])">Close</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -458,7 +458,8 @@
             return {
                 // markers: [],
                 backdropClasses: [],
-                modalClasses: ['modal','fade'],
+                // modalClasses: ['modal','fade'],
+                modalClasses :[],
                 istsos: null,
                 selectedTab: 'home',
                 selectedArpaProcedures: [],
@@ -780,20 +781,20 @@
         },
 
     methods: {
-        toggle() {
-
-            if( this.modalClasses.includes('show')){
-                this.modalClasses.pop()
-                this.modalClasses.pop()
+        toggle(index) {
+            console.log(index);
+            if( this.modalClasses[index].includes('show')){
+                this.modalClasses[index].pop()
+                this.modalClasses[index].pop()
                 this.backdropClasses=[]
             }
             else {
-                this.modalClasses.push('d-block')
-                this.modalClasses.push('show')
+                this.modalClasses[index].push('d-block')
+                this.modalClasses[index].push('show')
                 this.backdropClasses=['modal-backdrop', 'fade', 'show']
             }
 
-            },
+        },
         selectedTabObs(){
             if ( this.tableData.data && this.tableData.data.length>0 ) {
                         this.selectedTab='home'
@@ -945,7 +946,12 @@
                 };
             };
 
-            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
+            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite;
+                self.modalClasses=[];
+                for (let i = 0; i < self.dataSatellite.length; i++) {
+                self.modalClasses.push(['modal','fade']);
+                }
+            });
 
         },
 
