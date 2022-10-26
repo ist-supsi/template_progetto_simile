@@ -1077,7 +1077,7 @@
                     else{
                         console.log(cards[index].name) 
                     }
-                    if(indicatorDescription.indicatorDescription[cards[index].name].tag =='CIPAIS'){
+                    if(indicatorDescription.indicatorDescription[cards[index].name].annuale){
                         cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
                         }

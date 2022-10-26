@@ -21,6 +21,7 @@ let indicatorDescription =
             breveDescrizione:`Temperatura dell'acqua alla profondità del sensore/i`,
             // icon:'fa fa-thermometer-three-quarters text-warning',
             icon:'icon-water_temp',
+            annuale:false,
             
         },
 
@@ -37,7 +38,7 @@ let indicatorDescription =
             breveDescrizione:`Trasparenza delle acque misurata mediante Disco di Secchi`,
             // icon:'fa fa-tint text-primary',
             icon:'icon-water_SDT',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:5,
                 lugano:5
@@ -59,7 +60,7 @@ let indicatorDescription =
             breveDescrizione:`Massima profondità di mescolamento alla circolazione tardo-invernale`,
             // icon:'fa fa-arrows-v text-primary',
             icon:'icon-water-depht',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:null,
                 lugano:null
@@ -83,6 +84,7 @@ let indicatorDescription =
             breveDescrizione:`pH delle acque alla profondità del sensore`,
             // icon:'fa fa-certificate text-primary',
             icon:'icon-ph',
+            annuale:false,
         },
 
         'water-cond25': {
@@ -96,6 +98,7 @@ let indicatorDescription =
             breveDescrizione:`Conducibilità delle acque alla profondità del sensore`,
             // icon:'fa fa-bolt text-primary',
             icon:'icon-water_conduc',
+            annuale:false
         },
 
         'water-O2D': {
@@ -112,6 +115,7 @@ let indicatorDescription =
             breveDescrizione:`Ossigeno disciolto alla profondità del sensore/i, espresso come concentrazione`,
             // icon:'fa fa-eercast text-primary',
             icon:'icon-ossigeno_disc_conc',
+            annuale:false,
         },
 
 
@@ -126,6 +130,7 @@ let indicatorDescription =
             breveDescrizione:`Ossigeno disciolto alla profondità del sensore/i, espresso come % rispetto alla saturazione`,
             // icon:'fa fa-flask text-primary',
             icon:'icon-water_O2S',
+            annuale:false,
 
         },
 
@@ -137,6 +142,7 @@ let indicatorDescription =
             breveDescrizione:`Concentrazione dei solidi sospesi totali rilevata dalle immagini satellitari`,
             // icon:'fa fa-bandcamp text-primary',
             icon:'icon-solidi_sospesi',
+            annuale:false,
         },
 
         'water-Pload': {
@@ -150,7 +156,7 @@ let indicatorDescription =
             principali`,
             // icon:'fa fa-line-chart text-primary',
             icon:'icon-water_pload',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:200,
                 lugano:18
@@ -171,7 +177,7 @@ let indicatorDescription =
             principali`,
             // icon:'fa fa-line-chart text-primary',
             icon:'icon-water_pload',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:200,
                 lugano:18
@@ -193,7 +199,7 @@ let indicatorDescription =
             dei tributari principali`,
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:null,
                 lugano:null
@@ -214,7 +220,7 @@ let indicatorDescription =
             dei tributari principali`,
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:null,
                 lugano:null
@@ -234,7 +240,7 @@ let indicatorDescription =
             breveDescrizione:`Concentrazione media annua di fosforo totale nel lago`,
             // icon:'fa fa-file-powerpoint-o text-primary',
             icon:'icon-water_PTOT',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:null,
                 lugano:30
@@ -254,7 +260,7 @@ let indicatorDescription =
             breveDescrizione:`Concentrazione media annua di azoto totale nel lago`,
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:null,
                 lugano:null
@@ -274,6 +280,18 @@ let indicatorDescription =
             breveDescrizione:`Valore dell'indice sintetico LTLeco `,
             // icon:'fa fa-superpowers text-primary',
             icon:'icon-indice_LTleco',
+            annuale:true,
+        },
+        'LTLeco': {
+            title : 'Indice LTLeco',
+            description: `Indice che descrive lo stato trofico di un lago; basato sulla somma di punteggi
+            derivanti dal valore di P totale alla circolazione, trasperenza media annua, 
+            e valori di ossigeno alla saturazione in ipolimnio a fine stratificazione.
+            `,
+            breveDescrizione:`Valore dell'indice sintetico LTLeco `,
+            // icon:'fa fa-superpowers text-primary',
+            icon:'icon-indice_LTleco',
+            annuale:true,
         },
 
         'water-Chl-a': {
@@ -288,7 +306,8 @@ let indicatorDescription =
             `,
             breveDescrizione:`Concentrazione di clorofilla-a alla profondità del sensore`,
             // icon:'fa fa-flask text-primary',
-            icon:'icon-water_CHl_a'
+            icon:'icon-water_CHl_a',
+            annuale:false,
         },
 
         'water-PC': {
@@ -302,6 +321,7 @@ let indicatorDescription =
             breveDescrizione:`Concentrazione di ficocianina, pigmento indicatore della presenza di cianobatteri`,
             // icon:'fa fa-flask text-primary',
             icon:'icon-water_PC',
+            annuale:false,
         },
         'water-PE': {
             title : 'Ficoeritrina',
@@ -314,6 +334,7 @@ let indicatorDescription =
             breveDescrizione:`Concentrazione di ficoeritrina, pigmento indicatore della presenza di cianobatteri`,
             // icon:'fa fa-flask text-primary',
             icon:'icon-water_PC',
+            annuale:false,
         },
 
         'water-Biovol': {
@@ -326,7 +347,7 @@ let indicatorDescription =
             breveDescrizione:`Valore medio annuo del biovolume fitoplanctonico`,
             // icon:'fa fa-circle text-primary',
             icon:'icon-water_biovol',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:null,
                 lugano:null
@@ -346,7 +367,7 @@ let indicatorDescription =
             breveDescrizione:`Valore medio annuo del biovolume fitoplanctonico`,
             // icon:'fa fa-circle text-primary',
             icon:'icon-water_biovol',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:null,
                 lugano:null
@@ -374,6 +395,7 @@ let indicatorDescription =
             breveDescrizione:`Valore dell'indice IPAM`,
             // icon:'fa fa-italic text-primary',
             icon:'icon-indice_IPAM',
+            annuale:true,
         },
 
         'IPAM': {
@@ -393,6 +415,7 @@ let indicatorDescription =
             breveDescrizione:`Valore dell'indice IPAM`,
             // icon:'fa fa-italic text-primary',
             icon:'icon-indice_IPAM',
+            annuale:true,
         },
 
         'water-Cyano': {
@@ -410,6 +433,7 @@ let indicatorDescription =
             breveDescrizione:`% di cianobatteri sullabiomassa fitoplanctonica totale`,
             // icon:'fa  fa-flask text-primary',
             icon:'icon-cianobatteri',
+            annuale:false,
         },
 
         'air-temperature': {
@@ -423,6 +447,7 @@ let indicatorDescription =
             // icon:'fa fa-sun-o text-warning',
             // icon:'fa fa-question-circle-o text-info',
             icon:'icon-air_temperature',
+            annuale:false,
         },
 
         'wind-speed-max': {
@@ -434,6 +459,7 @@ let indicatorDescription =
             breveDescrizione:`Velocità del vento rilevata dalla stazione meteo sulla boa/piattaforma`,
             // icon:'fa  fa-fighter-jet text-info',
             icon:'icon-wind_speed',
+            annuale:false,
         },
 
 
@@ -448,6 +474,7 @@ let indicatorDescription =
             breveDescrizione:`Direzione del vento rilevata dalla stazione meteo sulla boa/piattaforma`,
             // icon:'fa fa-flag text-info',
             icon:'icon-wind_direction',
+            annuale:false,
         },
 
         'air-pressure': {
@@ -457,6 +484,7 @@ let indicatorDescription =
             breveDescrizione:``,
             // icon:'fa fa-arrows-h text-info',
             icon:' icon-air_pressure',
+            annuale:false,
         },
 
         'air-relative-humidity': {
@@ -466,6 +494,7 @@ let indicatorDescription =
             breveDescrizione:``,
             // icon: 'fa fa-tint text-info',
             icon:' icon-air_humidity',
+            annuale:false,
         },
 
         'global-radiation': {
@@ -475,6 +504,7 @@ let indicatorDescription =
             breveDescrizione:``,
             // icon:'fa fa-bolt text-info',
             icon:'icon-global_radiation',
+            annuale:false,
         },
         'solar-radiation': {
             title : 'Radiazione globali',
@@ -483,6 +513,7 @@ let indicatorDescription =
             breveDescrizione:``,
             // icon:'fa fa-bolt text-info',
             icon:'icon-global_radiation',
+            annuale:false,
         },
         'water-TN': {
             title : 'Media annua di N totale',
@@ -492,7 +523,7 @@ let indicatorDescription =
             breveDescrizione:``,
             // icon:'fa fa-bolt text-info',
             icon:'icon-water_biovol',
-            tag:'CIPAIS',
+            annuale:true,
             limite : {
                 maggiore:null,
                 lugano:null
@@ -511,6 +542,7 @@ let indicatorDescription =
             breveDescrizione:`Concentrazione media di Clorofilla-a e di Solidi Totali Sospesi (TSS)`,
             // icon:'fa fa-bolt text-info',
             icon:'icon-water_CHl_a',
+            annuale:false,
         },
 
     };

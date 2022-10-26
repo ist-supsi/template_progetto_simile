@@ -614,7 +614,7 @@
                   scrollWheelZoom: false
                 },
                 showMap: true,
-                selectedMarker: 4,
+                selectedMarker: 7,
                 cards: [{}, {}, {}, {}, {}, {}],
                 selected: 'Serie storiche'
             }
@@ -647,7 +647,16 @@
                     this.tableSetData();
                     this.tableSetDataArpa();
                     this.tableSetDataSatellite();
-                    this.selectedTabObs();
+                    
+ 
+                    if ( this.tableData.data && this.tableData.data.length>0 ) {
+                        this.selectedTab='home'
+                    } else if ( this.selectedSatelliteProcedures.length>0 ) {
+                        this.selectedTab='satellitari'
+                    } else {
+                        this.selectedTab='cipais'
+                    };
+
                 },
             },
             cards: {
@@ -849,36 +858,6 @@
                         result.options.yAxis.plotLines = []
                         result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
 
-                        if(indicatorDescription.indicatorDescription[proc.name].limite!=null){
-                            result.options.yAxis.plotLines.push({
-                            color: 'yellow',
-                            dashStyle: 'Solid',
-                            width: 2,
-                            value: indicatorDescription.indicatorDescription[proc.name].limite,
-                            label: {
-                                text: 'Limite',
-                                align: 'center',
-                                style: {color: 'darkgrey'}
-
-                            },
-
-                        })
-                        }
-                        if(indicatorDescription.indicatorDescription[proc.name].obiettivo!=null){
-                            result.options.yAxis.plotLines.push({
-                            color: 'green',
-                            dashStyle: 'ShortDash',
-                            width: 2,
-                            value: indicatorDescription.indicatorDescription[proc.name].obiettivo,
-                            label: {
-                                text: 'Obiettivo',
-                                align: 'center',
-                                style: {color: 'darkgrey'}
-
-                            },
-
-                        })
-                        }
 
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
@@ -984,8 +963,8 @@
                 cards[index].uom = result.uom;
 
                 if ( result.x){
-
-                    if(indicatorDescription.indicatorDescription[cards[index].name].tag =='ARPA'){
+                        console.log(cards[index].name)
+                    if(indicatorDescription.indicatorDescription[cards[index].name].annuale){
                         cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
                         }
