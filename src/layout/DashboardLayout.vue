@@ -41,11 +41,11 @@
         <p>Lago di Como</p>
       </sidebar-link>
 
-      <sidebar-link target="_blank"  to="/admin/home">
+      <sidebar-link target="_blank"  to="">
         <i class="nc-icon nc-planet"></i>
 
           <p title="Altre risorse del progetto Simile">
-            Altre risorse
+            <a href="" class="text-white" >Altre risorse</a>
           </p>
 
           <a alt="foo" 
