@@ -291,7 +291,9 @@ function areaLayerOptions (self) {
 function guessLocLabel (foi_name){
     const locLabel= {
         FIGINO:'Figino',
+        figino:'Figino',
         GANDRIA:'Gandria',
+        gandria:'Gandria',
         MELIDE:'Melide',
         lugano_basin_north:'Bacino Nord',
         lugano_basin_south:'Bacino Sud',
