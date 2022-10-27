@@ -18,7 +18,7 @@
   <a @click="showComponent()"> 
         Disclaimer
   </a>
-  
+  <div class="container">
 <div class="row" v-if="isOpen">
       <div class="col-md-4 col-sm-12 button-fixed">
         <div class="p-3 pb-4 bg-custom text-white">
@@ -54,6 +54,7 @@
         </div>
       </div>
     </div>
+  </div>
 </div> 
 </template>
 
@@ -110,4 +111,10 @@ export default{
       a{
         cursor: pointer;
       }
+      .container {
+      display: inline-block;
+      position: absolute;
+      z-index: 1000;
+  
+}
     </style>

@@ -481,7 +481,7 @@
                 series_o2c_data: {},
                 tableAllData: {},
                 allProcedures: {},
-                dataArpa:{},
+                dataArpa:[],
                 dataSatellite:{},
                 tableAllData2: {},
                 showModal: false,

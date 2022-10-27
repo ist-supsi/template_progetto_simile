@@ -2,9 +2,9 @@
   <footer class="footer">
     
     <div class="container-fluid">
-     
+     <div class="row justify-content-end">
       <nav>
-        <ul class="footer-menu">
+        <ul>
           <li>
             <!-- <router-link :to="">Dashboard</router-link> -->
             <disclaimerMessage/>
@@ -17,7 +17,7 @@
         <a href="" target="_blank">Disclaimer</a>.
         Designed by <a href="https://www.creative-tim.com/?ref=pdf-vuejs" target="_blank">Creative Tim</a>.
       </div> -->
-     
+    </div>
     </div>
   </footer>
 </template>
