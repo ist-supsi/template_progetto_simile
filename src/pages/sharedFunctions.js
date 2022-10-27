@@ -309,6 +309,11 @@ function guessLocLabel (foi_name){
         Pallanza_D:'Pallanza',
         Pallanza_S:'Pallanza',
         maggiore:'Bacino Completo',
+        ABBADIA:'Abbadia',
+        ARGEGNO:'Argegno',
+        COMO:'Como',
+
+
 
     }
     if(foi_name.split('_')[0] in locLabel){
@@ -340,6 +345,9 @@ function guessLocTitle (foi_name){
         Pallanza_D:'Dati relativi alla località di Pallanza',
         Pallanza_S:'Dati relativi alla località di Pallanza',
         maggiore:'Dati satellitari relativi al Bacino Completo',
+        ABBADIA:'Dati relativi alla località di Abbadia',
+        ARGEGNO:'Dati relativi alla località di Argegno',
+        COMO:'Dati relativi alla località di Como',
 
     }
     if(foi_name.split('_')[0] in locTitle){

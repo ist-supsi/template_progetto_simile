@@ -13,6 +13,12 @@
             {{ buttonTextDeny }}
     </div>
 </div> -->
+
+<div>
+  <a @click="showComponent()"> 
+        Disclaimer
+  </a>
+  <div class="container">
 <div class="row" v-if="isOpen">
       <div class="col-md-4 col-sm-12 button-fixed">
         <div class="p-3 pb-4 bg-custom text-white">
@@ -48,7 +54,8 @@
         </div>
       </div>
     </div>
-
+  </div>
+</div> 
 </template>
 
 <script>
@@ -76,7 +83,11 @@ export default{
         deny(){
             this.isOpen = false;
             localStorage.setItem('Consent:accepted', false)
-        }
+        },
+        showComponent(){
+        this.isOpen=true;
+        console.log(this.isOpen)
+      }
     }
 }
 </script>
@@ -97,4 +108,13 @@ export default{
       p{
       font-size: 14px;
       }
+      a{
+        cursor: pointer;
+      }
+      .container {
+      display: inline-block;
+      position: absolute;
+      z-index: 1000;
+  
+}
     </style>

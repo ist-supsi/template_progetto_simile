@@ -461,7 +461,17 @@ let indicatorDescription =
             icon:'icon-wind_speed',
             annuale:false,
         },
-
+        'wind-speed': {
+            title : 'Velocità del vento',
+            description: `Velocità e direzione del vento possono essere di supporto all'interpretazione 
+            degli altri parametri limnologici rilevati: in partcolare ilvento svolge 
+            un ruolo importante nelle dinamiche di stratificazione e mescolamento dei laghi.
+            `,
+            breveDescrizione:`Velocità del vento rilevata dalla stazione meteo sulla boa/piattaforma`,
+            // icon:'fa  fa-fighter-jet text-info',
+            icon:'icon-wind_speed',
+            annuale:false,
+        },
 
         //non presenti nel file excell fornito ma presenti su piattaforma:
 

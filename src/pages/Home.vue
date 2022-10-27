@@ -150,7 +150,7 @@
 
 
   </div>
-  <disclaimer-message />
+  <!-- <disclaimer-message /> -->
   </div>
 
 </template>

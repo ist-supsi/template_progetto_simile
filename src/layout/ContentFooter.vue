@@ -1,24 +1,44 @@
 <template>
   <footer class="footer">
+    
     <div class="container-fluid">
+     <div class="row justify-content-end">
       <nav>
-        <ul class="footer-menu">
+        <ul>
           <li>
-            <router-link :to="{path:'/admin'}">Dashboard</router-link>
+            <!-- <router-link :to="">Dashboard</router-link> -->
+            <disclaimerMessage/>
           </li>
         </ul>
       </nav>
-      <div class="copyright text-center">
+      <!-- <div class="copyright text-center">
         &copy; Coded with
         <i class="fa fa-heart heart"></i> by
-        <a href="https://binarcode.com" target="_blank">BinarCode</a>.
+        <a href="" target="_blank">Disclaimer</a>.
         Designed by <a href="https://www.creative-tim.com/?ref=pdf-vuejs" target="_blank">Creative Tim</a>.
-      </div>
+      </div> -->
+    </div>
     </div>
   </footer>
 </template>
+
 <script>
-  export default {}
+import disclaimerMessage from '../components/disclaimerMessage.vue';
+import Modal from '../components/ModalButton.vue';
+  export default {
+    components:{
+      disclaimerMessage,
+      Modal,
+     },
+     data(){
+      return {
+        
+      }
+     },
+     methods: {
+      
+    } 
+  }
 
 </script>
 <style>
