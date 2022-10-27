@@ -345,29 +345,33 @@
 
             });
 
-            this.groupedProcedures = Object.values(this.allProcedures).reduce((acc, it) => {
+            [this.groupedProcedures, this.procedureInfos] = sharedFunctions.groupProcedures(this.allProcedures);
+            console.log([this.groupedProcedures, this.procedureInfos]);
 
-                let arr = it.name.split('_');
-                let key;
-                if ( arr.length<=2 ) {
-                    key = it.name;
-                } else {
-                    key = arr.slice(0, -2).join('_');
-                };
-                self.procedureInfos[it.name] = {
-                    group: key,
-                    observedproperties: it.observedproperties[0].definition
-                };
-                if ( acc ) {
-                    if ( key in acc ) {
-                        acc[key].push(it.name);
-                    } else {
-                        acc[key] = [it.name];
-                    };
-                };
-                return acc;
-
-            }, {});
+            // this.groupedProcedures = Object.values(this.allProcedures).reduce((acc, it) => {
+            //
+            //     console.log(it.name);
+            //     let arr = it.name.split('_');
+            //     let key;
+            //     if ( arr.length<=2 ) {
+            //         key = it.name;
+            //     } else {
+            //         key = arr.slice(0, -2).join('_');
+            //     };
+            //     self.procedureInfos[it.name] = {
+            //         group: key,
+            //         observedproperties: it.observedproperties[0].definition
+            //     };
+            //     if ( acc ) {
+            //         if ( key in acc ) {
+            //             acc[key].push(it.name);
+            //         } else {
+            //             acc[key] = [it.name];
+            //         };
+            //     };
+            //     return acc;
+            //
+            // }, {});
             // this.setSeries();
         },
         methods: {
