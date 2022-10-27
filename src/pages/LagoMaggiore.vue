@@ -159,6 +159,15 @@
 
                         <div v-if="!(tableData.meta && tableData.meta.total>0)">
                             <h4>Non sono disponibili misure da sensore per la stazione selezionata</h4>
+                            <h5>Scegli un'altra località o un'area da analizzare:</h5>
+                            <select class="custom-select" id="inputGroupSelect03"
+                              aria-label="Example select with button addon" v-model="selectedMarker"
+                              title="Scegli una località o un'area da analizzare"
+                              >
+                                <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                  {{ guessLocLabel(feature.properties.foi_name) }}
+                              </option>
+                            </select>
                         </div>
                         <div v-else>
                             <h4>Cosa sono i dati da sensori</h4>
@@ -194,6 +203,15 @@
                         id="cipais" role="tabpanel" aria-labelledby="cipais-tab">
                         <div v-if="dataCipais.length==0">
                                 <h4>Non sono presenti indicatori CIPAIS per la stazione selezionata</h4>
+                                <h5>Scegli un'altra località o un'area da analizzare:</h5>
+                                <select class="custom-select" id="inputGroupSelect03"
+                                    aria-label="Example select with button addon" v-model="selectedMarker"
+                                    title="Scegli una località o un'area da analizzare"
+                                    >
+                                    <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                        {{ guessLocLabel(feature.properties.foi_name) }}
+                                    </option>
+                                </select>
                             </div>
                         <div v-else class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
@@ -300,6 +318,15 @@
                         </div>
                         <div v-else>
                             <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
+                            <h5>Scegli un'altra località o un'area da analizzare:</h5>
+                            <select class="custom-select" id="inputGroupSelect03"
+                                aria-label="Example select with button addon" v-model="selectedMarker"
+                                title="Scegli una località o un'area da analizzare"
+                                >
+                                <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                    {{ guessLocLabel(feature.properties.foi_name) }}
+                                </option>
+                            </select>
                         </div>
 
                     </div>
