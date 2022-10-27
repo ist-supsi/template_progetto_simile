@@ -224,8 +224,10 @@
             variableStd: 0,
             bulletOptions: {},
             setDataTimeout: null,
-            category_colors: ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
-                '#0d233a', '#77a1e5', '#8bbc21']
+            category_colors: [
+                '#2f7ed8',
+                '#8bbc21', '#f28f43', '#492970',
+                '#0d233a', '#77a1e5', '#a6c96a']
         }},
         watch: {
           series_data: {
@@ -346,33 +348,7 @@
             });
 
             [this.groupedProcedures, this.procedureInfos] = sharedFunctions.groupProcedures(this.allProcedures);
-            console.log([this.groupedProcedures, this.procedureInfos]);
 
-            // this.groupedProcedures = Object.values(this.allProcedures).reduce((acc, it) => {
-            //
-            //     console.log(it.name);
-            //     let arr = it.name.split('_');
-            //     let key;
-            //     if ( arr.length<=2 ) {
-            //         key = it.name;
-            //     } else {
-            //         key = arr.slice(0, -2).join('_');
-            //     };
-            //     self.procedureInfos[it.name] = {
-            //         group: key,
-            //         observedproperties: it.observedproperties[0].definition
-            //     };
-            //     if ( acc ) {
-            //         if ( key in acc ) {
-            //             acc[key].push(it.name);
-            //         } else {
-            //             acc[key] = [it.name];
-            //         };
-            //     };
-            //     return acc;
-            //
-            // }, {});
-            // this.setSeries();
         },
         methods: {
             // setBegin (value) {
@@ -394,11 +370,12 @@
                 //   	   turboThreshold: Infinity
                 //      }
                 // }};
-                let counter=0;
 
-                for (const procedure of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]) {
+                for (const [index, procedure] of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].entries()) {
                     //
                     this.data_loading = true;
+                    console.log([procedure, self.analisysVariable]);
+
                     this.istsos.fetchSeries(
                         procedure,
                         self.procedureInfos[procedure].observedproperties,
@@ -409,15 +386,11 @@
 
                         // TODO:
                         // 1. verificare il raggruppamento delle procedure nella pagina del Como
-                        // 2. rimuovere la proprietà legend enabled nel caso di una sola provedura graficata
 
-                        // console.log([result.options.series, counter]);
                         if ( procedure!=self.analisysVariable ) {
-                            result.options.series[counter].visible = false;
-                            result.options.legend.enabled = true;
+                            result.options.series[0].visible = false; // should be false
                         } else {
-                            result.options.series[counter].visible = true;
-                            result.options.legend.enabled = false;
+                            result.options.series[0].visible = true;
                             const series = result.options.series[0].data.map((xy)=>xy[1]);
 
                             if ( series.length > 0 ) {
@@ -437,8 +410,21 @@
                                 }];
                             };
                         };
+
+                        if ( !self.series_data.series ) {
+                            result.options.legend.enabled = false;
+                            // result.options.series[0].name = self.allProcedures[result.options.series[0].name].description;
+                            self.series_data = result.options;
+                        } else {
+                            self.series_data.legend.enabled = true;
+                            result.options.series[0].color = this.category_colors[index];
+                            // result.options.series[0].name = self.allProcedures[result.options.series[0].name].description;
+
+                            self.series_data.series.push(result.options.series[0]);
+                            // self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
+                        };
+
                         // result.options.series[counter].color = this.category_colors[counter];
-                        counter = counter+1;
 
                         if (procedure=='VENTO_VEL_MAX') {
                             self.wind_data_loading = true;
@@ -549,15 +535,9 @@
 
                             }};
                         };
-                        if ( !self.series_data.series ) {
-                            self.series_data = result.options;
-                        } else {
-                            self.series_data.series.push(result.options.series[0]);
-                            self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
-                        };
 
                     });
-                    break;
+                    // break;
                 };
 
                 self.locked = false; //

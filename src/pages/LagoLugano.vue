@@ -1084,7 +1084,7 @@
 
                 };
             };
-            
+
             Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite;
                 self.modalClasses=[];
                 for (let i = 0; i < self.dataSatellite.length; i++) {
@@ -1291,11 +1291,8 @@
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
 
             const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
-                                // self.features.features[self.selectedMarker].properties.names
-
 
             const filteredSortedData = this.tableAllData.data.filter(el=>{
-
                 if(el.procedures[0] && !el.procedures[0].includes("CIPAIS") && !el.procedures[0].includes("SATELLITE") && selectedProc.includes(el.procedures[0]) ){
                     return true;
                 }
@@ -1325,9 +1322,6 @@
                     return comparison*-1
                 }
             });
-
-            // TODO: Concordare la paginazione e la statistica dei risultati con
-            // il numero di dati filtrati.
 
             const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{

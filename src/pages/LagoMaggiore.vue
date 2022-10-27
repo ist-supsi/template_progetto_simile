@@ -685,7 +685,7 @@
                     this.tableSetData();
                     this.tableSetDataCipais();
                     this.tableSetDataSatellite();
-                    
+
                     if ( this.tableData.data && this.tableData.data.length>0 ) {
                         this.selectedTab='home'
                     } else if ( this.selectedSatelliteProcedures.length>0 ) {
@@ -716,6 +716,7 @@
                 "air-relative-humidity",
                 "wind-direction",
                 "wind-speed-max",
+                "wind-speed",
                 "water-temperature",
                 "water-O2S",
                 "water-SDT",
@@ -857,12 +858,12 @@
         },
         selectedTabObs(){
             if ( this.tableData.data && this.tableData.data.length>0 ) {
-                        this.selectedTab='home'
-                    } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length>0 ) {
-                        this.selectedTab='satellitari'
-                    } else if(this.selectedArpaProcedures && this.selectedArpaProcedure.length>0) {
-                        this.selectedTab='arpa'
-                    };
+                this.selectedTab='home'
+            } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length>0 ) {
+                this.selectedTab='satellitari'
+            } else if(this.selectedArpaProcedures && this.selectedArpaProcedure.length>0) {
+                this.selectedTab='arpa'
+            };
         },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
@@ -1102,7 +1103,7 @@
                         console.log(cards[index].name)
                     }
                     else{
-                        console.log(cards[index].name) 
+                        console.log(cards[index].name)
                     }
                     if(indicatorDescription.indicatorDescription[cards[index].name].annuale){
                         cards[index].time = {
@@ -1269,14 +1270,12 @@
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
 
             const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
-                                // self.features.features[self.selectedMarker].properties.names
+            // self.features.features[self.selectedMarker].properties.names
+
             const filteredSortedData = this.tableAllData.data.filter(el=>{
-
-
                 if(el.procedures[0] && !el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0]) ){
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 };
             }).filter(el=>{
@@ -1303,20 +1302,16 @@
                 }
             });
 
-            // TODO: Concordare la paginazione e la statistica dei risultati con
-            // il numero di dati filtrati.
-
             const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
-                    if(indicatorDescription.indicatorDescription[el.name].title==undefined){
-                        el['title'] = ' '
-                        return el;
-                    }
-                    else{
-                        el['title'] = indicatorDescription.indicatorDescription[el.name].title;
-                        return el;
-                    }
-
+                if (indicatorDescription.indicatorDescription[el.name].title==undefined) {
+                    el['title'] = ' '
+                    return el;
+                }
+                else{
+                    el['title'] = indicatorDescription.indicatorDescription[el.name].title;
+                    return el;
+                }
             });
             const tableData = {
                 // payload: this.tableAllData.payload,

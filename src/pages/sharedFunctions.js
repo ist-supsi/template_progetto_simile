@@ -414,7 +414,7 @@ function markerLayerOptions (self) {
 }
 
 const groupedProceduresList = [
-    ['WaterTemp_S', 'AIR_TEMP']
+    // ['WaterTemp_S', 'AIR_TEMP'] // raggruppamento di test
 ];
 
 // let groupedProcedures = groupedProceduresList.reduce((prev, curr)=>{
