@@ -71,7 +71,7 @@ export default {
     },
     timeout: {
       type: Number,
-      default: 30000,
+      default: 100000,
       validator: value => {
         return value >= 0;
       }
