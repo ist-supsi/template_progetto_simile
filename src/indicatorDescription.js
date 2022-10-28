@@ -72,6 +72,28 @@ let indicatorDescription =
             reversed: true,
         },
 
+        'MixDepth': {
+            title : 'Profondità mescolamento',
+            description: `La massima profondità di mescolamento alla circolazione tardo-invernale 
+            (tra febbraio e marzo) indica lo strato rimescolato, ovvero lo strato delle 
+            acque interessate da omogenizzazione termica e ridistribuzione di ossigeno e 
+            nutrienti.
+            `,
+            breveDescrizione:`Massima profondità di mescolamento alla circolazione tardo-invernale`,
+            // icon:'fa fa-arrows-v text-primary',
+            icon:'icon-water-depht',
+            annuale:true,
+            limite : {
+                maggiore:null,
+                lugano:null
+            },
+            obiettivo : {
+                maggiore:100,
+                lugano:60
+            },
+            reversed: true,
+        },
+
         'water-pH': {
             title : 'pH',
             description: `Il pH è un valore numerico che indica l’acidità di una soluzione. Valori 
