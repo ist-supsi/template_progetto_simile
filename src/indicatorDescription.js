@@ -457,7 +457,23 @@ let indicatorDescription =
             icon:'icon-cianobatteri',
             annuale:false,
         },
-
+        'Ciano%': {
+            title : 'Cianobatteri',
+            description: `I cianobatteri sono un gruppo di microrganismi fotosintetici che, in presenza 
+            di particolari condizioni ambientali favorevoli, possono raggiungere densità
+            molto elevate formando fioriture. Alcune specie di cianobatteri d’acqua dolce 
+            producono come metaboliti secondari delle tossine, dette cianotossine. 
+            La normativa prevede che per concentrazioni >100000 cell/ml di cianobatteri 
+            totali venga sconsigliata o vietata la balneazione per la possibile insorgenza
+            di effetti negativi sulla salute umana. Il contributo percentuale dei 
+            cianobatteri alla biomassa totale fitoplancton è quindi un indicatore dello
+            stato qualitativo delle acque.
+            `,
+            breveDescrizione:`% di cianobatteri sullabiomassa fitoplanctonica totale`,
+            // icon:'fa  fa-flask text-primary',
+            icon:'icon-cianobatteri',
+            annuale:false,
+        },
         'air-temperature': {
             title : 'Temperatura dell\'aria',
             description: `La temperatura dell'aria, così come gli altri parametri rilevati dalle stazioni
@@ -580,6 +596,7 @@ let indicatorDescription =
     };
 
 indicatorDescription['NLoad'] = indicatorDescription['Nload'];
+indicatorDescription['Biovol'] = indicatorDescription['biovol'];
     //per accedere alle mie descrizioni
 //var indicatorID1 =indicatorDescription["indicatorID1"]; 
 //var indicatorID2 =indicatorDescription["indicatorID2"];

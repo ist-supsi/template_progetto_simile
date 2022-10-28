@@ -41,6 +41,7 @@
                                     <p v-else class="card-category">{{cards[ii].title || "--"}}</p>
                                     <h4 class="card-title">{{cards[ii].data || "N.P."}} {{cards[ii].uom || ""}}</h4>
                                     <p class="card-category">{{(cards[ii].message && guessLocLabel(cards[ii].message)) || "--"}}</p>
+                                    
                                 </div>
                                 <div slot="footer">
                                     <i v-if="cards[ii].data===null" class="fa fa-refresh fa-spin"></i>
@@ -957,6 +958,7 @@
         guessLocTitle(foi_name){
             return sharedFunctions.guessLocTitle(foi_name);
         },
+        
         onChange(event) {
             return event.target.value;
         },
@@ -1144,8 +1146,9 @@
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
 
                 cards[index].data = result.value;
+                
                 cards[index].uom = result.uom;
-
+                
                 if (result.x){
 
                     if(indicatorDescription.indicatorDescription[cards[index].name] && indicatorDescription.indicatorDescription[cards[index].name].annuale){

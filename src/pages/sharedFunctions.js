@@ -362,6 +362,8 @@ function guessLocTitle (foi_name){
 };
 
 
+
+
 function markerLayerOptions (self) {
     return {
         pointToLayer: function (feature, latlng) {
