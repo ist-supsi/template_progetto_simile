@@ -693,8 +693,8 @@
                     this.tableSetData();
                     this.tableSetDataArpa();
                     this.tableSetDataSatellite();
-                    
- 
+
+
                     if ( this.tableData.data && this.tableData.data.length>0 ) {
                         this.selectedTab='home'
                     } else if ( this.selectedSatelliteProcedures.length>0 ) {
@@ -776,8 +776,6 @@
             ]).then(results=>{
                 const result = results[1];
 
-                console.log(result);
-                result.data.features.forEach(el=>{console.log(el.properties.foi_name)});
                 const reduced = groupBy(
                     result.data.features,
                     approxPosition,
@@ -837,7 +835,6 @@
 
     methods: {
         toggle(index) {
-            console.log(index);
             if( this.modalClasses[index].includes('show')){
                 this.modalClasses[index].pop()
                 this.modalClasses[index].pop()
@@ -1009,7 +1006,6 @@
                 cards[index].uom = result.uom;
 
                 if ( result.x){
-                        console.log(cards[index].name)
                     if(indicatorDescription.indicatorDescription[cards[index].name].annuale){
                         cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
@@ -1176,9 +1172,8 @@
             const end = (this.tableProps.page||1)*this.tableProps.length-1;
 
             const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
-                                // self.features.features[self.selectedMarker].properties.names
-            const filteredSortedData = this.tableAllData.data.filter(el=>{
 
+            const filteredSortedData = this.tableAllData.data.filter(el=>{
 
                 if(el.procedures[0] && !el.procedures[0].includes("ARPA") && selectedProc.includes(el.procedures[0]) ){
                     return true;
@@ -1209,9 +1204,6 @@
                     return comparison*-1
                 }
             });
-
-            // TODO: Concordare la paginazione e la statistica dei risultati con
-            // il numero di dati filtrati.
 
             const last_page = Math.floor(filteredSortedData.length/this.tableProps.length);
             const slicedData = filteredSortedData.slice(start, end+1).map(el=>{

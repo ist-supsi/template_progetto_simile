@@ -360,6 +360,8 @@ function guessLocTitle (foi_name){
     }
     else return foi_name
 };
+
+
 function markerLayerOptions (self) {
     return {
         pointToLayer: function (feature, latlng) {
@@ -413,4 +415,45 @@ function markerLayerOptions (self) {
     }
 }
 
-export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel, addBaseLayers, guessLocTitle, fromNow};
+const groupedProceduresList = [
+    // ['WaterTemp_S', 'AIR_TEMP'] // raggruppamento di test
+];
+
+// let groupedProcedures = groupedProceduresList.reduce((prev, curr)=>{
+//     for (let [index, proc] of curr.entries()) {
+//         prev[proc] = curr;
+//     };
+//     return prev;
+// }, {});
+
+function groupProcedures (allProcedures) {
+    let procedureInfos = {};
+    const groupedProcedures = Object.values(allProcedures).reduce((acc, it, idx)=>{
+        let foundIt = false;
+        for (const [index, group] of groupedProceduresList.entries()) {
+            if ( group.includes(it.name) ) {
+                foundIt = true;
+                const kk = index.toString();
+                if (!(kk in acc)) {
+                    acc[kk] = group;
+                };
+                procedureInfos[it.name] = {
+                    group: index,
+                    observedproperties: it.observedproperties[0].definition
+                };
+            };
+        };
+        if (!foundIt) {
+            acc[it.name] = [it.name]
+            procedureInfos[it.name] = {
+                group: it.name,
+                observedproperties: it.observedproperties[0].definition
+            };
+        };
+
+        return acc;
+    }, {});
+    return [groupedProcedures, procedureInfos];
+};
+
+export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel, addBaseLayers, guessLocTitle, fromNow, groupProcedures};
