@@ -41,7 +41,7 @@
                                     <p v-else class="card-category">{{cards[ii].title || "--"}}</p>
                                     <h4 class="card-title">{{cards[ii].data || "N.P."}} {{cards[ii].uom || ""}}</h4>
                                     <p class="card-category">{{(cards[ii].message && guessLocLabel(cards[ii].message)) || "--"}}</p>
-                                    
+                                    <p class="card-text"><small class="text-muted">{{cards[ii].type}}</small></p>
                                 </div>
                                 <div slot="footer">
                                     <i v-if="cards[ii].data===null" class="fa fa-refresh fa-spin"></i>
@@ -67,6 +67,7 @@
                                     <p v-else class="card-category">{{cards[ii+1].title || "--"}}</p>
                                     <h4 class="card-title">{{cards[ii+1].data || "N.P."}} {{cards[ii+1].uom || ""}}</h4>
                                     <p class="card-category">{{(cards[ii+1].message && guessLocLabel(cards[ii+1].message)) || "--"}}</p>
+                                    <p class="card-text"><small class="text-muted">{{cards[ii+1].type}}</small></p>
 
                                 </div>
                                 <div slot="footer">
@@ -973,6 +974,17 @@
             // return feature.properties.names[0].message || 'N.P.'
             return labels[feature.properties.markerIndex];
         },
+        getFeatureLabel (feature) {
+            // basins.features.filter(()=>{})
+            const labels = [
+                'Dato Satellitare',
+                'Dato Cipais',
+                'Dato Arpa',
+                'Dato da sensore'
+            ]
+            // return feature.properties.names[0].message || 'N.P.'
+            return labels[feature.properties.procedure.name];
+        },
         loopOnPairs (myarray) {
             return myarray.reduce(function(result, value, index, array) {
                 if (index % 2 === 0)
@@ -1145,6 +1157,18 @@
                 }
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
 
+                cards[index].type = result.procedure;
+                if((cards[index].type).includes('CIPAIS') ){
+                    cards[index].type='Dato Cipais'
+                }
+                else if((cards[index].type).includes('ARPA') ) {
+                cards[index].type='Dato Arpa'
+                }
+                else if((cards[index].type).includes('SATELLITE') ) {
+                cards[index].type='Dato Satellitare'
+                }
+                else{cards[index].type='Dato da Sensore'}
+
                 cards[index].data = result.value;
                 
                 cards[index].uom = result.uom;
@@ -1172,11 +1196,12 @@
                     let info = self.features.features[self.selectedMarker].properties.names[ii];
                     // cards.push(info)
                     cards[ii] = info;
-
                     cards[ii].data = null;
                     calls.push(this.istsos.fetchBy(
                         cards[ii].urn,
-                        cards[ii].procedure
+                        cards[ii].procedure,
+                        
+                        
                     ).then((result)=>{
                         updateCard(ii, result);
                     }));
@@ -1252,6 +1277,7 @@
                     type: 'primary',
                  })
         },
+        
         updateSelectedModal(data) {
             this.selectedRow = data;
         },
