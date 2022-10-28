@@ -1653,5 +1653,9 @@
     color: #42d0ed;
     border-color: #42d0ed;
 }
+/* .modal-backdrop{
+z-index: 1000;
+} */
+
 
 </style>

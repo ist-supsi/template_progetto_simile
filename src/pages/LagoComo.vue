@@ -1,5 +1,6 @@
 <template>
     <div class="content">
+        <div :class="backdropClasses"></div>
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
                     <div >

@@ -72,6 +72,28 @@ let indicatorDescription =
             reversed: true,
         },
 
+        'MixDepth': {
+            title : 'Profondità mescolamento',
+            description: `La massima profondità di mescolamento alla circolazione tardo-invernale 
+            (tra febbraio e marzo) indica lo strato rimescolato, ovvero lo strato delle 
+            acque interessate da omogenizzazione termica e ridistribuzione di ossigeno e 
+            nutrienti.
+            `,
+            breveDescrizione:`Massima profondità di mescolamento alla circolazione tardo-invernale`,
+            // icon:'fa fa-arrows-v text-primary',
+            icon:'icon-water-depht',
+            annuale:true,
+            limite : {
+                maggiore:null,
+                lugano:null
+            },
+            obiettivo : {
+                maggiore:100,
+                lugano:60
+            },
+            reversed: true,
+        },
+
         'water-pH': {
             title : 'pH',
             description: `Il pH è un valore numerico che indica l’acidità di una soluzione. Valori 
@@ -491,7 +513,7 @@ let indicatorDescription =
             title : 'Pressione dell\'aria',
             description: `Pressione dell'aria
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Pressione dell'aria`,
             // icon:'fa fa-arrows-h text-info',
             icon:' icon-air_pressure',
             annuale:false,
@@ -501,7 +523,7 @@ let indicatorDescription =
             title : 'Umidità dell aria',
             description: `Umidità dell'aria
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Umidità dell aria`,
             // icon: 'fa fa-tint text-info',
             icon:' icon-air_humidity',
             annuale:false,
@@ -511,16 +533,16 @@ let indicatorDescription =
             title : 'Radiazione globali',
             description: `Radiazione globali
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Radiazione globali`,
             // icon:'fa fa-bolt text-info',
             icon:'icon-global_radiation',
             annuale:false,
         },
         'solar-radiation': {
-            title : 'Radiazione globali',
-            description: `Radiazione globali
+            title : 'Radiazione solare',
+            description: `Radiazione solare
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Radiazione solare`,
             // icon:'fa fa-bolt text-info',
             icon:'icon-global_radiation',
             annuale:false,
@@ -530,7 +552,7 @@ let indicatorDescription =
             description: `Valore medio annuo delle concentrazioni (medie sulla colonna d'acqua ponderate sui volumi) di N totale.
              La media annua è calcolata a parire dai valori ottenuti nei monitoraggi mensili o con altra frequenza temporale.
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Valore medio annuo delle concentrazioni di N totale`,
             // icon:'fa fa-bolt text-info',
             icon:'icon-water_biovol',
             annuale:true,
