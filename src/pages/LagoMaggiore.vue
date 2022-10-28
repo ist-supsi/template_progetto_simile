@@ -530,7 +530,9 @@
                 tableAllData: {},
                 allProcedures: {},
                 dataCipais:[],
-                dataSatellite:{},
+                dataSatellite:[],
+                dataSatelliteWithSD:[],
+                dataSatelliteWithQQ:[],
                 tableAllData2: {},
                 showModal: false,
                 tableData: {},
@@ -978,6 +980,8 @@
         loadSatelliteData () {
             var self = this;
             let dataSatellite = [];
+            let dataSatelliteWithSD = [];
+            let dataSatelliteWithQQ = [];
             let prms = [];
             for (const proc of self.selectedSatelliteProcedures) {
 
@@ -986,49 +990,49 @@
                 if (info.samplingTime.beginposition && info.samplingTime.endposition) {
                     const begin = new Date(info.samplingTime.beginposition);
                     const end = new Date(info.samplingTime.endposition);
-                    console.log(info)
-                    const prm = self.istsos.fetchSeries(
-                        proc.procedure,
-                        info.observedproperties[0].definition,
-                        begin,
-                        end
-                    ).then(response=>{
-                        const result = istsosToHighcharts.istosToLine(response);
-                        // result.options.name = 'foo';
-                        const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+                    for (const prop of info.observedproperties) {
+                        const prm = self.istsos.fetchSeries(
+                            proc.procedure,
+                            prop.definition,
+                            begin,
+                            end
+                        ).then(response=>{
+                            const result = istsosToHighcharts.istosToLine(response);
+                            // result.options.name = 'foo';
+                            const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
 
-                        result.options.yAxis.plotLines = [{
-                            color: 'darkgrey',
-                            dashStyle: 'ShortDash',
-                            width: 2,
-                            value: variableAverage,
-                            label: {
-                                text: 'media della serie',
-                                align: 'center',
-                                style: {color: 'darkgrey'}
+                            result.options.yAxis.plotLines = [{
+                                color: 'darkgrey',
+                                dashStyle: 'ShortDash',
+                                width: 2,
+                                value: variableAverage,
+                                label: {
+                                    text: 'media della serie',
+                                    align: 'center',
+                                    style: {color: 'darkgrey'}
+                                }
+                            }];
+
+                            if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+                                result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                            }
+                            else{
+                                result.options.title.text = info.description;
 
                             }
-                        }];
-
-                        if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
-                            result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-                        }
-                        else{
-                            result.options.title.text = info.description;
-
-                        }
-                        result.options.subtitle.text = `${info.description} (${result.uom})`;
-                        dataSatellite.push(result.options);
-                    });
-                    prms.push(prm);
-
+                            result.options.subtitle.text = `${info.description} (${result.uom})`;
+                            dataSatellite.push(result.options);
+                        });
+                        prms.push(prm);
+                    };
                 };
+                
             };
 
             Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite;
                 self.modalClasses=[];
                 for (let i = 0; i < self.dataSatellite.length; i++) {
-                self.modalClasses.push(['modal','fade']);
+                    self.modalClasses.push(['modal','fade']);
                 }
             });
 
