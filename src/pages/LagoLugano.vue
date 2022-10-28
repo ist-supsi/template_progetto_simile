@@ -2,6 +2,7 @@
     <div class="content">
         <div :class="backdropClasses"></div>
             <div class="container-fluid">
+                
                 <div class="alert alert-simile" role="alert">
                     <div >
                         <h5>{{ cards[0].message && guessLocTitle(cards[0].message) }}</h5>
