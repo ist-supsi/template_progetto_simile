@@ -583,7 +583,7 @@
                         name: 'end',
                         orderable: false,
                     },
-                     {
+                    {
                         label: ' ',
                         name: 'info',
                         orderable: false,
@@ -645,9 +645,9 @@
                     visible: true,
                     layers: 'Marker',
                     geojson: {
-                      'name': 'markers',
-                      'type': 'FeatureCollection',
-                      'features': []
+                        'name': 'markers',
+                        'type': 'FeatureCollection',
+                        'features': []
                     },
                     pointToLayer: function (feature, latlng) {
                         return L.marker(latlng);
@@ -1290,8 +1290,15 @@
             const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
             // self.features.features[self.selectedMarker].properties.names
 
+            // Courtesy of: https://stackoverflow.com/a/1885569/1039510
+            const hadIntersection = (array1, array2)=>array1.filter(value => array2.includes(value));
             const filteredSortedData = this.tableAllData.data.filter(el=>{
-                if(el.procedures[0] && !el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0]) ){
+                const intesection = hadIntersection(selectedProc, el.procedures);
+                if (
+                    intesection.length>0
+                    && intesection.every((proc)=>!proc.includes("CIPAIS"))
+                    && intesection.every((proc)=>!proc.includes("SATELLITE"))
+                ) {
                     return true;
                 } else {
                     return false;

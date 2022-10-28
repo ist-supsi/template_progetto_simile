@@ -1172,14 +1172,21 @@
 
             const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
 
+            // Courtesy of: https://stackoverflow.com/a/1885569/1039510
+            const hadIntersection = (array1, array2)=>array1.filter(value => array2.includes(value));
             const filteredSortedData = this.tableAllData.data.filter(el=>{
 
-                if(el.procedures[0] && !el.procedures[0].includes("ARPA") && selectedProc.includes(el.procedures[0]) ){
-                    return true;
-                }
-                else {
-                    return false;
-                };
+              const intesection = hadIntersection(selectedProc, el.procedures);
+              if (
+                  intesection.length>0
+                  && intesection.every((proc)=>!proc.includes("CIPAIS"))
+                  && intesection.every((proc)=>!proc.includes("SATELLITE"))
+              ) {
+                  return true;
+              }
+              else {
+                  return false;
+              };
             }).filter(el=>{
                 if (self.tableProps.search.length==0) {
                     return true;
