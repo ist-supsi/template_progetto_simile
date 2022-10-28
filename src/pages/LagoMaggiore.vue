@@ -1291,7 +1291,7 @@
             // self.features.features[self.selectedMarker].properties.names
 
             const filteredSortedData = this.tableAllData.data.filter(el=>{
-                if(el.procedures[0] && !el.procedures[0].includes("CIPAIS") && selectedProc.includes(el.procedures[0]) ){
+                if(el.procedures[0] && !el.procedures[0].includes("CIPAIS") && !el.procedures[0].includes("SATELLITE") && selectedProc.includes(el.procedures[0]) ){
                     return true;
                 } else {
                     return false;

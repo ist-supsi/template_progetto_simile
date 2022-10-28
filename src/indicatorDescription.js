@@ -491,7 +491,7 @@ let indicatorDescription =
             title : 'Pressione dell\'aria',
             description: `Pressione dell'aria
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Pressione dell'aria`,
             // icon:'fa fa-arrows-h text-info',
             icon:' icon-air_pressure',
             annuale:false,
@@ -501,7 +501,7 @@ let indicatorDescription =
             title : 'Umidità dell aria',
             description: `Umidità dell'aria
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Umidità dell aria`,
             // icon: 'fa fa-tint text-info',
             icon:' icon-air_humidity',
             annuale:false,
@@ -511,16 +511,16 @@ let indicatorDescription =
             title : 'Radiazione globali',
             description: `Radiazione globali
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Radiazione globali`,
             // icon:'fa fa-bolt text-info',
             icon:'icon-global_radiation',
             annuale:false,
         },
         'solar-radiation': {
-            title : 'Radiazione globali',
-            description: `Radiazione globali
+            title : 'Radiazione solare',
+            description: `Radiazione solare
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Radiazione solare`,
             // icon:'fa fa-bolt text-info',
             icon:'icon-global_radiation',
             annuale:false,
@@ -530,7 +530,7 @@ let indicatorDescription =
             description: `Valore medio annuo delle concentrazioni (medie sulla colonna d'acqua ponderate sui volumi) di N totale.
              La media annua è calcolata a parire dai valori ottenuti nei monitoraggi mensili o con altra frequenza temporale.
             `,
-            breveDescrizione:``,
+            breveDescrizione:`Valore medio annuo delle concentrazioni di N totale`,
             // icon:'fa fa-bolt text-info',
             icon:'icon-water_biovol',
             annuale:true,
