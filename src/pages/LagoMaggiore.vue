@@ -312,7 +312,7 @@
                                                             <div class="modal-dialog modal-lg">
                                                                 <div class="modal-content">
                                                                     <div class="modal-body">
-                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[1]]"></highcharts>
+                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatelliteWithQQ[cc[1]]"></highcharts>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-primary" @click="toggle(cc[1])">Close</button>
@@ -787,8 +787,6 @@
             ]).then(results=>{
                 const result = results[1];
 
-                console.log(result);
-                result.data.features.forEach(el=>{console.log(el.properties.foi_name)});
                 const reduced = groupBy(
                     result.data.features,
                     approxPosition,
@@ -991,14 +989,40 @@
                     const begin = new Date(info.samplingTime.beginposition);
                     const end = new Date(info.samplingTime.endposition);
                     for (const prop of info.observedproperties) {
-                        const prm = self.istsos.fetchSeries(
-                            proc.procedure,
-                            prop.definition,
-                            begin,
-                            end
-                        ).then(response=>{
-                            const result = istsosToHighcharts.istosToLine(response);
-                            // result.options.name = 'foo';
+                        const prm = Promise.all([
+                            self.istsos.fetchSeries(
+                                proc.procedure,
+                                prop.definition,
+                                begin,
+                                end
+                            ),
+                            self.istsos.fetchSeries(
+                                proc.procedure+'_SD',
+                                prop.definition,
+                                begin,
+                                end
+                            ),
+                            self.istsos.fetchSeries(
+                                proc.procedure+'_1Q',
+                                prop.definition,
+                                begin,
+                                end
+                            ),
+                            self.istsos.fetchSeries(
+                                proc.procedure+'_3Q',
+                                prop.definition,
+                                begin,
+                                end
+                            )
+                        ]).then(response=>{
+
+                            const result = istsosToHighcharts.istosToLine(response[0]);
+                            const result1Q = istsosToHighcharts.istosToLine(response[2]);
+                            const result3Q = istsosToHighcharts.istosToLine(response[3]);
+                            const resultSD = istsosToHighcharts.istosToLine(response[1]);
+
+                            // result.options.series.push(result3Q.options.series[0])
+
                             const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
 
                             result.options.yAxis.plotLines = [{
@@ -1015,21 +1039,37 @@
 
                             if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                                 result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-                            }
-                            else{
+                            } else {
                                 result.options.title.text = info.description;
-
-                            }
+                            };
                             result.options.subtitle.text = `${info.description} (${result.uom})`;
-                            dataSatellite.push(result.options);
+                            dataSatellite.push({...result.options});
+
+                            const opts3Q = result3Q.options.series[0];
+                            opts3Q.color = '#f28f43'
+                            const opts1Q = result1Q.options.series[0];
+                            opts1Q.color = '#f2ff43'
+
+                            // WARNING!
+                            // const optsQQ = {...result.options};
+                            // const optsQQ = Object.assign({}, result.options);
+                            // It seams the only correct way for cloning an object bracking all references
+                            const optsQQ = JSON.parse(JSON.stringify(result.options));
+
+                            // TODO: Trasformare in grafico arearange (https://www.highcharts.com/demo/arearange)
+                            optsQQ.series.push(opts3Q);
+                            optsQQ.series.push(opts1Q);
+                            dataSatelliteWithQQ.push(optsQQ);
                         });
                         prms.push(prm);
                     };
                 };
-                
+
             };
 
-            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite;
+            Promise.all(prms).then(()=>{
+                self.dataSatellite = dataSatellite;
+                self.dataSatelliteWithQQ = dataSatelliteWithQQ;
                 self.modalClasses=[];
                 for (let i = 0; i < self.dataSatellite.length; i++) {
                     self.modalClasses.push(['modal','fade']);
@@ -1121,12 +1161,6 @@
 
 
                 if ( result.x){
-                    if(!cards[index].name in indicatorDescription.indicatorDescription){
-                        console.log(cards[index].name)
-                    }
-                    else{
-                        console.log(cards[index].name)
-                    }
                     if(indicatorDescription.indicatorDescription[cards[index].name].annuale){
                         cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
