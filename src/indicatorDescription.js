@@ -333,7 +333,7 @@ let indicatorDescription =
         },
 
         'water-PC': {
-            title : 'Ficianina',
+            title : 'Ficocianina',
             description: `Ficocianina e ficoeritrina sono sue pigmenti algali presenti nel fitoplancton 
             ed in particolare nei cianobatteri. La loro misura può quindi essere utilizzata 
             come indicatore della presenza e della densità di questo gruppo e il loro 

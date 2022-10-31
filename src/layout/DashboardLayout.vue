@@ -81,7 +81,7 @@
 
           rel="noopener noreferrer"
           href="https://www.webgis.eo.simile.polimi.it/">
-          WEB GIS DATI SAT
+          WEB GIS DATI
           </a>
       </sidebar-link> -->
 

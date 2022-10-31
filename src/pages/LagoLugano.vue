@@ -683,7 +683,7 @@
                     pointToLayer: function (feature, latlng) {
                         return L.marker(latlng);
 
-                    }
+                    },
                 },
                 // attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
                 currentZoom: 10.5,
@@ -1716,9 +1716,8 @@
         },
         setSelected(tab){
             this.selected =tab;
-        }
-
-
+        },
+      
 
     }
 
