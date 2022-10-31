@@ -41,38 +41,57 @@
         <p>Lago di Como</p>
       </sidebar-link>
 
-      <sidebar-link target="_blank"  to="">
+      <!-- <li><a class="nav-link">Test</a>
+          <ul> -->
+      <li class="">
+          <a href="https://simile.como.polimi.it/SimileWebAdministrator2/"
+              class="nav-link" target="_blank">
+              <i class="nc-icon nc-planet"></i>
+              <p title="Applicazione web SIMILE">SIMILE WEB APP</p>
+          </a>
+      </li>
+      <li class="">
+          <a href="https://www.webgis.eo.simile.polimi.it/"
+              class="nav-link" target="_blank">
+              <i class="nc-icon nc-square-pin"></i>
+              <p title="Web gis dati satellitari">WEB GIS</p>
+          </a>
+      </li>
+          <!-- </ul>
+      </li> -->
+
+      <!-- <sidebar-link target="_blank"  to="">
         <i class="nc-icon nc-planet"></i>
 
           <p title="Altre risorse del progetto Simile">
             <a href="" class="text-white" >Altre risorse</a>
           </p>
 
-          <a alt="foo" 
-          class="dropdown-item active" 
-          target="_blank" 
-         
-          rel="noopener noreferrer" 
+          <a alt="foo"
+          class="dropdown-item active"
+          target="_blank"
+
+          rel="noopener noreferrer"
           href="https://simile.como.polimi.it/SimileWebAdministrator2/">
           WEB APP SIMILE
           </a>
-          
-          <a class="dropdown-item active" 
-          target="_blank" 
-          
-          rel="noopener noreferrer" 
+
+          <a class="dropdown-item active"
+          target="_blank"
+
+          rel="noopener noreferrer"
           href="https://www.webgis.eo.simile.polimi.it/">
           WEB GIS DATI
           </a>
-      </sidebar-link>
-      
+      </sidebar-link> -->
+
 
       <!-- <sidebar-link target="_blank" to="" href="https://simile.como.polimi.it/SimileWebAdministrator2/">
-        
+
         <p>&nbsp &nbsp &nbsp WEB APP SIMILE</p>
       </sidebar-link>
       <sidebar-link target="_blank" to="" href="https://www.webgis.eo.simile.polimi.it/#">
-        
+
         <p>WEB GIS DATI</p>
       </sidebar-link> -->
 
@@ -106,13 +125,13 @@
       <dashboard-content @click="toggleSidebar">
 
       </dashboard-content>
-      
-      <content-footer> </content-footer>
-      
 
-    
+      <content-footer> </content-footer>
+
+
+
     </div>
-    
+
   </div>
 </template>
 <style lang="scss">
@@ -130,7 +149,7 @@
       ContentFooter,
       DashboardContent,
       MobileMenu,
-     
+
     },
     methods: {
       toggleSidebar () {
