@@ -1,5 +1,8 @@
 
 import config from '../../config.js'
+import istsosToHighcharts from './istsosToHighcharts';
+import indicatorDescription from '../indicatorDescription';
+import { mean,std,min,sqrt,max } from 'mathjs';
 
 // const base_layers = [
 //     {
@@ -458,4 +461,151 @@ function groupProcedures (allProcedures) {
     return [groupedProcedures, procedureInfos];
 };
 
-export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel, addBaseLayers, guessLocTitle, fromNow, groupProcedures};
+
+function loadSatelliteData (self) {
+    let dataSatellite = [];
+    let dataSatelliteWithSD = [];
+    let dataSatelliteWithQQ = [];
+    let prms = [];
+    for (const proc of self.selectedSatelliteProcedures) {
+
+        const info = self.allProcedures[proc.procedure];
+
+        if (info.samplingTime.beginposition && info.samplingTime.endposition) {
+            const begin = new Date(info.samplingTime.beginposition);
+            const end = new Date(info.samplingTime.endposition);
+            for (const prop of info.observedproperties) {
+                const prm = Promise.all([
+                    self.istsos.fetchSeries(
+                        proc.procedure,
+                        prop.definition,
+                        begin,
+                        end
+                    ),
+                    self.istsos.fetchSeries(
+                        proc.procedure+'_SD',
+                        prop.definition,
+                        begin,
+                        end
+                    ),
+                    self.istsos.fetchSeries(
+                        proc.procedure+'_1Q',
+                        prop.definition,
+                        begin,
+                        end
+                    ),
+                    self.istsos.fetchSeries(
+                        proc.procedure+'_3Q',
+                        prop.definition,
+                        begin,
+                        end
+                    )
+                ]).then(response=>{
+                    const result = istsosToHighcharts.istosToLine(response[0]);
+                    const result1Q = istsosToHighcharts.istosToLine(response[2]);
+                    const result3Q = istsosToHighcharts.istosToLine(response[3]);
+                    // const resultSD = istsosToHighcharts.istosToLine(response[1]);
+
+                    // Courtesy of: https://stackoverflow.com/a/10284006/1039510
+                    const zip = (...rows) => [...rows[0]].map((_,c) => rows.map(row => row[c]));
+                    const seriesQQ = zip(
+                        result1Q.options.series[0].data,
+                        result3Q.options.series[0].data).map((data)=>[...data[0], data[1][1]]);
+
+                    const dataSD = zip(
+                        result.options.series[0].data,
+                        istsosToHighcharts.istsosToSeries(
+                            response[1]).series
+                    ).map((data)=>[data[0][0], data[0][1]-data[1][1], data[0][1]+data[1][1]]);
+
+                    // result.options.series.push(result3Q.options.series[0])
+
+                    const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+
+                    result.options.yAxis.plotLines = [{
+                        color: 'darkgrey',
+                        dashStyle: 'ShortDash',
+                        width: 2,
+                        value: variableAverage,
+                        label: {
+                            text: 'media della serie',
+                            align: 'center',
+                            style: {color: 'darkgrey'}
+                        }
+                    }];
+
+                    if (info.observedproperties[0].name in indicatorDescription.indicatorDescription) {
+                        result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                    } else {
+                        result.options.title.text = info.description;
+                    };
+                    result.options.subtitle.text = `${info.description} (${result.uom})`;
+                    dataSatellite.push({...result.options});
+
+                    const opts3Q = result3Q.options.series[0];
+                    opts3Q.color = '#f28f43'
+                    const opts1Q = result1Q.options.series[0];
+                    opts1Q.color = '#f2ff43'
+
+                    // WARNING!
+                    // const optsQQ = {...result.options};
+                    // const optsQQ = Object.assign({}, result.options);
+                    // It seams the only correct way for cloning an object bracking all references
+                    const resultQQ = istsosToHighcharts.istosToLine(response[0], undefined, true);
+                    resultQQ.options.rangeSelector.selected = 3
+                    resultQQ.options.series[0]['showInLegend'] = false;
+                    resultQQ.options.yAxis.plotLines = result.options.yAxis.plotLines;
+
+                    let resultSD = JSON.parse(JSON.stringify(result));
+
+                    // TODO: Trasformare in grafico arearange
+                    //    (https://www.highcharts.com/demo/arearange)
+                    // optsQQ.series.push(opts3Q);
+                    // optsQQ.series.push(opts1Q);
+                    resultQQ.options.series.push({
+                        type: 'errorbar',
+                        name: 'deviazione standard',
+                        data: dataSD,
+                        visible: false,
+                        color: '#6d6d6d'
+                    });
+                    resultQQ.options.series.push({
+                        type: 'arearange',
+                        name: 'intervallo 1-3° quantile',
+                        data: seriesQQ,
+                        opacity: .7,
+                        visible: true,
+                        events: {
+                            hide: function () {
+                                this.chart.series[1].setVisible(true);
+                            },
+                            show: function () {
+                                this.chart.series[1].setVisible(false);
+                            }
+                        }
+                    });
+
+                    // dataSatelliteWithSD.push(resultSD.options);
+                    dataSatelliteWithQQ.push(resultQQ.options);
+                    // dataSatelliteWithQQ = [optsQQ, ...dataSatelliteWithQQ];
+                });
+                prms.push(prm);
+            };
+        };
+
+    };
+
+    Promise.all(prms).then(()=>{
+        self.dataSatellite = dataSatellite;
+        self.dataSatelliteWithQQ = dataSatelliteWithQQ;
+        // self.dataSatelliteWithSD = dataSatelliteWithSD;
+        self.modalClasses=[];
+        for (let i = 0; i < self.dataSatellite.length; i++) {
+            self.modalClasses.push(['modal','fade']);
+        }
+    });
+
+};
+
+export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel,
+    addBaseLayers, guessLocTitle, fromNow, groupProcedures, loadSatelliteData};

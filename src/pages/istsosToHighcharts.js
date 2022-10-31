@@ -84,20 +84,20 @@ STOCK_DEFAULTS['rangeSelector'] = {
             count: 3,
             text: '3m'
         },
-        // {
-        //     type: 'month',
-        //     count: 6,
-        //     text: '6m'
-        // },
         {
-            type: 'ytd',
-            text: 'YTD'
+            type: 'month',
+            count: 6,
+            text: '6m'
         },
         // {
-        //     type: 'year',
-        //     count: 1,
-        //     text: '1y'
+        //     type: 'ytd',
+        //     text: 'YTD'
         // },
+        {
+            type: 'year',
+            count: 1,
+            text: '1y'
+        },
         {
             type: 'all',
             text: 'All'
@@ -260,14 +260,16 @@ const POLAR_DEFAULT = {
     }]
 };
 
+const AREARANGE_DEFAULT = {};
+
 function polar(data) {
-    let options = {...POLAR_DEFAULT};
+    let options = JSON.parse(JSON.stringify(POLAR_DEFAULT));
     options.series[0].data = data;
     return options;
 };
 
 function windbarb(data) {
-    let options = {...WINDBARB_DEFAULTS};
+    let options = JSON.parse(JSON.stringify(WINDBARB_DEFAULTS));
     options['series'][0].data = data;
     options['series'][1].data = data;
     return options;
@@ -278,12 +280,13 @@ function epochToTime(epoch) {
     return (new Date(new Date(Math.round(new Date(epoch).getTime() / coeff) * coeff))).getTime()
 };
 
-function istsosToSeries(response) {
+function istsosToSeries(response, args) {
     const dataArray = response.data.data[0].result.DataArray;
     return {
         name: dataArray.field[1].name,
         uom: dataArray.field[1].uom,
         series: dataArray.values.filter(el=>el[1]!==null).map(el=>[epochToTime(el[0]), parseFloat(el[1].toPrecision(3))]),
+        ...(args||{})
     }
 };
 
@@ -309,11 +312,12 @@ function istosToLine (response, title, stock = false) {
       info.uom = dataArray.field[1].uom;
       info.options.tooltip = {
           shared: true,
-          useHTML: true,
-          headerFormat: '<table><tr><th colspan="2">{point.key}</th></tr>',
-          pointFormat: '<tr><td style="color: {series.color}">{series.name} </td>' +
-              `<td style="text-align: right"><b>{point.y} ${dataArray.field[1].uom}</b></td></tr>`,
-          footerFormat: '</table>',
+          valueSuffix: ` ${dataArray.field[1].uom}`,
+          // useHTML: true,
+          // headerFormat: '<table><tr><th colspan="2">{point.key}</th></tr>',
+          // pointFormat: '<tr><td style="color: {series.color}">{series.name} </td>' +
+          //     `<td style="text-align: right"><b>{point.y} ${dataArray.field[1].uom}</b></td></tr>`,
+          // footerFormat: '</table>',
           valueDecimals: 2
       };
       // info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;

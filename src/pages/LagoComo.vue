@@ -273,31 +273,26 @@
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[0]]"></highcharts>
                                         <!--  modal -->
-                                            <div class="container py-2" id="app">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <a role="button" class="btn btn-primary" @click="toggle(cc[0])">Vedi dettaglio</a>
-                                                        <div :class="modalClasses[cc[0]]" id="reject" role="dialog">
-                                                            <div class="modal-dialog modal-lg">
-                                                                <div class="modal-content">
-                                                                    <!-- <div class="modal-header">
-                                                                         <h4 class="modal-title"></h4>
-                                                                        <button type="button" class="close" @click="toggle()">&times;</button>
-                                                                    </div> -->
-                                                                    <div class="modal-body">
-                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[0]]"></highcharts>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-primary" @click="toggle(cc[0])">Close</button>
-                                                                    </div>
+                                        <div class="container py-2" id="app">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <a role="button" class="btn btn-primary" @click="toggle(cc[0])">Vedi dettaglio</a>
+                                                    <div :class="modalClasses[cc[0]]" id="reject" role="dialog">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">
+                                                                    <highcharts :constructor-type="'stockChart'" :options="dataSatelliteWithQQ[cc[0]]"></highcharts>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-primary" @click="toggle(cc[0])">Chiudi</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Modal -->
-
+                                        </div>
+                                        <!-- Modal -->
                                     </figure>
                                 </div>
                                 <div v-if="cc[1]" class="col-lg-6 col-sm-12">
@@ -313,10 +308,10 @@
                                                             <div class="modal-dialog modal-lg">
                                                                 <div class="modal-content">
                                                                     <div class="modal-body">
-                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[1]]"></highcharts>
+                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatelliteWithQQ[cc[1]]"></highcharts>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-primary" @click="toggle(cc[1])">Close</button>
+                                                                        <button type="button" class="btn btn-primary" @click="toggle(cc[1])">Chiudi</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -921,64 +916,67 @@
             Promise.all(prms).then(()=>{self.dataArpa=dataArpa});
         },
         loadSatelliteData () {
-            var self = this;
-            let dataSatellite = [];
-            let prms = [];
-            for (const proc of self.selectedSatelliteProcedures) {
-
-                const info = self.allProcedures[proc.procedure];
-
-                if (info.samplingTime.beginposition && info.samplingTime.endposition) {
-                    const begin = new Date(info.samplingTime.beginposition);
-                    const end = new Date(info.samplingTime.endposition);
-
-                    for (const prop of info.observedproperties) {
-                        const prm = self.istsos.fetchSeries(
-                            proc.procedure,
-                            prop.definition,
-                            begin,
-                            end
-                        ).then(response=>{
-                            const result = istsosToHighcharts.istosToLine(response);
-                            // result.options.name = 'foo';
-                            const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
-
-                            result.options.yAxis.plotLines = [{
-                                color: 'darkgrey',
-                                dashStyle: 'ShortDash',
-                                width: 2,
-                                value: variableAverage,
-                                label: {
-                                    text: 'media della serie',
-                                    align: 'center',
-                                    style: {color: 'darkgrey'}
-                                }
-                            }];
-
-                            if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
-                                result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-                            }
-                            else{
-                                result.options.title.text = info.description;
-
-                            }
-                            result.options.subtitle.text = `${info.description} (${result.uom})`;
-                            dataSatellite.push(result.options);
-                        });
-                        prms.push(prm);
-                    };
-
-                };
-            };
-
-            Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite;
-                self.modalClasses=[];
-                for (let i = 0; i < self.dataSatellite.length; i++) {
-                self.modalClasses.push(['modal','fade']);
-                }
-            });
-
+            sharedFunctions.loadSatelliteData(this);
         },
+        // loadSatelliteData () {
+        //     var self = this;
+        //     let dataSatellite = [];
+        //     let prms = [];
+        //     for (const proc of self.selectedSatelliteProcedures) {
+        //
+        //         const info = self.allProcedures[proc.procedure];
+        //
+        //         if (info.samplingTime.beginposition && info.samplingTime.endposition) {
+        //             const begin = new Date(info.samplingTime.beginposition);
+        //             const end = new Date(info.samplingTime.endposition);
+        //
+        //             for (const prop of info.observedproperties) {
+        //                 const prm = self.istsos.fetchSeries(
+        //                     proc.procedure,
+        //                     prop.definition,
+        //                     begin,
+        //                     end
+        //                 ).then(response=>{
+        //                     const result = istsosToHighcharts.istosToLine(response);
+        //                     // result.options.name = 'foo';
+        //                     const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+        //
+        //                     result.options.yAxis.plotLines = [{
+        //                         color: 'darkgrey',
+        //                         dashStyle: 'ShortDash',
+        //                         width: 2,
+        //                         value: variableAverage,
+        //                         label: {
+        //                             text: 'media della serie',
+        //                             align: 'center',
+        //                             style: {color: 'darkgrey'}
+        //                         }
+        //                     }];
+        //
+        //                     if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+        //                         result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+        //                     }
+        //                     else{
+        //                         result.options.title.text = info.description;
+        //
+        //                     }
+        //                     result.options.subtitle.text = `${info.description} (${result.uom})`;
+        //                     dataSatellite.push(result.options);
+        //                 });
+        //                 prms.push(prm);
+        //             };
+        //
+        //         };
+        //     };
+        //
+        //     Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite;
+        //         self.modalClasses=[];
+        //         for (let i = 0; i < self.dataSatellite.length; i++) {
+        //         self.modalClasses.push(['modal','fade']);
+        //         }
+        //     });
+        //
+        // },
 
         loadCardsData () {
             var self = this;
@@ -1005,7 +1003,7 @@
                   cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
                 };
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
-                
+
                 cards[index].type = result.procedure;
                 if((cards[index].type).includes('CIPAIS') ){
                     cards[index].type='Dato Cipais'
@@ -1017,7 +1015,7 @@
                 cards[index].type='Dato Satellitare'
                 }
                 else{cards[index].type='Dato da Sensore'}
-                
+
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
 

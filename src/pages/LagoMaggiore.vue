@@ -274,31 +274,26 @@
                                     <figure style="min-width: 100%" class="highcharts-figure">
                                         <highcharts :options="dataSatellite[cc[0]]"></highcharts>
                                         <!--  modal -->
-                                            <div class="container py-2" id="app">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <a role="button" class="btn btn-primary" @click="toggle(cc[0])">Vedi dettaglio</a>
-                                                        <div :class="modalClasses[cc[0]]" id="reject" role="dialog">
-                                                            <div class="modal-dialog modal-lg">
-                                                                <div class="modal-content">
-                                                                    <!-- <div class="modal-header">
-                                                                         <h4 class="modal-title"></h4>
-                                                                        <button type="button" class="close" @click="toggle()">&times;</button>
-                                                                    </div> -->
-                                                                    <div class="modal-body">
-                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatellite[cc[0]]"></highcharts>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-primary" @click="toggle(cc[0])">Close</button>
-                                                                    </div>
+                                        <div class="container py-2" id="app">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <a role="button" class="btn btn-primary" @click="toggle(cc[0])">Vedi dettaglio</a>
+                                                    <div :class="modalClasses[cc[0]]" id="reject" role="dialog">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+                                                                <div class="modal-body">
+                                                                    <highcharts :constructor-type="'stockChart'" :options="dataSatelliteWithQQ[cc[0]]"></highcharts>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-primary" @click="toggle(cc[0])">Chiudi</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Modal -->
-
+                                        </div>
+                                        <!-- Modal -->
                                     </figure>
                                 </div>
                                 <div v-if="cc[1]" class="col-lg-6 col-sm-12">
@@ -317,7 +312,7 @@
                                                                         <highcharts :constructor-type="'stockChart'" :options="dataSatelliteWithQQ[cc[1]]"></highcharts>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-primary" @click="toggle(cc[1])">Close</button>
+                                                                        <button type="button" class="btn btn-primary" @click="toggle(cc[1])">Chiudi</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -849,7 +844,6 @@
 
     methods: {
         toggle(index) {
-            console.log(index);
             if( this.modalClasses[index].includes('show')){
                 this.modalClasses[index].pop()
                 this.modalClasses[index].pop()
@@ -978,161 +972,8 @@
 
         },
         loadSatelliteData () {
-            var self = this;
-            let dataSatellite = [];
-            let dataSatelliteWithSD = [];
-            let dataSatelliteWithQQ = [];
-            let prms = [];
-            for (const proc of self.selectedSatelliteProcedures) {
-
-                const info = self.allProcedures[proc.procedure];
-
-                if (info.samplingTime.beginposition && info.samplingTime.endposition) {
-                    const begin = new Date(info.samplingTime.beginposition);
-                    const end = new Date(info.samplingTime.endposition);
-                    for (const prop of info.observedproperties) {
-                        const prm = Promise.all([
-                            self.istsos.fetchSeries(
-                                proc.procedure,
-                                prop.definition,
-                                begin,
-                                end
-                            ),
-                            self.istsos.fetchSeries(
-                                proc.procedure+'_SD',
-                                prop.definition,
-                                begin,
-                                end
-                            ),
-                            self.istsos.fetchSeries(
-                                proc.procedure+'_1Q',
-                                prop.definition,
-                                begin,
-                                end
-                            ),
-                            self.istsos.fetchSeries(
-                                proc.procedure+'_3Q',
-                                prop.definition,
-                                begin,
-                                end
-                            )
-                        ]).then(response=>{
-
-                            const result = istsosToHighcharts.istosToLine(response[0]);
-                            const result1Q = istsosToHighcharts.istosToLine(response[2]);
-                            const result3Q = istsosToHighcharts.istosToLine(response[3]);
-                            const resultSD = istsosToHighcharts.istosToLine(response[1]);
-
-                            // result.options.series.push(result3Q.options.series[0])
-
-                            const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
-
-                            result.options.yAxis.plotLines = [{
-                                color: 'darkgrey',
-                                dashStyle: 'ShortDash',
-                                width: 2,
-                                value: variableAverage,
-                                label: {
-                                    text: 'media della serie',
-                                    align: 'center',
-                                    style: {color: 'darkgrey'}
-                                }
-                            }];
-
-                            if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
-                                result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-                            } else {
-                                result.options.title.text = info.description;
-                            };
-                            result.options.subtitle.text = `${info.description} (${result.uom})`;
-                            dataSatellite.push({...result.options});
-
-                            const opts3Q = result3Q.options.series[0];
-                            opts3Q.color = '#f28f43'
-                            const opts1Q = result1Q.options.series[0];
-                            opts1Q.color = '#f2ff43'
-
-                            // WARNING!
-                            // const optsQQ = {...result.options};
-                            // const optsQQ = Object.assign({}, result.options);
-                            // It seams the only correct way for cloning an object bracking all references
-                            const optsQQ = JSON.parse(JSON.stringify(result.options));
-
-                            // TODO: Trasformare in grafico arearange (https://www.highcharts.com/demo/arearange)
-                            optsQQ.series.push(opts3Q);
-                            optsQQ.series.push(opts1Q);
-                            dataSatelliteWithQQ.push(optsQQ);
-                        });
-                        prms.push(prm);
-                    };
-                };
-
-            };
-
-            Promise.all(prms).then(()=>{
-                self.dataSatellite = dataSatellite;
-                self.dataSatelliteWithQQ = dataSatelliteWithQQ;
-                self.modalClasses=[];
-                for (let i = 0; i < self.dataSatellite.length; i++) {
-                    self.modalClasses.push(['modal','fade']);
-                }
-            });
-
+            sharedFunctions.loadSatelliteData(this);
         },
-
-        // loadSatelliteData () {
-        //     var self = this;
-        //     let dataSatellite = [];
-        //     let prms = [];
-        //     for (const proc of self.selectedSatelliteProcedures) {
-
-        //         const info = self.allProcedures[proc.procedure];
-
-        //         if (info.samplingTime.beginposition && info.samplingTime.endposition) {
-        //             const begin = new Date(info.samplingTime.beginposition);
-        //             const end = new Date(info.samplingTime.endposition);
-        //             console.log(info)
-        //             const prm = self.istsos.fetchSeries(
-        //                 proc.procedure,
-        //                 info.observedproperties[0].definition,
-        //                 begin,
-        //                 end
-        //             ).then(response=>{
-        //                 const result = istsosToHighcharts.istosToLine(response);
-        //                 // result.options.name = 'foo';
-        //                 const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
-
-        //                 result.options.yAxis.plotLines = [{
-        //                     color: 'darkgrey',
-        //                     dashStyle: 'ShortDash',
-        //                     width: 2,
-        //                     value: variableAverage,
-        //                     label: {
-        //                         text: 'media della serie',
-        //                         align: 'center',
-        //                         style: {color: 'darkgrey'}
-
-        //                     }
-        //                 }];
-
-        //                 if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
-        //                     result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-        //                 }
-        //                 else{
-        //                     result.options.title.text = info.description;
-
-        //                 }
-        //                 result.options.subtitle.text = `${info.description} (${result.uom})`;
-        //                 dataSatellite.push(result.options);
-        //             });
-        //             prms.push(prm);
-
-        //         };
-        //     };
-
-        //     Promise.all(prms).then(()=>{self.dataSatellite=dataSatellite});
-
-        // },
         loadCardsData () {
             var self = this;
 
@@ -1169,7 +1010,7 @@
                 cards[index].type='Dato Satellitare'
                 }
                 else{cards[index].type='Dato da Sensore'}
-                
+
                 cards[index].data = result.value;
                 cards[index].uom = result.uom;
 
@@ -1457,135 +1298,6 @@
                     time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
-            // this.istsos.fetchLastTemetature('TEMP_2_5').then((result)=>{
-            //     // self.last_temperature_data = result.options;
-            //     self.lastTemp25 = `${result.options.series[0].data[0].y}${result.uom}`
-            //     self.lastTemp25Time = {
-            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            // });
-            // this.istsos.fetchLastTemetature('TEMP_5_0').then((result)=>{
-            //     // self.last_temperature_data = result.options;
-            //     self.lastTemp50 = `${result.options.series[0].data[0].y}${result.uom}`
-            //     self.lastTemp50Time = {
-            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            // });
-            // this.istsos.fetchLastTemetature('TEMP_8_0').then((result)=>{
-            //     // self.last_temperature_data = result.options;
-            //     self.lastTemp80 = `${result.options.series[0].data[0].y}${result.uom}`
-            //     self.lastTemp80Time = {
-            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            // });
-            // this.istsos.fetchLastTemetature('TEMP_12_5').then((result)=>{
-            //     // self.last_temperature_data = result.options;
-            //     self.lastTemp125 = `${result.options.series[0].data[0].y}${result.uom}`
-            //     self.lastTemp125Time = {
-            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            // });
-            // this.istsos.fetchLastTemetature('TEMP_20_0').then((result)=>{
-            //     // self.last_temperature_data = result.options;
-            //     self.lastTemp200 = `${result.options.series[0].data[0].y}${result.uom}`
-            //     self.lastTemp200Time = {
-            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            // });
-            // this.istsos.fetchLastO2c('O2C_0_4').then((result)=>{
-            //     // self.last_temperature_data = result.options;
-            //     self.lastO2c04 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //     self.lastO2c04Time = {
-            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            // });
-            // this.istsos.fetchLastO2c('O2C_2_5').then((result)=>{
-            //     // self.last_temperature_data = result.options;
-            //     self.lastO2c25 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //     self.lastO2c25Time = {
-            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            // });
-            // this.istsos.fetchLastO2c('O2C_5_0').then((result)=>{
-            //     // self.last_temperature_data = result.options;
-            //     self.lastO2c50 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //     self.lastO2c50Time = {
-            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            // });
-            // this.istsos.fetchLastO2c('O2C_8_0').then((result)=>{
-            //     // self.last_temperature_data = result.options;
-            //     self.lastO2c80 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //     self.lastO2c80Time = {
-            //         date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //         time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //     }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            // });
-            // this.istsos.fetchLastO2c('O2C_12_5').then((result)=>{
-            //      // self.last_temperature_data = result.options;
-            //      self.lastO2c125 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //      self.lastO2c125Time = {
-            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            //  });
-            //  this.istsos.fetchLastO2c('O2C_20_0').then((result)=>{
-            //      // self.last_temperature_data = result.options;
-            //      self.lastO2c200 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //      self.lastO2c200Time = {
-            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            //  });
-
-            //  this.istsos.fetchLastO2s('O2S_2_5').then((result)=>{
-            //      // self.last_temperature_data = result.options;
-            //      self.lastO2s25 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //      self.lastO2s25Time = {
-            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            //  });
-            //  this.istsos.fetchLastO2s('O2S_5_0').then((result)=>{
-            //      // self.last_temperature_data = result.options;
-            //      self.lastO2s50 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //      self.lastO2s50Time = {
-            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            //  });
-            //  this.istsos.fetchLastO2s('O2S_8_0').then((result)=>{
-            //      // self.last_temperature_data = result.options;
-            //      self.lastO2s80 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //      self.lastO2s80Time = {
-            //          date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //          time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //      }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            //  });
-            //  this.istsos.fetchLastO2s('O2S_12_5').then((result)=>{
-            //       // self.last_temperature_data = result.options;
-            //       self.lastO2s125 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //       self.lastO2s125Time = {
-            //           date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //           time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //       }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            //   });
-            //   this.istsos.fetchLastO2s('O2S_20_0').then((result)=>{
-            //       // self.last_temperature_data = result.options;
-            //       self.lastO2s200 = `${result.options.series[0].data[0].y} ${result.uom}`;
-            //       self.lastO2s200Time = {
-            //           date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-            //           time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
-            //       }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
-            //   });
 
         },
         appendTempSeries () {
