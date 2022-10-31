@@ -11,12 +11,12 @@
       </a>
     </div>
     <p class="description text-justify">
-      Il lago di Como o Lario è un lago subalpino di origine fluvio-glaciale, situato pressochè interamente in territorio 
+      Il lago di Como, o Lario, è un lago subalpino di origine fluvio-glaciale, situato pressochè interamente in territorio 
       lombardo, nelle province di Como e Lecco. E’ posto a un'altitudine di 197,39 m s.l.m. È il lago più profondo d’Italia 
-      (410 m nei pressi di Argegno) ed il terzo lago italiano per superficie e volume. Ha una forma caratteristica a "Y" 
+      (425 m nei pressi di Argegno) ed il terzo lago italiano per superficie e volume. Ha una forma caratteristica a "Y" 
       rovesciata ed è composto da tre sottobacini: a sinistra il ramo di Como, a destra il ramo di Lecco e a nord il ramo 
-      di Colico. Il fiume Adda è il principale immissario e l'unico emissario. Il bacino idrografico del lago di Como è 
-      molto vasto e si estende sia in territorio italiano che svizzero per un totale di 4.508 km<sup>2</sup>, di cui 4.394 km<sup>2</sup> in 
+      di Colico. Il fiume Adda è il principale immissario e l'unico emissario. Il bacino idrografico del lago di Como
+      si estende sia in territorio italiano che svizzero per un totale di 4.508 km<sup>2</sup>, di cui 4.394 km<sup>2</sup> in 
       Lombardia. Il punto più elevato culmina sul Pizzo Bernina al confine fra Italia e Svizzera. 
       Il territorio del lago ha un’elevata valenza turistica. Le acque del lago sono utilizzate a scopo idropotabile, irriguo e 
       per la pesca professionale e sportiva. 
