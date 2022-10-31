@@ -135,7 +135,9 @@
                                 <i aria-hidden="true" class="fa fa-info-circle" title="Scopri come interagire con la mappa"></i></button>
                           </div>
                           <select class="custom-select" id="inputGroupSelect03"
-                              aria-label="Example select with button addon" v-model="selectedMarker"
+                              aria-label="Example select with button addon"
+                              v-model="selectedMarker"
+                              @change="centerMapTo()"
                               title="Scegli una località o un'area da analizzare"
                               >
                             <option v-for="feature in features.features" :value="feature.properties.markerIndex">
@@ -927,6 +929,9 @@
         },
 
     methods: {
+        centerMapTo () {
+            sharedFunctions.centerMapTo(this);
+        },
         toggle(index) {
             console.log(index);
             if( this.modalClasses[index].includes('show')){
