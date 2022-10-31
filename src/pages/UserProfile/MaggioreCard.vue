@@ -11,7 +11,7 @@
       </a>
     </div>
     <p class="description text-justify">
-      Il Lago Maggiore o Verbano è un grande lago pedemontano originato dalla rimodellazione glaciale di una 
+      Il Lago Maggiore, o Verbano, è un grande lago pedemontano originato dalla rimodellazione glaciale di una 
       preesistente valle fluviale. E’ il secondo lago italiano per superficie e volume ed il secondo per profondità 
       massima (370 m) ed è situato tra le provincie di Varese (a est), quelle di Novara e di Verbania ad ovest ed il 
       Canton Ticino (Svizzera) a Nord. Si trova a un’altitudine media di 193.88 m sul livello del mare. 
