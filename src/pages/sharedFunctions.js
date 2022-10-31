@@ -1,4 +1,5 @@
 
+import { latLng } from 'leaflet';
 import config from '../../config.js'
 
 // const base_layers = [
@@ -367,6 +368,7 @@ function guessLocTitle (foi_name){
 function markerLayerOptions (self) {
     return {
         pointToLayer: function (feature, latlng) {
+            
             const prefixes = feature.properties.names.reduce((prev, info) => {
                 const name = info.procedure;
                 const prefix = name.split('_')[0];
@@ -412,7 +414,6 @@ function markerLayerOptions (self) {
                 // return L.marker(latlng)
                 // return feature;
             };
-
         }
     }
 }
