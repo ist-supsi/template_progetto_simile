@@ -611,5 +611,15 @@ function loadSatelliteData (self) {
 
 };
 
+function centerMapTo(self) {
+    const LonLat = self.features.features[self.selectedMarker].geometry.coordinates;
+    self.$refs.map.mapObject.setView(
+        [LonLat[1], LonLat[0]],
+        self.$refs.map.mapObject.getZoom()
+    );
+};
+
 export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel,
-    addBaseLayers, guessLocTitle, fromNow, groupProcedures, loadSatelliteData};
+    addBaseLayers, guessLocTitle, fromNow, groupProcedures, loadSatelliteData,
+    centerMapTo
+};
