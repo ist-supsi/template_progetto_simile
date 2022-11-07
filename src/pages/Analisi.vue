@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-6">
-                    <span height="200px"><h3>Descrizione</h3>
+                    <span height="200px"><h3>{{cards[0].title}}</h3>
                       <!-- {{ description }} -->
                       {{cards[0].description}}
                     </span>

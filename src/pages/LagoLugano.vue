@@ -157,7 +157,7 @@
                     <a :class="{'nav-link': true, active: selectedTab=='home', enabled: tableData.data}"
                         id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
-                        aria-selected="true" @click="selectedTab='home'">Sensori</a>
+                        aria-selected="true" @click="selectedTab='home'">Dati da sensori</a>
                 </li>
                 <li class="nav-item">
                     <a :class="{'nav-link': true, active: selectedTab=='cipais', enabled: selectedCipaisProcedures.length==0}"
@@ -217,7 +217,7 @@
                                 <data-table
                                     :columns="tableColumns2"
                                     :data="tableData"
-                                    :per-page="[5, 10, 15]"
+                                    :per-page="[10, 15, 20]"
                                     @on-table-props-changed="reloadTable"
                                     >
                                 </data-table>
@@ -1029,7 +1029,7 @@
                                 width: 2,
                                 value: indicatorDescription.indicatorDescription[proc.name].limite.lugano,
                                 label: {
-                                    text: 'Limite',
+                                    text: 'Soglia critica',
                                     align: 'center',
                                     style: {color: 'darkgrey'}
                                 }});
@@ -1157,14 +1157,14 @@
                 }
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
 
-                cards[index].type = result.procedure;
-                if((cards[index].type).includes('CIPAIS') ){
+                // cards[index].type = result.procedure;
+                if(result.procedure.includes('CIPAIS') ){
                     cards[index].type='Dato Cipais'
                 }
-                else if((cards[index].type).includes('ARPA') ) {
+                else if(result.procedure.includes('ARPA') ) {
                 cards[index].type='Dato Arpa'
                 }
-                else if((cards[index].type).includes('SATELLITE') ) {
+                else if(result.procedure.includes('SATELLITE') ) {
                 cards[index].type='Dato Satellitare'
                 }
                 else{cards[index].type='Dato da Sensore'}
@@ -1174,8 +1174,8 @@
                 cards[index].uom = result.uom;
 
                 if (result.x){
-
-                    if(indicatorDescription.indicatorDescription[cards[index].name] && indicatorDescription.indicatorDescription[cards[index].name].annuale){
+                    
+                    if(result.procedure.includes('CIPAIS')|| result.procedure.includes('ARPA')){
                         cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
                         }
@@ -1255,7 +1255,7 @@
 
           this.$notifications.notify(
                 {
-                    message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
+                    message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati nelle tab sottostanti.</span>`,
 
                     icon: 'nc-icon nc-quote',
                     horizontalAlign: horizontalAlign,

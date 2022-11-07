@@ -94,6 +94,9 @@
 .fixed-plugin .active .fa-circle-thin {
     color: #00bbff;
 }
+.fa-sun-o {
+    font-size: 40px;
+}
 
 .fixed-plugin .dropdown-menu>.active>a,
 .fixed-plugin .dropdown-menu>.active>a:hover,
@@ -848,6 +851,7 @@
     font-variant: normal;
     text-transform: none;
     line-height: 1;
+    font-size: 60px;
   
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;

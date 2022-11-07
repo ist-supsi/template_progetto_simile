@@ -44,8 +44,8 @@
                                 <div slot="footer">
                                     <i v-if="!cards[ii] || cards[ii].data===null" class="fa fa-refresh fa-spin"></i>
                                     <i v-if="!cards[ii] || cards[ii].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                    <i v-if="cards[ii] && cards[ii].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii] && cards[ii].time && cards[ii].time.date}}
-                                    <i v-if="cards[ii+1] && cards[ii].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii] && cards[ii].time && cards[ii].time.time}}
+                                    <i v-if="cards[ii].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii] && cards[ii].time && cards[ii].time.date}}
+                                    <i v-if="cards[ii].time && cards[ii].time.time " class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii] && cards[ii].time && cards[ii].time.time}}
                                 </div>
                             </stats-card>
                         </div>
@@ -69,8 +69,8 @@
                                 <div slot="footer">
                                     <i v-if="!cards[ii+1] || cards[ii+1].data===null" class="fa fa-refresh fa-spin"></i>
                                     <i v-if="!cards[ii+1] || cards[ii+1].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                    <i v-if="cards[ii+1] && cards[ii+1].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii+1] && cards[ii+1].time && cards[ii+1].time.date}}
-                                    <i v-if="cards[ii+1] && cards[ii+1].time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1] && cards[ii+1].time && cards[ii+1].time.time}}
+                                    <i v-if="cards[ii+1]" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii+1] && cards[ii+1].time && cards[ii+1].time.date}}
+                                    <i v-if="cards[ii+1].time && cards[ii+1].time.time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1] && cards[ii+1].time && cards[ii+1].time.time}}
                                 </div>
                             </stats-card>
                         </div>
@@ -145,7 +145,7 @@
                     <a :class="{'nav-link': true, active: selectedTab=='home', enabled: tableData.data}"
                         id="home-tab" data-toggle="tab"
                         role="tab" aria-controls="home"
-                        aria-selected="true" @click="selectedTab='home'">Sensori</a>
+                        aria-selected="true" @click="selectedTab='home'">Dati da sensori</a>
                 </li>
                 <li class="nav-item">
                     <a :class="{'nav-link': true, active: selectedTab=='arpa', enabled: selectedArpaProcedures.length==0}"
@@ -201,7 +201,7 @@
                                 <data-table
                                     :columns="tableColumns2"
                                     :data="tableData"
-                                    :per-page="[5, 10, 15]"
+                                    :per-page="[10, 15, 20]"
                                     @on-table-props-changed="reloadTable"
                                     >
                                 </data-table>
@@ -906,7 +906,12 @@
                             result.options.title.text = info.description;
 
                         }
-                        result.options.subtitle.text = `${info.description} (${result.uom})`;
+                        console.log(result);
+                        if(result.uom){
+                            result.options.subtitle.text = `${info.description} (${result.uom})`;
+                        }
+                        else{ result.options.subtitle.text = info.description  }
+                        
                         dataArpa.push(result.options);
                     });
                     prms.push(prm);
@@ -1004,23 +1009,24 @@
                 };
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
 
-                cards[index].type = result.procedure;
-                if((cards[index].type).includes('CIPAIS') ){
+                if(result.procedure.includes('CIPAIS') ){
                     cards[index].type='Dato Cipais'
                 }
-                else if((cards[index].type).includes('ARPA') ) {
+                else if(result.procedure.includes('ARPA') ) {
                 cards[index].type='Dato Arpa'
                 }
-                else if((cards[index].type).includes('SATELLITE') ) {
+                else if(result.procedure.includes('SATELLITE') ) {
                 cards[index].type='Dato Satellitare'
                 }
                 else{cards[index].type='Dato da Sensore'}
 
                 cards[index].data = result.value;
+
                 cards[index].uom = result.uom;
 
-                if ( result.x){
-                    if(indicatorDescription.indicatorDescription[cards[index].name].annuale){
+                if (result.x){
+                    
+                    if(result.procedure.includes('CIPAIS')|| result.procedure.includes('ARPA')){
                         cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
                         }
@@ -1031,7 +1037,7 @@
                             time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
                         }
                     }
-                    }
+                }
 
                 cards[index].message = result.locationUrn.split(':').at(-1);
             };
@@ -1100,7 +1106,7 @@
 
           this.$notifications.notify(
                 {
-                    message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
+                    message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati nelle tab sottostanti.</span>`,
 
                     icon: 'nc-icon nc-quote',
                     horizontalAlign: horizontalAlign,

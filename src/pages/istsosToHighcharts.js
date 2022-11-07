@@ -308,11 +308,22 @@ function istosToLine (response, title, stock = false) {
 
       // console.log(dataArray);
       if (title) { info.options.title = title; };
-      info.options.yAxis.title.text = `${dataArray.field[1].name} (${dataArray.field[1].uom})`
-      info.uom = dataArray.field[1].uom;
+      
+      let tip;
+      if(dataArray.field[1].uom=="null"){
+        info.options.yAxis.title.text = dataArray.field[1].name
+        info.uom = null;
+        tip ="";
+        }
+      else{
+        info.options.yAxis.title.text = `${dataArray.field[1].name} (${dataArray.field[1].uom})`
+        info.uom = dataArray.field[1].uom;
+        tip=` ${dataArray.field[1].uom}`
+        };
+        
       info.options.tooltip = {
           shared: true,
-          valueSuffix: ` ${dataArray.field[1].uom}`,
+          valueSuffix: tip,
           // useHTML: true,
           // headerFormat: '<table><tr><th colspan="2">{point.key}</th></tr>',
           // pointFormat: '<tr><td style="color: {series.color}">{series.name} </td>' +

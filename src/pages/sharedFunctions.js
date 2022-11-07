@@ -535,11 +535,7 @@ function loadSatelliteData (self) {
                         }
                     }];
 
-                    if (info.observedproperties[0].name in indicatorDescription.indicatorDescription) {
-                        result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-                    } else {
-                        result.options.title.text = info.description;
-                    };
+                    
                     result.options.subtitle.text = `${info.description} (${result.uom})`;
                     dataSatellite.push({...result.options});
 
@@ -556,7 +552,14 @@ function loadSatelliteData (self) {
                     resultQQ.options.rangeSelector.selected = 3
                     resultQQ.options.series[0]['showInLegend'] = false;
                     resultQQ.options.yAxis.plotLines = result.options.yAxis.plotLines;
-
+                    resultQQ.options.subtitle.text = `${info.description} (${result.uom})`;
+                    if (info.observedproperties[0].name in indicatorDescription.indicatorDescription) {
+                        result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                        resultQQ.options.title.text =indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                    } else {
+                        result.options.title.text = info.description;
+                        resultQQ.options.title.text = info.description;
+                    };
                     let resultSD = JSON.parse(JSON.stringify(result));
 
                     // TODO: Trasformare in grafico arearange

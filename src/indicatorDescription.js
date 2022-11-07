@@ -282,6 +282,7 @@ let indicatorDescription =
             breveDescrizione:`Concentrazione media annua di azoto totale nel lago`,
             // icon:'fa fa-flask text-primary',
             icon:'icon-conc_azoto',
+            
             annuale:true,
             limite : {
                 maggiore:null,
@@ -551,7 +552,8 @@ let indicatorDescription =
             `,
             breveDescrizione:`Radiazione globali`,
             // icon:'fa fa-bolt text-info',
-            icon:'icon-global_radiation',
+            // icon:'icon-global_radiation',
+            icon:'fa fa-sun-o',
             annuale:false,
         },
         'solar-radiation': {
@@ -560,7 +562,8 @@ let indicatorDescription =
             `,
             breveDescrizione:`Radiazione solare`,
             // icon:'fa fa-bolt text-info',
-            icon:'icon-global_radiation',
+            // icon:'icon-global_radiation',
+            icon:'fa fa-sun-o',
             annuale:false,
         },
         'water-TN': {
@@ -570,7 +573,7 @@ let indicatorDescription =
             `,
             breveDescrizione:`Valore medio annuo delle concentrazioni di N totale`,
             // icon:'fa fa-bolt text-info',
-            icon:'icon-water_biovol',
+            icon: 'fa fa-flask',
             annuale:true,
             limite : {
                 maggiore:null,
@@ -614,5 +617,4 @@ function getCardIcon (name) {
 };
 
 export default {indicatorDescription, getCardIcon};
-
 
