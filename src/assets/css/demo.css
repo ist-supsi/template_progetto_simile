@@ -97,6 +97,10 @@
 .fa-sun-o {
     font-size: 40px;
 }
+.fa-flask {
+    font-size: 40px;
+    color: #404040;
+}
 
 .fixed-plugin .dropdown-menu>.active>a,
 .fixed-plugin .dropdown-menu>.active>a:hover,
