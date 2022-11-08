@@ -535,8 +535,7 @@ function loadSatelliteData (self) {
                         }
                     }];
 
-
-                    result.options.subtitle.text = `${info.description} (${result.uom})`;
+                    // result.options.subtitle.text = `${indicatorDescription.indicatorDescription[prop.name].breveDescrizione} (${result.uom})`;
                     dataSatellite.push({...result.options});
 
                     const opts3Q = result3Q.options.series[0];
@@ -552,10 +551,14 @@ function loadSatelliteData (self) {
                     resultQQ.options.rangeSelector.selected = 3
                     resultQQ.options.series[0]['showInLegend'] = false;
                     resultQQ.options.yAxis.plotLines = result.options.yAxis.plotLines;
-                    resultQQ.options.subtitle.text = `${info.description} (${result.uom})`;
-                    if (info.observedproperties[0].name in indicatorDescription.indicatorDescription) {
-                        result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-                        resultQQ.options.title.text =indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                    resultQQ.options.subtitle.text = result.options.subtitle.text;
+
+
+                    if (prop.name in indicatorDescription.indicatorDescription) {
+                        result.options.title.text = indicatorDescription.indicatorDescription[prop.name].title;
+                        resultQQ.options.title.text = result.options.title.text;
+                        result.options.subtitle.text = indicatorDescription.indicatorDescription[prop.name].breveDescrizione+` (${result.uom})`;
+                        resultQQ.options.subtitle.text = result.options.subtitle.text;
                     } else {
                         result.options.title.text = info.description;
                         resultQQ.options.title.text = info.description;

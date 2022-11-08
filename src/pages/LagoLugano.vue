@@ -220,6 +220,7 @@
                                     :columns="tableColumns2"
                                     :data="tableData"
                                     :per-page="[10, 15, 20]"
+                                    :translate="{ nextButton: '>', previousButton: '<', placeholderSearch: 'Cerca nella tabella'}"
                                     @on-table-props-changed="reloadTable"
                                     >
                                 </data-table>

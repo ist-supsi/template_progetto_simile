@@ -31,8 +31,8 @@
                                 <p class="card-category">{{cards[0].message || "--"}}</p>
                             </div>
                             <div slot="footer">
-                                <i v-if="cards[0].data===null" class="fa fa-refresh fa-spin"></i>
-                                <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i>
+                                <i v-if="!cards[0].time" class="fa fa-refresh fa-spin"></i>
+                                <!-- <i v-if="cards[0].data===undefined" class="fa fa-exclamation-triangle"></i> -->
                                 <i v-if="cards[0].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[0].time && cards[0].time.date}}
                                 <i v-if="cards[0].time" class="fa fa-clock-o"
                                     data-toggle="tooltip"
@@ -315,7 +315,7 @@
                 }
                 else{
                     data=null;
-                    time=null;
+                    time=new Date(result.data.data[0].result.DataArray.values[0][0]);
                 };
                 // console.log(result.data.data);
                 const info= {
