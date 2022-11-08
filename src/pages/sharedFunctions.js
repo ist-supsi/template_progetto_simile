@@ -371,7 +371,7 @@ function guessLocTitle (foi_name){
 function markerLayerOptions (self) {
     return {
         pointToLayer: function (feature, latlng) {
-            
+
             const prefixes = feature.properties.names.reduce((prev, info) => {
                 const name = info.procedure;
                 const prefix = name.split('_')[0];
@@ -535,7 +535,7 @@ function loadSatelliteData (self) {
                         }
                     }];
 
-                    
+
                     result.options.subtitle.text = `${info.description} (${result.uom})`;
                     dataSatellite.push({...result.options});
 
@@ -619,7 +619,86 @@ function centerMapTo(self) {
     );
 };
 
+function tableSetData (self) {
+
+    const substr = self.tableProps.search.toLowerCase();
+
+    const start = (self.tableProps.page||1)*self.tableProps.length-self.tableProps.length;
+    const end = (self.tableProps.page||1)*self.tableProps.length-1;
+
+    const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
+
+    // Courtesy of: https://stackoverflow.com/a/1885569/1039510
+    const hadIntersection = (array1, array2)=>array1.filter(value => array2.includes(value));
+    const sensorData = self.tableAllData.data.filter(el=>{
+        const intesection = hadIntersection(selectedProc, el.procedures);
+        if (
+            intesection.length>0
+            && intesection.every((proc)=>!proc.includes("ARPA"))
+            && intesection.every((proc)=>!proc.includes("CIPAIS"))
+            && intesection.every((proc)=>!proc.includes("SATELLITE"))
+        ) {
+            return true;
+        } else {
+            return false;
+        };
+    });
+    const filteredSortedData = sensorData.filter(el=>{
+        if (self.tableProps.search.length==0) {
+            return true;
+        } else if (el.description.toLowerCase().includes(substr)) {
+            return true;
+        } else if (el.name.toLowerCase().includes(substr)) {
+            return true;
+        } else {
+            return false;
+        };
+    }).sort((item, other)=>{
+        let comparison;
+        if ( item[self.tableProps.column]<other[self.tableProps.column] ) {
+            comparison = -1;
+        } else {
+            comparison = 1
+        }
+        if ( self.tableProps.dir=='asc' ) {
+            return comparison
+        } else {
+            return comparison*-1
+        }
+    });
+
+    const last_page = Math.floor(filteredSortedData.length/self.tableProps.length)+1;
+    const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
+        if (el.name in indicatorDescription.indicatorDescription) {
+            el['title'] = indicatorDescription.indicatorDescription[el.name].title;
+        } else {
+            el['title'] = `*** ${el.name} ***`
+        };
+        // el['title'] = indicatorDescription.indicatorDescription[el.name].title;
+        return el;
+    });
+    const tableData = {
+        // payload: self.tableAllData.payload,
+        links: {
+            prev: self.tableProps.page>1,
+            next: self.tableProps.page<last_page
+        },
+        meta: {
+            current_page: self.tableProps.page,
+            from: start+1,
+            last_page: last_page,
+            per_page: self.tableProps.length,
+            total: sensorData.length,
+            to: Math.min(end+1, self.tableAllData.data.length),
+            // veryTotal: sensorData.length,
+        },
+        data: slicedData
+    };
+    self.tableData = tableData;
+
+};
+
 export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel,
     addBaseLayers, guessLocTitle, fromNow, groupProcedures, loadSatelliteData,
-    centerMapTo
+    centerMapTo, tableSetData
 };

@@ -569,7 +569,7 @@
                 tableProps: {
                     page: 1,
                     search: '',
-                    length: 5,
+                    length: 10,
                     column: 'name',
                     dir: 'asc'
                 },
@@ -636,9 +636,10 @@
                         name: 'Analizza',
                         event: "click",
                         handler: (data)=>{
-                            this.$root.analisysVariable = `${data.procedures[0]}`;
-                            this.$root.analisysVariableUrn = `${data.definition}`;
-
+                            const procedure = this.features.features[this.selectedMarker].properties.names
+                                .filter(value=>data.procedures.includes(value.procedure))[0];
+                            this.$root.analisysVariable = procedure.procedure;
+                            this.$root.analisysVariableUrn = procedure.urn;
                         },
                         orderable: false,
                         classes: {
@@ -1179,7 +1180,7 @@
                 cards[index].uom = result.uom;
 
                 if (result.x){
-                    
+
                     if(result.procedure.includes('CIPAIS')|| result.procedure.includes('ARPA')){
                         cards[index].time = {
                         date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
@@ -1337,76 +1338,84 @@
             })
         },
         tableSetData () {
-
-            var self = this;
-
-            const substr = self.tableProps.search.toLowerCase();
-
-            const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
-
-            const end = (this.tableProps.page||1)*this.tableProps.length-1;
-
-            const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
-
-            // Courtesy of: https://stackoverflow.com/a/1885569/1039510
-            const hadIntersection = (array1, array2)=>array1.filter(value => array2.includes(value));
-            const filteredSortedData = this.tableAllData.data.filter(el=>{
-              const intesection = hadIntersection(selectedProc, el.procedures);
-              if (
-                  intesection.length>0
-                  && intesection.every((proc)=>!proc.includes("CIPAIS"))
-                  && intesection.every((proc)=>!proc.includes("SATELLITE"))
-              ) {
-                  return true;
-              }
-              else {
-                  return false;
-              };
-            }).filter(el=>{
-                if (self.tableProps.search.length==0) {
-                    return true;
-                } else if (el.description.toLowerCase().includes(substr)) {
-                    return true;
-                } else if (el.name.toLowerCase().includes(substr)) {
-                    return true;
-                } else {
-                    return false;
-                };
-            }).sort((item, other)=>{
-                let comparison;
-                if ( item[this.tableProps.column]<other[this.tableProps.column] ) {
-                    comparison = -1;
-                } else {
-                    comparison = 1
-                }
-                if ( this.tableProps.dir=='asc' ) {
-                    return comparison
-                } else {
-                    return comparison*-1
-                }
-            });
-
-            const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
-            const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
-                el['title'] = indicatorDescription.indicatorDescription[el.name].title;
-                return el;
-            });
-            const tableData = {
-                // payload: this.tableAllData.payload,
-                links: {},
-                meta: {
-                    current_page: this.tableProps.page,
-                    from: start+1,
-                    last_page: last_page,
-                    per_page: this.tableProps.length,
-                    total: filteredSortedData.length,
-                    to: Math.min(end+1, this.tableAllData.data.length)
-                },
-                data: slicedData
-
-            };
-            this.tableData = tableData;
+            sharedFunctions.tableSetData(this);
         },
+        // tableSetData () {
+        //
+        //     var self = this;
+        //
+        //     const substr = self.tableProps.search.toLowerCase();
+        //
+        //     const start = (this.tableProps.page||1)*this.tableProps.length-this.tableProps.length;
+        //
+        //     const end = (this.tableProps.page||1)*this.tableProps.length-1;
+        //
+        //     const selectedProc =self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
+        //
+        //     // Courtesy of: https://stackoverflow.com/a/1885569/1039510
+        //     const hadIntersection = (array1, array2)=>array1.filter(value => array2.includes(value));
+        //     const filteredSortedData = this.tableAllData.data.filter(el=>{
+        //         const intesection = hadIntersection(selectedProc, el.procedures);
+        //         if (
+        //             intesection.length>0
+        //             && intesection.every((proc)=>!proc.includes("CIPAIS"))
+        //             && intesection.every((proc)=>!proc.includes("SATELLITE"))
+        //         ) {
+        //             return true;
+        //         }
+        //         else {
+        //             return false;
+        //         };
+        //     }).filter(el=>{
+        //         if (self.tableProps.search.length==0) {
+        //             return true;
+        //         } else if (el.description.toLowerCase().includes(substr)) {
+        //             return true;
+        //         } else if (el.name.toLowerCase().includes(substr)) {
+        //             return true;
+        //         } else {
+        //             return false;
+        //         };
+        //     }).sort((item, other)=>{
+        //         let comparison;
+        //         if ( item[this.tableProps.column]<other[this.tableProps.column] ) {
+        //             comparison = -1;
+        //         } else {
+        //             comparison = 1
+        //         }
+        //         if ( this.tableProps.dir=='asc' ) {
+        //             return comparison
+        //         } else {
+        //             return comparison*-1
+        //         }
+        //     });
+        //
+        //     const last_page = Math.floor(filteredSortedData.length/this.tableProps.length)+1;
+        //     const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
+        //         if (el.name in indicatorDescription.indicatorDescription) {
+        //             el['title'] = indicatorDescription.indicatorDescription[el.name].title;
+        //         } else {
+        //             el['title'] = `*** ${el.name} ***`
+        //         };
+        //         // el['title'] = indicatorDescription.indicatorDescription[el.name].title;
+        //         return el;
+        //     });
+        //     const tableData = {
+        //         // payload: this.tableAllData.payload,
+        //         links: {},
+        //         meta: {
+        //             current_page: this.tableProps.page,
+        //             from: start+1,
+        //             last_page: last_page,
+        //             per_page: this.tableProps.length,
+        //             total: filteredSortedData.length,
+        //             to: Math.min(end+1, this.tableAllData.data.length)
+        //         },
+        //         data: slicedData
+        //
+        //     };
+        //     this.tableData = tableData;
+        // },
         tableSetDataCipais () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedCipaisProcedures = selectedProc.filter(el=>el.procedure.includes("CIPAIS"));
@@ -1483,8 +1492,6 @@
             var self = this;
             this.tableProps = tableProps
             this.tableSetData();
-
-
         },
         // reloadTableCipais (tableProps) {
         //     var self = this;
@@ -1717,7 +1724,7 @@
         setSelected(tab){
             this.selected =tab;
         },
-      
+
 
     }
 
