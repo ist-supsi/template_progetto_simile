@@ -109,7 +109,8 @@ let indicatorDescription =
         },
 
         'water-pH': {
-            title : 'pH',
+            // title : 'pH',
+            title : 'Acidità / Basicità',
             description: `Il pH è un valore numerico che indica l’acidità di una soluzione. Valori
             compresi tra 6 e 9 sono in genere compatibili con la vita degli organismi
             acquatici; valori al di fuori di questo range sono solitamente la conseguenza

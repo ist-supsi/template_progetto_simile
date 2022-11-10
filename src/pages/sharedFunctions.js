@@ -553,7 +553,6 @@ function loadSatelliteData (self) {
                     resultQQ.options.yAxis.plotLines = result.options.yAxis.plotLines;
                     resultQQ.options.subtitle.text = result.options.subtitle.text;
 
-
                     if (prop.name in indicatorDescription.indicatorDescription) {
                         result.options.title.text = indicatorDescription.indicatorDescription[prop.name].title;
                         resultQQ.options.title.text = result.options.title.text;
@@ -571,11 +570,26 @@ function loadSatelliteData (self) {
                     // optsQQ.series.push(opts1Q);
                     resultQQ.options.series.push({
                         type: 'errorbar',
+                        showInLegend: true,
                         name: 'deviazione standard',
                         data: dataSD,
                         visible: false,
-                        color: '#6d6d6d'
+                        color: '#6d6d6d',
+                        events: {
+                            // hide: function () {
+                            //     console.log(this.chart.series);
+                            //     // this.chart.series[2].setVisible(true);
+                            // },
+                            show: function () {
+                                this.chart.series.forEach((series)=>{
+                                    if (series.name=='intervallo 1-3° quantile') {
+                                        series.hide();
+                                    };
+                                })
+                            }
+                        }
                     });
+
                     resultQQ.options.series.push({
                         type: 'arearange',
                         name: 'intervallo 1-3° quantile',
@@ -583,11 +597,15 @@ function loadSatelliteData (self) {
                         opacity: .7,
                         visible: true,
                         events: {
-                            hide: function () {
-                                this.chart.series[1].setVisible(true);
-                            },
+                            // hide: function () {
+                            //     this.chart.series[1].setVisible(true);
+                            // },
                             show: function () {
-                                this.chart.series[1].setVisible(false);
+                                this.chart.series.forEach((series)=>{
+                                    if (series.name=='deviazione standard') {
+                                        series.hide();
+                                    };
+                                })
                             }
                         }
                     });
@@ -631,6 +649,11 @@ function tableSetData (self) {
 
     const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
 
+    //
+    if ( self.tableProps.column=='id' ) {
+        self.tableProps.column = 'title';
+    };
+
     // Courtesy of: https://stackoverflow.com/a/1885569/1039510
     const hadIntersection = (array1, array2)=>array1.filter(value => array2.includes(value));
     const sensorData = self.tableAllData.data.filter(el=>{
@@ -645,33 +668,8 @@ function tableSetData (self) {
         } else {
             return false;
         };
-    });
-    const filteredSortedData = sensorData.filter(el=>{
-        if (self.tableProps.search.length==0) {
-            return true;
-        } else if (el.description.toLowerCase().includes(substr)) {
-            return true;
-        } else if (el.name.toLowerCase().includes(substr)) {
-            return true;
-        } else {
-            return false;
-        };
-    }).sort((item, other)=>{
-        let comparison;
-        if ( item[self.tableProps.column]<other[self.tableProps.column] ) {
-            comparison = -1;
-        } else {
-            comparison = 1
-        }
-        if ( self.tableProps.dir=='asc' ) {
-            return comparison
-        } else {
-            return comparison*-1
-        }
-    });
-
-    const last_page = Math.floor(filteredSortedData.length/self.tableProps.length)+1;
-    const slicedData = filteredSortedData.slice(start, end+1).map(el=>{
+    }).map((el, idx)=>{
+        el.id = idx;
         if (el.name in indicatorDescription.indicatorDescription) {
             el['title'] = indicatorDescription.indicatorDescription[el.name].title;
         } else {
@@ -680,6 +678,35 @@ function tableSetData (self) {
         // el['title'] = indicatorDescription.indicatorDescription[el.name].title;
         return el;
     });
+    const filteredSortedData = sensorData.filter(el=>{
+        if (self.tableProps.search.length==0) {
+            return true;
+        } else if (el.description.toLowerCase().includes(substr)) {
+            return true;
+        } else if (el.name.toLowerCase().includes(substr)) {
+            return true;
+        } else if (el.title.toLowerCase().includes(substr)) {
+            return true;
+        } else {
+            return false;
+        };
+    });
+
+    filteredSortedData.sort((item, other)=>{
+        const column = self.tableProps.column;
+        if (
+            item[column] < other[column]
+            && self.tableProps.dir=='asc'
+        ) {
+            return -1
+        } else {
+            return 1
+        };
+        return 0
+    });
+
+    const last_page = Math.floor(filteredSortedData.length/self.tableProps.length)+1;
+    const slicedData = filteredSortedData.slice(start, end+1);
     const tableData = {
         // payload: self.tableAllData.payload,
         links: {
@@ -698,7 +725,7 @@ function tableSetData (self) {
         data: slicedData
     };
     self.tableData = tableData;
-
+    // console.log(slicedData.map(el=>el.title));
 };
 
 export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel,

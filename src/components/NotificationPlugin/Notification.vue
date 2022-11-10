@@ -145,7 +145,13 @@ export default {
     this.elmHeight = this.$el.clientHeight;
     if (this.timeout) {
       setTimeout(this.close, this.timeout);
-    }
+    };
+    // Custom behaviour to show last notification only
+    if (this.$notifications.settings.showLastOnly) {
+        this.$notifications.state.slice(0, -1).forEach((ntf)=>{
+            this.$notifications.removeNotification(ntf.timestamp)
+        });
+    };
   }
 };
 </script>

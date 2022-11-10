@@ -3,13 +3,15 @@ import Notifications from './Notifications.vue';
 const NotificationStore = {
   state: [], // here the notifications will be added
   settings: {
+    icon: 'nc-icon nc-quote',
     overlap: false,
     verticalAlign: 'top',
-    horizontalAlign: 'right',
-    type: 'info',
+    horizontalAlign: 'center',
+    type: 'primary',
     timeout: 45000,
     closeOnClick: true,
-    showClose: true
+    showClose: true,
+    showLastOnly: true
   },
   setOptions(options) {
     this.settings = Object.assign(this.settings, options);

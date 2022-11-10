@@ -538,7 +538,7 @@
                     page: 1,
                     search: '',
                     length: 10,
-                    column: 'name',
+                    column: 'title',
                     dir: 'asc'
                 },
                 // tablePropsCipais: {
@@ -557,7 +557,7 @@
 
                     // },
                     {
-                        label:'Titolo',
+                        label:'Misura',
                         name:'title',
                         orderable: true,
                     },
@@ -853,12 +853,12 @@
         },
         selectedTabObs(){
             if ( this.tableData.data && this.tableData.data.length>0 ) {
-                        this.selectedTab='home'
-                    } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length>0 ) {
-                        this.selectedTab='satellitari'
-                    } else if(this.selectedArpaProcedures && this.selectedArpaProcedure.length>0) {
-                        this.selectedTab='arpa'
-                    };
+                this.selectedTab='home'
+            } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length>0 ) {
+                this.selectedTab='satellitari'
+            } else if(this.selectedArpaProcedures && this.selectedArpaProcedure.length>0) {
+                this.selectedTab='arpa'
+            };
         },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
@@ -913,7 +913,6 @@
                             result.options.title.text = info.description;
 
                         }
-                        console.log(result);
                         if(result.uom){
                             result.options.subtitle.text = `${info.description} (${result.uom})`;
                         }
@@ -1076,36 +1075,22 @@
             },
         addMarker(event) {
             this.markers.push(event.latlng);
-            },
+        },
         displayRow (data) {
-          const horizontalAlign = 'center';
-          const verticalAlign = 'top';
-          // const color = Math.floor((Math.random() * 4) + 1)
-          //if it finds the name of the indicator in the indicatorDescription.indicatorDescription dictionary then
-          //it shows the notification
-          if(indicatorDescription.indicatorDescription[data.name]){
-                this.$notifications.notify(
-                {
-                // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
-                    message: indicatorDescription.indicatorDescription[data.name].description,
-                    icon: 'nc-icon nc-quote',
-                    horizontalAlign: horizontalAlign,
-                    verticalAlign: verticalAlign,
-                    type: 'primary',
-                 })
-          }
-          else {
-             this.$notifications.notify(
-                {
-                // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
-                    message: 'no description found',
-                    icon: 'nc-icon nc-quote',
-                    horizontalAlign: horizontalAlign,
-                    verticalAlign: verticalAlign,
-                    type: 'primary',
-                 })
-          }
+            // const horizontalAlign = 'center';
+            // const verticalAlign = 'top';
+            // const color = Math.floor((Math.random() * 4) + 1)
+            //if it finds the name of the indicator in the indicatorDescription.indicatorDescription dictionary then
+            //it shows the notification
 
+            if (indicatorDescription.indicatorDescription[data.name]) {
+                const message = indicatorDescription.indicatorDescription[data.name].description
+            } else {
+                const message = `Nessuna descrizione disponibile per ${data.name}`
+            };
+            this.$notifications.notify(
+                {message: indicatorDescription.indicatorDescription[data.name].description}
+            );
         },
         displayInfo (data) {
           const horizontalAlign = 'center';

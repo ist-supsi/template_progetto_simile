@@ -542,7 +542,7 @@
                     page: 1,
                     search: '',
                     length: 10,
-                    column: 'name',
+                    column: 'title',
                     dir: 'asc'
                 },
                 // tablePropsCipais: {
@@ -554,14 +554,13 @@
                 // },
                 tableColumns2: [
                     // {
-                    //     // label: 'Nome',
-                    //     // name: 'name',
-                    //     // orderable: true,
-                    //     // hidden: true,
-
+                    //     label: ' ',
+                    //     name: 'id',
+                    //     orderable: false,
+                    //     hidden: true,
                     // },
                     {
-                        label:'Titolo',
+                        label:'Misura',
                         name:'title',
                         orderable: true,
                     },
@@ -750,7 +749,6 @@
 
             const groupBy = (x,f,g)=>x.reduce((a,b)=>{
                 const rr = g(b);
-
                 if ( a[f(b)] ) {
                     // a[f(b)].push(g(b))
                     if ( !a[f(b)][rr.name] ) {
@@ -777,8 +775,8 @@
                     procedure: b.properties.name,
                     urn: b.properties.observedproperties[0].def,
                     description: b.properties.description,
-                    foi_name: b.properties.foi_name
-
+                    foi_name: b.properties.foi_name,
+                    observedproperties: b.properties.observedproperties
                 }
             };
 
@@ -787,12 +785,18 @@
                 this.istsos.fetchGeometryCollection(),
             ]).then(results=>{
                 const result = results[1];
+                // console.log(result);
+
+                // const reduced = result.data.features.reduce((acc, curr, cidx)=>{
+                //
+                // }, []);
 
                 const reduced = groupBy(
                     result.data.features,
                     approxPosition,
                     collectNames
                 );
+                // console.log(reduced);
                 let bounds = L.latLngBounds([]);
 
                 const features = Object.entries(reduced).map(([k, v], ii) => {
@@ -813,16 +817,17 @@
                                 if ( ia>ib ) return 1;
                                 return -1
 
-                            }).map(a=>a[1]),
+                            }).map(a=>{
+
+                                return a[1]
+                            }),
                             // infos: v,
                         },
                         "geometry": {
                             "type": "Point",
                             "coordinates": coords
                         }
-
                     }
-
             });
 
                 // Set FeatureCollection
@@ -845,7 +850,6 @@
             this.$root.dropdownVisible = false;
 
         },
-
     methods: {
         centerMapTo () {
             sharedFunctions.centerMapTo(this);
@@ -1006,14 +1010,12 @@
                   cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
                 };
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
-                if(result.procedure.includes('CIPAIS') ){
+                if (result.procedure.includes('CIPAIS')) {
                     cards[index].type='Dato Cipais'
-                }
-                else if(result.procedure.includes('ARPA') ) {
-                cards[index].type='Dato Arpa'
-                }
-                else if(result.procedure.includes('SATELLITE') ) {
-                cards[index].type='Dato Satellitare'
+                } else if(result.procedure.includes('ARPA') ) {
+                  cards[index].type='Dato Arpa'
+                } else if(result.procedure.includes('SATELLITE') ) {
+                  cards[index].type='Dato Satellitare'
                 }
                 else{cards[index].type='Dato da Sensore'}
 
@@ -1040,9 +1042,24 @@
 
             let calls = []
             for (let ii = 0; ii < 6; ii++) {
+
                 if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
                     let info = self.features.features[self.selectedMarker].properties.names[ii];
-                    // cards.push(info)
+                    // TODO:
+                    // self.features.features[self.selectedMarker].properties.names[ii].observedproperties.forEach((nfo, idx)=>{
+                    //     // cards[ii] = {...nfo, name: };
+                    //     cards[ii].data = null;
+                    //     console.log(info.procedure);
+                    //     console.log(nfo);
+                    //     calls.push(this.istsos.fetchBy(
+                    //         nfo.def,
+                    //         info.procedure
+                    //     ).then((result)=>{
+                    //         updateCard(ii+idx, result);
+                    //     }));
+                    // });
+
+
                     cards[ii] = info;
 
                     cards[ii].data = null;
@@ -1062,39 +1079,25 @@
         markerLayerOptions () { return sharedFunctions.markerLayerOptions(this) },
         removeMarker(index) {
             this.markers.splice(index, 1);
-            },
+        },
         addMarker(event) {
             this.markers.push(event.latlng);
-            },
+        },
         displayRow (data) {
-          const horizontalAlign = 'center';
-          const verticalAlign = 'top';
-          // const color = Math.floor((Math.random() * 4) + 1)
-          //if it finds the name of the indicator in the indicatorDescription.indicatorDescription dictionary then
-          //it shows the notification
-          if(indicatorDescription.indicatorDescription[data.name]){
-                this.$notifications.notify(
-                {
-                // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
-                    message: indicatorDescription.indicatorDescription[data.name].description,
-                    icon: 'nc-icon nc-quote',
-                    horizontalAlign: horizontalAlign,
-                    verticalAlign: verticalAlign,
-                    type: 'primary',
-                 })
-          }
-          else {
-             this.$notifications.notify(
-                {
-                // message: `<span>Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.</span>`,
-                    message: 'no description found',
-                    icon: 'nc-icon nc-quote',
-                    horizontalAlign: horizontalAlign,
-                    verticalAlign: verticalAlign,
-                    type: 'primary',
-                 })
-          }
+            // const horizontalAlign = 'center';
+            // const verticalAlign = 'top';
+            // const color = Math.floor((Math.random() * 4) + 1)
+            //if it finds the name of the indicator in the indicatorDescription.indicatorDescription dictionary then
+            //it shows the notification
 
+            if (indicatorDescription.indicatorDescription[data.name]) {
+                const message = indicatorDescription.indicatorDescription[data.name].description
+            } else {
+                const message = `Nessuna descrizione disponibile per ${data.name}`
+            };
+            this.$notifications.notify(
+                {message: indicatorDescription.indicatorDescription[data.name].description}
+            );
         },
         displayInfo (data) {
           const horizontalAlign = 'center';
@@ -1111,10 +1114,10 @@
                  })
         },
         displayModal (data) {
-          const horizontalAlign = 'center';
-          const verticalAlign = 'top';
+            const horizontalAlign = 'center';
+            const verticalAlign = 'top';
 
-          this.$notifications.notify(
+            this.$notifications.notify(
                 {
                     message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
 
@@ -1266,7 +1269,6 @@
         tableSetDataSatellite () {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
             this.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
-
         },
         reloadTable (tableProps) {
             var self = this;
