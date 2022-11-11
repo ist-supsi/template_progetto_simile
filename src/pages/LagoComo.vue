@@ -701,7 +701,7 @@
                     } else if ( this.selectedSatelliteProcedures.length>0 ) {
                         this.selectedTab='satellitari'
                     } else {
-                        this.selectedTab='cipais'
+                        this.selectedTab='arpa'
                     };
 
                 },
