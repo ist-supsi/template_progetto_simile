@@ -37,7 +37,8 @@
                                 <i v-if="cards[0].time" class="fa fa-clock-o"
                                     data-toggle="tooltip"
                                     :title="`approximately ${cards[0].time.from_now}`"
-                                    aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}}
+                                    aria-hidden="true"></i>{{cards[0].time && cards[0].time.time}} (Ultimo dato rilevato disponibile)
+
                             </div>
                         </stats-card>
 
@@ -426,7 +427,9 @@
 
                         // result.options.series[counter].color = this.category_colors[counter];
 
-                        if (procedure=='VENTO_VEL_MAX') {
+                        if (procedure in sharedFunctions.windsProcedure) {
+                            const dirProc = sharedFunctions.windsProcedure[procedure]
+                            const dirUrn = self.allProcedures[dirProc].observedproperties[0].definition
                             self.wind_data_loading = true;
                             //
                             this.wind_data_options = {plotOptions: {
@@ -436,8 +439,8 @@
                             }};
 
                             let windPromise = this.istsos.fetchSeries(
-                                "VENTO_DIR",
-                                "urn:ogc:def:parameter:x-istsos:1.0:meteo:wind:direction",
+                                dirProc,
+                                dirUrn,
                                 self.seriesBegin,
                                 self.seriesEnd
                             )

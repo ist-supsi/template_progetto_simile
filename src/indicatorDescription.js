@@ -25,7 +25,7 @@ let indicatorDescription =
         },
 
         'water-temperature-ptcan1_0': {
-            title : "Temperatura superficiale",
+            title : "Temperatura superficiale (profondità 1 m)",
             description: `La misura delle temperatura dell'acqua permette di seguire il ciclo termico
             del lago nel corso dell'anno. Dalla temperatura dipendono processi importanti
             come la stratificazione/circolazione delle acque, la quantità di ossigeno in
@@ -34,6 +34,36 @@ let indicatorDescription =
             cambiamenti climatici.
             `,
             breveDescrizione:`Temperatura superficiale dell'acqua alla profondità di 1 m`,
+            // icon:'fa fa-thermometer-three-quarters text-warning',
+            icon:'icon-water_temp',
+            // annuale: false,
+        },
+
+        'water-temperature-ptcan10_0': {
+            title : "Temperatura superficiale (profondità 10 m)",
+            description: `La misura delle temperatura dell'acqua permette di seguire il ciclo termico
+            del lago nel corso dell'anno. Dalla temperatura dipendono processi importanti
+            come la stratificazione/circolazione delle acque, la quantità di ossigeno in
+            coluaione, lo sviluppo delle fioriture algali. Inoltre il monitoraggio a lungo
+            termine delle temperature è utile per valutare la risposta del lago ai
+            cambiamenti climatici.
+            `,
+            breveDescrizione:`Temperatura superficiale dell'acqua alla profondità di 10 m`,
+            // icon:'fa fa-thermometer-three-quarters text-warning',
+            icon:'icon-water_temp',
+            // annuale: false,
+        },
+
+        'water-temperature-ptcan30_0': {
+            title : "Temperatura superficiale (profondità 30 m)",
+            description: `La misura delle temperatura dell'acqua permette di seguire il ciclo termico
+            del lago nel corso dell'anno. Dalla temperatura dipendono processi importanti
+            come la stratificazione/circolazione delle acque, la quantità di ossigeno in
+            coluaione, lo sviluppo delle fioriture algali. Inoltre il monitoraggio a lungo
+            termine delle temperature è utile per valutare la risposta del lago ai
+            cambiamenti climatici.
+            `,
+            breveDescrizione:`Temperatura superficiale dell'acqua alla profondità di 30 m`,
             // icon:'fa fa-thermometer-three-quarters text-warning',
             icon:'icon-water_temp',
             // annuale: false,

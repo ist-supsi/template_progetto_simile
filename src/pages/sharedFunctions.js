@@ -421,9 +421,23 @@ function markerLayerOptions (self) {
     }
 }
 
+// Elenco delle coppie di procedure che vanno analizzate in parallelo
+// in serie temporale
 const groupedProceduresList = [
     // ['WaterTemp_S', 'AIR_TEMP'] // raggruppamento di test
+    ['WATER_TEMP_1_0', 'WATER_TEMP_10_0', 'WATER_TEMP_30_0'],
+    ['O2D_Sup_AVG1H', 'O2D_Deep_AVG1H'],
+    ['O2S_Sup_AVG1H', 'O2S_Deep_AVG1H'],
 ];
+
+// Coppie delle procedure relative alle misure di vento da associare
+const windsProcedure = {
+    "WIND_SPEED": "WIND_DIRECTION",
+    "WIND_SPEED_MAX": "WIND_DIRECTION",
+    "VENTO_VEL_MAX": "VENTO_DIR",
+    "b2_MANDELLO_WIND_SPEED_MAX": "b2_MANDELLO_WIND_DIRECTION",
+    "b1_DERVIO_WIND_SPEED_MAX": "b1_DERVIO_WIND_DIRECTION"
+};
 
 // let groupedProcedures = groupedProceduresList.reduce((prev, curr)=>{
 //     for (let [index, proc] of curr.entries()) {
@@ -730,5 +744,5 @@ function tableSetData (self) {
 
 export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel,
     addBaseLayers, guessLocTitle, fromNow, groupProcedures, loadSatelliteData,
-    centerMapTo, tableSetData
+    centerMapTo, tableSetData, windsProcedure
 };

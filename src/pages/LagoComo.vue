@@ -766,8 +766,8 @@
                     procedure: b.properties.name,
                     urn: b.properties.observedproperties[0].def,
                     description: b.properties.description,
-                    foi_name: b.properties.foi_name
-
+                    foi_name: b.properties.foi_name,
+                    observedproperties: b.properties.observedproperties
                 }
             };
 
@@ -1050,18 +1050,21 @@
 
             let calls = []
             for (let ii = 0; ii < 6; ii++) {
+
                 if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
                     let info = self.features.features[self.selectedMarker].properties.names[ii];
-                    // cards.push(info)
-                    cards[ii] = info;
-
-                    cards[ii].data = null;
-                    calls.push(this.istsos.fetchBy(
-                        cards[ii].urn,
-                        cards[ii].procedure
-                    ).then((result)=>{
-                        updateCard(ii, result);
-                    }));
+                    // In questo modo considero anche le pèrocedure annidate
+                    // (i.e. capita al momento solo per misure satellitari: Solidi sospesi e Clorofilla a)
+                    self.features.features[self.selectedMarker].properties.names[ii].observedproperties.forEach((nfo, idx)=>{
+                        cards[ii+idx] = nfo;
+                        cards[ii+idx].data = null;
+                        calls.push(this.istsos.fetchBy(
+                            nfo.def,
+                            info.procedure
+                        ).then((result)=>{
+                            updateCard(ii+idx, result);
+                        }));
+                    });
                 };
             };
             Promise.all(calls).then(()=>{

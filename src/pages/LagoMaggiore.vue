@@ -1045,30 +1045,18 @@
 
                 if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
                     let info = self.features.features[self.selectedMarker].properties.names[ii];
-                    // TODO:
-                    // self.features.features[self.selectedMarker].properties.names[ii].observedproperties.forEach((nfo, idx)=>{
-                    //     // cards[ii] = {...nfo, name: };
-                    //     cards[ii].data = null;
-                    //     console.log(info.procedure);
-                    //     console.log(nfo);
-                    //     calls.push(this.istsos.fetchBy(
-                    //         nfo.def,
-                    //         info.procedure
-                    //     ).then((result)=>{
-                    //         updateCard(ii+idx, result);
-                    //     }));
-                    // });
-
-
-                    cards[ii] = info;
-
-                    cards[ii].data = null;
-                    calls.push(this.istsos.fetchBy(
-                        cards[ii].urn,
-                        cards[ii].procedure
-                    ).then((result)=>{
-                        updateCard(ii, result);
-                    }));
+                    // In questo modo considero anche le pèrocedure annidate
+                    // (i.e. capita al momento solo per misure satellitari: Solidi sospesi e Clorofilla a)
+                    self.features.features[self.selectedMarker].properties.names[ii].observedproperties.forEach((nfo, idx)=>{
+                        cards[ii+idx] = nfo;
+                        cards[ii+idx].data = null;
+                        calls.push(this.istsos.fetchBy(
+                            nfo.def,
+                            info.procedure
+                        ).then((result)=>{
+                            updateCard(ii+idx, result);
+                        }));
+                    });
                 };
             };
             Promise.all(calls).then(()=>{
