@@ -291,7 +291,8 @@ function areaLayerOptions (self) {
           })
       },
   }
-}
+};
+
 function guessLocLabel (foi_name){
     const locLabel= {
         FIGINO:'Figino',
@@ -365,9 +366,6 @@ function guessLocTitle (foi_name){
     else return foi_name
 };
 
-
-
-
 function markerLayerOptions (self) {
     return {
         pointToLayer: function (feature, latlng) {
@@ -420,6 +418,28 @@ function markerLayerOptions (self) {
         }
     }
 }
+
+const procPriorities = [
+    "air-temperature",
+    "air-relative-humidity",
+    "wind-speed-max",
+    "wind-direction",
+    "water-temperature",
+    "water-temperature-pH",
+    'water-temperature-ptcan1_0',
+    "water-O2S",
+    "water-SDT",
+    "water-PTOT",
+    "water-depth",
+    'MixDepth',
+    "water-Pload",
+    'Pload',
+    "water-Biovol",
+    'water-Biovol',
+    'Biovol',
+    'biovol',
+    "water-PC"
+];
 
 // Elenco delle coppie di procedure che vanno analizzate in parallelo
 // in serie temporale
@@ -582,6 +602,9 @@ function loadSatelliteData (self) {
                     //    (https://www.highcharts.com/demo/arearange)
                     // optsQQ.series.push(opts3Q);
                     // optsQQ.series.push(opts1Q);
+
+                    const sname = 'intervallo 1-3° quartile'
+
                     resultQQ.options.series.push({
                         type: 'errorbar',
                         showInLegend: true,
@@ -596,7 +619,7 @@ function loadSatelliteData (self) {
                             // },
                             show: function () {
                                 this.chart.series.forEach((series)=>{
-                                    if (series.name=='intervallo 1-3° quantile') {
+                                    if (series.name==sname) {
                                         series.hide();
                                     };
                                 })
@@ -606,7 +629,7 @@ function loadSatelliteData (self) {
 
                     resultQQ.options.series.push({
                         type: 'arearange',
-                        name: 'intervallo 1-3° quantile',
+                        name: sname,
                         data: seriesQQ,
                         opacity: .7,
                         visible: true,
@@ -744,5 +767,5 @@ function tableSetData (self) {
 
 export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel,
     addBaseLayers, guessLocTitle, fromNow, groupProcedures, loadSatelliteData,
-    centerMapTo, tableSetData, windsProcedure
+    centerMapTo, tableSetData, windsProcedure, procPriorities
 };

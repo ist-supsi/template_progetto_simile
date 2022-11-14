@@ -847,10 +847,27 @@
                                 const ia = good_names.indexOf(a[0]);
                                 const ib = good_names.indexOf(b[0]);
 
-                                if ( ia==ib ) return 0;
-                                if ( ia==-1 ) return 1;
-                                if ( ib==-1 ) return -1;
-                                if ( ia>ib ) return 1;
+                                if ( ia==ib ) {
+                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    return 0
+                                };
+                                if ( ia>ib ) {
+                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    return 1
+                                };
+                                if ( ia==-1 ) {
+                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    return 1;
+                                };
+                                if ( ib==-1 ) {
+                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    return -1;
+                                };
+
                                 return -1
 
                             }).map(a=>a[1]),
@@ -1179,7 +1196,7 @@
 
                 cards[index].data = result.value;
 
-                cards[index].uom = result.uom;
+                cards[index].uom = (!result.uom) || result.uom=='null' ? null : result.uom;
 
                 if (result.x){
 

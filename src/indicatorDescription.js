@@ -139,8 +139,8 @@ let indicatorDescription =
         },
 
         'water-pH': {
-            // title : 'pH',
-            title : 'Acidità / Basicità',
+            title : 'pH',
+            // title : 'Acidità / Basicità',
             description: `Il pH è un valore numerico che indica l’acidità di una soluzione. Valori
             compresi tra 6 e 9 sono in genere compatibili con la vita degli organismi
             acquatici; valori al di fuori di questo range sono solitamente la conseguenza
@@ -378,6 +378,15 @@ let indicatorDescription =
             annuale:false,
         },
 
+        'sat-water-Chl-a': {
+            title : 'Clorofilla a',
+            description: `Descrizione non presente`,
+            breveDescrizione:`Concentrazione di clorofilla-a (descrizione provvisoria)`,
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-water_CHl_a',
+            annuale:false,
+        },
+
         'water-PC': {
             title : 'Ficocianina',
             description: `Ficocianina e ficoeritrina sono sue pigmenti algali presenti nel fitoplancton
@@ -582,10 +591,9 @@ let indicatorDescription =
         },
 
         'air-relative-humidity': {
-            title : 'Umidità dell aria',
-            description: `Umidità dell'aria
-            `,
-            breveDescrizione:`Umidità dell aria`,
+            title : "Umidità dell'aria",
+            description: "Umidità dell'aria",
+            breveDescrizione: "Umidità dell'aria",
             // icon: 'fa fa-tint text-info',
             icon:' icon-air_humidity',
             annuale:false,
@@ -644,6 +652,7 @@ let indicatorDescription =
 
 indicatorDescription['NLoad'] = indicatorDescription['Nload'];
 indicatorDescription['Biovol'] = indicatorDescription['biovol'];
+indicatorDescription["water-temperature-pH"] = indicatorDescription["water-temperature"]
     //per accedere alle mie descrizioni
 //var indicatorID1 =indicatorDescription["indicatorID1"];
 //var indicatorID2 =indicatorDescription["indicatorID2"];

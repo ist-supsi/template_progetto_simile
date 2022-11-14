@@ -722,20 +722,8 @@
 
             sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
 
-            const good_names = [
-                "air-temperature",
-                "air-relative-humidity",
-                "wind-direction",
-                "wind-speed-max",
-                "water-temperature",
-                "water-O2S",
-                "water-SDT",
-                "water-PTOT",
-                "water-depth",
-                "water-Pload",
-                "water-Biovol",
-                "water-PC"
-            ];
+            // TODO: Aggiungere procedure b1 e b2
+            const good_names = sharedFunctions.procPriorities;
 
             const groupBy = (x,f,g)=>x.reduce((a,b)=>{
                 const rr = g(b);
@@ -796,10 +784,27 @@
                                 const ia = good_names.indexOf(a[0]);
                                 const ib = good_names.indexOf(b[0]);
 
-                                if ( ia==ib ) return 0;
-                                if ( ia==-1 ) return 1;
-                                if ( ib==-1 ) return -1;
-                                if ( ia>ib ) return 1;
+                                if ( ia==ib ) {
+                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    return 0
+                                };
+                                if ( ia>ib ) {
+                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    return 1
+                                };
+                                if ( ia==-1 ) {
+                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    return 1;
+                                };
+                                if ( ib==-1 ) {
+                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    return -1;
+                                };
+
                                 return -1
 
                             }).map(a=>a[1]),
@@ -1028,7 +1033,7 @@
 
                 cards[index].data = result.value;
 
-                cards[index].uom = result.uom;
+                cards[index].uom = (!result.uom) || result.uom=='null' ? null : result.uom;
 
                 if (result.x){
 
