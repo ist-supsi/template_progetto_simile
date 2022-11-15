@@ -285,9 +285,8 @@ function areaLayerOptions (self) {
       onEachFeature: function (feature, layer) {
           layer.bindTooltip(`<h6>${guessLocLabel(feature.properties.label)}</h6>`, {sticky: true})
           layer.on('click', ee => {
-              self.selectedMarker=feature.properties.markerIndex
-              self.selectedTab='satellitari'
-              console.log(self.selectedMarker)
+              self.selectedMarker=feature.properties.markerIndex;
+              self.selectedTab='satellitari';
           })
       },
   }
@@ -379,8 +378,10 @@ function markerLayerOptions (self) {
             const suffixes = feature.properties.names.reduce((prev, info) => {
                 const name = info.procedure;
 
+                // TODO:
                 const suffix = name.split('_').at(-1);
                 if ( !prev.includes(suffix) ) { prev.push(suffix); }
+                // console.log(name, prev);
                 return prev;
             }, []);
             if (!prefixes.every(prefix => prefix=='SATELLITE')) {
@@ -407,6 +408,8 @@ function markerLayerOptions (self) {
                 return marker;
             } else {
                 self.basins.features.map(feat => {
+                    // console.log([feat.properties.basin, suffixes]);
+                    // if (feature.properties.names.every(name=>name.procedure.includes(`_${feat.properties.basin}`))) {
                     if ( feat.properties.basin.startsWith(suffixes[0]) ) {
                         feat.properties.markerIndex = feature.properties.markerIndex;
                     };
@@ -502,8 +505,9 @@ function loadSatelliteData (self) {
     let dataSatelliteWithSD = [];
     let dataSatelliteWithQQ = [];
     let prms = [];
-    for (const proc of self.selectedSatelliteProcedures) {
-
+    for (const proc of self.selectedSatelliteProcedures
+        // .filter(myproc=>!myproc.procedure.match(/_[0-9]Q/gi))
+    ) {
         const info = self.allProcedures[proc.procedure];
 
         if (info.samplingTime.beginposition && info.samplingTime.endposition) {

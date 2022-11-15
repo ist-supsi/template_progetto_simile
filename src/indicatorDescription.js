@@ -40,7 +40,7 @@ let indicatorDescription =
         },
 
         'water-temperature-ptcan10_0': {
-            title : "Temperatura superficiale (profondità 10 m)",
+            title : "Temperatura dell'acqua (profondità 10 m)",
             description: `La misura delle temperatura dell'acqua permette di seguire il ciclo termico
             del lago nel corso dell'anno. Dalla temperatura dipendono processi importanti
             come la stratificazione/circolazione delle acque, la quantità di ossigeno in
@@ -55,7 +55,7 @@ let indicatorDescription =
         },
 
         'water-temperature-ptcan30_0': {
-            title : "Temperatura superficiale (profondità 30 m)",
+            title : "Temperatura dell'acqua (profondità 30 m)",
             description: `La misura delle temperatura dell'acqua permette di seguire il ciclo termico
             del lago nel corso dell'anno. Dalla temperatura dipendono processi importanti
             come la stratificazione/circolazione delle acque, la quantità di ossigeno in
@@ -67,6 +67,14 @@ let indicatorDescription =
             // icon:'fa fa-thermometer-three-quarters text-warning',
             icon:'icon-water_temp',
             // annuale: false,
+        },
+
+        'sat-water-temperature': {
+            title : "Temperatura dell'acqua da satellite",
+            description: `Descrizione non presente`,
+            breveDescrizione:`Temperatura superficiale dell'acqua misurata da satellite (descrizione provvisoria)`,
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-water_temp'
         },
 
         'water-SDT': {
@@ -339,17 +347,17 @@ let indicatorDescription =
             },
         },
 
-        'indice-LTLeco': {
-            title : 'Indice LTLeco',
-            description: `Indice che descrive lo stato trofico di un lago; basato sulla somma di punteggi
-            derivanti dal valore di P totale alla circolazione, trasperenza media annua,
-            e valori di ossigeno alla saturazione in ipolimnio a fine stratificazione.
-            `,
-            breveDescrizione:`Valore dell'indice sintetico LTLeco `,
-            // icon:'fa fa-superpowers text-primary',
-            icon:'icon-indice_LTleco',
-            annuale:true,
-        },
+        // 'indice-LTLeco': {
+        //     title : 'Indice LTLeco',
+        //     description: `Indice che descrive lo stato trofico di un lago; basato sulla somma di punteggi
+        //     derivanti dal valore di P totale alla circolazione, trasperenza media annua,
+        //     e valori di ossigeno alla saturazione in ipolimnio a fine stratificazione.
+        //     `,
+        //     breveDescrizione:`Valore dell'indice sintetico LTLeco `,
+        //     // icon:'fa fa-superpowers text-primary',
+        //     icon:'icon-indice_LTleco',
+        //     annuale:true,
+        // },
         'LTLeco': {
             title : 'Indice LTLeco',
             description: `Indice che descrive lo stato trofico di un lago; basato sulla somma di punteggi
@@ -360,6 +368,7 @@ let indicatorDescription =
             // icon:'fa fa-superpowers text-primary',
             icon:'icon-indice_LTleco',
             annuale:true,
+            decimals: 0
         },
 
         'water-Chl-a': {
@@ -648,11 +657,21 @@ let indicatorDescription =
             annuale:false,
         },
 
+        'sat-water-TSS': {
+            title : 'Solidi Totali Sospesi',
+            description: `Concentrazione media di Solidi Totali Sospesi (TSS)`,
+            breveDescrizione:`Concentrazione media di Solidi Totali Sospesi (TSS)`,
+            // icon:'fa fa-bolt text-info',
+            icon:'icon-water_CHl_a',
+            annuale:false,
+        },
+
     };
 
 indicatorDescription['NLoad'] = indicatorDescription['Nload'];
 indicatorDescription['Biovol'] = indicatorDescription['biovol'];
 indicatorDescription["water-temperature-pH"] = indicatorDescription["water-temperature"]
+indicatorDescription['indice-LTLeco'] = indicatorDescription['LTLeco']
     //per accedere alle mie descrizioni
 //var indicatorID1 =indicatorDescription["indicatorID1"];
 //var indicatorID2 =indicatorDescription["indicatorID2"];

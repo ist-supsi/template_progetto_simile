@@ -731,27 +731,22 @@
 
             sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
 
-            const good_names = [
-                "air-temperature",
-                "air-relative-humidity",
-                "wind-direction",
-                "wind-speed-max",
-                "wind-speed",
-                "water-temperature",
-                "water-O2S",
-                "water-SDT",
-                "water-PTOT",
-                "water-depth",
-                "water-Pload",
-                "water-Biovol",
-                "water-PC"
-            ];
+            const good_names = sharedFunctions.procPriorities;
 
             const groupBy = (x,f,g)=>x.reduce((a,b)=>{
                 const rr = g(b);
+
                 if ( a[f(b)] ) {
                     // a[f(b)].push(g(b))
-                    if ( !a[f(b)][rr.name] ) {
+                    // Questo porta a favorire "Chl_S_AVG1H_conc" rispetto a "Chl_S_AVG1H" [*]
+                    // La prima misurata in μg/L è preferita perché conforme ad altre misurazioni
+                    // sugli altri laghi
+                    if ( !a[f(b)][rr.name] && !['_1Q', '_3Q', '_SD'].some(suff=>rr.procedure.endsWith(suff))) {
+                        a[f(b)][rr.name] = rr;
+                    } else if (
+                        rr.procedure.startsWith(a[f(b)][rr.name].procedure)
+                        && a[f(b)][rr.name].procedure.endsWith('_conc') // [*]
+                    ) {
                         a[f(b)][rr.name] = rr;
                     };
                     return a;
@@ -769,7 +764,6 @@
                 return `${lon};${lat}`;
             };
             const collectNames = (b)=>{
-
                 return {
                     name: b.properties.observedproperties[0].name,
                     procedure: b.properties.name,
@@ -785,7 +779,6 @@
                 this.istsos.fetchGeometryCollection(),
             ]).then(results=>{
                 const result = results[1];
-                // console.log(result);
 
                 // const reduced = result.data.features.reduce((acc, curr, cidx)=>{
                 //
@@ -796,9 +789,9 @@
                     approxPosition,
                     collectNames
                 );
-                // console.log(reduced);
                 let bounds = L.latLngBounds([]);
 
+                console.log(reduced);
                 const features = Object.entries(reduced).map(([k, v], ii) => {
                     const coords = k.split(';').map(parseFloat);
                     // bounds.extend(L.latLng(coords[1], coords[0]));
@@ -810,25 +803,24 @@
                             names: Object.entries(v).sort((a, b) => {
                                 const ia = good_names.indexOf(a[0]);
                                 const ib = good_names.indexOf(b[0]);
-
                                 if ( ia==ib ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    if ( a[1].procedure.toLowerCase().includes('cipais') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('cipais') ) return -1;
                                     return 0
                                 };
                                 if ( ia>ib ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    if ( a[1].procedure.toLowerCase().includes('cipais') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('cipais') ) return -1;
                                     return 1
                                 };
                                 if ( ia==-1 ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    if ( a[1].procedure.toLowerCase().includes('cipais') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('cipais') ) return -1;
                                     return 1;
                                 };
                                 if ( ib==-1 ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    if ( a[1].procedure.toLowerCase().includes('cipais') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('cipais') ) return -1;
                                     return -1;
                                 };
 
@@ -983,13 +975,17 @@
                         })
                         }
 
+                        const uom = !result.uom || result.uom=='null' ? '' : ` (${result.uom})`;
+
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                            result.options.subtitle.text = `${indicatorDescription.indicatorDescription[info.observedproperties[0].name].breveDescrizione}${uom}`;
                         }
                         else{
                             result.options.title.text = info.description;
+                            result.options.subtitle.text = `${info.description}${uom}`;
                         }
-                        result.options.subtitle.text = `${info.description} (${result.uom})`;
+
                         dataCipais.push(result.options);
                     });
                     prms.push(prm);
@@ -1030,12 +1026,13 @@
                 if (result.procedure.includes('CIPAIS')) {
                     cards[index].type='Dato Cipais'
                 } else if(result.procedure.includes('ARPA') ) {
-                  cards[index].type='Dato Arpa'
+                    cards[index].type='Dato Arpa'
                 } else if(result.procedure.includes('SATELLITE') ) {
-                  cards[index].type='Dato Satellitare'
+                    cards[index].type='Dato Satellitare'
                 }
                 else{cards[index].type='Dato da Sensore'}
 
+                console.log(index, cards[index].name, result.value);
                 cards[index].data = result.value;
 
                 cards[index].uom = (!result.uom) || result.uom=='null' ? null : result.uom;
@@ -1057,25 +1054,24 @@
                 cards[index].message = result.locationUrn.split(':').at(-1);
             };
 
-            let calls = []
-            for (let ii = 0; ii < 6; ii++) {
-
-                if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
-                    let info = self.features.features[self.selectedMarker].properties.names[ii];
-                    // In questo modo considero anche le pèrocedure annidate
-                    // (i.e. capita al momento solo per misure satellitari: Solidi sospesi e Clorofilla a)
-                    self.features.features[self.selectedMarker].properties.names[ii].observedproperties.forEach((nfo, idx)=>{
-                        cards[ii+idx] = nfo;
-                        cards[ii+idx].data = null;
+            let calls = [];
+            self.features.features[self.selectedMarker].properties.names.forEach((info, cidx)=>{
+                // In questo modo considero anche le pèrocedure annidate
+                // (i.e. capita al momento solo per misure satellitari: Solidi sospesi e Clorofilla a)
+                info.observedproperties.forEach((nfo, idx)=>{
+                    if (calls.length<6) {
+                        const lidx = calls.length;
+                        cards[lidx] = nfo;
+                        cards[lidx].data = null;
                         calls.push(this.istsos.fetchBy(
                             nfo.def,
                             info.procedure
                         ).then((result)=>{
-                            updateCard(ii+idx, result);
+                            updateCard(lidx, result);
                         }));
-                    });
-                };
-            };
+                    };
+                });
+            });
             Promise.all(calls).then(()=>{
                 self.cards = cards;
             })

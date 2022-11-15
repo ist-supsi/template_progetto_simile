@@ -290,7 +290,7 @@ function istsosToSeries(response, args) {
     }
 };
 
-function istosToLine (response, title, stock = false) {
+function istosToLine (response, title, stock = false, decimals = 2, precision = 3) {
       const dataArray = response.data.data[0].result.DataArray;
       let info;
       if ( !stock ) {
@@ -308,19 +308,18 @@ function istosToLine (response, title, stock = false) {
 
       // console.log(dataArray);
       if (title) { info.options.title = title; };
-      
+
       let tip;
-      if(dataArray.field[1].uom=="null"){
+      if (dataArray.field[1].uom=="null") {
         info.options.yAxis.title.text = dataArray.field[1].name
         info.uom = null;
         tip ="";
-        }
-      else{
+      } else {
         info.options.yAxis.title.text = `${dataArray.field[1].name} (${dataArray.field[1].uom})`
         info.uom = dataArray.field[1].uom;
         tip=` ${dataArray.field[1].uom}`
-        };
-        
+      };
+
       info.options.tooltip = {
           shared: true,
           valueSuffix: tip,
@@ -329,14 +328,15 @@ function istosToLine (response, title, stock = false) {
           // pointFormat: '<tr><td style="color: {series.color}">{series.name} </td>' +
           //     `<td style="text-align: right"><b>{point.y} ${dataArray.field[1].uom}</b></td></tr>`,
           // footerFormat: '</table>',
-          valueDecimals: 2
+          valueDecimals: decimals
       };
       // info.options.xAxis.categories[0] = `<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`;
       // info.options.series[0].data[0].y = dataArray.values[0][1];
       // info.value = dataArray.values[0][1];
       // info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
 
-      info.options.series[0].data = dataArray.values.filter(el=>el[1]!==null).map(el=>[epochToTime(el[0]), parseFloat(el[1].toPrecision(3))]);
+      info.options.series[0].data = dataArray.values.filter(el=>el[1]!==null)
+        .map(el=>[epochToTime(el[0]), parseFloat(el[1].toPrecision(precision))]);
       info.options.series[0].name = response.data.data[0].name;
       info.options.series[0].color = category_colors[0];
       // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}

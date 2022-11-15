@@ -768,27 +768,14 @@
 
             sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
 
-            const good_names = [
-                "air-temperature",
-                "air-relative-humidity",
-                "wind-direction",
-                "wind-speed-max",
-                "water-temperature",
-                "water-O2S",
-                "water-SDT",
-                "water-PTOT",
-                "water-depth",
-                "water-Pload",
-                "water-Biovol",
-                "water-PC"
-            ];
+            const good_names = sharedFunctions.procPriorities;
 
             const groupBy = (x,f,g)=>x.reduce((a,b)=>{
                 const rr = g(b);
 
                 if ( a[f(b)] ) {
                     // a[f(b)].push(g(b))
-                    if ( !a[f(b)][rr.name] ) {
+                    if ( !a[f(b)][rr.name] && !['_1Q', '_3Q', '_SD'].some(suff=>rr.procedure.endsWith(suff))) {
                         a[f(b)][rr.name] = rr;
                     };
                     return a;
@@ -848,23 +835,23 @@
                                 const ib = good_names.indexOf(b[0]);
 
                                 if ( ia==ib ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    if ( a[1].procedure.toLowerCase().includes('cipais') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('cipais') ) return -1;
                                     return 0
                                 };
                                 if ( ia>ib ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    if ( a[1].procedure.toLowerCase().includes('cipais') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('cipais') ) return -1;
                                     return 1
                                 };
                                 if ( ia==-1 ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    if ( a[1].procedure.toLowerCase().includes('cipais') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('cipais') ) return -1;
                                     return 1;
                                 };
                                 if ( ib==-1 ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
+                                    if ( a[1].procedure.toLowerCase().includes('cipais') ) return 1;
+                                    if ( b[1].procedure.toLowerCase().includes('cipais') ) return -1;
                                     return -1;
                                 };
 
@@ -953,7 +940,6 @@
             sharedFunctions.centerMapTo(this);
         },
         toggle(index) {
-            console.log(index);
             if( this.modalClasses[index].includes('show')){
                 this.modalClasses[index].pop()
                 this.modalClasses[index].pop()
@@ -1042,7 +1028,6 @@
                         const result = istsosToHighcharts.istosToLine(response);
                         // result.options.name = 'foo';
                         const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
-                        console.log(proc.name);
                         result.options.yAxis.plotLines = []
 
                         if (indicatorDescription.indicatorDescription[proc.name]) {
@@ -1076,14 +1061,16 @@
 
                         }
 
+                        const uom = !result.uom || result.uom=='null' ? '' : ` (${result.uom})`;
+
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                            result.options.subtitle.text = `${indicatorDescription.indicatorDescription[info.observedproperties[0].name].breveDescrizione}${uom}`;
                         }
                         else{
                             result.options.title.text = info.description;
-
+                            result.options.subtitle.text = `${info.description}${uom}`;
                         }
-                        result.options.subtitle.text = `${info.description} (${result.uom})`;
                         dataCipais.push(result.options);
                     });
                     prms.push(prm);
@@ -1171,13 +1158,12 @@
                 // self.cards[index].description = self.cards[index].description.substring(0, 27)
                 // const title = self.tableAllData.filter((el)=>{el.definition==result.urn})[0];
                 // cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27);
-                if(cards[index]==undefined){
+
+                if (cards[index]==undefined) {
                     cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
-                }
-                else if(indicatorDescription.indicatorDescription[cards[index].name]==undefined){
-                cards[index].title = cards[index].description.substring(0, 27);
-                }
-                else{
+                } else if(indicatorDescription.indicatorDescription[cards[index].name]==undefined) {
+                    cards[index].title = cards[index].description ? cards[index].description.substring(0, 27) : '';
+                } else {
                     cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
                 }
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
@@ -1216,24 +1202,24 @@
             };
 
             let calls = []
-            for (let ii = 0; ii < 6; ii++) {
-
-                if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
-                    let info = self.features.features[self.selectedMarker].properties.names[ii];
-                    // In questo modo considero anche le pèrocedure annidate
-                    // (i.e. capita al momento solo per misure satellitari: Solidi sospesi e Clorofilla a)
-                    self.features.features[self.selectedMarker].properties.names[ii].observedproperties.forEach((nfo, idx)=>{
-                        cards[ii+idx] = nfo;
-                        cards[ii+idx].data = null;
+            self.features.features[self.selectedMarker].properties.names.forEach((info, cidx)=>{
+                // In questo modo considero anche le pèrocedure annidate
+                // (i.e. capita al momento solo per misure satellitari: Solidi sospesi e Clorofilla a)
+                info.observedproperties.forEach((nfo, idx)=>{
+                    if (calls.length<6) {
+                        // console.log(info.procedure, nfo.def);
+                        const lidx = calls.length;
+                        cards[lidx] = nfo;
+                        cards[lidx].data = null;
                         calls.push(this.istsos.fetchBy(
                             nfo.def,
                             info.procedure
                         ).then((result)=>{
-                            updateCard(ii+idx, result);
+                            updateCard(lidx, result);
                         }));
-                    });
-                };
-            };
+                    };
+                });
+            });
             Promise.all(calls).then(()=>{
                 self.cards = cards;
             })

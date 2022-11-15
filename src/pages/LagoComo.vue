@@ -722,7 +722,6 @@
 
             sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
 
-            // TODO: Aggiungere procedure b1 e b2
             const good_names = sharedFunctions.procPriorities;
 
             const groupBy = (x,f,g)=>x.reduce((a,b)=>{
@@ -730,7 +729,7 @@
 
                 if ( a[f(b)] ) {
                     // a[f(b)].push(g(b))
-                    if ( !a[f(b)][rr.name] ) {
+                    if ( !a[f(b)][rr.name] && !['_1Q', '_3Q', '_SD'].some(suff=>rr.procedure.endsWith(suff))) {
                         a[f(b)][rr.name] = rr;
                     };
                     return a;
@@ -771,6 +770,7 @@
                     collectNames
                 );
                 let bounds = L.latLngBounds([]);
+                console.log(reduced);
 
                 const features = Object.entries(reduced).map(([k, v], ii) => {
                     const coords = k.split(';').map(parseFloat);
@@ -903,25 +903,44 @@
                         begin,
                         end
                     ).then(response=>{
-                        const result = istsosToHighcharts.istosToLine(response);
+                        let decimals = 2
+                        if (
+                            info.observedproperties[0].name in indicatorDescription.indicatorDescription
+                            && 'decimals' in indicatorDescription.indicatorDescription[info.observedproperties[0].name]
+                        ) {
+                            decimals = indicatorDescription.indicatorDescription[info.observedproperties[0].name].decimals
+                        };
+                        const result = istsosToHighcharts.istosToLine(
+                            response, '', false, decimals, decimals+2);
                         // result.options.name = 'foo';
                         const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
 
                         result.options.yAxis.plotLines = []
                         result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
 
+                        const uom = !result.uom || result.uom=='null' ? '' : ` (${result.uom})`;
 
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                            result.options.subtitle.text = `${indicatorDescription.indicatorDescription[info.observedproperties[0].name].breveDescrizione}${uom}`;
                         }
                         else{
                             result.options.title.text = info.description;
+                            result.options.subtitle.text = `${info.description}${uom}`;
+                        }
 
-                        }
-                        if(result.uom){
-                            result.options.subtitle.text = `${info.description} (${result.uom})`;
-                        }
-                        else{ result.options.subtitle.text = info.description  }
+
+                        // if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+                        //     result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
+                        // }
+                        // else{
+                        //     result.options.title.text = info.description;
+                        //
+                        // }
+                        // if(result.uom){
+                        //     result.options.subtitle.text = `${info.description} (${result.uom})`;
+                        // }
+                        // else{ result.options.subtitle.text = info.description  }
 
                         dataArpa.push(result.options);
                     });
@@ -1054,24 +1073,24 @@
             };
 
             let calls = []
-            for (let ii = 0; ii < 6; ii++) {
-
-                if ( self.features.features[self.selectedMarker].properties.names[ii] ) {
-                    let info = self.features.features[self.selectedMarker].properties.names[ii];
-                    // In questo modo considero anche le pèrocedure annidate
-                    // (i.e. capita al momento solo per misure satellitari: Solidi sospesi e Clorofilla a)
-                    self.features.features[self.selectedMarker].properties.names[ii].observedproperties.forEach((nfo, idx)=>{
-                        cards[ii+idx] = nfo;
-                        cards[ii+idx].data = null;
+            self.features.features[self.selectedMarker].properties.names.forEach((info, cidx)=>{
+                // In questo modo considero anche le pèrocedure annidate
+                // (i.e. capita al momento solo per misure satellitari: Solidi sospesi e Clorofilla a)
+                info.observedproperties.forEach((nfo, idx)=>{
+                    if (calls.length<6) {
+                        const lidx = calls.length;
+                        cards[lidx] = nfo;
+                        cards[lidx].data = null;
                         calls.push(this.istsos.fetchBy(
                             nfo.def,
                             info.procedure
                         ).then((result)=>{
-                            updateCard(ii+idx, result);
+                            updateCard(lidx, result);
                         }));
-                    });
-                };
-            };
+                    };
+                });
+            });
+
             Promise.all(calls).then(()=>{
                 self.cards = cards;
             })
