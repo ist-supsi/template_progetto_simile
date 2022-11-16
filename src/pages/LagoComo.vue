@@ -1040,8 +1040,105 @@
                                   }
                               }
                           }]
+                        } else if (proc.procedure.startsWith('SDT')) {
+                          result.options.yAxis.plotBands = [{
+                              from: 0,
+                              to: 5.5,
+                              color: '#99CC99',
+                              label: {
+                                  text: 'Sufficiente',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 5.5,
+                              to: 10,
+                              color: '#99CC66',
+                              label: {
+                                  text: 'Buono',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 10,
+                              to: 100,
+                              color: '#99CC33',
+                              label: {
+                                  text: 'Elevato',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }]
+                        }  else if (proc.procedure.startsWith('PTOT')) {
+                          result.options.yAxis.plotBands = [{
+                              from: 0,
+                              to: 8,
+                              color: '#99CC99',
+                              label: {
+                                  text: 'Sufficiente',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 8,
+                              to: 15,
+                              color: '#99CC66',
+                              label: {
+                                  text: 'Buono',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 15,
+                              to: 100,
+                              color: '#99CC33',
+                              label: {
+                                  text: 'Elevato',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }]
+                        }  else if (proc.procedure.startsWith('O2S')) {
+                          result.options.yAxis.plotBands = [{
+                              from: 0,
+                              to: 40,
+                              color: '#99CC99',
+                              label: {
+                                  text: 'Sufficiente',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 40,
+                              to: 80,
+                              color: '#99CC66',
+                              label: {
+                                  text: 'Buono',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 80,
+                              to: 100,
+                              color: '#99CC33',
+                              label: {
+                                  text: 'Elevato',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }]
                         };
 
+                        //
                         console.log(proc.procedure);
 
 
