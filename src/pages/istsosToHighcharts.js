@@ -227,7 +227,10 @@ const POLAR_DEFAULT = {
         max: 360,
         labels: {
             // format: '{value}°'
-            formatter: (x)=>nameByDirs[x.value]
+            formatter: (x) => {
+              console.log(x.value);
+              return nameByDirs[x.value]
+            }
         }
     },
 
@@ -263,7 +266,7 @@ const POLAR_DEFAULT = {
 const AREARANGE_DEFAULT = {};
 
 function polar(data) {
-    let options = JSON.parse(JSON.stringify(POLAR_DEFAULT));
+    let options = {...POLAR_DEFAULT};
     options.series[0].data = data;
     return options;
 };

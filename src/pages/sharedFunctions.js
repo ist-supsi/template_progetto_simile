@@ -769,7 +769,87 @@ function tableSetData (self) {
     // console.log(slicedData.map(el=>el.title));
 };
 
+function setWindData(self, result, promise, revert = false) {
+
+    const results = revert ? [otherResult, result] : [result, otherResult];
+
+
+
+    self.wind_data_loading = true;
+
+    self.wind_data_options = {plotOptions: {
+        windbarb: {
+           turboThreshold: Infinity
+         }
+    }};
+
+    let windPromise = self.istsos.fetchSeries(
+        dirProc,
+        dirUrn,
+        self.seriesBegin,
+        self.seriesEnd
+    )
+
+    let timeout;
+    results[0].options.chart.events = {render: function(event) {
+        var evt = this;
+        // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
+        clearTimeout(timeout);
+        timeout = setTimeout(()=>{
+            windPromise.then((response)=>{
+                const windirData = istsosToHighcharts.istsosToSeries(response);
+
+                let windataObj = {};
+                for (const el of windirData.series) {
+                    windataObj[el[0]] = el[1];
+                };
+
+                const start_ts = evt.rangeSelector.maxInput.min;
+                const end_ts = evt.rangeSelector.minInput.max;
+                const end = new Date(end_ts);
+                const start = new Date(start_ts);
+
+                const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
+                const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
+
+                const startIndex = sd.indexOf(Math.min(...sd));
+                const endIndex = ed.indexOf(Math.min(...ed));
+
+                let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
+
+                const wind_series = wind_data.map((el)=> el.slice(1).reverse());
+
+                // *************************************
+                // WARNING: Non serve più
+                // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
+                // valori ho introdotto questo workaround per limitare la serie al massimo consentito
+                // issue aperta: https://github.com/highcharts/highcharts/issues/17851
+                // const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+                // const series_excess = wind_data.length-1000;
+                // if ( series_excess>0 ) {
+                //     for (let i = 0; i < series_excess; i++) {
+                //         wind_data.splice(random(1, wind_data.length-1), 1)
+                //     }
+                // };
+                // *************************************
+
+                self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
+
+                self.wind_data_options.title.text = 'Velocità del vento';
+                self.wind_data_options['subtitle'] = {
+                    text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
+                };
+
+                self.wind_series = istsosToHighcharts.polar(wind_series);
+
+                self.wind_data_loading = false;
+            });
+        });
+
+    }};
+};
+
 export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel,
     addBaseLayers, guessLocTitle, fromNow, groupProcedures, loadSatelliteData,
-    centerMapTo, tableSetData, windsProcedure, procPriorities
+    centerMapTo, tableSetData, windsProcedure, procPriorities, setWindData
 };

@@ -237,7 +237,35 @@
                         <div v-else class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori ARPA</h4>
 
-                            <p class="description text-justify">I dati degli “Indicatori ARPA” .....<br>Per ulteriori informazioni:<a href="https://www.cipais.org/" target="_blank"> Sito Cipais</a> </p>
+                            <p class="description text-justify">
+                              Gli indici chimico fisici (LTLeco)e biologici (IPAM)
+                              che ARPA produce sono calcolati sulla base dei dati
+                              dei dati raccolti nelle 4 stazioni del Lago di Como
+                              ai fini della classificazione ecologica ai sensi
+                              del D lgs 152/2006. </br>
+                              I dati chimico fisici  sono misurati lungo la colonna
+                              d'acqua, dalla superficie al fondo, e i campioni di
+                              fitoplancton e clorofilla sono raccolti, nella zona
+                              eufotica, nelle stazioni a centro lago sottoposte a monitoraggio.</br>
+
+                              Nelle stazioni di Argegno Como, Abbadia Lariana vengono effettuati, nel punto di massima profondità a centro lago, 6 campionamenti all’anno per la determinazione dei nutrienti lungo la colonna d’acqua, delle sostanze chimiche prioritarie e del fitoplancton e della clorofilla-a nello strato integrato 0-20 metri. Questi dati vengono utilizzati per la classificazione ecologica e chimica. In questo caso il giudizio deriva dal confronto tra lo stato dell’LTLEco, quello dei parametri chimici a sostegno (tab 1/B dl 172/2015) e quello della componente fitoplanctonica (IPAM).
+                              Il peggiore determina lo stato ecologico.</br>
+                              Nella stazione di Dervio, massima profondità a centro lago,
+                              vengono monitorati gli stessi parametri ma la frequenza
+                              per il fitoplancton, ed in aggiunta, per lo zooplancton è
+                              di 12 campionamenti all’anno.</br>
+                              Questa stazione fa parte della rete europea di monitoraggio a lungo termine Lter.</br>
+
+                              Le boe posizionate a Mandello del Lario, a Dervio e
+                              Blevio sono ancorate ad una profondità di 50 metri
+                              circa dove è stato concesso dall’Autorità di Bacino
+                              del Lario e dei laghi minori.</br>
+                              Le misure in continuo in superficie, e quelle di
+                              temperatura che verranno garantite dai termistori
+                              fino a 50 metri per ora non ancora posizionati,
+                              sono assimilabili a quelle effettuate nelle stazioni
+                              a centro lago di cui sopra.
+                            </p>
 
                                 <div v-for="cc in loopOnPairs(Array.from(Array(dataArpa.length), (n,i)=>i))" class="row">
                                     <div class="col-lg-6 col-sm-12">
@@ -770,7 +798,6 @@
                     collectNames
                 );
                 let bounds = L.latLngBounds([]);
-                console.log(reduced);
 
                 const features = Object.entries(reduced).map(([k, v], ii) => {
                     const coords = k.split(';').map(parseFloat);
@@ -928,6 +955,94 @@
                             result.options.title.text = info.description;
                             result.options.subtitle.text = `${info.description}${uom}`;
                         }
+
+                        if (proc.procedure.startsWith('IPAM')) {
+                            result.options.yAxis.plotBands = [{
+                                from: 0,
+                                to: 0.20,
+                                color: '#99CCFF',
+                                label: {
+                                    text: 'Cattivo',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 0.20,
+                                to: 0.40,
+                                color: '#99CCCC',
+                                label: {
+                                    text: 'Scarso',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 0.40,
+                                to: 0.60,
+                                color: '#99CC99',
+                                label: {
+                                    text: 'Sufficiente',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 0.60,
+                                to: 0.80,
+                                color: '#99CC66',
+                                label: {
+                                    text: 'Buono',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 0.80,
+                                to: 1,
+                                color: '#99CC33',
+                                label: {
+                                    text: 'Ottimo',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }]
+                        } else if (proc.procedure.startsWith('LTLECO')) {
+                          result.options.yAxis.plotBands = [{
+                              from: 0,
+                              to: 12,
+                              color: '#99CC99',
+                              label: {
+                                  text: 'Sufficiente',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 12,
+                              to: 15,
+                              color: '#99CC66',
+                              label: {
+                                  text: 'Buono',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 15,
+                              // to: 1,
+                              color: '#99CC33',
+                              label: {
+                                  text: 'Elevato',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }]
+                        };
+
+                        console.log(proc.procedure);
 
 
                         // if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){

@@ -375,7 +375,6 @@
                 for (const [index, procedure] of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].entries()) {
                     //
                     this.data_loading = true;
-                    console.log([procedure, self.analisysVariable]);
 
                     this.istsos.fetchSeries(
                         procedure,
@@ -428,26 +427,31 @@
                         // result.options.series[counter].color = this.category_colors[counter];
 
                         if (procedure in sharedFunctions.windsProcedure) {
-                            const dirProc = sharedFunctions.windsProcedure[procedure]
-                            const dirUrn = self.allProcedures[dirProc].observedproperties[0].definition
                             self.wind_data_loading = true;
-                            //
+
                             this.wind_data_options = {plotOptions: {
                         		    windbarb: {
                               	   turboThreshold: Infinity
                                  }
                             }};
 
+                            const dirProc = sharedFunctions.windsProcedure[procedure];
+                            const dirUrn = self.allProcedures[dirProc].observedproperties[0].definition;
+
                             let windPromise = this.istsos.fetchSeries(
                                 dirProc,
                                 dirUrn,
                                 self.seriesBegin,
                                 self.seriesEnd
-                            )
+                            );
 
                             let timeout;
                             result.options.chart.events = {render: function(event) {
                                 var evt = this;
+                                const start_ts = evt.rangeSelector.maxInput.min;
+                                const end_ts = evt.rangeSelector.minInput.max;
+                                const end = new Date(end_ts);
+                                const start = new Date(start_ts);
                                 // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
                                 clearTimeout(timeout);
                                 timeout = setTimeout(()=>{
@@ -458,11 +462,7 @@
                                         for (const el of windirData.series) {
                                             windataObj[el[0]] = el[1];
                                         };
-
-                                        const start_ts = evt.rangeSelector.maxInput.min;
-                                        const end_ts = evt.rangeSelector.minInput.max;
-                                        const end = new Date(end_ts);
-                                        const start = new Date(start_ts);
+                                        console.log(windataObj);
 
                                         const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
                                         const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
@@ -470,16 +470,12 @@
                                         const startIndex = sd.indexOf(Math.min(...sd));
                                         const endIndex = ed.indexOf(Math.min(...ed));
 
-                                        // let startIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(start.getTime());
-                                        // if (startIndex==-1) { startIndex=0 };
-                                        // let endIndex = self.series_data.series[0].data.map(cc=>cc[0]).indexOf(end.getTime());
-                                        // if (endIndex==-1) { endIndex=self.series_data.series[0].data.length };
-
                                         let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
 
                                         const wind_series = wind_data.map((el)=> el.slice(1).reverse());
 
                                         // *************************************
+                                        // WARNING: Non serve più
                                         // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
                                         // valori ho introdotto questo workaround per limitare la serie al massimo consentito
                                         // issue aperta: https://github.com/highcharts/highcharts/issues/17851
@@ -498,45 +494,133 @@
                                         self.wind_data_options['subtitle'] = {
                                             text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
                                         };
-                                        //Copio l'oggetto wind_data e trattengo le proprietà che mi interessano  direzione e velocità
-
-                                        //     const allowedProperties = ['dato1', 'dato2'];
-
-                                        //     const allKeys = Object.keys(wind_data);
-                                        //     const freqs =allKeys.reduce((next, key)=> {
-                                        //         if(allowedProperties.includes(key)){
-                                        //         return { ...next, [key]: wind_data[key]};
-                                        //     } else {
-                                        //         return next;
-                                        //     }
-                                        // } , {});
-
 
                                         self.wind_series = istsosToHighcharts.polar(wind_series);
 
-                                        // const b = 16;
-                                        // const dirs = Array(b+1).fill(0).map((_, i) => [i*(360/b), 0]);
-                                        // console.log(wind_data);
-                                        // const freqs = wind_data.reduce((pp, cc)=>{
-                                        //     const mm = dirs.map(d=>Math.abs(d[0]-cc[2]));
-                                        //     let ii = mm.indexOf(min(mm));
-                                        //     if (ii==(mm.length-1)) {ii=0};
-                                        //     pp[ii][1] = pp[ii][1]+1;
-                                        //     return pp
-                                        // }, [...dirs]).slice(0, dirs.length-1).map(vv=>vv[1]);
-
-                                        // let wind_freq_options = istsosToHighcharts.polar(freqs);
-                                        // console.log(wind_freq_options)
-                                        // wind_freq_options.title.text = 'Frequenza della direzione';
-                                        // wind_freq_options.subtitle.text = '';
-                                        //   wind_freq_options.series[0].name = 'Frequenza'
-
-                                        // self.wind_freq_options = wind_freq_options;
                                         self.wind_data_loading = false;
                                     });
                                 });
 
                             }};
+                        } else if (Object.values(sharedFunctions.windsProcedure).includes(procedure)) {
+
+                            result.options.yAxis.plotBands = [{
+                                from: 0,
+                                to: 45,
+                                color: 'rgba(192, 192, 192, 0.1)',
+                                label: {
+                                    text: 'N',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 45,
+                                to: 135,
+                                color: 'rgba(68, 170, 213, 0.1)',
+                                label: {
+                                    text: 'E',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 135,
+                                to: 225,
+                                color: 'rgba(192, 192, 192, 0.1)',
+                                label: {
+                                    text: 'S',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 225,
+                                to: 315,
+                                color: 'rgba(68, 170, 213, 0.1)',
+                                label: {
+                                    text: 'O',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 315,
+                                to: 360,
+                                color: 'rgba(192, 192, 192, 0.1)',
+                                label: {
+                                    text: 'N',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }];
+
+                            const dirIdx = Object.values(sharedFunctions.windsProcedure).indexOf(procedure);
+                            self.wind_data_loading = true;
+
+                            this.wind_data_options = {plotOptions: {
+                        		    windbarb: {
+                              	   turboThreshold: Infinity
+                                 }
+                            }};
+
+                            const velProc = Object.keys(sharedFunctions.windsProcedure)[dirIdx];
+                            const velUrn = self.allProcedures[velProc].observedproperties[0].definition;
+
+                            let windVelPromise = this.istsos.fetchSeries(
+                                velProc,
+                                velUrn,
+                                self.seriesBegin,
+                                self.seriesEnd
+                            );
+                            let timeout;
+                            result.options.chart.events = {render: function(event) {
+                                var evt = this;
+                                const start_ts = evt.rangeSelector.maxInput.min;
+                                const end_ts = evt.rangeSelector.minInput.max;
+                                const end = new Date(end_ts);
+                                const start = new Date(start_ts);
+                                // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
+                                clearTimeout(timeout);
+                                timeout = setTimeout(()=>{
+                                    windVelPromise.then((response)=>{
+                                        const winvelData = istsosToHighcharts.istsosToSeries(response);
+
+                                        let windataObj = {};
+                                        for (const el of winvelData.series) {
+                                            windataObj[el[0]] = el[1];
+                                        };
+
+                                        const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
+                                        const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
+
+                                        const startIndex = sd.indexOf(Math.min(...sd));
+                                        const endIndex = ed.indexOf(Math.min(...ed));
+
+                                        let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>{
+                                            return [el[0], windataObj[el[0]], el[1]];
+                                            // [...el, windataObj[el[0]]]
+                                        });
+                                        const wind_series = wind_data.map((el)=> el.slice(1).reverse());
+
+                                        self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
+                                        self.wind_data_options.title.text = 'Velocità del vento';
+                                        self.wind_data_options['subtitle'] = {
+                                            text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
+                                        };
+
+                                        self.wind_series = istsosToHighcharts.polar(wind_series);
+
+                                        self.wind_data_loading = false;
+
+
+
+                                    });
+                                });
+
+                            }};
+
                         };
 
                     });
