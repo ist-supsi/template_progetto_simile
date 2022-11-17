@@ -226,9 +226,9 @@
             bulletOptions: {},
             setDataTimeout: null,
             category_colors: [
-                '#2f7ed8',
+                '#77a1e5',
                 '#8bbc21', '#f28f43', '#492970',
-                '#0d233a', '#77a1e5', '#a6c96a']
+                '#0d233a', '#2f7ed8', '#a6c96a']
         }},
         watch: {
           series_data: {
@@ -374,6 +374,7 @@
 
                 for (const [index, procedure] of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].entries()) {
                     //
+                    console.log(index, procedure);
                     this.data_loading = true;
 
                     this.istsos.fetchSeries(
@@ -409,6 +410,50 @@
                                     }
                                 }];
                             };
+                        };
+
+                        if (procedure.startsWith('OXYGENATION')) {
+                            result.options.yAxis.plotBands = [{
+                                from: 0,
+                                to: 1.5,
+                                color: '#e9f2fa',
+                                label: {
+                                    text: 'Scarso',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 1.5,
+                                to: 2.5,
+                                color: '#a8cceb',
+                                label: {
+                                    text: 'Sufficiente',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 2.5,
+                                to: 3.5,
+                                color: '#67a6dc',
+                                label: {
+                                    text: 'Buona',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 3.5,
+                                to: 4.5,
+                                color: '#2780cd',
+                                label: {
+                                    text: 'Eccellente',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }]
                         };
 
                         if ( !self.series_data.series ) {

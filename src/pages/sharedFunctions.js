@@ -451,6 +451,7 @@ const groupedProceduresList = [
     ['WATER_TEMP_1_0', 'WATER_TEMP_10_0', 'WATER_TEMP_30_0'],
     ['O2D_Sup_AVG1H', 'O2D_Deep_AVG1H'],
     ['O2S_Sup_AVG1H', 'O2S_Deep_AVG1H'],
+    ['OXYGENATION_0_4', 'OXYGENATION_2_5', 'OXYGENATION_5_0', 'OXYGENATION_8_0', 'OXYGENATION_12_0', 'OXYGENATION_20_0']
 ];
 
 // Coppie delle procedure relative alle misure di vento da associare

@@ -57,6 +57,13 @@
               <p title="Web gis dati satellitari">WEB GIS</p>
           </a>
       </li>
+      <li class="">
+          <a href="https://www.skylinewebcams.com/webcam/italia/piemonte/verbania/lago-maggiore-boa-limnologica.html?w=1764"
+              class="nav-link" target="_blank">
+              <i class="nc-icon nc-camera-20"></i>
+              <p title="Pallanza live webcam">WEBCAM</p>
+          </a>
+      </li>
           <!-- </ul>
       </li> -->
 

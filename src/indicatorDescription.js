@@ -666,6 +666,19 @@ let indicatorDescription =
             annuale:false,
         },
 
+        'water-oxygen-class': {
+            title : 'Classi di ossigenazione',
+            description: `Il livello di ossigeno presente nei laghi e nei corsi
+            d'acqua è comunemente usato come indicatore della qualità dell'acqua.
+            indicatore della qualità dell'acqua. Il mantenimento di concentrazioni
+            adeguate di ossigeno è di vitale importanza per sostenere pesci,
+            invertebrati e altre forme di vita acquatica.`,
+            breveDescrizione:`Classi di ossigenazione`,
+            // icon:'fa fa-bolt text-info',
+            icon:'icon-water_O2S',
+            annuale:false,
+        },
+
     };
 
 indicatorDescription['NLoad'] = indicatorDescription['Nload'];
