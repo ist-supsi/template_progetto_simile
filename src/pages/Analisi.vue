@@ -374,7 +374,6 @@
 
                 for (const [index, procedure] of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].entries()) {
                     //
-                    console.log(index, procedure);
                     this.data_loading = true;
 
                     this.istsos.fetchSeries(
@@ -383,7 +382,11 @@
                         self.seriesBegin,
                         self.seriesEnd
                     ).then((response)=>{
-                        let result = istsosToHighcharts.istosToLine(response, undefined, true);
+
+                        let result = istsosToHighcharts.istosToLine(
+                            response, undefined, true, 2, 3,
+                            procedure.startsWith('OXYGENATION')
+                        );
 
                         // TODO:
                         // 1. verificare il raggruppamento delle procedure nella pagina del Como
@@ -413,10 +416,12 @@
                         };
 
                         if (procedure.startsWith('OXYGENATION')) {
+
                             result.options.yAxis.plotBands = [{
                                 from: 0,
                                 to: 1.5,
-                                color: '#e9f2fa',
+                                // color: '#e9f2fa',
+                                color: '#99CCCC',
                                 label: {
                                     text: 'Scarso',
                                     style: {
@@ -426,7 +431,8 @@
                             }, {
                                 from: 1.5,
                                 to: 2.5,
-                                color: '#a8cceb',
+                                // color: '#a8cceb',
+                                color: '#99CC99',
                                 label: {
                                     text: 'Sufficiente',
                                     style: {
@@ -436,7 +442,8 @@
                             }, {
                                 from: 2.5,
                                 to: 3.5,
-                                color: '#67a6dc',
+                                // color: '#67a6dc',
+                                color: '#99CC66',
                                 label: {
                                     text: 'Buona',
                                     style: {
@@ -446,7 +453,8 @@
                             }, {
                                 from: 3.5,
                                 to: 4.5,
-                                color: '#2780cd',
+                                // color: '#2780cd',
+                                color: '#99CC33',
                                 label: {
                                     text: 'Eccellente',
                                     style: {

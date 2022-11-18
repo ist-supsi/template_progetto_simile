@@ -1,4 +1,5 @@
 import Highcharts from 'highcharts';
+import sharedFunctions from './sharedFunctions.js';
 
 const category_colors = ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
     '#0d233a', '#77a1e5', '#8bbc21'];
@@ -293,7 +294,7 @@ function istsosToSeries(response, args) {
     }
 };
 
-function istosToLine (response, title, stock = false, decimals = 2, precision = 3) {
+function istosToLine (response, title, stock = false, decimals = 2, precision = 3, column = false) {
       const dataArray = response.data.data[0].result.DataArray;
       let info;
       if ( !stock ) {
@@ -342,6 +343,26 @@ function istosToLine (response, title, stock = false, decimals = 2, precision = 
         .map(el=>[epochToTime(el[0]), parseFloat(el[1].toPrecision(precision))]);
       info.options.series[0].name = response.data.data[0].name;
       info.options.series[0].color = category_colors[0];
+      if (column) {
+          info.options.series[0].type = 'column';
+          info.options.chart.inverted =  false;
+
+          const roundBy = (date, ms) => new Date(Math.round(date / ms) * ms);
+
+          const data = Object.entries(sharedFunctions.groupBy(
+              info.options.series[0].data,
+              el=>roundBy(new Date(el[0]), 2*36e5)
+          )).map(entry=>[(entry[1][0][0]), Math.min(entry[1][0][1])])
+          // .group(el=>{
+          //
+          //     return el[0];
+          // });
+          // console.log(data);
+          // info.options.series[0].grouping = false;
+          info.options.series[0].data = data;
+
+      };
+
       // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
       return info;
 }
