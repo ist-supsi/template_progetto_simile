@@ -137,7 +137,6 @@
                           <select class="custom-select" id="inputGroupSelect03"
                               aria-label="Example select with button addon"
                               v-model="selectedMarker"
-                              @change="centerMapTo()"
                               title="Scegli una località o un'area da analizzare"
                               >
                             <option v-for="feature in features.features" :value="feature.properties.markerIndex">
@@ -182,19 +181,18 @@
                         <!-- <div :class="{'container-fluid': true, invisible: Object.keys(tableData).length == 0}"> -->
                         <div v-if="!(tableData.meta && tableData.meta.total>0)">
                             <div class="row">
-                            <h4>Non sono disponibili misure da sensore per la stazione selezionata.</h4>
+                                <h4>Non sono disponibili misure da sensore per la stazione selezionata.</h4>
                             </div>
-
-                            <div class="form-group row">
-                            <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località o un'area da analizzare:</label>
+                            <div v-if="features.features" class="form-group row">
+                                <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località tra quelle monitorate da sensori:</label>
                                 <div class="col-sm-6">
                                     <select name="prova" class="custom-select" id="inputGroupSelect03"
-                                        aria-label="Example select with button addon" v-model="selectedMarker"
-                                        title="Scegli una località o un'area da analizzare"
-                                        >
-                                        <option v-for="feature in features.features" :value="feature.properties.markerIndex">
-                                            {{ guessLocLabel(feature.properties.foi_name) }}
-                                        </option>
+                                    aria-label="Example select with button addon" v-model="selectedMarker"
+                                    title="Scegli una località o un'area da analizzare"
+                                    >
+                                    <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>!(nfo.procedure.includes('CIPAIS')||nfo.procedure.startsWith('SATELLITE'))))" :value="feature.properties.markerIndex">
+                                        {{ guessLocLabel(feature.properties.foi_name) }}
+                                    </option>
                                     </select>
                                 </div>
                             </div>
@@ -241,19 +239,19 @@
                                 <h4>Non sono presenti indicatori CIPAIS per la stazione selezionata</h4>
                             </div>
 
-                                <div class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località o un'area da analizzare:</label>
-                                    <div class="col-sm-6">
-                                        <select name="prova" class="custom-select" id="inputGroupSelect03"
-                                        aria-label="Example select with button addon" v-model="selectedMarker"
-                                        title="Scegli una località o un'area da analizzare"
-                                        >
-                                        <option v-for="feature in features.features" :value="feature.properties.markerIndex">
-                                            {{ guessLocLabel(feature.properties.foi_name) }}
-                                        </option>
-                                        </select>
-                                    </div>
+                            <div v-if="features.features" class="form-group row">
+                                <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località:</label>
+                                <div class="col-sm-6">
+                                    <select name="prova" class="custom-select" id="inputGroupSelect03"
+                                    aria-label="Example select with button addon" v-model="selectedMarker"
+                                    title="Scegli una località o un'area da analizzare"
+                                    >
+                                    <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.includes('CIPAIS')))" :value="feature.properties.markerIndex">
+                                        {{ guessLocLabel(feature.properties.foi_name) }}
+                                    </option>
+                                    </select>
                                 </div>
+                            </div>
                             </div>
                         <div v-else class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
@@ -358,14 +356,15 @@
                             <div class="row">
                             <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
                             </div>
-                            <div class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località o un'area da analizzare:</label>
+                            <div v-if="features.features" class="form-group row">
+                                    <label for="inputGroupSelect03" class="form-text text-muted">
+                                        Scegli un'area da analizzare:</label>
                                     <div class="col-sm-6">
                                         <select name="prova" class="custom-select" id="inputGroupSelect03"
                                         aria-label="Example select with button addon" v-model="selectedMarker"
                                         title="Scegli una località o un'area da analizzare"
                                         >
-                                        <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.startsWith('SATELLITE')))" :value="feature.properties.markerIndex">
                                             {{ guessLocLabel(feature.properties.foi_name) }}
                                         </option>
                                         </select>
@@ -730,6 +729,7 @@
             selectedMarker: {
                 handler(val){
                     // do stuff
+                    this.centerMapTo()
                     this.loadCardsData();
                     this.tableSetData();
                     // DEPRERCATED??

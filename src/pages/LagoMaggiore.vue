@@ -122,7 +122,6 @@
                               <select class="custom-select" id="inputGroupSelect03"
                                   aria-label="Example select with button addon"
                                   v-model="selectedMarker"
-                                  @change="centerMapTo()"
                                   title="Scegli una località o un'area da analizzare"
                                   >
                                 <option v-for="feature in features.features" :value="feature.properties.markerIndex">
@@ -165,14 +164,14 @@
                             <div class="row">
                             <h4>Non sono disponibili misure da sensore per la stazione selezionata</h4>
                             </div>
-                            <div class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località o un'area da analizzare:</label>
+                            <div v-if="features.features" class="form-group row">
+                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località tra quelle monitorate da sensori:</label>
                                     <div class="col-sm-6">
                                         <select name="prova" class="custom-select" id="inputGroupSelect03"
                                         aria-label="Example select with button addon" v-model="selectedMarker"
                                         title="Scegli una località o un'area da analizzare"
                                         >
-                                        <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>!(nfo.procedure.includes('CIPAIS')||nfo.procedure.startsWith('SATELLITE'))))" :value="feature.properties.markerIndex">
                                             {{ guessLocLabel(feature.properties.foi_name) }}
                                         </option>
                                         </select>
@@ -216,19 +215,19 @@
                             <div class="row">
                                 <h4>Non sono presenti indicatori CIPAIS per la stazione selezionata</h4>
                             </div>
-                                <div class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località o un'area da analizzare:</label>
+                                <div v-if="features.features" class="form-group row">
+                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località:</label>
                                     <div class="col-sm-6">
                                         <select name="prova" class="custom-select" id="inputGroupSelect03"
                                         aria-label="Example select with button addon" v-model="selectedMarker"
                                         title="Scegli una località o un'area da analizzare"
                                         >
-                                        <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.includes('CIPAIS')))" :value="feature.properties.markerIndex">
                                             {{ guessLocLabel(feature.properties.foi_name) }}
                                         </option>
                                         </select>
                                     </div>
-                            </div>
+                                </div>
                             </div>
                         <div v-else class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori CIPAIS</h4>
@@ -332,14 +331,15 @@
                             <div class="row">
                             <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
                             </div>
-                            <div class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località o un'area da analizzare:</label>
+                            <div v-if="features.features" class="form-group row">
+                                    <label for="inputGroupSelect03" class="form-text text-muted">
+                                        Scegli un'area da analizzare:</label>
                                     <div class="col-sm-6">
                                         <select name="prova" class="custom-select" id="inputGroupSelect03"
                                         aria-label="Example select with button addon" v-model="selectedMarker"
                                         title="Scegli una località o un'area da analizzare"
                                         >
-                                        <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.startsWith('SATELLITE')))" :value="feature.properties.markerIndex">
                                             {{ guessLocLabel(feature.properties.foi_name) }}
                                         </option>
                                         </select>
@@ -701,6 +701,7 @@
             selectedMarker: {
                 handler(val){
                     // do stuff
+                    this.centerMapTo();
                     this.loadCardsData();
                     this.tableSetData();
                     this.tableSetDataCipais();
@@ -736,16 +737,18 @@
             const groupBy = (x,f,g)=>x.reduce((a,b)=>{
                 const rr = g(b);
 
+                if (rr.procedure.endsWith('_conc')) console.log(rr.procedure);
                 if ( a[f(b)] ) {
                     // a[f(b)].push(g(b))
                     // Questo porta a favorire "Chl_S_AVG1H_conc" rispetto a "Chl_S_AVG1H" [*]
                     // La prima misurata in μg/L è preferita perché conforme ad altre misurazioni
-                    // sugli altri laghi
+                    // sugli altri laghi.
+
                     if ( !a[f(b)][rr.name] && !['_1Q', '_3Q', '_SD'].some(suff=>rr.procedure.endsWith(suff))) {
                         a[f(b)][rr.name] = rr;
                     } else if (
                         rr.procedure.startsWith(a[f(b)][rr.name].procedure)
-                        && a[f(b)][rr.name].procedure.endsWith('_conc') // [*]
+                        && rr.procedure.endsWith('_conc') // [*]
                     ) {
                         a[f(b)][rr.name] = rr;
                     };
@@ -791,7 +794,6 @@
                 );
                 let bounds = L.latLngBounds([]);
 
-                console.log(reduced);
                 const features = Object.entries(reduced).map(([k, v], ii) => {
                     const coords = k.split(';').map(parseFloat);
                     // bounds.extend(L.latLng(coords[1], coords[0]));
@@ -899,6 +901,10 @@
                 this.selectedTab='arpa'
             };
         },
+        // filterFeature(prefix) {
+        //     return this.features.features.filter(el=>{})
+        //
+        // },
         guessLocLabel(foi_name){
             return sharedFunctions.guessLocLabel(foi_name);
         },
@@ -1032,8 +1038,7 @@
                 }
                 else{cards[index].type='Dato da Sensore'}
 
-                console.log(index, cards[index].name, result.value);
-                cards[index].data = result.value;
+                cards[index].data = result.value>-999.9 ? result.value : '';
 
                 cards[index].uom = (!result.uom) || result.uom=='null' ? null : result.uom;
 

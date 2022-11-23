@@ -294,7 +294,7 @@ function istsosToSeries(response, args) {
     }
 };
 
-function istosToLine (response, title, stock = false, decimals = 2, precision = 3, column = false) {
+function istosToLine (response, title, stock = false, decimals = 2, precision = 3, heatmap = false) {
       const dataArray = response.data.data[0].result.DataArray;
       let info;
       if ( !stock ) {
@@ -339,11 +339,20 @@ function istosToLine (response, title, stock = false, decimals = 2, precision = 
       // info.value = dataArray.values[0][1];
       // info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
 
-      info.options.series[0].data = dataArray.values.filter(el=>el[1]!==null)
-        .map(el=>[epochToTime(el[0]), parseFloat(el[1].toPrecision(precision))]);
+      info.options.series[0].data = dataArray.values.filter(el=>{
+          if (el[1]<=0) console.log(el[1], el[1]==-999, el[2]);
+          return el[1]!==null && el[2]>0
+      }).map(el=>[epochToTime(el[0]), parseFloat(el[1].toPrecision(precision))]);
       info.options.series[0].name = response.data.data[0].name;
       info.options.series[0].color = category_colors[0];
-      if (column) {
+      // TODO:
+      // if (heatmap) {
+      //     info.options.chart.type = 'heatmap'
+      //     console.log(info.options.series[0].data);
+      //     info.options.xAxis = {categories: info.options.series[0].data.map(el=>(new Date(el[0])))}
+      //     info.options.yAxis
+      // };
+      if (heatmap) {
           info.options.series[0].type = 'column';
           info.options.chart.inverted =  false;
 
@@ -353,11 +362,7 @@ function istosToLine (response, title, stock = false, decimals = 2, precision = 
               info.options.series[0].data,
               el=>roundBy(new Date(el[0]), 2*36e5)
           )).map(entry=>[(entry[1][0][0]), Math.min(entry[1][0][1])])
-          // .group(el=>{
-          //
-          //     return el[0];
-          // });
-          // console.log(data);
+
           // info.options.series[0].grouping = false;
           info.options.series[0].data = data;
 

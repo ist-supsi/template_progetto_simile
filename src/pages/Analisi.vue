@@ -417,6 +417,10 @@
 
                         if (procedure.startsWith('OXYGENATION')) {
 
+                            result.options.series[0].data = result.options.series[0].data.filter(el=>el[1]!=-999)
+                            result.options.yAxis.min = 0;
+                            result.options.yAxis.max = 5;
+
                             result.options.yAxis.plotBands = [{
                                 from: 0,
                                 to: 1.5,
@@ -462,7 +466,10 @@
                                     }
                                 }
                             }]
-                        };
+                        }
+                        // else if (procedure.endsWith('_conc')) {
+                        //     result.options.series[0].data = result.options.series[0].data.filter(el=>el[1]!=-999.9)
+                        // };
 
                         if ( !self.series_data.series ) {
                             result.options.legend.enabled = false;

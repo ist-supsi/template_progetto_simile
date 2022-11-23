@@ -324,10 +324,7 @@ function guessLocLabel (foi_name){
         maggiore:'Bacino Completo',
         ABBADIA:'Abbadia',
         ARGEGNO:'Argegno',
-        COMO:'Como',
-
-
-
+        COMO:'Como'
     }
     if(foi_name.split('_')[0] in locLabel){
         return locLabel[foi_name.split('_')[0]]

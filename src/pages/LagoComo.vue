@@ -126,7 +126,6 @@
                               <select class="custom-select" id="inputGroupSelect03"
                                   aria-label="Example select with button addon"
                                   v-model="selectedMarker"
-                                  @change="centerMapTo()"
                                   title="Scegli una località o un'area da analizzare"
                                   >
                                 <option v-for="feature in features.features" :value="feature.properties.markerIndex">
@@ -169,18 +168,18 @@
                             <div class="row">
                             <h4>Non sono disponibili misure da sensore per la stazione selezionata</h4>
                             </div>
-                            <div class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località o un'area da analizzare:</label>
-                                    <div class="col-sm-6">
-                                        <select name="prova" class="custom-select" id="inputGroupSelect03"
-                                        aria-label="Example select with button addon" v-model="selectedMarker"
-                                        title="Scegli una località o un'area da analizzare"
-                                        >
-                                        <option v-for="feature in features.features" :value="feature.properties.markerIndex">
-                                            {{ guessLocLabel(feature.properties.foi_name) }}
-                                        </option>
-                                        </select>
-                                    </div>
+                            <div v-if="features.features" class="form-group row">
+                                <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località tra quelle monitorate da sensori:</label>
+                                <div class="col-sm-6">
+                                    <select name="prova" class="custom-select" id="inputGroupSelect03"
+                                    aria-label="Example select with button addon" v-model="selectedMarker"
+                                    title="Scegli una località o un'area da analizzare"
+                                    >
+                                    <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>!(nfo.procedure.includes('ARPA')||nfo.procedure.startsWith('SATELLITE'))))" :value="feature.properties.markerIndex">
+                                        {{ guessLocLabel(feature.properties.foi_name) }}
+                                    </option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div v-else>
@@ -220,19 +219,19 @@
                                 <div class="row">
                                 <h4>Non sono presenti indicatori ARPA per la stazione selezionata</h4>
                                 </div>
-                                <div class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località o un'area da analizzare:</label>
+                                <div v-if="features.features" class="form-group row">
+                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località:</label>
                                     <div class="col-sm-6">
                                         <select name="prova" class="custom-select" id="inputGroupSelect03"
                                         aria-label="Example select with button addon" v-model="selectedMarker"
                                         title="Scegli una località o un'area da analizzare"
                                         >
-                                        <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.includes('ARPA')))" :value="feature.properties.markerIndex">
                                             {{ guessLocLabel(feature.properties.foi_name) }}
                                         </option>
                                         </select>
                                     </div>
-                            </div>
+                                </div>
                             </div>
                         <div v-else class="container-fluid">
                             <h4>Cosa sono i dati degli Indicatori ARPA</h4>
@@ -256,15 +255,6 @@
                               di 12 campionamenti all’anno.</br>
                               Questa stazione fa parte della rete europea di monitoraggio a lungo termine Lter.</br>
 
-                              Le boe posizionate a Mandello del Lario, a Dervio e
-                              Blevio sono ancorate ad una profondità di 50 metri
-                              circa dove è stato concesso dall’Autorità di Bacino
-                              del Lario e dei laghi minori.</br>
-                              Le misure in continuo in superficie, e quelle di
-                              temperatura che verranno garantite dai termistori
-                              fino a 50 metri per ora non ancora posizionati,
-                              sono assimilabili a quelle effettuate nelle stazioni
-                              a centro lago di cui sopra.
                             </p>
 
                                 <div v-for="cc in loopOnPairs(Array.from(Array(dataArpa.length), (n,i)=>i))" class="row">
@@ -359,14 +349,15 @@
                             <div class="row">
                             <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
                             </div>
-                            <div class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località o un'area da analizzare:</label>
+                            <div v-if="features.features" class="form-group row">
+                                    <label for="inputGroupSelect03" class="form-text text-muted">
+                                        Scegli un'area da analizzare:</label>
                                     <div class="col-sm-6">
                                         <select name="prova" class="custom-select" id="inputGroupSelect03"
                                         aria-label="Example select with button addon" v-model="selectedMarker"
                                         title="Scegli una località o un'area da analizzare"
                                         >
-                                        <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.startsWith('SATELLITE')))" :value="feature.properties.markerIndex">
                                             {{ guessLocLabel(feature.properties.foi_name) }}
                                         </option>
                                         </select>
@@ -718,11 +709,11 @@
             selectedMarker: {
                 handler(val){
                     // do stuff
+                    this.centerMapTo();
                     this.loadCardsData();
                     this.tableSetData();
                     this.tableSetDataArpa();
                     this.tableSetDataSatellite();
-
 
                     if ( this.tableData.data && this.tableData.data.length>0 ) {
                         this.selectedTab='home'
@@ -949,7 +940,8 @@
 
                         if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
-                            result.options.subtitle.text = `${indicatorDescription.indicatorDescription[info.observedproperties[0].name].breveDescrizione}${uom}`;
+                            const subt = indicatorDescription.indicatorDescription[info.observedproperties[0].name].breveDescrizioneArpa || indicatorDescription.indicatorDescription[info.observedproperties[0].name].breveDescrizione
+                            result.options.subtitle.text = `${subt}${uom}`;
                         }
                         else{
                             result.options.title.text = info.description;
@@ -1009,6 +1001,8 @@
                                 }
                             }]
                         } else if (proc.procedure.startsWith('LTLECO')) {
+                          result.options.yAxis.min = 8;
+                          result.options.yAxis.max = 16;
                           result.options.yAxis.plotBands = [{
                               from: 0,
                               to: 12,
@@ -1031,7 +1025,7 @@
                               }
                           }, {
                               from: 15,
-                              // to: 1,
+                              to: 16,
                               color: '#99CC33',
                               label: {
                                   text: 'Elevato',
@@ -1076,9 +1070,9 @@
                           result.options.yAxis.plotBands = [{
                               from: 0,
                               to: 8,
-                              color: '#99CC99',
+                              color: '#99CC33',
                               label: {
-                                  text: 'Sufficiente',
+                                  text: 'Elevato',
                                   style: {
                                       color: '#606060'
                                   }
@@ -1096,9 +1090,9 @@
                           }, {
                               from: 15,
                               to: 100,
-                              color: '#99CC33',
+                              color: '#99CC99',
                               label: {
-                                  text: 'Elevato',
+                                  text: 'Sufficiente',
                                   style: {
                                       color: '#606060'
                                   }

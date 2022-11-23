@@ -57,12 +57,20 @@
               <p title="Web gis dati satellitari">WEB GIS</p>
           </a>
       </li>
-      <li class="">
+      <!-- <li class="">
           <a href="https://www.skylinewebcams.com/webcam/italia/piemonte/verbania/lago-maggiore-boa-limnologica.html?w=1764"
               class="nav-link" target="_blank">
               <i class="nc-icon nc-camera-20"></i>
               <p title="Pallanza live webcam">WEBCAM</p>
           </a>
+      </li> -->
+      <li class="">
+          <span @click="toggleModalWebcam()"
+              class="nav-link">
+              <i class="nc-icon nc-camera-20"></i>
+              <p title="webcam">WEBCAM</p>
+          </span>
+
       </li>
           <!-- </ul>
       </li> -->
@@ -135,7 +143,37 @@
 
       <content-footer> </content-footer>
 
-
+      <!-- Modal -->
+<div
+    :class="{modal: true, fade: true, show: webcamModalShow}"
+    :style="{display: webcamModalShow ? 'block' : 'none'}"
+    id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    style="padding-right: 15px;"
+>
+  <div class="modal-dialog modal-xl" style="z-index: 1072;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Lago Maggiore: boa in località Pallanza</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="toggleModalWebcam()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <iframe v-if="webcamModalShow" loading="lazy" src="https://www.skylinewebcams.com/webcam/italia/piemonte/verbania/lago-maggiore-boa-limnologica.html?w=1764"
+            width="800" height="500" frameborder="0" scrolling="no" marginwidth="0" marginheight="0" allow=autoplay allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+            @click="toggleModalWebcam()"
+        >Close</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
+  <div
+    :class = "{'modal-backdrop': true, fade: true, show: webcamModalShow}" :style="{display: webcamModalShow ? 'block' : 'none'}">
+  </div>
+</div>
 
     </div>
 
@@ -158,7 +196,13 @@
       MobileMenu,
 
     },
+    data () {
+        return {
+            webcamModalShow: false,
+        }
+    },
     methods: {
+      toggleModalWebcam () {this.webcamModalShow = !this.webcamModalShow},
       toggleSidebar () {
         if (this.$sidebar.showSidebar) {
           this.$sidebar.displaySidebar(false)
@@ -177,5 +221,27 @@
 {
   background-color:transparent;
 }
-
+.carousel-control-prev, .carousel-control-next {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    display: -ms-flexbox;
+    display: -webkit-box;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-box-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    width: 15%;
+    color: #fff;
+    text-align: center;
+    opacity: 0.5;
+    -webkit-transition: opacity 0.15s ease;
+    transition: opacity 0.15s ease;
+    border-color: rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0.2)
+}
 </style>

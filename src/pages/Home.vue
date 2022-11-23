@@ -1,17 +1,17 @@
 <template>
-  
+
   <div class="content">
-    
+
     <div class="container-fluid">
-     
+
         <div class="row">
-          
+
           <div class="col-12">
-            
+
             <card>
-              
+
               <div class="typo-line">
-                
+
                 <!-- <h4 class="title">Il Progetto<br />
                 </h4> -->
                 <!-- <p class="longtext"><span class="category"><b><i>IL PROGETTO</i></b></span><br></p> -->
@@ -210,7 +210,7 @@
             this.ceresioIstosos._call({services: 'ceresiohourly', operations: 'getobservation/count'}),
             // ...
         ]).then(responses=>{
-            console.log(responses);
+            // console.log(responses);
             this.measuresCountIstsos = responses.reduce((pp, cc)=>{
                 return pp+cc.data.data.count
             }, 0)

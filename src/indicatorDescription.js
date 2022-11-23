@@ -71,8 +71,8 @@ let indicatorDescription =
 
         'sat-water-temperature': {
             title : "Temperatura dell'acqua da satellite",
-            description: `Descrizione non presente`,
-            breveDescrizione:`Temperatura superficiale dell'acqua misurata da satellite (descrizione provvisoria)`,
+            description: `Temperatura superficiale dell'acqua misurata da satellite`,
+            breveDescrizione:`Temperatura superficiale dell'acqua misurata da satellite`,
             // icon:'fa fa-flask text-primary',
             icon:'icon-water_temp'
         },
@@ -310,10 +310,10 @@ let indicatorDescription =
             title : 'Concentrazione di fosforo',
             description: `Valore medio annuo delle concentrazioni (medie sulla colonna d'acqua ponderate
             sui volumi) di P totale. La media annua è calcolata a parire dai valori
-            ottenuti nei monitoraggi mensili o con altra frequenza temporale.
-            `,
+            ottenuti nei monitoraggi mensili o con altra frequenza temporale.`,
             breveDescrizione:`Concentrazione media annua di fosforo totale nel lago`,
             // icon:'fa fa-file-powerpoint-o text-primary',
+            breveDescrizioneArpa: `Valore  di fosforo totale alla circolazione tardo-invernale`,
             icon:'icon-water_PTOT',
             annuale:true,
             limite : {
@@ -378,7 +378,7 @@ let indicatorDescription =
             biomassa algale presente. I suoi valori variano nell’arco dell’anno e a seconda
             della profondità, con i massimi nei mesi estivi in coincidenza della maggior
             produttività algale. La concentrazione è più alta nei laghi più produttivi o
-            eutrofi. L'aumento dei valori di clorofilla può essereutilizzato come segnale
+            eutrofi. L'aumento dei valori di clorofilla può essere utilizzato come segnale
             dello sviluppo di una fioritura algale.
             `,
             breveDescrizione:`Concentrazione di clorofilla-a alla profondità del sensore`,
@@ -389,8 +389,8 @@ let indicatorDescription =
 
         'sat-water-Chl-a': {
             title : 'Clorofilla a',
-            description: `Descrizione non presente`,
-            breveDescrizione:`Concentrazione di clorofilla-a (descrizione provvisoria)`,
+            description: `Concentrazione di clorofilla a misurata da satellite`,
+            breveDescrizione:`Concentrazione di clorofilla a misurata da satellite`,
             // icon:'fa fa-flask text-primary',
             icon:'icon-water_CHl_a',
             annuale:false,
@@ -659,8 +659,8 @@ let indicatorDescription =
 
         'sat-water-TSS': {
             title : 'Solidi Totali Sospesi',
-            description: `Concentrazione media di Solidi Totali Sospesi (TSS)`,
-            breveDescrizione:`Concentrazione media di Solidi Totali Sospesi (TSS)`,
+            description: `Concentrazione di solidi sospesi totali misurata da satellite`,
+            breveDescrizione:`Concentrazione di solidi sospesi totali misurata da satellite`,
             // icon:'fa fa-bolt text-info',
             icon:'icon-water_CHl_a',
             annuale:false,
