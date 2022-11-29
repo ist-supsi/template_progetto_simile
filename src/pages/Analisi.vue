@@ -372,320 +372,358 @@
                 //      }
                 // }};
 
-                for (const [index, procedure] of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].entries()) {
-                    //
-                    this.data_loading = true;
-
-                    this.istsos.fetchSeries(
-                        procedure,
-                        self.procedureInfos[procedure].observedproperties,
-                        self.seriesBegin,
-                        self.seriesEnd
-                    ).then((response)=>{
-
-                        let result = istsosToHighcharts.istosToLine(
-                            response, undefined, true, 2, 3,
-                            procedure.startsWith('OXYGENATION')
-                        );
-
-                        // TODO:
-                        // 1. verificare il raggruppamento delle procedure nella pagina del Como
-
-                        if ( procedure!=self.analisysVariable ) {
-                            result.options.series[0].visible = false; // should be false
-                        } else {
-                            result.options.series[0].visible = true;
-                            const series = result.options.series[0].data.map((xy)=>xy[1]);
-
-                            if ( series.length > 0 ) {
-                                const variableAverage = mean(series);
-                                // const variableStd = sqrt(std(series));
-
-                                result.options.yAxis.plotLines = [{
-                                    color: 'darkgrey',
-                                    dashStyle: 'ShortDash',
-                                    width: 2,
-                                    value: variableAverage,
-                                    label: {
-                                        text: 'media della serie',
-                                        align: 'center',
-                                        style: {color: 'darkgrey'}
-                                    }
-                                }];
-                            };
-                        };
-
-                        if (procedure.startsWith('OXYGENATION')) {
-
-                            result.options.series[0].data = result.options.series[0].data.filter(el=>el[1]!=-999)
-                            result.options.yAxis.min = 0;
-                            result.options.yAxis.max = 5;
-
-                            result.options.yAxis.plotBands = [{
-                                from: 0,
-                                to: 1.5,
-                                // color: '#e9f2fa',
-                                color: '#99CCCC',
-                                label: {
-                                    text: 'Scarso',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
-                            }, {
-                                from: 1.5,
-                                to: 2.5,
-                                // color: '#a8cceb',
-                                color: '#99CC99',
-                                label: {
-                                    text: 'Sufficiente',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
-                            }, {
-                                from: 2.5,
-                                to: 3.5,
-                                // color: '#67a6dc',
-                                color: '#99CC66',
-                                label: {
-                                    text: 'Buona',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
-                            }, {
-                                from: 3.5,
-                                to: 4.5,
-                                // color: '#2780cd',
-                                color: '#99CC33',
-                                label: {
-                                    text: 'Eccellente',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
-                            }]
-                        }
-                        // else if (procedure.endsWith('_conc')) {
-                        //     result.options.series[0].data = result.options.series[0].data.filter(el=>el[1]!=-999.9)
-                        // };
-
-                        if ( !self.series_data.series ) {
-                            result.options.legend.enabled = false;
-                            // result.options.series[0].name = self.allProcedures[result.options.series[0].name].description;
-                            self.series_data = result.options;
-                        } else {
-                            self.series_data.legend.enabled = true;
-                            result.options.series[0].color = this.category_colors[index];
-                            // result.options.series[0].name = self.allProcedures[result.options.series[0].name].description;
-
-                            self.series_data.series.push(result.options.series[0]);
-                            // self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
-                        };
-
-                        // result.options.series[counter].color = this.category_colors[counter];
-
-                        if (procedure in sharedFunctions.windsProcedure) {
-                            self.wind_data_loading = true;
-
-                            this.wind_data_options = {plotOptions: {
-                        		    windbarb: {
-                              	   turboThreshold: Infinity
-                                 }
-                            }};
-
-                            const dirProc = sharedFunctions.windsProcedure[procedure];
-                            const dirUrn = self.allProcedures[dirProc].observedproperties[0].definition;
-
-                            let windPromise = this.istsos.fetchSeries(
-                                dirProc,
-                                dirUrn,
+                if (this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].every(el=>el.startsWith('OXYGENATION'))) {
+                    Promise.all(
+                        this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].map(proc=>{
+                            return this.istsos.fetchSeries(
+                                proc,
+                                self.procedureInfos[proc].observedproperties,
                                 self.seriesBegin,
                                 self.seriesEnd
-                            );
-
-                            let timeout;
-                            result.options.chart.events = {render: function(event) {
-                                var evt = this;
-                                const start_ts = evt.rangeSelector.maxInput.min;
-                                const end_ts = evt.rangeSelector.minInput.max;
-                                const end = new Date(end_ts);
-                                const start = new Date(start_ts);
-                                // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
-                                clearTimeout(timeout);
-                                timeout = setTimeout(()=>{
-                                    windPromise.then((response)=>{
-                                        const windirData = istsosToHighcharts.istsosToSeries(response);
-
-                                        let windataObj = {};
-                                        for (const el of windirData.series) {
-                                            windataObj[el[0]] = el[1];
-                                        };
-                                        console.log(windataObj);
-
-                                        const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
-                                        const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
-
-                                        const startIndex = sd.indexOf(Math.min(...sd));
-                                        const endIndex = ed.indexOf(Math.min(...ed));
-
-                                        let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
-
-                                        const wind_series = wind_data.map((el)=> el.slice(1).reverse());
-
-                                        // *************************************
-                                        // WARNING: Non serve più
-                                        // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
-                                        // valori ho introdotto questo workaround per limitare la serie al massimo consentito
-                                        // issue aperta: https://github.com/highcharts/highcharts/issues/17851
-                                        // const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-                                        // const series_excess = wind_data.length-1000;
-                                        // if ( series_excess>0 ) {
-                                        //     for (let i = 0; i < series_excess; i++) {
-                                        //         wind_data.splice(random(1, wind_data.length-1), 1)
-                                        //     }
-                                        // };
-                                        // *************************************
-
-                                        self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
-
-                                        self.wind_data_options.title.text = 'Velocità del vento';
-                                        self.wind_data_options['subtitle'] = {
-                                            text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
-                                        };
-
-                                        self.wind_series = istsosToHighcharts.polar(wind_series);
-
-                                        self.wind_data_loading = false;
-                                    });
-                                });
-
-                            }};
-                        } else if (Object.values(sharedFunctions.windsProcedure).includes(procedure)) {
-
-                            result.options.yAxis.plotBands = [{
-                                from: 0,
-                                to: 45,
-                                color: 'rgba(192, 192, 192, 0.1)',
-                                label: {
-                                    text: 'N',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
-                            }, {
-                                from: 45,
-                                to: 135,
-                                color: 'rgba(68, 170, 213, 0.1)',
-                                label: {
-                                    text: 'E',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
-                            }, {
-                                from: 135,
-                                to: 225,
-                                color: 'rgba(192, 192, 192, 0.1)',
-                                label: {
-                                    text: 'S',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
-                            }, {
-                                from: 225,
-                                to: 315,
-                                color: 'rgba(68, 170, 213, 0.1)',
-                                label: {
-                                    text: 'O',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
-                            }, {
-                                from: 315,
-                                to: 360,
-                                color: 'rgba(192, 192, 192, 0.1)',
-                                label: {
-                                    text: 'N',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
-                            }];
-
-                            const dirIdx = Object.values(sharedFunctions.windsProcedure).indexOf(procedure);
-                            self.wind_data_loading = true;
-
-                            this.wind_data_options = {plotOptions: {
-                        		    windbarb: {
-                              	   turboThreshold: Infinity
-                                 }
-                            }};
-
-                            const velProc = Object.keys(sharedFunctions.windsProcedure)[dirIdx];
-                            const velUrn = self.allProcedures[velProc].observedproperties[0].definition;
-
-                            let windVelPromise = this.istsos.fetchSeries(
-                                velProc,
-                                velUrn,
-                                self.seriesBegin,
-                                self.seriesEnd
-                            );
-                            let timeout;
-                            result.options.chart.events = {render: function(event) {
-                                var evt = this;
-                                const start_ts = evt.rangeSelector.maxInput.min;
-                                const end_ts = evt.rangeSelector.minInput.max;
-                                const end = new Date(end_ts);
-                                const start = new Date(start_ts);
-                                // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
-                                clearTimeout(timeout);
-                                timeout = setTimeout(()=>{
-                                    windVelPromise.then((response)=>{
-                                        const winvelData = istsosToHighcharts.istsosToSeries(response);
-
-                                        let windataObj = {};
-                                        for (const el of winvelData.series) {
-                                            windataObj[el[0]] = el[1];
-                                        };
-
-                                        const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
-                                        const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
-
-                                        const startIndex = sd.indexOf(Math.min(...sd));
-                                        const endIndex = ed.indexOf(Math.min(...ed));
-
-                                        let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>{
-                                            return [el[0], windataObj[el[0]], el[1]];
-                                            // [...el, windataObj[el[0]]]
-                                        });
-                                        const wind_series = wind_data.map((el)=> el.slice(1).reverse());
-
-                                        self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
-                                        self.wind_data_options.title.text = 'Velocità del vento';
-                                        self.wind_data_options['subtitle'] = {
-                                            text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
-                                        };
-
-                                        self.wind_series = istsosToHighcharts.polar(wind_series);
-
-                                        self.wind_data_loading = false;
-
-
-
-                                    });
-                                });
-
-                            }};
-
-                        };
-
+                            )
+                        })
+                    ).then(response=>{
+                        let result = istsosToHighcharts.istsosToHeatmap(response);
                     });
-                    // break;
+
+                } else {
+                  for (const [index, procedure] of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].entries()) {
+                      //
+                      this.data_loading = true;
+
+                      this.istsos.fetchSeries(
+                          procedure,
+                          self.procedureInfos[procedure].observedproperties,
+                          self.seriesBegin,
+                          self.seriesEnd
+                      ).then((response)=>{
+
+                          let result = istsosToHighcharts.istosToLine(
+                              response, undefined, true, 2, 3
+                          );
+
+                          // TODO:
+                          // 1. verificare il raggruppamento delle procedure nella pagina del Como
+
+                          if ( procedure!=self.analisysVariable ) {
+                              result.options.series[0].visible = false; // should be false
+                          } else {
+                              result.options.series[0].visible = true;
+                              const series = result.options.series[0].data.map((xy)=>xy[1]);
+
+                              if ( series.length > 0 ) {
+                                  const variableAverage = mean(series);
+                                  // const variableStd = sqrt(std(series));
+
+                                  result.options.yAxis.plotLines = [{
+                                      color: 'darkgrey',
+                                      dashStyle: 'ShortDash',
+                                      width: 2,
+                                      value: variableAverage,
+                                      label: {
+                                          text: 'media della serie',
+                                          align: 'center',
+                                          style: {color: 'darkgrey'}
+                                      }
+                                  }];
+                              };
+                          };
+
+                          // if (procedure.startsWith('OXYGENATION')) {
+                          //
+                          //     result.options.series[0].visible = true;
+                          //     result.options.series[0].data = result.options.series[0].data.filter(el=>el[1]!=-999).map(el=>[el[1]]);
+                          //     result.options.yAxis.min = 0;
+                          //     result.options.yAxis.max = 5;
+                          //
+                          //     result.options.yAxis.categories = ['0.4', '2.5', '5.0', '8.0', '12.5', '20.0'];
+                          //     result.options.yAxis.title = {text: "Profondità"};
+                          //     result.options.yAxis.reversed = true;
+                          //
+                          //     // info.options.series[0].type = 'column';
+                          //     result.options.chart.inverted =  false;
+                          //     result.options.chart.type = 'heatmap'
+                          //     // result.options.chart.marginTop = 80;
+                          //     // result.options.chart.marginBottom = 80;
+                          //     result.options.chart.plotBorderWidth = 1;
+                          //
+                          //     result.options.xAxis.type = 'datetime'
+                          //     result.options.xAxis.categories = result.options.series[0].data.map(el=>new Date(el[0]));
+                          //
+                          //
+                          //
+                          //     console.log(result.options);
+                          //
+                          //     // result.options.yAxis.plotBands = [{
+                          //     //     from: 0,
+                          //     //     to: 1.5,
+                          //     //     // color: '#e9f2fa',
+                          //     //     color: '#99CCCC',
+                          //     //     label: {
+                          //     //         text: 'Scarso',
+                          //     //         style: {
+                          //     //             color: '#606060'
+                          //     //         }
+                          //     //     }
+                          //     // }, {
+                          //     //     from: 1.5,
+                          //     //     to: 2.5,
+                          //     //     // color: '#a8cceb',
+                          //     //     color: '#99CC99',
+                          //     //     label: {
+                          //     //         text: 'Sufficiente',
+                          //     //         style: {
+                          //     //             color: '#606060'
+                          //     //         }
+                          //     //     }
+                          //     // }, {
+                          //     //     from: 2.5,
+                          //     //     to: 3.5,
+                          //     //     // color: '#67a6dc',
+                          //     //     color: '#99CC66',
+                          //     //     label: {
+                          //     //         text: 'Buona',
+                          //     //         style: {
+                          //     //             color: '#606060'
+                          //     //         }
+                          //     //     }
+                          //     // }, {
+                          //     //     from: 3.5,
+                          //     //     to: 4.5,
+                          //     //     // color: '#2780cd',
+                          //     //     color: '#99CC33',
+                          //     //     label: {
+                          //     //         text: 'Eccellente',
+                          //     //         style: {
+                          //     //             color: '#606060'
+                          //     //         }
+                          //     //     }
+                          //     // }]
+                          // };
+                          // else if (procedure.endsWith('_conc')) {
+                          //     result.options.series[0].data = result.options.series[0].data.filter(el=>el[1]!=-999.9)
+                          // };
+
+                          if ( !self.series_data.series ) {
+                              result.options.legend.enabled = false;
+                              // result.options.series[0].name = self.allProcedures[result.options.series[0].name].description;
+                              self.series_data = result.options;
+                          } else {
+                              self.series_data.legend.enabled = true;
+                              result.options.series[0].color = this.category_colors[index];
+                              // result.options.series[0].name = self.allProcedures[result.options.series[0].name].description;
+
+                              self.series_data.series.push(result.options.series[0]);
+                              // self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
+                          };
+
+                          // result.options.series[counter].color = this.category_colors[counter];
+
+                          if (procedure in sharedFunctions.windsProcedure) {
+                              self.wind_data_loading = true;
+
+                              this.wind_data_options = {plotOptions: {
+                                  windbarb: {
+                                     turboThreshold: Infinity
+                                   }
+                              }};
+
+                              const dirProc = sharedFunctions.windsProcedure[procedure];
+                              const dirUrn = self.allProcedures[dirProc].observedproperties[0].definition;
+
+                              let windPromise = this.istsos.fetchSeries(
+                                  dirProc,
+                                  dirUrn,
+                                  self.seriesBegin,
+                                  self.seriesEnd
+                              );
+
+                              let timeout;
+                              result.options.chart.events = {render: function(event) {
+                                  var evt = this;
+                                  const start_ts = evt.rangeSelector.maxInput.min;
+                                  const end_ts = evt.rangeSelector.minInput.max;
+                                  const end = new Date(end_ts);
+                                  const start = new Date(start_ts);
+                                  // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
+                                  clearTimeout(timeout);
+                                  timeout = setTimeout(()=>{
+                                      windPromise.then((response)=>{
+                                          const windirData = istsosToHighcharts.istsosToSeries(response);
+
+                                          let windataObj = {};
+                                          for (const el of windirData.series) {
+                                              windataObj[el[0]] = el[1];
+                                          };
+                                          console.log(windataObj);
+
+                                          const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
+                                          const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
+
+                                          const startIndex = sd.indexOf(Math.min(...sd));
+                                          const endIndex = ed.indexOf(Math.min(...ed));
+
+                                          let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
+
+                                          const wind_series = wind_data.map((el)=> el.slice(1).reverse());
+
+                                          // *************************************
+                                          // WARNING: Non serve più
+                                          // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
+                                          // valori ho introdotto questo workaround per limitare la serie al massimo consentito
+                                          // issue aperta: https://github.com/highcharts/highcharts/issues/17851
+                                          // const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+                                          // const series_excess = wind_data.length-1000;
+                                          // if ( series_excess>0 ) {
+                                          //     for (let i = 0; i < series_excess; i++) {
+                                          //         wind_data.splice(random(1, wind_data.length-1), 1)
+                                          //     }
+                                          // };
+                                          // *************************************
+
+                                          self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
+
+                                          self.wind_data_options.title.text = 'Velocità del vento';
+                                          self.wind_data_options['subtitle'] = {
+                                              text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
+                                          };
+
+                                          self.wind_series = istsosToHighcharts.polar(wind_series);
+
+                                          self.wind_data_loading = false;
+                                      });
+                                  });
+
+                              }};
+                          } else if (Object.values(sharedFunctions.windsProcedure).includes(procedure)) {
+
+                              result.options.yAxis.plotBands = [{
+                                  from: 0,
+                                  to: 45,
+                                  color: 'rgba(192, 192, 192, 0.1)',
+                                  label: {
+                                      text: 'N',
+                                      style: {
+                                          color: '#606060'
+                                      }
+                                  }
+                              }, {
+                                  from: 45,
+                                  to: 135,
+                                  color: 'rgba(68, 170, 213, 0.1)',
+                                  label: {
+                                      text: 'E',
+                                      style: {
+                                          color: '#606060'
+                                      }
+                                  }
+                              }, {
+                                  from: 135,
+                                  to: 225,
+                                  color: 'rgba(192, 192, 192, 0.1)',
+                                  label: {
+                                      text: 'S',
+                                      style: {
+                                          color: '#606060'
+                                      }
+                                  }
+                              }, {
+                                  from: 225,
+                                  to: 315,
+                                  color: 'rgba(68, 170, 213, 0.1)',
+                                  label: {
+                                      text: 'O',
+                                      style: {
+                                          color: '#606060'
+                                      }
+                                  }
+                              }, {
+                                  from: 315,
+                                  to: 360,
+                                  color: 'rgba(192, 192, 192, 0.1)',
+                                  label: {
+                                      text: 'N',
+                                      style: {
+                                          color: '#606060'
+                                      }
+                                  }
+                              }];
+
+                              const dirIdx = Object.values(sharedFunctions.windsProcedure).indexOf(procedure);
+                              self.wind_data_loading = true;
+
+                              this.wind_data_options = {plotOptions: {
+                                  windbarb: {
+                                     turboThreshold: Infinity
+                                   }
+                              }};
+
+                              const velProc = Object.keys(sharedFunctions.windsProcedure)[dirIdx];
+                              const velUrn = self.allProcedures[velProc].observedproperties[0].definition;
+
+                              let windVelPromise = this.istsos.fetchSeries(
+                                  velProc,
+                                  velUrn,
+                                  self.seriesBegin,
+                                  self.seriesEnd
+                              );
+                              let timeout;
+                              result.options.chart.events = {render: function(event) {
+                                  var evt = this;
+                                  const start_ts = evt.rangeSelector.maxInput.min;
+                                  const end_ts = evt.rangeSelector.minInput.max;
+                                  const end = new Date(end_ts);
+                                  const start = new Date(start_ts);
+                                  // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
+                                  clearTimeout(timeout);
+                                  timeout = setTimeout(()=>{
+                                      windVelPromise.then((response)=>{
+                                          const winvelData = istsosToHighcharts.istsosToSeries(response);
+
+                                          let windataObj = {};
+                                          for (const el of winvelData.series) {
+                                              windataObj[el[0]] = el[1];
+                                          };
+
+                                          const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
+                                          const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
+
+                                          const startIndex = sd.indexOf(Math.min(...sd));
+                                          const endIndex = ed.indexOf(Math.min(...ed));
+
+                                          let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>{
+                                              return [el[0], windataObj[el[0]], el[1]];
+                                              // [...el, windataObj[el[0]]]
+                                          });
+                                          const wind_series = wind_data.map((el)=> el.slice(1).reverse());
+
+                                          self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
+                                          self.wind_data_options.title.text = 'Velocità del vento';
+                                          self.wind_data_options['subtitle'] = {
+                                              text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
+                                          };
+
+                                          self.wind_series = istsosToHighcharts.polar(wind_series);
+
+                                          self.wind_data_loading = false;
+
+
+
+                                      });
+                                  });
+
+                              }};
+
+                          };
+
+                      });
+                      // break;
+                  }
                 };
+
+                console.log(this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]);
+
+
 
                 self.locked = false; //
                 // self.wind_data_options=result.options;

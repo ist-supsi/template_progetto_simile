@@ -1,6 +1,6 @@
 <template>
   <card class="card-user h-100">
-    <img slot="image" src="http://a.tile.stamen.com/watercolor/15/17198/11658.jpg" alt="Lago Ceresio"/>
+    <img slot="image" src="https://a.tile.stamen.com/watercolor/15/17198/11658.jpg" alt="Lago Ceresio"/>
     <div class="author">
       <a href="#/admin/lago-maggiore">
         <img class="avatar border-gray" src="https://live.staticflickr.com/65535/49409610966_b93106c08c_b.jpg" alt="Lago Maggiore"/>
@@ -11,17 +11,17 @@
       </a>
     </div>
     <p class="description text-justify">
-      Il Lago Maggiore, o Verbano, è un grande lago pedemontano originato dalla rimodellazione glaciale di una 
-      preesistente valle fluviale. È il secondo lago italiano per superficie e volume ed il secondo per profondità 
-      massima (370 m) ed è situato tra le provincie di Varese (a est), quelle di Novara e di Verbania ad ovest ed il 
-      Canton Ticino (Svizzera) a Nord. Si trova a un’altitudine media di 193.88 m sul livello del mare. 
-      Il bacino imbrifero del lago è di 6599 km<sup>2</sup>, divisi equamente tra Italia (3229 km<sup>2</sup>) e Svizzera (3370 km<sup>2</sup>). L'80% della 
-      superficie lacustre è però in Italia. La popolazione residente nel bacino imbrifero è di circa 670'000 abitanti; 
-      questo numero può però aumentare significativamente in alcuni periodi dell'anno, a causa delle presenze 
-      turistiche. 
-      Le acque del Lago Maggiore sono importanti per la pesca sportiva e professionale e la nautica da diporto. Le 
-      acque in uscita sono d’importanza fondamentale a fini irrigui delle colture di riso e granoturco della Pianura 
-      Padana.  
+      Il Lago Maggiore, o Verbano, è un grande lago pedemontano originato dalla rimodellazione glaciale di una
+      preesistente valle fluviale. È il secondo lago italiano per superficie e volume ed il secondo per profondità
+      massima (370 m) ed è situato tra le provincie di Varese (a est), quelle di Novara e di Verbania ad ovest ed il
+      Canton Ticino (Svizzera) a Nord. Si trova a un’altitudine media di 193.88 m sul livello del mare.
+      Il bacino imbrifero del lago è di 6599 km<sup>2</sup>, divisi equamente tra Italia (3229 km<sup>2</sup>) e Svizzera (3370 km<sup>2</sup>). L'80% della
+      superficie lacustre è però in Italia. La popolazione residente nel bacino imbrifero è di circa 670'000 abitanti;
+      questo numero può però aumentare significativamente in alcuni periodi dell'anno, a causa delle presenze
+      turistiche.
+      Le acque del Lago Maggiore sono importanti per la pesca sportiva e professionale e la nautica da diporto. Le
+      acque in uscita sono d’importanza fondamentale a fini irrigui delle colture di riso e granoturco della Pianura
+      Padana.
     </p>
     <div slot="footer" class="text-center d-flex justify-content-center">
       <!-- <button href="#" class="btn btn-simple"><i class="fa fa-facebook-square"></i></button>
