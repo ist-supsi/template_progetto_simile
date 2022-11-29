@@ -294,7 +294,7 @@ function istsosToSeries(response, args) {
     }
 };
 
-function istosToLine (response, title, stock = false, decimals = 2, precision = 3, heatmap = false) {
+function istosToLine (response, title, stock = false, decimals = 2, precision = 3) {
       const dataArray = response.data.data[0].result.DataArray;
       let info;
       if ( !stock ) {
@@ -340,7 +340,7 @@ function istosToLine (response, title, stock = false, decimals = 2, precision = 
       // info.options.xAxis.categories = [`<span class="hc-cat-title">uom</span><br/>${dataArray.field[1].uom}`];
 
       info.options.series[0].data = dataArray.values.filter(el=>{
-          if (el[1]<=0) console.log(el[1], el[1]==-999, el[2]);
+          // if (el[1]<=0) console.log(el[1], el[1]==-999, el[2]);
           return el[1]!==null && el[2]>0
       }).map(el=>[epochToTime(el[0]), parseFloat(el[1].toPrecision(precision))]);
       info.options.series[0].name = response.data.data[0].name;
@@ -352,26 +352,147 @@ function istosToLine (response, title, stock = false, decimals = 2, precision = 
       //     info.options.xAxis = {categories: info.options.series[0].data.map(el=>(new Date(el[0])))}
       //     info.options.yAxis
       // };
-      if (heatmap) {
-          info.options.series[0].type = 'column';
-          info.options.chart.inverted =  false;
-
-          const roundBy = (date, ms) => new Date(Math.round(date / ms) * ms);
-
-          const data = Object.entries(sharedFunctions.groupBy(
-              info.options.series[0].data,
-              el=>roundBy(new Date(el[0]), 2*36e5)
-          )).map(entry=>[(entry[1][0][0]), Math.min(entry[1][0][1])])
-
-          // info.options.series[0].grouping = false;
-          info.options.series[0].data = data;
-
-      };
+      // if (heatmap) {
+      //     info.options.series[0].type = 'column';
+      //     info.options.chart.inverted =  false;
+      //
+      //     // const roundBy = (date, ms) => new Date(Math.round(date / ms) * ms);
+      //
+      //     // const data = Object.entries(sharedFunctions.groupBy(
+      //     //     info.options.series[0].data,
+      //     //     el=>roundBy(new Date(el[0]), 2*36e5)
+      //     // )).map(entry=>[(entry[1][0][0]), Math.min(entry[1][0][1])])
+      //     //
+      //     // // info.options.series[0].grouping = false;
+      //     // info.options.series[0].data = data;
+      //
+      // };
 
       // info.options.series[0].label = {format: '{name}'+`${dataArray.field[1].uom}`}
       return info;
 }
 
+function getPointCategoryName(point, dimension) {
+    var series = point.series,
+        isY = dimension === 'y',
+        axis = series[isY ? 'yAxis' : 'xAxis'];
+    return axis.categories[point[isY ? 'y' : 'x']];
+}
+
+const HEATMAP_DEFAULTS = {
+
+    chart: {
+        type: 'heatmap',
+        marginTop: 40,
+        marginBottom: 80,
+        plotBorderWidth: 1
+    },
 
 
-export default {istosToLine, windbarb, istsosToSeries, polar};
+    title: {
+        text: 'Sales per employee per weekday'
+    },
+
+    xAxis: {
+     // date dei valori
+        categories: ['2010', '2011', '2012', '2013', '2014', '2015'] // dates
+    },
+
+    yAxis: {
+    		// profondità a cui sono i sensori
+        categories: ['0.4', '2.5', '5.0', '8.0', '12.5', '20.0'], // profondità a cui sono i sensori
+        title: "Profondità",
+        reversed: true
+    },
+
+    accessibility: {
+        point: {
+            descriptionFormatter: function (point) {
+                var ix = point.index + 1,
+                    xName = getPointCategoryName(point, 'x'),
+                    yName = getPointCategoryName(point, 'y'),
+                    val = point.value;
+                return ix + '. ' + xName + ' sales ' + yName + ', ' + val + '.';
+            }
+        }
+    },
+
+    colorAxis: {
+        min: 0,
+        minColor: '#FFFFFF',
+        maxColor: Highcharts.getOptions().colors[0]
+    },
+
+    legend: {
+        align: 'right',
+        layout: 'vertical',
+        margin: 0,
+        verticalAlign: 'top',
+        y: 25,
+        symbolHeight: 280
+    },
+
+    tooltip: {
+        formatter: function () {
+            return '<b>' + getPointCategoryName(this.point, 'x') + '</b> sold <br><b>' +
+                this.point.value + '</b> items on <br><b>' + getPointCategoryName(this.point, 'y') + '</b>';
+        }
+    },
+
+    series: [{
+        name: 'Sales per employee',
+        borderWidth: 1,
+        data: [
+        // index della lista di date, index della lista delle profondità,valore all'index
+        [0, 0, 4], [0, 1, 4], [0, 2, 4], [0, 3, 3], [0, 4, 3], [0, 5, 1],
+        [1, 0, 4], [1, 1, 4], [1, 2, 4], [1, 3, 4], [1,4, 4], [1, 5, 3],
+        [2, 0, 4], [2, 1, 4], [2, 2, 4], [2, 3, 4], [2, 4, 3],[2, 5, 2]
+        ],
+        dataLabels: {
+            enabled: true,
+            color: '#000000'
+        }
+    }],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                yAxis: {
+                    labels: {
+                        formatter: function () {
+                            return this.value.charAt(0);
+                        }
+                    }
+                }
+            }
+        }]
+    }
+
+};
+
+function istsosToHeatmap(multi_response) {
+    let info = {options: {...HEATMAP_DEFAULTS}};
+    console.log(multi_response);
+    // response.data.data[0].result.DataArray
+    const timestamps = Array.from(new Set(multi_response.map(res=>res.data.data[0].result.DataArray.values).flat().map(el=>el[0]))).sort()
+    // let data = multi_response.
+    info.options.xAxis.categories = timestamps;
+    let values = [];
+
+    for (const [index, response] of multi_response.entries()) {
+        for (const val of response.data.data[0].result.DataArray.values) {
+            // console.log(val);
+            const tsi = timestamps.indexOf(val[0])
+            const ycat = response.data.data[0].name.replace('OXYGENATION_', '').replace('_', '.')
+            const ycati = info.options.yAxis.categories.indexOf(ycat);
+            // console.log(tsi, ycati);
+            values.push([tsi, ycati, val[1]]);
+        };
+    };
+    // TODO: 
+};
+
+export default {istosToLine, windbarb, istsosToSeries, polar, istsosToHeatmap};
