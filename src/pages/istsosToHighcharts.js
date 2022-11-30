@@ -383,14 +383,19 @@ const HEATMAP_DEFAULTS = {
 
     chart: {
         type: 'heatmap',
-        marginTop: 40,
+        // marginTop: 40,
         marginBottom: 80,
-        plotBorderWidth: 1
+        plotBorderWidth: 1,
+        zoomType: 'x',
     },
 
 
     title: {
-        text: 'Sales per employee per weekday'
+        text: 'Serie temporale'
+    },
+    subtitle: {
+        text: document.ontouchstart === undefined ?
+        "clic e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
     },
 
     xAxis: {
@@ -405,17 +410,17 @@ const HEATMAP_DEFAULTS = {
         reversed: true
     },
 
-    accessibility: {
-        point: {
-            descriptionFormatter: function (point) {
-                var ix = point.index + 1,
-                    xName = getPointCategoryName(point, 'x'),
-                    yName = getPointCategoryName(point, 'y'),
-                    val = point.value;
-                return ix + '. ' + xName + ' sales ' + yName + ', ' + val + '.';
-            }
-        }
-    },
+    // accessibility: {
+    //     point: {
+    //         descriptionFormatter: function (point) {
+    //             var ix = point.index + 1,
+    //                 xName = getPointCategoryName(point, 'x'),
+    //                 yName = getPointCategoryName(point, 'y'),
+    //                 val = point.value;
+    //             return ix + '. ' + xName + ' sales ' + yName + ', ' + val + '.';
+    //         }
+    //     }
+    // },
 
     colorAxis: {
         min: 0,
@@ -434,8 +439,10 @@ const HEATMAP_DEFAULTS = {
 
     tooltip: {
         formatter: function () {
-            return '<b>' + getPointCategoryName(this.point, 'x') + '</b> sold <br><b>' +
-                this.point.value + '</b> items on <br><b>' + getPointCategoryName(this.point, 'y') + '</b>';
+            const classi = {4: 'Eccellente', 3: 'Buona', 2: 'Sufficiente', 1: 'Scarca'};
+            return '<b>' + getPointCategoryName(this.point, 'x') + '</b><br>' +
+                'Classe di ossigenazione: <b>' + classi[this.point.value] + '</b><br>' +
+                'Profondità: <b>' + getPointCategoryName(this.point, 'y') + ' m</b>';
         }
     },
 
@@ -473,26 +480,37 @@ const HEATMAP_DEFAULTS = {
 
 };
 
-function istsosToHeatmap(multi_response) {
-    let info = {options: {...HEATMAP_DEFAULTS}};
-    console.log(multi_response);
-    // response.data.data[0].result.DataArray
-    const timestamps = Array.from(new Set(multi_response.map(res=>res.data.data[0].result.DataArray.values).flat().map(el=>el[0]))).sort()
-    // let data = multi_response.
-    info.options.xAxis.categories = timestamps;
-    let values = [];
+// let HEATMAP_DEFAULTS = LINE_DEFAULTS;
+// HEATMAP_DEFAULTS.chart.type = 'heatmap';
 
+HEATMAP_DEFAULTS['rangeSelector'] = STOCK_DEFAULTS['rangeSelector']
+
+function istsosToHeatmap(multi_response, title) {
+    let info = {options: {...HEATMAP_DEFAULTS}};
+    if (title) { info.options.title = title; };
+    // info.options.chart.width = 800;
+    // response.data.data[0].result.DataArray
+    const timestamps = Array.from(new Set(multi_response.map(res=>res.data.data[0].result.DataArray.values).flat().map(el=>{
+        let day = new Date(el[0]);
+        return day.toLocaleDateString('en-CA');
+    }))).sort()
+    info.options.xAxis.categories = timestamps;
+
+    console.log(timestamps);
+    let values = [];
     for (const [index, response] of multi_response.entries()) {
-        for (const val of response.data.data[0].result.DataArray.values) {
-            // console.log(val);
-            const tsi = timestamps.indexOf(val[0])
+        response.data.data[0].result.DataArray.values.filter(el=>el[1]!=-999).forEach(val=>{
+            let day = new Date(val[0]);
+            console.log(day.toLocaleDateString('en-CA'));
+            const tsi = timestamps.indexOf(day.toLocaleDateString('en-CA')) // .findIndex(ts=>ts.valueOf()===day.valueOf())
             const ycat = response.data.data[0].name.replace('OXYGENATION_', '').replace('_', '.')
             const ycati = info.options.yAxis.categories.indexOf(ycat);
-            // console.log(tsi, ycati);
             values.push([tsi, ycati, val[1]]);
-        };
+        });
     };
-    // TODO: 
+    // TODO:
+    info.options.series[0].data = values;
+    return info;
 };
 
 export default {istosToLine, windbarb, istsosToSeries, polar, istsosToHeatmap};
