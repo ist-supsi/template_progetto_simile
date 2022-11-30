@@ -70,7 +70,9 @@
 
             <div v-if="Object.keys(series_data).length>0" class="row mb-4" >
                 <div class="col-md-12">
-                        <highcharts :constructor-type="'stockChart'" :options="series_data"></highcharts>
+
+                        <highcharts v-if="constructorType" :constructor-type="constructorType" :options="series_data"></highcharts>
+                        <highcharts v-else :options="series_data"></highcharts>
                 </div>
             </div>
             <div v-else-if="data_loading" class="row mb-4" >
@@ -131,6 +133,8 @@
     import { Chart } from 'highcharts-vue';
     import Highcharts from 'highcharts';
     import More from 'highcharts/highcharts-more';
+    import HeatMap from 'highcharts/modules/heatmap'
+
     // import loadBullet from 'highcharts/modules/bullet.js';
 
     import ChartCard from 'src/components/Cards/ChartCard.vue';
@@ -155,6 +159,7 @@
 
     More(Highcharts)
     stockInit(Highcharts)
+    HeatMap(Highcharts)
 
     Highcharts.setOptions({
         lang: {
@@ -225,6 +230,7 @@
             variableStd: 0,
             bulletOptions: {},
             setDataTimeout: null,
+            constructorType: 'stockChart',
             category_colors: [
                 '#77a1e5',
                 '#8bbc21', '#f28f43', '#492970',
@@ -373,6 +379,8 @@
                 // }};
 
                 if (this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].every(el=>el.startsWith('OXYGENATION'))) {
+                    self.constructorType = false;
+                    // self.constructorType = 'stockChart';
                     Promise.all(
                         this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].map(proc=>{
                             return this.istsos.fetchSeries(
@@ -383,10 +391,12 @@
                             )
                         })
                     ).then(response=>{
-                        let result = istsosToHighcharts.istsosToHeatmap(response);
+                        let result = istsosToHighcharts.istsosToHeatmap(response, undefined);
+                        self.series_data = result.options;
                     });
 
                 } else {
+                  self.constructorType = 'stockChart';
                   for (const [index, procedure] of this.groupedProcedures[self.procedureInfos[this.analisysVariable].group].entries()) {
                       //
                       this.data_loading = true;
