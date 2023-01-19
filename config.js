@@ -8,12 +8,13 @@ const devProxyConf = {
 // Configurazione di deploy su server SUPSI
 const proxyConf = {
     port: '',
-    host: 'simile.ddns.net', // window.location.hostname,
+    // host: 'simile.ddns.net', // window.location.hostname,
+    host: window.location.hostname,
     name: 'api/istsos'
 };
 
 const config = {
-    istsosProxy: devProxyConf,
+    istsosProxy: proxyConf,
     verbanoIstsos: {
         proxyEndpoint: 'verbano',
         baseUrl: 'https://istsos.irsa.cnr.it',
