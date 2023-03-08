@@ -9,6 +9,7 @@ import UserProfile from 'src/pages/UserProfile.vue'
 //import TableList from 'src/pages/TableList.vue'
 import LagoMaggiore from 'src/pages/LagoMaggiore.vue'
 import LagoLugano from 'src/pages/LagoLugano.vue'
+import LagoVarese from 'src/pages/LagoVarese.vue'
 
 import Analisi from 'src/pages/Analisi.vue'
 
@@ -89,6 +90,11 @@ const routes = [
         path: 'lago-Como',
         name: 'Lago Como',
         component: LagoComo
+      },
+      {
+        path: 'lago-varase',
+        name: 'Lago Varase',
+        component: LagoVarese
       },
       {
         path: 'analisi',

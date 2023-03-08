@@ -38,6 +38,10 @@
         <i class="nc-icon nc-tag-content"></i>
         <p>Lago di Como</p>
       </sidebar-link>
+      <sidebar-link to="/admin/lago-varase">
+        <i class="nc-icon nc-tag-content"></i>
+        <p>Lago di Varase</p>
+      </sidebar-link>
       <!--sidebar-link to="/admin/maps">
         <i class="nc-icon nc-pin-3"></i>
         <p>Maps</p>

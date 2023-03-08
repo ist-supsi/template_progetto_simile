@@ -40,6 +40,10 @@
         <i class="nc-icon nc-tag-content"></i>
         <p>Lago di Como</p>
       </sidebar-link>
+      <sidebar-link to="/admin/lago-varase">
+        <i class="nc-icon nc-tag-content"></i>
+        <p>Lago di Varase</p>
+      </sidebar-link>
 
       <!-- <li><a class="nav-link">Test</a>
           <ul> -->
