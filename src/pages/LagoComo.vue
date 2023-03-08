@@ -23,7 +23,7 @@
                 </div> -->
 
                 <div class="col-8">
-                    <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
+                    <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row" :key="ii">
                         <div class="col-6" :class="[(cards[ii+1] && cards[ii+1].title) ? 'col-6' : 'col-12']">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
@@ -128,7 +128,7 @@
                                   v-model="selectedMarker"
                                   title="Scegli una località o un'area da analizzare"
                                   >
-                                <option v-for="feature in features.features" :value="feature.properties.markerIndex">
+                                <option v-for="feature in features.features" :value="feature.properties.markerIndex" :key="feature">
                                       {{ guessLocLabel(feature.properties.foi_name) }}
                                   </option>
                               </select>
@@ -175,7 +175,7 @@
                                     aria-label="Example select with button addon" v-model="selectedMarker"
                                     title="Scegli una località o un'area da analizzare"
                                     >
-                                    <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>!(nfo.procedure.includes('ARPA')||nfo.procedure.startsWith('SATELLITE'))))" :value="feature.properties.markerIndex">
+                                    <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>!(nfo.procedure.includes('ARPA')||nfo.procedure.startsWith('SATELLITE'))))" :value="feature.properties.markerIndex" :key="feature">
                                         {{ guessLocLabel(feature.properties.foi_name) }}
                                     </option>
                                     </select>
@@ -226,7 +226,7 @@
                                         aria-label="Example select with button addon" v-model="selectedMarker"
                                         title="Scegli una località o un'area da analizzare"
                                         >
-                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.includes('ARPA')))" :value="feature.properties.markerIndex">
+                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.includes('ARPA')))" :value="feature.properties.markerIndex" :key="feature">
                                             {{ guessLocLabel(feature.properties.foi_name) }}
                                         </option>
                                         </select>
@@ -257,7 +257,7 @@
 
                             </p>
 
-                                <div v-for="cc in loopOnPairs(Array.from(Array(dataArpa.length), (n,i)=>i))" class="row">
+                                <div v-for="cc in loopOnPairs(Array.from(Array(dataArpa.length), (n,i)=>i))" class="row" :key="cc">
                                     <div class="col-lg-6 col-sm-12">
                                         <figure style="min-width: 100%" class="highcharts-figure">
                                             <highcharts :options="dataArpa[cc[0]]"></highcharts>
@@ -287,7 +287,7 @@
                                 e la deviazione standard. I laghi possono essere divisi in più bacini, e per ogni bacino vengono calcolate le statistiche
                                  dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le immagini acquisite
                                  dalle missioni ESA Sentinel-3 e NASA Landsat 8. Le mappe complete sono disponibili al seguente <a href="https://www.webgis.eo.simile.polimi.it/" target="_blank"> link</a> </p>
-                            <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
+                            <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row" :key="cc">
 
                                 <div class="col-lg-6 col-sm-12">
 
@@ -357,7 +357,7 @@
                                         aria-label="Example select with button addon" v-model="selectedMarker"
                                         title="Scegli una località o un'area da analizzare"
                                         >
-                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.startsWith('SATELLITE')))" :value="feature.properties.markerIndex">
+                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.startsWith('SATELLITE')))" :value="feature.properties.markerIndex" :key="feature">
                                             {{ guessLocLabel(feature.properties.foi_name) }}
                                         </option>
                                         </select>
