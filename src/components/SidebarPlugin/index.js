@@ -35,6 +35,7 @@ const SidebarPlugin = {
           ceresioIstosos: new IstsosIO(config.ceresioIstsos.endpoint, config.ceresioIstsos.proxyEndpoint, config.ceresioIstsos.baseUrl),
           verbanoIstosos: new IstsosIO(config.verbanoIstsos.endpoint, config.verbanoIstsos.proxyEndpoint, config.verbanoIstsos.baseUrl),
           larioIstosos: new IstsosIO(config.larioIstsos.endpoint, config.larioIstsos.proxyEndpoint, config.larioIstsos.baseUrl),
+          vareseIstosos: new IstsosIO(config.vareseIstsos.endpoint, config.vareseIstsos.proxyEndpoint, config.vareseIstsos.baseUrl),
           whereAmI: '',
           allProcedures: null
         }

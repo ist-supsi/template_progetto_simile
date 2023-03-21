@@ -24,6 +24,11 @@ const config = {
         baseUrl: 'https://istsos.irsa.cnr.it',
         endpoint:  'lariolive'
     },
+    vareseIstsos: {
+        proxyEndpoint: 'varese',
+        baseUrl: 'https://istsos.ddns.net',
+        endpoint:  'test_varese'
+    },
     ceresioIstsos: {
         proxyEndpoint: 'index',
         baseUrl: 'https://istsos.ddns.net',

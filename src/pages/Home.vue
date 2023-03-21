@@ -198,7 +198,8 @@
         Promise.all([
             this.ceresioIstosos._call({services: 'ceresiohourly', observedproperties: ''}),
             this.verbanoIstosos._call({services: 'maggiorelive', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} }),
-            this.larioIstosos._call({services: 'lariolive', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} })
+          this.larioIstosos._call({ services: 'lariolive', observedproperties: '' }).then((r) => r).catch(e => { return { 'data': { 'data': [] } } }),
+          this.vareseIstosos._call({services: 'test_varese', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} })
         ]).then(responses=>{
             let responseIstsosData = [];
             responses.forEach((response)=>{responseIstsosData = responseIstsosData.concat(response.data.data)});
