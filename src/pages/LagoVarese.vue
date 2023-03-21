@@ -366,7 +366,6 @@
             }"
           >
             <div class="col-12">
-              {{ tableData }}
               <data-table
                 :columns="tableColumns2"
                 :data="tableData"
@@ -929,14 +928,14 @@ export default {
       // 45.98815472817849, 8.970311660582176
       // minlat="45.9029678" minlon="8.8586625" maxlat="46.0363240" maxlon="9.1252600"/
       bounds: latLngBounds([
-        [45.9, 8.85],
-        [46.03, 9.12]
+        [45.76, 8.66],
+        [45.85, 8.82]
       ]),
       features: {
         type: "FeatureCollection",
         features: []
       },
-      basins: lake_basins.ceresio,
+      basins: lake_basins.varese,
       // url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       // url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
       wmsUrl:
@@ -965,7 +964,7 @@ export default {
         scrollWheelZoom: false
       },
       showMap: true,
-      selectedMarker: 1,
+      selectedMarker: 0,
       cards: [{}, {}, {}, {}, {}, {}],
       selected: "Serie storiche"
     };
@@ -1653,7 +1652,6 @@ export default {
         self.tableAllData = {
           data: tableAllData.filter(el => el.begin && el.end)
         };
-
       });
     },
     tableSetData() {
