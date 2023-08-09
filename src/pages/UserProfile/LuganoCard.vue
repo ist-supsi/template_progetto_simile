@@ -1,6 +1,6 @@
 <template>
   <card class="card-user h-100">
-    <img slot="image" src="https://a.tile.stamen.com/watercolor/15/17198/11657.jpg" alt="Lago Ceresio"/>
+    <img slot="image" src="https://stamen-tiles.a.ssl.fastly.net/watercolor/15/17198/11657.jpg" alt="Lago Ceresio"/>
     <div class="author">
       <a href="#/admin/lago-lugano">
         <img class="avatar border-gray" src="https://upload.wikimedia.org/wikipedia/commons/b/b7/Der_Lago_di_Lugano.jpg" alt="Lago di Lugano"/>

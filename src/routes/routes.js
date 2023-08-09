@@ -9,6 +9,8 @@ import UserProfile from 'src/pages/UserProfile.vue'
 //import TableList from 'src/pages/TableList.vue'
 import LagoMaggiore from 'src/pages/LagoMaggiore.vue'
 import LagoLugano from 'src/pages/LagoLugano.vue'
+import LagoComo from 'src/pages/LagoComo.vue'
+import LagoVarese from 'src/pages/LagoVarese.vue'
 
 import Analisi from 'src/pages/Analisi.vue'
 
@@ -16,7 +18,6 @@ import WindbarbMokup from 'src/pages/WindbarbMokup.vue'
 
 //import Typography from 'src/pages/Typography.vue'
 //import Icons from 'src/pages/Icons.vue'
-import LagoComo from 'src/pages/LagoComo.vue'
 // import Maps from 'src/pages/Maps.vue'
 import Notifications from 'src/pages/Notifications.vue'
 import Upgrade from 'src/pages/Upgrade.vue'
@@ -89,6 +90,11 @@ const routes = [
         path: 'lago-Como',
         name: 'Lago Como',
         component: LagoComo
+      },
+      {
+        path: 'lago-varese',
+        name: 'Lago Varese',
+        component: LagoVarese
       },
       {
         path: 'analisi',

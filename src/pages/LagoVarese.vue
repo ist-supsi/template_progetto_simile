@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="alert alert-simile" role="alert">
                     <div >
-                        <h5>{{ cards[0].message && guessLocTitle(cards[0].message) }}</h5>
+                        <h5>{{ cards[0].message && guessLocTitle(cards[0].message) }} (demo)</h5>
                     </div>
 
                 </div>
@@ -239,52 +239,37 @@
                             <h4>Cosa sono i dati degli Indicatori ARPA</h4>
 
                             <p class="description text-justify">
-                              Gli indici chimico fisici (LTLeco)e biologici (IPAM)
-                              che ARPA produce sono calcolati sulla base dei dati
-                              dei dati raccolti nelle 4 stazioni del Lago di Como
-                              ai fini della classificazione ecologica ai sensi
-                              del D lgs 152/2006. </br>
-                              I dati chimico fisici  sono misurati lungo la colonna
-                              d'acqua, dalla superficie al fondo, e i campioni di
-                              fitoplancton e clorofilla sono raccolti, nella zona
-                              eufotica, nelle stazioni a centro lago sottoposte a monitoraggio.</br>
-
-                              Nelle stazioni di Argegno Como, Abbadia Lariana vengono effettuati, nel punto di massima profondità a centro lago, 6 campionamenti all’anno per la determinazione dei nutrienti lungo la colonna d’acqua, delle sostanze chimiche prioritarie e del fitoplancton e della clorofilla-a nello strato integrato 0-20 metri. Questi dati vengono utilizzati per la classificazione ecologica e chimica. In questo caso il giudizio deriva dal confronto tra lo stato dell’LTLEco, quello dei parametri chimici a sostegno (tab 1/B dl 172/2015) e quello della componente fitoplanctonica (IPAM).
-                              Il peggiore determina lo stato ecologico.</br>
-                              Nella stazione di Dervio, massima profondità a centro lago,
-                              vengono monitorati gli stessi parametri ma la frequenza
-                              per il fitoplancton, ed in aggiunta, per lo zooplancton è
-                              di 12 campionamenti all’anno.</br>
-                              Questa stazione fa parte della rete europea di monitoraggio a lungo termine Lter.</br>
-
+                                Gli indici chimico fisici (LTLeco) e biologici (IPAM) che ARPA produce sono calcolati sulla base dei dati raccolti nella stazione di massima profondità di Biandronno ai fini della classificazione ecologica ai sensi del D. lgs. 152/2006.<br/>
+                                I dati chimico fisici sono misurati lungo la colonna d'acqua, dalla superficie al fondo, e i campioni di fitoplancton e clorofilla sono raccolti nello strato integrato rappresentativo della zona eufotica.<br/>
+                                Normalmente vengono effettuati 6 campionamenti all’anno per la determinazione dei nutrienti lungo la colonna d’acqua, delle sostanze chimiche prioritarie, del fitoplancton e della clorofilla-a.<br/>
+                                Dal 2019, nell’ambito dell'Accordo Quadro di Sviluppo Territoriale “Salvaguardia e risanamento del lago di Varese”, la frequenza di monitoraggio è salita a 12 campionamenti all’anno.<br/>
+                                Questi dati vengono utilizzati per la classificazione ecologica e chimica. In questo caso il giudizio deriva dal confronto tra lo stato dell’LTLEco, quello dei parametri chimici a sostegno (tab 1/B dl172/2015) e quello della componente fitoplanctonica (IPAM). Il peggiore determina lo stato ecologico.
                             </p>
                             <p>
-                                        Di seguito viene presentata la legenda di classificazione utilizzata nei grafici seguenti:
-                                </p>
-                                <div>
-                                        <div class="legend-item">
-                                            <span class="legend-item__color" style="background-color: rgba(255, 0, 0, 0.5);"></span>
-                                            <span class="legend-item__label">Cattivo</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <span class="legend-item__color" style="background-color: rgba(255, 165, 0, 0.5);"></span>
-                                            <span class="legend-item__label">Scarso</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <span class="legend-item__color" style="background-color: rgba(255, 255, 0, 0.5);"></span>
-                                            <span class="legend-item__label">Sufficiente</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <span class="legend-item__color" style="background-color: rgba(50, 205, 50, 0.5);"></span>
-                                            <span class="legend-item__label">Buono</span>
-                                        </div>
-                                        <div class="legend-item">
-                                            <span class="legend-item__color" style="background-color: rgba(0, 0, 255, 0.5);"></span>
-                                            <span class="legend-item__label">Elevato</span>
-                                        </div>
+                                    Di seguito viene presentata la legenda di classificazione utilizzata nei grafici seguenti:
+                            </p>
+                            <div>
+                                    <div class="legend-item">
+                                        <span class="legend-item__color" style="background-color: rgba(255, 0, 0, 0.5);"></span>
+                                        <span class="legend-item__label">Cattivo</span>
                                     </div>
-
-
+                                    <div class="legend-item">
+                                        <span class="legend-item__color" style="background-color: rgba(255, 165, 0, 0.5);"></span>
+                                        <span class="legend-item__label">Scarso</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-item__color" style="background-color: rgba(255, 255, 0, 0.5);"></span>
+                                        <span class="legend-item__label">Sufficiente</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-item__color" style="background-color: rgba(50, 205, 50, 0.5);"></span>
+                                        <span class="legend-item__label">Buono</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-item__color" style="background-color: rgba(0, 0, 255, 0.5);"></span>
+                                        <span class="legend-item__label">Elevato</span>
+                                    </div>
+                                </div>
                                 <div v-for="cc in loopOnPairs(Array.from(Array(dataArpa.length), (n,i)=>i))" class="row">
                                     <div class="col-lg-6 col-sm-12">
                                         <figure style="min-width: 100%" class="highcharts-figure">
@@ -456,7 +441,7 @@
     import sharedFunctions from './sharedFunctions.js';
 
     import istsosToHighcharts from './istsosToHighcharts';
-    import { mean,std,min,sqrt,max } from 'mathjs';
+    import { mean,std,min,sqrt,max, log } from 'mathjs';
 
     // Highcharts.setOptions({
     //     chart: {
@@ -525,28 +510,28 @@
 
     export default {
         components: {
-    LTable,
-    // ChartCard,
-    StatsCard,
-    LMap,
-    LTileLayer,
-    "l-wms-tile-layer": LWMSTileLayer,
-    LGeoJson,
-    LControl,
-    LControlLayers,
-    highcharts: Chart,
-    // HighchartCard,
-    NotifyButton,
-    // 'v-marker-cluster': Vue2LeafletMarkerCluster,
-    // 'v-marker': Vue2LeafletMarker,
-    ModalButton,
-    Modal,
-    // SimileIcon,
-    TabNav,
-    Tab,
-    CipaisLugano,
-    TestChart
-},
+            LTable,
+            // ChartCard,
+            StatsCard,
+            LMap,
+            LTileLayer,
+            "l-wms-tile-layer": LWMSTileLayer,
+            LGeoJson,
+            LControl,
+            LControlLayers,
+            highcharts: Chart,
+            // HighchartCard,
+            NotifyButton,
+            // 'v-marker-cluster': Vue2LeafletMarkerCluster,
+            // 'v-marker': Vue2LeafletMarker,
+            ModalButton,
+            Modal,
+            // SimileIcon,
+            TabNav,
+            Tab,
+            CipaisLugano,
+            TestChart
+        },
         data () {
             return {
                 // markers: [],
@@ -674,14 +659,14 @@
                 // 45.98815472817849, 8.970311660582176
                 // minlat="45.9029678" minlon="8.8586625" maxlat="46.0363240" maxlon="9.1252600"/
                 bounds: latLngBounds([
-                    [46.17, 9.06],
-                    [45.81, 9.39]
+                    [45.865, 8.67],
+                    [45.77, 8.83]
                 ]),
                 features: {
                   "type": "FeatureCollection",
                   "features": []
                 },
-                basins: lake_basins.lario,
+                basins: lake_basins.varese,
                 url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
                 layers: sharedFunctions.map_layers,
@@ -708,7 +693,7 @@
                   scrollWheelZoom: false
                 },
                 showMap: true,
-                selectedMarker: 7,
+                selectedMarker: 0,
                 cards: [{}, {}, {}, {}, {}, {}],
                 selected: 'Serie storiche'
             }
@@ -762,9 +747,9 @@
         },
         mounted() {
             var self = this;
-            this.$root.whereAmI = 'Lago di Como';
+            this.$root.whereAmI = 'Lago di Varese';
 
-            this.istsos = this.larioIstsos;
+            this.istsos = this.vareseIstsos;
             this.$root.istsos = this.istsos;
 
             sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
@@ -809,7 +794,7 @@
                 this.tableFetchData2(),
                 this.istsos.fetchGeometryCollection(),
             ]).then(results=>{
-                const result = results[1];
+                const result = results[1];                
 
                 const reduced = groupBy(
                     result.data.features,
@@ -863,8 +848,7 @@
 
                     }
 
-            });
-
+                });
                 // Set FeatureCollection
                 self.features = {
                     "type": "FeatureCollection",
@@ -1035,128 +1019,162 @@
                               from: 0,
                               to: 12,
                               color: 'rgba(255, 255, 0, 0.5)',
-                                label: {
-                                    //   text: 'Sufficiente',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
+                              label: {
+                                //   text: 'Sufficiente',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }, {
                               from: 12,
-                              to: 15,
+                              to: 14,
                               color: 'rgba(50, 205, 50, 0.5)',
-                                label: {
-                                    //   text: 'Buono',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
+                              label: {
+                                //   text: 'Buono',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }, {
-                              from: 15,
-                              to: 16,
+                              from: 14,
+                              to: 20,
                               color: 'rgba(0, 0, 255, 0.5)',
-                                label: {
-                                    //   text: 'Elevato',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
+                              label: {
+                                //   text: 'Elevato',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }]
-                        } else if (proc.procedure.startsWith('SDT')) {
-                          result.options.yAxis.plotBands = [{
-                              from: 0,
-                              to: 5.5,
-                              color: 'rgba(255, 255, 0, 0.5)',
+                        } else if (proc.procedure.startsWith('LTLeco')) {
+                            result.options.yAxis.min = 8;
+                            result.options.yAxis.max = 16;
+                            result.options.yAxis.plotBands = [{
+                                from: 0,
+                                to: 12,
+                                color: 'rgba(255, 255, 0, 0.5)',
                                 label: {
                                     // text: 'Sufficiente',
                                     style: {
                                         color: '#606060'
                                     }
                                 }
-                          }, {
-                              from: 5.5,
-                              to: 10,
-                              color: 'rgba(50, 205, 50, 0.5)',
+                            }, {
+                                from: 12,
+                                to: 14,
+                                color: 'rgba(50, 205, 50, 0.5)',
                                 label: {
                                     // text: 'Buono',
                                     style: {
                                         color: '#606060'
                                     }
                                 }
-                          }, {
-                              from: 10,
-                              to: 100,
-                              color: 'rgba(0, 0, 255, 0.5)',
+                            }, {
+                                from: 14,
+                                to: 20,
+                                color: 'rgba(0, 0, 255, 0.5)',
                                 label: {
                                     // text: 'Elevato',
                                     style: {
                                         color: '#606060'
                                     }
                                 }
+                            }]
+                        } else if (proc.procedure.startsWith('SDT')) {
+                          result.options.yAxis.plotBands = [{
+                              from: 0,
+                              to: 3,
+                              color: 'rgba(255, 255, 0, 0.5)',
+                              label: {
+                                //   text: 'Sufficiente',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 3,
+                              to: 6,
+                              color: 'rgba(50, 205, 50, 0.5)',
+                              label: {
+                                //   text: 'Buono',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
+                          }, {
+                              from: 6,
+                              to: 100,
+                              color: 'rgba(0, 0, 255, 0.5)',
+                              label: {
+                                //   text: 'Elevato',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }]
                         }  else if (proc.procedure.startsWith('PTOT')) {
                           result.options.yAxis.plotBands = [{
                               from: 0,
-                              to: 8,
+                              to: 12,
                               color: 'rgba(0, 0, 255, 0.5)',
-                                label: {
-                                    //   text: 'Elevato',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
+                              label: {
+                                //   text: 'Elevato',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }, {
-                              from: 8,
-                              to: 15,
+                              from: 12,
+                              to: 20,
                               color: 'rgba(50, 205, 50, 0.5)',
-                                label: {
-                                    //   text: 'Buono',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
+                              label: {
+                                //   text: 'Buono',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }, {
-                              from: 15,
-                              to: 100,
+                              from: 20,
+                              to: 1000,
                               color: 'rgba(255, 255, 0, 0.5)',
-                                label: {
-                                    //   text: 'Sufficiente',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
+                              label: {
+                                //   text: 'Sufficiente',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }]
                         }  else if (proc.procedure.startsWith('O2S')) {
                           result.options.yAxis.plotBands = [{
                               from: 0,
                               to: 40,
                               color: 'rgba(255, 255, 0, 0.5)',
-                                label: {
-                                    //   text: 'Sufficiente',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
+                              label: {
+                                //   text: 'Sufficiente',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }, {
                               from: 40,
                               to: 80,
                               color: 'rgba(50, 205, 50, 0.5)',
-                                label: {
-                                    //   text: 'Buono',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
+                              label: {
+                                //   text: 'Buono',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }, {
                               from: 80,
                               to: 100,
                               color: 'rgba(0, 0, 255, 0.5)',
-                                label: {
-                                    //   text: 'Elevato',
-                                    style: {
-                                        color: '#606060'
-                                    }
-                                }
+                              label: {
+                                //   text: 'Elevato',
+                                  style: {
+                                      color: '#606060'
+                                  }
+                              }
                           }]
                         };
 
@@ -1533,7 +1551,7 @@
         },
         populateCockpit () {
             var self = this;
-            this.istsos.fetchLastTemetature('W_TEMP_0_4').then((result)=>{
+            this.istsos.fetchLastTemetature('W_TEMP_01').then((result)=>{
                 // self.last_temperature_data = result.options;
 
                 self.lastTemp04 = `${result.options.series[0].data[0].y}${result.uom}`
@@ -1554,7 +1572,7 @@
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
 
             });
-            this.istsos.fetchLastO2s('W_O2S_0_4').then((result)=>{
+            this.istsos.fetchLastO2s('W_O2_SAT').then((result)=>{
                 // self.last_temperature_data = result.options;
                 self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
                 self.lastO2s04Time = {

@@ -32,9 +32,10 @@ const SidebarPlugin = {
           dropdownVisible: false,
           // istsos: new IstsosIO(proxyUrl, proxyServices),
           istsos: null,
-          ceresioIstosos: new IstsosIO(config.ceresioIstsos.endpoint, config.ceresioIstsos.proxyEndpoint, config.ceresioIstsos.baseUrl),
-          verbanoIstosos: new IstsosIO(config.verbanoIstsos.endpoint, config.verbanoIstsos.proxyEndpoint, config.verbanoIstsos.baseUrl),
-          larioIstosos: new IstsosIO(config.larioIstsos.endpoint, config.larioIstsos.proxyEndpoint, config.larioIstsos.baseUrl),
+          ceresioIstsos: new IstsosIO(config.ceresioIstsos.endpoint, config.ceresioIstsos.proxyEndpoint, config.ceresioIstsos.baseUrl),
+          verbanoIstsos: new IstsosIO(config.verbanoIstsos.endpoint, config.verbanoIstsos.proxyEndpoint, config.verbanoIstsos.baseUrl),
+          larioIstsos: new IstsosIO(config.larioIstsos.endpoint, config.larioIstsos.proxyEndpoint, config.larioIstsos.baseUrl),
+          vareseIstsos: new IstsosIO(config.vareseIstsos.endpoint, config.vareseIstsos.proxyEndpoint, config.vareseIstsos.baseUrl),
           whereAmI: '',
           allProcedures: null
         }

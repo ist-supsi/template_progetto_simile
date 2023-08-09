@@ -65,7 +65,7 @@ const TEMPERATURE_SERIES_DEFAULTS = {
     },
     subtitle: {
         text: document.ontouchstart === undefined ?
-        "clic e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
+        "clicca e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
     },
     xAxis: {
         type: 'datetime'
@@ -101,10 +101,10 @@ axios.interceptors.request.use(function (config) {
 
 // TODO:
 // Per informazioni aggregate per tipo di misura:
-// https://istsos.ddns.net/istsos/wa/istsos/services/<servizio>/observedproperties
+// https://ecolake.supsi.ch/istsos/wa/istsos/services/<servizio>/observedproperties
 
 export default class IstsosIO {
-  constructor(services, proxyEndpoint='index', baseUrl='https://istsos.ddns.net') {
+  constructor(services, proxyEndpoint='index', baseUrl='https://ecolake.supsi.ch') {
     this.services = services;
     // this.formname = formname;
     // this.formkey = formkey;
@@ -150,7 +150,10 @@ export default class IstsosIO {
   _call(params) {
       var self = this;
       const path = Object.entries({...(params||{})}).map((pair)=>pair.join('/')).join('/');
-      const url = new URL(`/istsos/wa/istsos/${path}`, this.baseUrl).toString();
+      var url = new URL(`/istsos/wa/istsos/${path}`, this.baseUrl).toString();
+      if (url.includes("geojson")> 0) {
+        url = `${url}?epsg=4326`;
+      }
       return this._getToken().then((token) => {
           var config = {
               method: 'get',
@@ -183,7 +186,8 @@ export default class IstsosIO {
           offerings: 'temporary',
           procedures: undefined,
           observedproperties: undefined,
-          eventtime: 'last'
+          eventtime: 'last',
+          qualityfilter: '>=100'
       };
       return this._call({...DEFAULT_PARAMS, ...(params||{})});
   };
@@ -249,6 +253,7 @@ export default class IstsosIO {
       return this.fetch({
           procedures: procedures,
           eventtime: eventtime,
+          qualityfilter: ">=100",
           observedproperties: urn
       }).then((response)=>{
           return self.adaptResponse(response);
@@ -267,6 +272,7 @@ export default class IstsosIO {
       return this.fetch({
           procedures: procedures,
           eventtime: eventtime,
+          qualityfilter: ">=100",
           observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:temperature'
       })
   };
@@ -275,6 +281,7 @@ export default class IstsosIO {
       return this.fetch({
           procedures: procedures,
           eventtime: eventtime,
+          qualityfilter: ">=100",
           observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:O2D'
       })
   };
@@ -283,6 +290,7 @@ export default class IstsosIO {
       return this.fetch({
           procedures: procedures,
           eventtime: eventtime,
+          qualityfilter: ">=100",
           observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:O2S'
       })
   };
@@ -291,6 +299,7 @@ export default class IstsosIO {
       return this.fetch({
           procedures: procedures,
           eventtime: eventtime,
+          qualityfilter: ">=100",
           observedproperties: 'urn:ogc:def:parameter:x-istsos:1.0:water:SDT'
       })
   };

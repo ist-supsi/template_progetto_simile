@@ -12,7 +12,7 @@ const LINE_DEFAULTS = {
     },
     subtitle: {
         text: document.ontouchstart === undefined ?
-        "clic e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
+        "clicca e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
     },
     xAxis: {
         type: 'datetime'

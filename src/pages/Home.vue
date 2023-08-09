@@ -42,14 +42,17 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-4">
+          <div class="col-3">
             <maggiore-card></maggiore-card>
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <lugano-card></lugano-card>
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <como-card></como-card>
+          </div>
+          <div class="col-3">
+            <varese-card></varese-card>
           </div>
         </div>
         <div class="row">
@@ -161,6 +164,7 @@
   import LuganoCard from './UserProfile/LuganoCard.vue'
   import ComoCard from './UserProfile/ComoCard.vue'
   import MaggioreCard from './UserProfile/MaggioreCard.vue'
+  import VareseCard from './UserProfile/VareseCard.vue'
   import axios from 'axios'
   import VueAxios from 'vue-axios'
   export default {
@@ -169,6 +173,7 @@
       LuganoCard,
       ComoCard,
       MaggioreCard,
+      VareseCard,
       StatsCard,
       disclaimerMessage
     },
@@ -196,9 +201,10 @@
         });
 
         Promise.all([
-            this.ceresioIstosos._call({services: 'ceresiohourly', observedproperties: ''}),
-            this.verbanoIstosos._call({services: 'maggiorelive', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} }),
-            this.larioIstosos._call({services: 'lariolive', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} })
+            this.ceresioIstsos._call({services: 'ceresiohourly', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} }),
+            this.verbanoIstsos._call({services: 'maggiorelive', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} }),
+            this.larioIstsos._call({services: 'lariolive', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} }),
+            this.vareseIstsos._call({services: 'vareselive', observedproperties: ''}).then((r)=>r).catch(e=>{ return {'data': {'data': []}} })
         ]).then(responses=>{
             let responseIstsosData = [];
             responses.forEach((response)=>{responseIstsosData = responseIstsosData.concat(response.data.data)});
@@ -207,7 +213,7 @@
 
         // TODO:
         Promise.all([
-            this.ceresioIstosos._call({services: 'ceresiohourly', operations: 'getobservation/count'}),
+            this.ceresioIstsos._call({services: 'ceresiohourly', operations: 'getobservation/count'}),
             // ...
         ]).then(responses=>{
             // console.log(responses);

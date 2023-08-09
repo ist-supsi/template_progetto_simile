@@ -14,21 +14,26 @@ const proxyConf = {
 };
 
 const config = {
-    istsosProxy: proxyConf,
+    istsosProxy: devProxyConf,
     verbanoIstsos: {
         proxyEndpoint: 'verbano',
-        baseUrl: 'https://istsos.irsa.cnr.it',
+        baseUrl: 'https://limnodata.irsa.cnr.it',
         endpoint:  'maggiorelive'
     },
     larioIstsos: {
         proxyEndpoint: 'lario',
-        baseUrl: 'https://istsos.irsa.cnr.it',
+        baseUrl: 'https://limnodata.irsa.cnr.it',
         endpoint:  'lariolive'
     },
     ceresioIstsos: {
-        proxyEndpoint: 'index',
-        baseUrl: 'https://istsos.ddns.net',
+        proxyEndpoint: 'ceresio',
+        baseUrl: 'https://ecolake.supsi.ch',
         endpoint:  'ceresiohourly'
+    },
+    vareseIstsos: {
+        proxyEndpoint: 'varese',
+        baseUrl: 'https://limnodata.irsa.cnr.it',
+        endpoint:  'vareselive'
     },
     apikeys: {
         stadiamaps: "5215a8ea-9563-412f-ae94-686f868a6fa3"

@@ -69,6 +69,51 @@ let indicatorDescription =
             // annuale: false,
         },
 
+        'water-temperature-ptcan-1_0': {
+            title : "Temperatura superficiale (profondità 1 m)",
+            description: `La misura delle temperatura dell'acqua permette di seguire il ciclo termico
+            del lago nel corso dell'anno. Dalla temperatura dipendono processi importanti
+            come la stratificazione/circolazione delle acque, la quantità di ossigeno in
+            coluaione, lo sviluppo delle fioriture algali. Inoltre il monitoraggio a lungo
+            termine delle temperature è utile per valutare la risposta del lago ai
+            cambiamenti climatici.
+            `,
+            breveDescrizione:`Temperatura superficiale dell'acqua alla profondità di 1 m`,
+            // icon:'fa fa-thermometer-three-quarters text-warning',
+            icon:'icon-water_temp',
+            // annuale: false,
+        },
+
+        'water-temperature-ptcan-11_0': {
+            title : "Temperatura superficiale (profondità 11 m)",
+            description: `La misura delle temperatura dell'acqua permette di seguire il ciclo termico
+            del lago nel corso dell'anno. Dalla temperatura dipendono processi importanti
+            come la stratificazione/circolazione delle acque, la quantità di ossigeno in
+            coluaione, lo sviluppo delle fioriture algali. Inoltre il monitoraggio a lungo
+            termine delle temperature è utile per valutare la risposta del lago ai
+            cambiamenti climatici.
+            `,
+            breveDescrizione:`Temperatura superficiale dell'acqua alla profondità di 1 m`,
+            // icon:'fa fa-thermometer-three-quarters text-warning',
+            icon:'icon-water_temp',
+            // annuale: false,
+        },
+
+        'water-temperature-ptcan-23_0': {
+            title : "Temperatura superficiale (profondità 23 m)",
+            description: `La misura delle temperatura dell'acqua permette di seguire il ciclo termico
+            del lago nel corso dell'anno. Dalla temperatura dipendono processi importanti
+            come la stratificazione/circolazione delle acque, la quantità di ossigeno in
+            coluaione, lo sviluppo delle fioriture algali. Inoltre il monitoraggio a lungo
+            termine delle temperature è utile per valutare la risposta del lago ai
+            cambiamenti climatici.
+            `,
+            breveDescrizione:`Temperatura superficiale dell'acqua alla profondità di 1 m`,
+            // icon:'fa fa-thermometer-three-quarters text-warning',
+            icon:'icon-water_temp',
+            // annuale: false,
+        },
+
         'sat-water-temperature': {
             title : "Temperatura dell'acqua da satellite",
             description: `Temperatura superficiale dell'acqua misurata da satellite`,
@@ -195,6 +240,21 @@ let indicatorDescription =
 
 
         'water-O2S': {
+            title : 'Ossigeno disciolto % S.',
+            description: `L'ossigeno, oltre che come concentrazione, può essere espresso come % rispetto
+            alla saturazione, ovvero la quantità di ossigeno presente rispetto al valore
+            massimo, preso uguale a cento, che si può avere nelle stesse condizioni di
+            salinità, di temperatura e pressione atmosferica. Valori superiodi al 100%
+            indicano condizioni di sovrassaturazione.
+            `,
+            breveDescrizione:`Ossigeno disciolto alla profondità del sensore/i, espresso come % rispetto alla saturazione`,
+            // icon:'fa fa-flask text-primary',
+            icon:'icon-water_O2S',
+            annuale:false,
+
+        },
+
+        'water-O2S_v2': {
             title : 'Ossigeno disciolto % S.',
             description: `L'ossigeno, oltre che come concentrazione, può essere espresso come % rispetto
             alla saturazione, ovvero la quantità di ossigeno presente rispetto al valore
@@ -684,6 +744,8 @@ let indicatorDescription =
 indicatorDescription['NLoad'] = indicatorDescription['Nload'];
 indicatorDescription['Biovol'] = indicatorDescription['biovol'];
 indicatorDescription["water-temperature-pH"] = indicatorDescription["water-temperature"]
+indicatorDescription["water-temperature-OPTOD"] = indicatorDescription["water-temperature"]
+indicatorDescription["water-temperature-C4E"] = indicatorDescription["water-temperature"]
 indicatorDescription['indice-LTLeco'] = indicatorDescription['LTLeco']
     //per accedere alle mie descrizioni
 //var indicatorID1 =indicatorDescription["indicatorID1"];

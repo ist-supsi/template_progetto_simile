@@ -303,6 +303,8 @@ function guessLocLabel (foi_name){
     const locLabel= {
         FIGINO:'Figino',
         figino:'Figino',
+        VARESE:'Varese',
+        varese:'Varese',
         GANDRIA:'Gandria',
         gandria:'Gandria',
         MELIDE:'Melide',
@@ -337,6 +339,7 @@ function guessLocLabel (foi_name){
 function guessLocTitle (foi_name){
     const locTitle= {
         FIGINO:'Dati relativi alla località di Figino',
+        VARESE:'Dati relativi alla località di Varese',
         GANDRIA:'Dati relativi alla località di Gandria',
         MELIDE:'Dati relativi alla località di Melide',
         lugano_basin_north:'Dati satellitari relativi al Bacino Nord',
@@ -355,6 +358,7 @@ function guessLocTitle (foi_name){
         Pallanza_D:'Dati relativi alla località di Pallanza',
         Pallanza_S:'Dati relativi alla località di Pallanza',
         maggiore:'Dati satellitari relativi al Bacino Completo',
+        varese:'Dati satellitari relativi al Bacino Completo',
         ABBADIA:'Dati relativi alla località di Abbadia',
         ARGEGNO:'Dati relativi alla località di Argegno',
         COMO:'Dati relativi alla località di Como',
@@ -432,8 +436,10 @@ const procPriorities = [
     "wind-speed-max",
     "wind-direction",
     "water-temperature",
+    "water-pH",
     "water-temperature-pH",
     'water-temperature-ptcan1_0',
+    'water-temperature-ptcan-1_0',
     "water-O2S",
     "water-SDT",
     "water-PTOT",
@@ -453,9 +459,14 @@ const procPriorities = [
 const groupedProceduresList = [
     // ['WaterTemp_S', 'AIR_TEMP'] // raggruppamento di test
     ['WATER_TEMP_1_0', 'WATER_TEMP_10_0', 'WATER_TEMP_30_0'],
+    ['W_TEMP_01', 'W_TEMP_11', 'W_TEMP_23'],
     ['O2D_Sup_AVG1H', 'O2D_Deep_AVG1H'],
     ['O2S_Sup_AVG1H', 'O2S_Deep_AVG1H'],
-    ['OXYGENATION_0_4', 'OXYGENATION_2_5', 'OXYGENATION_5_0', 'OXYGENATION_8_0', 'OXYGENATION_12_5', 'OXYGENATION_20_0']
+    [
+        'OXYGENATION_0_4', 'OXYGENATION_2_5',
+        'OXYGENATION_5_0', 'OXYGENATION_8_0',
+        'OXYGENATION_12_5', 'OXYGENATION_20_0'
+    ]
 ];
 
 // Coppie delle procedure relative alle misure di vento da associare

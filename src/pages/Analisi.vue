@@ -223,7 +223,7 @@
             analisysVariableUrn: this.$root.analisysVariableUrn,
             seriesFrom: null,
             seriesTo: null,
-            seriesBegin: new Date(new Date().setDate(new Date().getDate() - 185)),
+            seriesBegin: new Date(new Date().setDate(new Date().getDate() - 30)),
             seriesEnd: new Date(),
             // locked: false,
             variableAverage: 0,
@@ -565,7 +565,6 @@
                                           for (const el of windirData.series) {
                                               windataObj[el[0]] = el[1];
                                           };
-                                          console.log(windataObj);
 
                                           const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
                                           const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
@@ -573,23 +572,13 @@
                                           const startIndex = sd.indexOf(Math.min(...sd));
                                           const endIndex = ed.indexOf(Math.min(...ed));
 
-                                          let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
+                                          let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map(
+                                              (el) => [
+                                                  ...el, windataObj[el[0]]
+                                              ]
+                                            );
 
                                           const wind_series = wind_data.map((el)=> el.slice(1).reverse());
-
-                                          // *************************************
-                                          // WARNING: Non serve più
-                                          // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
-                                          // valori ho introdotto questo workaround per limitare la serie al massimo consentito
-                                          // issue aperta: https://github.com/highcharts/highcharts/issues/17851
-                                          // const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-                                          // const series_excess = wind_data.length-1000;
-                                          // if ( series_excess>0 ) {
-                                          //     for (let i = 0; i < series_excess; i++) {
-                                          //         wind_data.splice(random(1, wind_data.length-1), 1)
-                                          //     }
-                                          // };
-                                          // *************************************
 
                                           self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
 
@@ -606,7 +595,6 @@
 
                               }};
                           } else if (Object.values(sharedFunctions.windsProcedure).includes(procedure)) {
-
                               result.options.yAxis.plotBands = [{
                                   from: 0,
                                   to: 45,
@@ -657,18 +645,23 @@
                                           color: '#606060'
                                       }
                                   }
-                              }];
-
-                              const dirIdx = Object.values(sharedFunctions.windsProcedure).indexOf(procedure);
+                                  }];
+                              var velProc = '';
+                              for (let index = 0; index < Object.values(sharedFunctions.windsProcedure).length; index++) {
+                                  var element = Object.values(sharedFunctions.windsProcedure)[index];
+                                  var tmpVelProc = Object.keys(sharedFunctions.windsProcedure)[index];
+                                  if (procedure == element && self.allProcedures[tmpVelProc]) {
+                                      velProc = tmpVelProc;
+                                }
+                              }
                               self.wind_data_loading = true;
 
                               this.wind_data_options = {plotOptions: {
                                   windbarb: {
                                      turboThreshold: Infinity
                                    }
-                              }};
-
-                              const velProc = Object.keys(sharedFunctions.windsProcedure)[dirIdx];
+                              }
+                              };
                               const velUrn = self.allProcedures[velProc].observedproperties[0].definition;
 
                               let windVelPromise = this.istsos.fetchSeries(
@@ -694,7 +687,6 @@
                                           for (const el of winvelData.series) {
                                               windataObj[el[0]] = el[1];
                                           };
-
                                           const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
                                           const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
 
@@ -717,8 +709,6 @@
 
                                           self.wind_data_loading = false;
 
-
-
                                       });
                                   });
 
@@ -730,11 +720,6 @@
                       // break;
                   }
                 };
-
-                console.log(this.groupedProcedures[self.procedureInfos[this.analisysVariable].group]);
-
-
-
                 self.locked = false; //
                 // self.wind_data_options=result.options;
                 // self.wind_data_options=self.series_data

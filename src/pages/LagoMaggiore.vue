@@ -182,7 +182,7 @@
                             <h4>Cosa sono i dati da sensori</h4>
 
                             <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
-                            (laghi Maggiore e Como) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
+                            (laghi Maggiore, Como e Varese) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
                             elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
                             tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
                             (clorofilla, ficocianina e ficoeritrina) si utilizzano sensori di tipo fluorimetrico.
@@ -727,7 +727,7 @@
             var self = this;
             this.$root.whereAmI = 'Lago Maggiore';
 
-            this.istsos = this.verbanoIstosos;
+            this.istsos = this.verbanoIstsos;
             this.$root.istsos = this.istsos;
 
             sharedFunctions.addBaseLayers(this.$refs.map.mapObject);

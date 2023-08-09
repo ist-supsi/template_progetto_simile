@@ -1,5 +1,6 @@
 import Highcharts from 'highcharts';
 import sharedFunctions from './sharedFunctions.js';
+import { log } from 'mathjs';
 
 const category_colors = ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
     '#0d233a', '#77a1e5', '#8bbc21'];
@@ -19,7 +20,7 @@ const LINE_DEFAULTS = {
     },
     subtitle: {
         text: document.ontouchstart === undefined ?
-        "clic e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
+        "clicca e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
     },
     xAxis: {
         type: 'datetime',
@@ -229,7 +230,6 @@ const POLAR_DEFAULT = {
         labels: {
             // format: '{value}°'
             formatter: (x) => {
-              console.log(x.value);
               return nameByDirs[x.value]
             }
         }
@@ -294,7 +294,8 @@ function istsosToSeries(response, args) {
     }
 };
 
-function istosToLine (response, title, stock = false, decimals = 2, precision = 3) {
+function istosToLine(response, title, stock = false, decimals = 2, precision = 3) {
+    console.log("title");
       const dataArray = response.data.data[0].result.DataArray;
       let info;
       if ( !stock ) {
@@ -322,7 +323,10 @@ function istosToLine (response, title, stock = false, decimals = 2, precision = 
         info.options.yAxis.title.text = `${dataArray.field[1].name} (${dataArray.field[1].uom})`
         info.uom = dataArray.field[1].uom;
         tip=` ${dataArray.field[1].uom}`
-      };
+    };
+    // info.options.legend.enabled = true;
+    // info.options.legend.floating = true;
+    console.log(info.options.legend.enabled);
 
       info.options.tooltip = {
           shared: true,
@@ -395,7 +399,7 @@ const HEATMAP_DEFAULTS = {
     },
     subtitle: {
         text: document.ontouchstart === undefined ?
-        "clic e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
+        "clicca e trascina nell'area del tracciato per ingrandire" : 'Pizzica il grafico per ingrandire'
     },
 
     xAxis: {
@@ -423,7 +427,7 @@ const HEATMAP_DEFAULTS = {
     // },
 
     colorAxis: {
-        min: 0,
+        // min: 0,
         minColor: '#FFFFFF',
         maxColor: Highcharts.getOptions().colors[0]
     },
@@ -439,7 +443,7 @@ const HEATMAP_DEFAULTS = {
 
     tooltip: {
         formatter: function () {
-            const classi = {4: 'Eccellente', 3: 'Buona', 2: 'Sufficiente', 1: 'Scarca'};
+            const classi = {4: 'Eccellente', 3: 'Buona', 2: 'Sufficiente', 1: 'Scarsa'};
             return '<b>' + getPointCategoryName(this.point, 'x') + '</b><br>' +
                 'Classe di ossigenazione: <b>' + classi[this.point.value] + '</b><br>' +
                 'Profondità: <b>' + getPointCategoryName(this.point, 'y') + ' m</b>';
@@ -448,17 +452,19 @@ const HEATMAP_DEFAULTS = {
 
     series: [{
         name: 'Sales per employee',
-        borderWidth: 1,
+        borderWidth: 0.5,
         data: [
-        // index della lista di date, index della lista delle profondità,valore all'index
-        [0, 0, 4], [0, 1, 4], [0, 2, 4], [0, 3, 3], [0, 4, 3], [0, 5, 1],
-        [1, 0, 4], [1, 1, 4], [1, 2, 4], [1, 3, 4], [1,4, 4], [1, 5, 3],
-        [2, 0, 4], [2, 1, 4], [2, 2, 4], [2, 3, 4], [2, 4, 3],[2, 5, 2]
+            // index della lista di date, index della lista delle profondità,valore all'index
+            [0, 0, 4], [0, 1, 4], [0, 2, 4], [0, 3, 3], [0, 4, 3], [0, 5, 1],
+            [1, 0, 4], [1, 1, 4], [1, 2, 4], [1, 3, 4], [1,4, 4], [1, 5, 3],
+            [2, 0, 4], [2, 1, 4], [2, 2, 4], [2, 3, 4], [2, 4, 3],[2, 5, 2]
         ],
+        color: "black",
+        fillColor: "#FFF",
         dataLabels: {
-            enabled: true,
-            color: '#000000'
-        }
+            enabled: false,
+            color: '#FFF'
+        },
     }],
 
     responsive: {
@@ -492,17 +498,15 @@ function istsosToHeatmap(multi_response, title) {
     // response.data.data[0].result.DataArray
     const timestamps = Array.from(new Set(multi_response.map(res=>res.data.data[0].result.DataArray.values).flat().map(el=>{
         let day = new Date(el[0]);
-        return day.toLocaleDateString('en-CA');
-    }))).sort()
+        return day.toLocaleDateString();
+    })))
     info.options.xAxis.categories = timestamps;
 
-    console.log(timestamps);
     let values = [];
     for (const [index, response] of multi_response.entries()) {
         response.data.data[0].result.DataArray.values.filter(el=>el[1]!=-999).forEach(val=>{
             let day = new Date(val[0]);
-            console.log(day.toLocaleDateString('en-CA'));
-            const tsi = timestamps.indexOf(day.toLocaleDateString('en-CA')) // .findIndex(ts=>ts.valueOf()===day.valueOf())
+            const tsi = timestamps.indexOf(day.toLocaleDateString()) // .findIndex(ts=>ts.valueOf()===day.valueOf())
             const ycat = response.data.data[0].name.replace('OXYGENATION_', '').replace('_', '.')
             const ycati = info.options.yAxis.categories.indexOf(ycat);
             values.push([tsi, ycati, val[1]]);

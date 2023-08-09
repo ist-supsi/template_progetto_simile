@@ -1,6 +1,6 @@
 <template>
   <card class="card-user h-100">
-    <img slot="image" src="https://a.tile.stamen.com/watercolor/15/17196/11658.jpg" alt="Lago Lario"/>
+    <img slot="image" src="https://stamen-tiles.a.ssl.fastly.net/watercolor/15/17196/11658.jpg" alt="Lago Lario"/>
     <div class="author">
       <a href="#/admin/lago-como">
         <img class="avatar border-gray" src="https://cdn.pixabay.com/photo/2018/09/28/17/39/lake-3709807_1280.jpg" alt="Lago di Como"/>

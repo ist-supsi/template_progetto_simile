@@ -1,6 +1,6 @@
 <template>
   <card class="card-user h-100">
-    <img slot="image" src="https://a.tile.stamen.com/watercolor/15/17198/11658.jpg" alt="Lago Ceresio"/>
+    <img slot="image" src="https://stamen-tiles.a.ssl.fastly.net/watercolor/15/17198/11658.jpg" alt="Lago Ceresio"/>
     <div class="author">
       <a href="#/admin/lago-maggiore">
         <img class="avatar border-gray" src="https://live.staticflickr.com/65535/49409610966_b93106c08c_b.jpg" alt="Lago Maggiore"/>
