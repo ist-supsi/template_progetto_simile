@@ -1,14 +1,14 @@
 <template>
     <div class="content">
         <div :class="backdropClasses"></div>
-            <div class="container-fluid">
-                <div class="alert alert-simile" role="alert">
-                    <div >
-                        <h5>{{ cards[0].message && guessLocTitle(cards[0].message) }} (demo)</h5>
-                    </div>
-
+        <div class="container-fluid">
+            <div class="alert alert-simile" role="alert">
+                <div>
+                    <h5>{{ cards[0].message && guessLocTitle(cards[0].message) }} (demo)</h5>
                 </div>
+
             </div>
+        </div>
 
         <div class="container-fluid">
 
@@ -23,56 +23,61 @@
                 </div> -->
 
                 <div class="col-8">
-                    <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n,i)=>i).filter(e=>!(e%2))" class="row">
-                        <div v-if="cards[ii]" :class="[cards[ii+1] ? 'col-6' : 'col-12']">
+                    <div v-for="ii in Array.from(Array(Object.entries(cards).length), (n, i) => i).filter(e => !(e % 2))"
+                        class="row">
+                        <div v-if="cards[ii]" :class="[cards[ii + 1] ? 'col-6' : 'col-12']">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                    <i :class="getCardIcon(cards[ii].name)"
-                                      data-toggle="tooltip"
-                                      title="cards[ii].title||'no data'"></i>
+                                    <i :class="getCardIcon(cards[ii].name)" data-toggle="tooltip"
+                                        title="cards[ii].title||'no data'"></i>
                                 </div>
                                 <div slot="content">
                                     <p v-if="!cards[ii].title" class="card-category placeholder-glow">
-                                      <span class="placeholder col-12"></span>
+                                        <span class="placeholder col-12"></span>
                                     </p>
-                                    <p v-else class="card-category">{{cards[ii].title || "--"}}</p>
-                                    <h4 class="card-title">{{cards[ii].data || "N.P."}} {{cards[ii].uom || ""}}</h4>
-                                    <p class="card-category">{{(cards[ii].message && guessLocLabel(cards[ii].message)) || "--"}}</p>
-                                    <p class="card-text"><small class="text-muted">{{cards[ii].type}}</small></p>
+                                    <p v-else class="card-category">{{ cards[ii].title || "--" }}</p>
+                                    <h4 class="card-title">{{ cards[ii].data || "N.P." }} {{ cards[ii].uom || "" }}</h4>
+                                    <p class="card-category">{{ (cards[ii].message && guessLocLabel(cards[ii].message)) ||
+                                        "--" }}</p>
+                                    <p class="card-text"><small class="text-muted">{{ cards[ii].type }}</small></p>
                                 </div>
                                 <div slot="footer">
-                                    <i v-if="cards[ii].data===null" class="fa fa-refresh fa-spin"></i>
-                                    <i v-if="cards[ii].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                    <i v-if="cards[ii].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.date}}
-                                    <i v-if="cards[ii].time && cards[ii].time.time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii].time && cards[ii].time.time}}
+                                    <i v-if="cards[ii].data === null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="cards[ii].data === undefined" class="fa fa-exclamation-triangle"></i>
+                                    <i v-if="cards[ii].time" class="fa fa-calendar" aria-hidden="true"></i>{{ cards[ii].time
+                                        && cards[ii].time.date }}
+                                    <i v-if="cards[ii].time && cards[ii].time.time" class="fa fa-clock-o"
+                                        aria-hidden="true"></i>{{ cards[ii].time && cards[ii].time.time }}
 
                                 </div>
                             </stats-card>
                         </div>
-                        <div v-if="cards[ii+1]" class="col-6">
+                        <div v-if="cards[ii + 1]" class="col-6">
                             <stats-card>
                                 <div slot="header" class="icon-warning">
                                     <!-- <i class="nc-icon nc-chart text-warning"></i> -->
-                                    <i :class="getCardIcon(cards[ii+1].name)"
-                                      data-toggle="tooltip"
-                                      title="cards[ii+1].title||'no data'"></i>
+                                    <i :class="getCardIcon(cards[ii + 1].name)" data-toggle="tooltip"
+                                        title="cards[ii+1].title||'no data'"></i>
                                 </div>
                                 <div slot="content">
-                                    <p v-if="!cards[ii+1].title" class="card-category placeholder-glow">
-                                      <span class="placeholder col-12"></span>
+                                    <p v-if="!cards[ii + 1].title" class="card-category placeholder-glow">
+                                        <span class="placeholder col-12"></span>
                                     </p>
-                                    <p v-else class="card-category">{{cards[ii+1].title || "--"}}</p>
-                                    <h4 class="card-title">{{cards[ii+1].data || "N.P."}} {{cards[ii+1].uom || ""}}</h4>
-                                    <p class="card-category">{{(cards[ii+1].message && guessLocLabel(cards[ii+1].message)) || "--"}}</p>
-                                    <p class="card-text"><small class="text-muted">{{cards[ii+1].type}}</small></p>
+                                    <p v-else class="card-category">{{ cards[ii + 1].title || "--" }}</p>
+                                    <h4 class="card-title">{{ cards[ii + 1].data || "N.P." }} {{ cards[ii + 1].uom || "" }}</h4>
+                                    <p class="card-category">{{ (cards[ii + 1].message && guessLocLabel(cards[ii + 1].message))
+                                        || "--" }}</p>
+                                    <p class="card-text"><small class="text-muted">{{ cards[ii + 1].type }}</small></p>
 
                                 </div>
                                 <div slot="footer">
-                                    <i v-if="cards[ii+1].data===null" class="fa fa-refresh fa-spin"></i>
-                                    <i v-if="cards[ii+1].data===undefined" class="fa fa-exclamation-triangle"></i>
-                                    <i v-if="cards[ii+1].time" class="fa fa-calendar" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.date}}
-                                    <i v-if="cards[ii+1].time && cards[ii+1].time.time" class="fa fa-clock-o" aria-hidden="true"></i>{{cards[ii+1].time && cards[ii+1].time.time}}
+                                    <i v-if="cards[ii + 1].data === null" class="fa fa-refresh fa-spin"></i>
+                                    <i v-if="cards[ii + 1].data === undefined" class="fa fa-exclamation-triangle"></i>
+                                    <i v-if="cards[ii + 1].time" class="fa fa-calendar"
+                                        aria-hidden="true"></i>{{ cards[ii + 1].time && cards[ii + 1].time.date }}
+                                    <i v-if="cards[ii + 1].time && cards[ii + 1].time.time" class="fa fa-clock-o"
+                                        aria-hidden="true"></i>{{ cards[ii + 1].time && cards[ii + 1].time.time }}
                                 </div>
                             </stats-card>
                         </div>
@@ -81,63 +86,36 @@
                 </div>
                 <div class="col-4" style="height: 510px">
                     <card style="height: 94%;">
-                    <l-map
-                        v-if="showMap"
-                        :zoom="currentZoom"
-                        :bounds="bounds"
-                        :options="mapOptions"
-                        @update:center="centerUpdate"
-                        @update:zoom="zoomUpdate"
-                        style="height: 100%;"
-                        ref="map"
-                      >
+                        <l-map v-if="showMap" :zoom="currentZoom" :bounds="bounds" :options="mapOptions"
+                            @update:center="centerUpdate" @update:zoom="zoomUpdate" style="height: 100%;" ref="map">
 
-                          <l-wms-tile-layer
-                            v-for="layer in layers"
-                            :key="layer.name"
-                            :base-url="wmsUrl"
-                            :layers="layer.layers"
-                            :visible="layer.visible"
-                            :name="layer.name"
-                            :transparent="layer.transparent"
-                            :format="layer.format"
-                            :opacity="layer.opacity"
-                            layer-type="overlay"
-                          ></l-wms-tile-layer>
+                            <l-wms-tile-layer v-for="layer in layers" :key="layer.name" :base-url="wmsUrl"
+                                :layers="layer.layers" :visible="layer.visible" :name="layer.name"
+                                :transparent="layer.transparent" :format="layer.format" :opacity="layer.opacity"
+                                layer-type="overlay"></l-wms-tile-layer>
 
-                          <l-geo-json
-                              ref="areaLayer"
-                              :geojson="basins"
-                              :options = areaLayerOptions()
-                          />
+                            <l-geo-json ref="areaLayer" :geojson="basins" :options=areaLayerOptions() />
 
-                          <l-geo-json
-                              ref="markerLayer"
-                              :geojson="features"
-                              :options="markerLayerOptions()"
+                            <l-geo-json ref="markerLayer" :geojson="features" :options="markerLayerOptions()" />
+                            <l-control position="bottomright">
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <button class="btn btn-info" type="button" @click="this.displayInfo">
+                                            <i aria-hidden="true" class="fa fa-info-circle"
+                                                title="Scopri come interagire con la mappa"></i></button>
+                                    </div>
+                                    <select class="custom-select" id="inputGroupSelect03"
+                                        aria-label="Example select with button addon" v-model="selectedMarker"
+                                        title="Scegli una località o un'area da analizzare">
+                                        <option v-for="feature in features.features"
+                                            :value="feature.properties.markerIndex">
+                                            {{ guessLocLabel(feature.properties.foi_name) }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </l-control>
 
-                          />
-                          <l-control position="bottomright">
-                            <div class="input-group input-group-sm mb-3">
-                              <div class="input-group-prepend">
-                                <button class="btn btn-info" type="button"
-                                    @click="this.displayInfo"
-                                >
-                                    <i aria-hidden="true" class="fa fa-info-circle" title="Scopri come interagire con la mappa"></i></button>
-                              </div>
-                              <select class="custom-select" id="inputGroupSelect03"
-                                  aria-label="Example select with button addon"
-                                  v-model="selectedMarker"
-                                  title="Scegli una località o un'area da analizzare"
-                                  >
-                                <option v-for="feature in features.features" :value="feature.properties.markerIndex">
-                                      {{ guessLocLabel(feature.properties.foi_name) }}
-                                  </option>
-                              </select>
-                            </div>
-                          </l-control>
-
-                      </l-map>
+                        </l-map>
                     </card>
                 </div>
             </div>
@@ -145,49 +123,49 @@
 
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='home', enabled: tableData.data}"
-                        id="home-tab" data-toggle="tab"
-                        role="tab" aria-controls="home"
-                        aria-selected="true" @click="selectedTab='home'">Dati da sensori</a>
+                    <a :class="{ 'nav-link': true, active: selectedTab == 'home', enabled: tableData.data }" id="home-tab"
+                        data-toggle="tab" role="tab" aria-controls="home" aria-selected="true"
+                        @click="selectedTab = 'home'">Dati da sensori</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='arpa', enabled: selectedArpaProcedures.length==0}"
-                        id="arpa-tab" data-toggle="tab"
-                        role="tab" aria-controls="arpa"
-                        aria-selected="true" @click="selectedTab='arpa'">Indicatori ARPA</a>
+                    <a :class="{ 'nav-link': true, active: selectedTab == 'arpa', enabled: selectedArpaProcedures.length == 0 }"
+                        id="arpa-tab" data-toggle="tab" role="tab" aria-controls="arpa" aria-selected="true"
+                        @click="selectedTab = 'arpa'">Indicatori ARPA</a>
                 </li>
                 <li class="nav-item">
-                    <a :class="{'nav-link': true, active: selectedTab=='satellitari', enabled: selectedSatelliteProcedures.length==0}" id="satellitari-tab" data-toggle="tab"
-                        role="tab" aria-controls="satellitari"
-                        aria-selected="false" @click="selectedTab='satellitari'">Dati satellitari</a>
+                    <a :class="{ 'nav-link': true, active: selectedTab == 'satellitari', enabled: selectedSatelliteProcedures.length == 0 }"
+                        id="satellitari-tab" data-toggle="tab" role="tab" aria-controls="satellitari" aria-selected="false"
+                        @click="selectedTab = 'satellitari'">Dati satellitari</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='home', active: selectedTab=='home'}"
-                        id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div :class="{ 'tab-pane': true, 'fade': true, show: selectedTab == 'home', active: selectedTab == 'home' }"
+                    id="home" role="tabpanel" aria-labelledby="home-tab">
 
-                        <div v-if="!(tableData.meta && tableData.meta.total && tableData.meta.total>0)">
-                            <div class="row">
+                    <div v-if="!(tableData.meta && tableData.meta.total && tableData.meta.total > 0)">
+                        <div class="row">
                             <h4>Non sono disponibili misure da sensore per la stazione selezionata</h4>
-                            </div>
-                            <div v-if="features.features" class="form-group row">
-                                <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località tra quelle monitorate da sensori:</label>
-                                <div class="col-sm-6">
-                                    <select name="prova" class="custom-select" id="inputGroupSelect03"
+                        </div>
+                        <div v-if="features.features" class="form-group row">
+                            <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località tra quelle
+                                monitorate da sensori:</label>
+                            <div class="col-sm-6">
+                                <select name="prova" class="custom-select" id="inputGroupSelect03"
                                     aria-label="Example select with button addon" v-model="selectedMarker"
-                                    title="Scegli una località o un'area da analizzare"
-                                    >
-                                    <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>!(nfo.procedure.includes('ARPA')||nfo.procedure.startsWith('SATELLITE'))))" :value="feature.properties.markerIndex">
+                                    title="Scegli una località o un'area da analizzare">
+                                    <option
+                                        v-for="feature in features.features.filter(feat => feat.properties.names.some(nfo => !(nfo.procedure.includes('ARPA') || nfo.procedure.startsWith('SATELLITE'))))"
+                                        :value="feature.properties.markerIndex">
                                         {{ guessLocLabel(feature.properties.foi_name) }}
                                     </option>
-                                    </select>
-                                </div>
+                                </select>
                             </div>
                         </div>
-                        <div v-else>
-                            <h4>Cosa sono i dati da sensori</h4>
+                    </div>
+                    <div v-else>
+                        <h4>Cosa sono i dati da sensori</h4>
 
-                            <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
+                        <p class="description text-justify">I dati provengono da sensori in-situ collocati su boe
                             (laghi Maggiore, Como e Varese) e piattaforme (Lago di Lugano). I dati sono raccolti a frequenza
                             elevata (sub-oraria) e trasmessi in tempo quasi reale. I sensori utilizzati sono di diversa
                             tipologia a seconda della proprietà misurata. Nel caso dei pigmenti algali
@@ -196,726 +174,745 @@
                             I dati raccolti sono inoltre periodicamente validati mediante campagne di misura e analisi
                             di laboratorio. </p>
 
-                            <h4>Misure disponibili:</h4>
-
-                        </div>
-                        <div :class="{'row': true, 'd-none': !(tableData.meta && tableData.meta.total && tableData.meta.total>0)}">
-                            <div class="col-12">
-                                <data-table
-                                    :columns="tableColumns2"
-                                    :data="tableData"
-                                    :per-page="[10, 15, 20]"
-                                    :translate="{ nextButton: '>', previousButton: '<', placeholderSearch: 'Cerca nella tabella'}"
-                                    @on-table-props-changed="reloadTable"
-                                    >
-                                </data-table>
-                            </div>
-
-                        </div>
-
+                        <h4>Misure disponibili:</h4>
 
                     </div>
-                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='arpa', active: selectedTab=='arpa'}"
-                        id="arpa" role="tabpanel" aria-labelledby="arpa-tab">
-                            <div v-if="dataArpa.length==0">
-                                <div class="row">
-                                <h4>Non sono presenti indicatori ARPA per la stazione selezionata</h4>
-                                </div>
-                                <div v-if="features.features" class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località:</label>
-                                    <div class="col-sm-6">
-                                        <select name="prova" class="custom-select" id="inputGroupSelect03"
-                                        aria-label="Example select with button addon" v-model="selectedMarker"
-                                        title="Scegli una località o un'area da analizzare"
-                                        >
-                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.includes('ARPA')))" :value="feature.properties.markerIndex">
-                                            {{ guessLocLabel(feature.properties.foi_name) }}
-                                        </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        <div v-else class="container-fluid">
-                            <h4>Cosa sono i dati degli Indicatori ARPA</h4>
-
-                            <p class="description text-justify">
-                                Gli indici chimico fisici (LTLeco) e biologici (IPAM) che ARPA produce sono calcolati sulla base dei dati raccolti nella stazione di massima profondità di Biandronno ai fini della classificazione ecologica ai sensi del D. lgs. 152/2006.<br/>
-                                I dati chimico fisici sono misurati lungo la colonna d'acqua, dalla superficie al fondo, e i campioni di fitoplancton e clorofilla sono raccolti nello strato integrato rappresentativo della zona eufotica.<br/>
-                                Normalmente vengono effettuati 6 campionamenti all’anno per la determinazione dei nutrienti lungo la colonna d’acqua, delle sostanze chimiche prioritarie, del fitoplancton e della clorofilla-a.<br/>
-                                Dal 2019, nell’ambito dell'Accordo Quadro di Sviluppo Territoriale “Salvaguardia e risanamento del lago di Varese”, la frequenza di monitoraggio è salita a 12 campionamenti all’anno.<br/>
-                                Questi dati vengono utilizzati per la classificazione ecologica e chimica. In questo caso il giudizio deriva dal confronto tra lo stato dell’LTLEco, quello dei parametri chimici a sostegno (tab 1/B dl172/2015) e quello della componente fitoplanctonica (IPAM). Il peggiore determina lo stato ecologico.
-                            </p>
-                            <p>
-                                    Di seguito viene presentata la legenda di classificazione utilizzata nei grafici seguenti:
-                            </p>
-                            <div>
-                                    <div class="legend-item">
-                                        <span class="legend-item__color" style="background-color: rgba(255, 0, 0, 0.5);"></span>
-                                        <span class="legend-item__label">Cattivo</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <span class="legend-item__color" style="background-color: rgba(255, 165, 0, 0.5);"></span>
-                                        <span class="legend-item__label">Scarso</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <span class="legend-item__color" style="background-color: rgba(255, 255, 0, 0.5);"></span>
-                                        <span class="legend-item__label">Sufficiente</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <span class="legend-item__color" style="background-color: rgba(50, 205, 50, 0.5);"></span>
-                                        <span class="legend-item__label">Buono</span>
-                                    </div>
-                                    <div class="legend-item">
-                                        <span class="legend-item__color" style="background-color: rgba(0, 0, 255, 0.5);"></span>
-                                        <span class="legend-item__label">Elevato</span>
-                                    </div>
-                                </div>
-                                <div v-for="cc in loopOnPairs(Array.from(Array(dataArpa.length), (n,i)=>i))" class="row">
-                                    <div class="col-lg-6 col-sm-12">
-                                        <figure style="min-width: 100%" class="highcharts-figure">
-                                            <highcharts :options="dataArpa[cc[0]]"></highcharts>
-                                        </figure>
-                                    </div>
-                                    <div v-if="cc[1]" class="col-lg-6 col-sm-12">
-                                        <figure style="min-width: 100%" class="highcharts-figure">
-                                            <highcharts :options="dataArpa[cc[1]]"></highcharts>
-                                        </figure>
-                                    </div>
-                                </div>
+                    <div
+                        :class="{ 'row': true, 'd-none': !(tableData.meta && tableData.meta.total && tableData.meta.total > 0) }">
+                        <div class="col-12">
+                            <data-table :columns="tableColumns2" :data="tableData" :per-page="[10, 15, 20]"
+                                :translate="{ nextButton: '>', previousButton: '<', placeholderSearch: 'Cerca nella tabella' }"
+                                @on-table-props-changed="reloadTable">
+                            </data-table>
                         </div>
-
 
                     </div>
 
 
+                </div>
+                <div :class="{ 'tab-pane': true, 'fade': true, show: selectedTab == 'arpa', active: selectedTab == 'arpa' }"
+                    id="arpa" role="tabpanel" aria-labelledby="arpa-tab">
+                    <div v-if="dataArpa.length == 0">
+                        <div class="row">
+                            <h4>Non sono presenti indicatori ARPA per la stazione selezionata</h4>
+                        </div>
+                        <div v-if="features.features" class="form-group row">
+                            <label for="inputGroupSelect03" class="form-text text-muted">Scegli un'altra località:</label>
+                            <div class="col-sm-6">
+                                <select name="prova" class="custom-select" id="inputGroupSelect03"
+                                    aria-label="Example select with button addon" v-model="selectedMarker"
+                                    title="Scegli una località o un'area da analizzare">
+                                    <option
+                                        v-for="feature in features.features.filter(feat => feat.properties.names.some(nfo => nfo.procedure.includes('ARPA')))"
+                                        :value="feature.properties.markerIndex">
+                                        {{ guessLocLabel(feature.properties.foi_name) }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="container-fluid">
+                        <h4>Cosa sono i dati degli Indicatori ARPA</h4>
 
-                    <div :class="{'tab-pane': true, 'fade': true, show: selectedTab=='satellitari', active: selectedTab=='satellitari'}"
-                        id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
-                        <div v-if="dataSatellite.length>0" class="container-fluid">
-                            <h4>Cosa sono i dati satellitari</h4>
+                        <p class="description text-justify">
+                            Gli indici chimico fisici (LTLeco) e biologici (IPAM) che ARPA produce sono calcolati sulla base
+                            dei dati raccolti nella stazione di massima profondità di Biandronno ai fini della
+                            classificazione ecologica ai sensi del D. lgs. 152/2006.<br />
+                            I dati chimico fisici sono misurati lungo la colonna d'acqua, dalla superficie al fondo, e i
+                            campioni di fitoplancton e clorofilla sono raccolti nello strato integrato rappresentativo della
+                            zona eufotica.<br />
+                            Normalmente vengono effettuati 6 campionamenti all’anno per la determinazione dei nutrienti
+                            lungo la colonna d’acqua, delle sostanze chimiche prioritarie, del fitoplancton e della
+                            clorofilla-a.<br />
+                            Dal 2019, nell’ambito dell'Accordo Quadro di Sviluppo Territoriale “Salvaguardia e risanamento
+                            del lago di Varese”, la frequenza di monitoraggio è salita a 12 campionamenti all’anno.<br />
+                            Questi dati vengono utilizzati per la classificazione ecologica e chimica. In questo caso il
+                            giudizio deriva dal confronto tra lo stato dell’LTLEco, quello dei parametri chimici a sostegno
+                            (tab 1/B dl172/2015) e quello della componente fitoplanctonica (IPAM). Il peggiore determina lo
+                            stato ecologico.
+                        </p>
+                        <p>
+                            Di seguito viene presentata la legenda di classificazione utilizzata nei grafici seguenti:
+                        </p>
+                        <div>
+                            <div class="legend-item">
+                                <span class="legend-item__color" style="background-color: rgba(255, 0, 0, 0.5);"></span>
+                                <span class="legend-item__label">Cattivo</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-item__color" style="background-color: rgba(255, 165, 0, 0.5);"></span>
+                                <span class="legend-item__label">Scarso</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-item__color" style="background-color: rgba(255, 255, 0, 0.5);"></span>
+                                <span class="legend-item__label">Sufficiente</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-item__color" style="background-color: rgba(50, 205, 50, 0.5);"></span>
+                                <span class="legend-item__label">Buono</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-item__color" style="background-color: rgba(0, 0, 255, 0.5);"></span>
+                                <span class="legend-item__label">Elevato</span>
+                            </div>
+                        </div>
+                        <div v-for="cc in loopOnPairs(Array.from(Array(dataArpa.length), (n, i) => i))" class="row">
+                            <div class="col-lg-6 col-sm-12">
+                                <figure style="min-width: 100%" class="highcharts-figure">
+                                    <highcharts :options="dataArpa[cc[0]]"></highcharts>
+                                </figure>
+                            </div>
+                            <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+                                <figure style="min-width: 100%" class="highcharts-figure">
+                                    <highcharts :options="dataArpa[cc[1]]"></highcharts>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
 
-                            <p class="description text-justify">I grafici rappresentano le serie storiche di alcune statistiche derivate da immagini
-                                satellitari per ognuno dei parametri di qualità delle acque dei laghi (concentrazione di clorofilla-a, solidi sospesi
-                                totali e temperatura superficiale). Le statistiche che vengono calcolate sono la media, il primo e il terzo quartile,
-                                e la deviazione standard. I laghi possono essere divisi in più bacini, e per ogni bacino vengono calcolate le statistiche
-                                 dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le immagini acquisite
-                                 dalle missioni ESA Sentinel-3 e NASA Landsat 8. Le mappe complete sono disponibili al seguente <a href="https://www.webgis.eo.simile.polimi.it/" target="_blank"> link</a> </p>
-                            <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n,i)=>i))" class="row">
 
-                                <div class="col-lg-6 col-sm-12">
+                </div>
 
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataSatellite[cc[0]]"></highcharts>
-                                        <!--  modal -->
-                                        <div class="container py-2" id="app">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <a role="button" class="btn btn-primary" @click="toggle(cc[0])">Vedi dettaglio</a>
-                                                    <div :class="modalClasses[cc[0]]" id="reject" role="dialog">
-                                                        <div class="modal-dialog modal-lg">
-                                                            <div class="modal-content">
-                                                                <div class="modal-body">
-                                                                    <highcharts :constructor-type="'stockChart'" :options="dataSatelliteWithQQ[cc[0]]"></highcharts>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-primary" @click="toggle(cc[0])">Chiudi</button>
-                                                                </div>
+
+
+                <div :class="{ 'tab-pane': true, 'fade': true, show: selectedTab == 'satellitari', active: selectedTab == 'satellitari' }"
+                    id="satellitari" role="tabpanel" aria-labelledby="satellitari-tab">
+                    <div v-if="dataSatellite.length > 0" class="container-fluid">
+                        <h4>Cosa sono i dati satellitari</h4>
+
+                        <p class="description text-justify">I grafici rappresentano le serie storiche di alcune statistiche
+                            derivate da immagini
+                            satellitari per ognuno dei parametri di qualità delle acque dei laghi (concentrazione di
+                            clorofilla-a, solidi sospesi
+                            totali e temperatura superficiale). Le statistiche che vengono calcolate sono la media, il primo
+                            e il terzo quartile,
+                            e la deviazione standard. I laghi possono essere divisi in più bacini, e per ogni bacino vengono
+                            calcolate le statistiche
+                            dei valori ottenuti a partire dalle mappe dei parametri, che vengono prodotte utilizzando le
+                            immagini acquisite
+                            dalle missioni ESA Sentinel-3 e NASA Landsat 8. Le mappe complete sono disponibili al seguente
+                            <a href="https://www.webgis.eo.simile.polimi.it/" target="_blank"> link</a> </p>
+                        <div v-for="cc in loopOnPairs(Array.from(Array(dataSatellite.length), (n, i) => i))" class="row">
+
+                            <div class="col-lg-6 col-sm-12">
+
+                                <figure style="min-width: 100%" class="highcharts-figure">
+                                    <highcharts :options="dataSatellite[cc[0]]"></highcharts>
+                                    <!--  modal -->
+                                    <div class="container py-2" id="app">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <a role="button" class="btn btn-primary" @click="toggle(cc[0])">Vedi
+                                                    dettaglio</a>
+                                                <div :class="modalClasses[cc[0]]" id="reject" role="dialog">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body">
+                                                                <highcharts :constructor-type="'stockChart'"
+                                                                    :options="dataSatelliteWithQQ[cc[0]]"></highcharts>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-primary"
+                                                                    @click="toggle(cc[0])">Chiudi</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Modal -->
-                                    </figure>
-                                </div>
-                                <div v-if="cc[1]" class="col-lg-6 col-sm-12">
+                                    </div>
+                                    <!-- Modal -->
+                                </figure>
+                            </div>
+                            <div v-if="cc[1]" class="col-lg-6 col-sm-12">
 
-                                    <figure style="min-width: 100%" class="highcharts-figure">
-                                        <highcharts :options="dataSatellite[cc[1]]"></highcharts>
-                                        <!--  modal -->
-                                        <div class="container py-2" id="app">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <a role="button" class="btn btn-primary" @click="toggle(cc[1])">Vedi dettaglio</a>
-                                                        <div :class="modalClasses[cc[1]]" id="reject" role="dialog">
-                                                            <div class="modal-dialog modal-lg">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-body">
-                                                                        <highcharts :constructor-type="'stockChart'" :options="dataSatelliteWithQQ[cc[1]]"></highcharts>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-primary" @click="toggle(cc[1])">Chiudi</button>
-                                                                    </div>
-                                                                </div>
+                                <figure style="min-width: 100%" class="highcharts-figure">
+                                    <highcharts :options="dataSatellite[cc[1]]"></highcharts>
+                                    <!--  modal -->
+                                    <div class="container py-2" id="app">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <a role="button" class="btn btn-primary" @click="toggle(cc[1])">Vedi
+                                                    dettaglio</a>
+                                                <div :class="modalClasses[cc[1]]" id="reject" role="dialog">
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body">
+                                                                <highcharts :constructor-type="'stockChart'"
+                                                                    :options="dataSatelliteWithQQ[cc[1]]"></highcharts>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-primary"
+                                                                    @click="toggle(cc[1])">Chiudi</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Modal -->
-                                    </figure>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <div class="row">
-                            <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
-                            </div>
-                            <div v-if="features.features" class="form-group row">
-                                    <label for="inputGroupSelect03" class="form-text text-muted">
-                                        Scegli un'area da analizzare:</label>
-                                    <div class="col-sm-6">
-                                        <select name="prova" class="custom-select" id="inputGroupSelect03"
-                                        aria-label="Example select with button addon" v-model="selectedMarker"
-                                        title="Scegli una località o un'area da analizzare"
-                                        >
-                                        <option v-for="feature in features.features.filter(feat=>feat.properties.names.some(nfo=>nfo.procedure.startsWith('SATELLITE')))" :value="feature.properties.markerIndex">
-                                            {{ guessLocLabel(feature.properties.foi_name) }}
-                                        </option>
-                                        </select>
+                                        </div>
                                     </div>
+                                    <!-- Modal -->
+                                </figure>
                             </div>
                         </div>
-
                     </div>
+                    <div v-else>
+                        <div class="row">
+                            <h4>Non sono presenti dati satellitari per la stazione selezionata</h4>
+                        </div>
+                        <div v-if="features.features" class="form-group row">
+                            <label for="inputGroupSelect03" class="form-text text-muted">
+                                Scegli un'area da analizzare:</label>
+                            <div class="col-sm-6">
+                                <select name="prova" class="custom-select" id="inputGroupSelect03"
+                                    aria-label="Example select with button addon" v-model="selectedMarker"
+                                    title="Scegli una località o un'area da analizzare">
+                                    <option
+                                        v-for="feature in features.features.filter(feat => feat.properties.names.some(nfo => nfo.procedure.startsWith('SATELLITE')))"
+                                        :value="feature.properties.markerIndex">
+                                        {{ guessLocLabel(feature.properties.foi_name) }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
-
-
 </template>
 <script>
-    // import {Chart} from 'highcharts-vue';
-    // import Highcharts from 'highcharts';
-    // import loadBullet from 'highcharts/modules/bullet.js';
+// import {Chart} from 'highcharts-vue';
+// import Highcharts from 'highcharts';
+// import loadBullet from 'highcharts/modules/bullet.js';
 
-    // import SimileIcon from 'src/components/Icon/SimileIcon.vue'
+// import SimileIcon from 'src/components/Icon/SimileIcon.vue'
 
-    // import ChartCard from 'src/components/Cards/ChartCard.vue'
-    // import HighchartCard from 'src/components/Cards/HighchartCard.vue'
-    import StatsCard from 'src/components/Cards/StatsCard.vue'
-    import LTable from 'src/components/Table.vue'
+// import ChartCard from 'src/components/Cards/ChartCard.vue'
+// import HighchartCard from 'src/components/Cards/HighchartCard.vue'
+import StatsCard from 'src/components/Cards/StatsCard.vue'
+import LTable from 'src/components/Table.vue'
 
-    // Courtesy of: https://vue2-leaflet.netlify.app/quickstart/#marker-icons-are-missing
-    // Otherwise Marker Icons are missing
-    import { Icon } from 'leaflet';
+// Courtesy of: https://vue2-leaflet.netlify.app/quickstart/#marker-icons-are-missing
+// Otherwise Marker Icons are missing
+import { Icon } from 'leaflet';
 
-    delete Icon.Default.prototype._getIconUrl;
-    Icon.Default.mergeOptions({
-      iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-      iconUrl: require('leaflet/dist/images/marker-icon.png'),
-      shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-    });
+delete Icon.Default.prototype._getIconUrl;
+Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+});
 
 
-    import { latLngBounds, latLng } from "leaflet";
-    import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LControl } from "vue2-leaflet";
+import { latLngBounds, latLng } from "leaflet";
+import { LMap, LTileLayer, LWMSTileLayer, LControlLayers, LGeoJson, LControl } from "vue2-leaflet";
 
-    import 'leaflet/dist/leaflet.css';
+import 'leaflet/dist/leaflet.css';
 
-    // import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
-    // import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
+// import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+// import Vue2LeafletMarker from 'vue2-leaflet-markercluster'
 
-    // import "leaflet.markercluster/dist/MarkerCluster.css";
-    // import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+// import "leaflet.markercluster/dist/MarkerCluster.css";
+// import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
-    import Modal from 'src/components/Modal.vue';
-    import ModalButton from 'src/components/ModalButton.vue';
-    import NotifyButton from 'src/components/NotifyButton.vue';
-    import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
-    import indicatorDescription from '../indicatorDescription';
+import Modal from 'src/components/Modal.vue';
+import ModalButton from 'src/components/ModalButton.vue';
+import NotifyButton from 'src/components/NotifyButton.vue';
+import AnchorToAnalisysPage from 'src/components/AnchorToAnalisysPage.vue';
+import indicatorDescription from '../indicatorDescription';
 
-    import TabNav from '../layout/TabNav.vue';
-    import Tab from '../components/Tab.vue';
-    import CipaisLugano from '../components/CipaisLugano.vue';
-    import TestChart from '../components/testChart.vue';
+import TabNav from '../layout/TabNav.vue';
+import Tab from '../components/Tab.vue';
+import CipaisLugano from '../components/CipaisLugano.vue';
+import TestChart from '../components/testChart.vue';
 
-    import lake_basins from './lake_basins.js'
+import lake_basins from './lake_basins.js'
 
-    import {Chart} from 'highcharts-vue';
-    import Highcharts from 'highcharts';
+import { Chart } from 'highcharts-vue';
+import Highcharts from 'highcharts';
 
-    import IstsosIO from '../manageIstsosToken.js';
+import IstsosIO from '../manageIstsosToken.js';
 
-    import sharedFunctions from './sharedFunctions.js';
+import sharedFunctions from './sharedFunctions.js';
 
-    import istsosToHighcharts from './istsosToHighcharts';
-    import { mean,std,min,sqrt,max, log } from 'mathjs';
+import istsosToHighcharts from './istsosToHighcharts';
+import { mean, std, min, sqrt, max, log } from 'mathjs';
 
-    // Highcharts.setOptions({
-    //     chart: {
-    //         inverted: true,
-    //         marginLeft: 135,
-    //         type: 'bullet'
-    //     },
-    //     title: {
-    //         text: null
-    //     },
-    //     legend: {
-    //         enabled: false
-    //     },
-    //     yAxis: {
-    //         gridLineWidth: 0
-    //     },
-    //     plotOptions: {
-    //         series: {
-    //             pointPadding: 0.25,
-    //             borderWidth: 0,
-    //             color: '#000'
-    //         }
-    //     },
-    //     credits: {
-    //         enabled: false
-    //     },
-    //     exporting: {
-    //         enabled: false
-    //     }
-    // });
+// Highcharts.setOptions({
+//     chart: {
+//         inverted: true,
+//         marginLeft: 135,
+//         type: 'bullet'
+//     },
+//     title: {
+//         text: null
+//     },
+//     legend: {
+//         enabled: false
+//     },
+//     yAxis: {
+//         gridLineWidth: 0
+//     },
+//     plotOptions: {
+//         series: {
+//             pointPadding: 0.25,
+//             borderWidth: 0,
+//             color: '#000'
+//         }
+//     },
+//     credits: {
+//         enabled: false
+//     },
+//     exporting: {
+//         enabled: false
+//     }
+// });
 
-  //   loadBullet(Highcharts);
-  //
-  //   Highcharts.setOptions({
-  //     chart: {
-  //         inverted: true,
-  //         marginLeft: 135,
-  //         type: 'bullet'
-  //     },
-  //     title: {
-  //         text: null
-  //     },
-  //     legend: {
-  //         enabled: false
-  //     },
-  //     yAxis: {
-  //         gridLineWidth: 0
-  //     },
-  //     plotOptions: {
-  //         series: {
-  //             pointPadding: 0.25,
-  //             borderWidth: 0,
-  //             color: '#000',
-  //             targetOptions: {
-  //                 width: '200%'
-  //             }
-  //         }
-  //     },
-  //     credits: {
-  //         enabled: false
-  //     },
-  //     exporting: {
-  //         enabled: false
-  //     }
-  // });
+//   loadBullet(Highcharts);
+//
+//   Highcharts.setOptions({
+//     chart: {
+//         inverted: true,
+//         marginLeft: 135,
+//         type: 'bullet'
+//     },
+//     title: {
+//         text: null
+//     },
+//     legend: {
+//         enabled: false
+//     },
+//     yAxis: {
+//         gridLineWidth: 0
+//     },
+//     plotOptions: {
+//         series: {
+//             pointPadding: 0.25,
+//             borderWidth: 0,
+//             color: '#000',
+//             targetOptions: {
+//                 width: '200%'
+//             }
+//         }
+//     },
+//     credits: {
+//         enabled: false
+//     },
+//     exporting: {
+//         enabled: false
+//     }
+// });
 
-    export default {
-        components: {
-            LTable,
-            // ChartCard,
-            StatsCard,
-            LMap,
-            LTileLayer,
-            "l-wms-tile-layer": LWMSTileLayer,
-            LGeoJson,
-            LControl,
-            LControlLayers,
-            highcharts: Chart,
-            // HighchartCard,
-            NotifyButton,
-            // 'v-marker-cluster': Vue2LeafletMarkerCluster,
-            // 'v-marker': Vue2LeafletMarker,
-            ModalButton,
-            Modal,
-            // SimileIcon,
-            TabNav,
-            Tab,
-            CipaisLugano,
-            TestChart
-        },
-        data () {
-            return {
-                // markers: [],
-                backdropClasses: [],
-                // modalClasses: ['modal','fade'],
-                modalClasses :[],
-                istsos: null,
-                selectedTab: 'home',
-                selectedArpaProcedures: [],
-                selectedSatelliteProcedures: [],
-                arpaData: [],
-                selectedProc: null,
-                showDescription: true,
-                lastSdtFig: '',
-                lastSdtTime: null,
-                lastTemp04: '',
-                lastTemp04Time: null,
-                lastO2s04: '',
-                lastO2s04Time: null,
-                selected_temperature: 'TEMP_0_4',
-                selected_o2c: 'O2C_0_4',
-                last_temperature_data: {},
-                series_data: {},
-                last_o2c_data: {},
-                series_o2c_data: {},
-                tableAllData: {},
-                allProcedures: {},
-                dataArpa:[],
-                dataSatellite:{},
-                tableAllData2: {},
-                showModal: false,
-                tableData: {},
-                tableDataArpa:{},
-                tableData2: {},
-                tableProps: {
-                    page: 1,
-                    search: '',
-                    length: 10,
-                    column: 'title',
-                    dir: 'asc'
-                },
-                // tablePropsCipais: {
-                //     page: 1,
-                //     search: '',
-                //     length: 5,
-                //     column: 'name',
-                //     dir: 'asc'
+export default {
+    components: {
+        LTable,
+        // ChartCard,
+        StatsCard,
+        LMap,
+        LTileLayer,
+        "l-wms-tile-layer": LWMSTileLayer,
+        LGeoJson,
+        LControl,
+        LControlLayers,
+        highcharts: Chart,
+        // HighchartCard,
+        NotifyButton,
+        // 'v-marker-cluster': Vue2LeafletMarkerCluster,
+        // 'v-marker': Vue2LeafletMarker,
+        ModalButton,
+        Modal,
+        // SimileIcon,
+        TabNav,
+        Tab,
+        CipaisLugano,
+        TestChart
+    },
+    data() {
+        return {
+            // markers: [],
+            backdropClasses: [],
+            // modalClasses: ['modal','fade'],
+            modalClasses: [],
+            istsos: null,
+            selectedTab: 'home',
+            selectedArpaProcedures: [],
+            selectedSatelliteProcedures: [],
+            arpaData: [],
+            selectedProc: null,
+            showDescription: true,
+            lastSdtFig: '',
+            lastSdtTime: null,
+            lastTemp04: '',
+            lastTemp04Time: null,
+            lastO2s04: '',
+            lastO2s04Time: null,
+            selected_temperature: 'TEMP_0_4',
+            selected_o2c: 'O2C_0_4',
+            last_temperature_data: {},
+            series_data: {},
+            last_o2c_data: {},
+            series_o2c_data: {},
+            tableAllData: {},
+            allProcedures: {},
+            dataArpa: [],
+            dataSatellite: {},
+            tableAllData2: {},
+            showModal: false,
+            tableData: {},
+            tableDataArpa: {},
+            tableData2: {},
+            tableProps: {
+                page: 1,
+                search: '',
+                length: 10,
+                column: 'title',
+                dir: 'asc'
+            },
+            // tablePropsCipais: {
+            //     page: 1,
+            //     search: '',
+            //     length: 5,
+            //     column: 'name',
+            //     dir: 'asc'
+            // },
+            tableColumns2: [
+                // {
+                //     // label: 'Nome',
+                //     // name: 'name',
+                //     // orderable: true,
+                //     // hidden: true,
+
                 // },
-                tableColumns2: [
-                    // {
-                    //     // label: 'Nome',
-                    //     // name: 'name',
-                    //     // orderable: true,
-                    //     // hidden: true,
-
-                    // },
-                    {
-                        label:'Misura',
-                        name:'title',
-                        orderable: true,
+                {
+                    label: 'Misura',
+                    name: 'title',
+                    orderable: true,
+                },
+                // {
+                //     label: 'Descrizione',
+                //     name: 'description',
+                //     orderable: false,
+                // },
+                // {
+                //     label: 'Giorni',
+                //     name: 'days',
+                //     orderable: false,
+                // },
+                {
+                    label: 'Inizio',
+                    name: 'begin',
+                    orderable: false,
+                },
+                {
+                    label: 'Fine',
+                    name: 'end',
+                    orderable: false,
+                },
+                {
+                    label: ' ',
+                    name: 'info',
+                    orderable: false,
+                    classes: {
+                        'btn': true,
+                        'btn-info': true,
+                        'btn-sm': true,
                     },
-                    // {
-                    //     label: 'Descrizione',
-                    //     name: 'description',
-                    //     orderable: false,
-                    // },
-                    // {
-                    //     label: 'Giorni',
-                    //     name: 'days',
-                    //     orderable: false,
-                    // },
-                    {
-                        label: 'Inizio',
-                        name: 'begin',
-                        orderable: false,
-                    },
-                    {
-                        label: 'Fine',
-                        name: 'end',
-                        orderable: false,
-                    },
-                     {
-                        label: ' ',
-                        name: 'info',
-                        orderable: false,
-                        classes: {
-                            'btn': true,
-                            'btn-info': true,
-                            'btn-sm': true,
-                        },
-                        event: "click",
-                        handler: this.displayRow,
-                        component: NotifyButton,
-                        iclasses: {
-                            'fa': true,
-                            'fa-info-circle': true
-                        }
-
-                    },
-                    {
-                        label: '',
-                        name: 'Analizza',
-                        event: "click",
-                        handler: (data)=>{
-                            const procedure = this.features.features[this.selectedMarker].properties.names
-                                .filter(value=>data.procedures.includes(value.procedure))[0];
-                            this.$root.analisysVariable = procedure.procedure;
-                            this.$root.analisysVariableUrn = procedure.urn;
-                        },
-                        orderable: false,
-                        classes: {
-                            'btn': true,
-                            'btn-primary': false,
-                            'btn-info': true,
-                            'btn-sm': true,
-                        },
-                        component: AnchorToAnalisysPage
+                    event: "click",
+                    handler: this.displayRow,
+                    component: NotifyButton,
+                    iclasses: {
+                        'fa': true,
+                        'fa-info-circle': true
                     }
-                ],
-                selectedRow: {},
-                editTooltip: 'Edit Task',
-                deleteTooltip: 'Remove',
-                zoom: 13,
-                //center: latLng(47.41322, -1.219482),
-                // 45.98815472817849, 8.970311660582176
-                // minlat="45.9029678" minlon="8.8586625" maxlat="46.0363240" maxlon="9.1252600"/
-                bounds: latLngBounds([
-                    [45.865, 8.67],
-                    [45.77, 8.83]
-                ]),
-                features: {
-                  "type": "FeatureCollection",
-                  "features": []
-                },
-                basins: lake_basins.varese,
-                url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
-                layers: sharedFunctions.map_layers,
-                markerLayer: {
-                    name: 'Marker',
-                    visible: true,
-                    layers: 'Marker',
-                    geojson: {
-                      'name': 'markers',
-                      'type': 'FeatureCollection',
-                      'features': []
-                    },
-                    pointToLayer: function (feature, latlng) {
-                        return L.marker(latlng);
 
-                    }
                 },
-                attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-                currentZoom: 10.5,
-                //currentCenter: latLng(47.41322, -1.219482),
-                showParagraph: false,
-                mapOptions: {
-                  zoomSnap: 0.5,
-                  scrollWheelZoom: false
-                },
-                showMap: true,
-                selectedMarker: 0,
-                cards: [{}, {}, {}, {}, {}, {}],
-                selected: 'Serie storiche'
-            }
-        },
-        watch: {
-            selectedArpaProcedures: {
-                handler(val){
-                    // do stuff
-                    // TODO: load cipais data
-                    this.loadArpaData();
-                },
-                // deep: true
+                {
+                    label: '',
+                    name: 'Analizza',
+                    event: "click",
+                    handler: (data) => {
+                        const procedure = this.features.features[this.selectedMarker].properties.names
+                            .filter(value => data.procedures.includes(value.procedure))[0];
+                        this.$root.analisysVariable = procedure.procedure;
+                        this.$root.analisysVariableUrn = procedure.urn;
+                    },
+                    orderable: false,
+                    classes: {
+                        'btn': true,
+                        'btn-primary': false,
+                        'btn-info': true,
+                        'btn-sm': true,
+                    },
+                    component: AnchorToAnalisysPage
+                }
+            ],
+            selectedRow: {},
+            editTooltip: 'Edit Task',
+            deleteTooltip: 'Remove',
+            zoom: 13,
+            //center: latLng(47.41322, -1.219482),
+            // 45.98815472817849, 8.970311660582176
+            // minlat="45.9029678" minlon="8.8586625" maxlat="46.0363240" maxlon="9.1252600"/
+            bounds: latLngBounds([
+                [45.865, 8.67],
+                [45.77, 8.83]
+            ]),
+            features: {
+                "type": "FeatureCollection",
+                "features": []
             },
-            selectedSatelliteProcedures: {
-                handler(val){
-                    this.loadSatelliteData();
-                },
-                // deep: true
-            },
+            basins: lake_basins.varese,
+            url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            wmsUrl: 'https://www.gishosting.gter.it/lizmap-web-client/lizmap/www/index.php/lizmap/service/?repository=dorota&project=cartografia_simile&',
+            layers: sharedFunctions.map_layers,
             markerLayer: {
-                handler(val){
-                    // do stuff
+                name: 'Marker',
+                visible: true,
+                layers: 'Marker',
+                geojson: {
+                    'name': 'markers',
+                    'type': 'FeatureCollection',
+                    'features': []
                 },
-                deep: true
-            },
-            selectedMarker: {
-                handler(val){
-                    // do stuff
-                    this.centerMapTo();
-                    this.loadCardsData();
-                    this.tableSetData();
-                    this.tableSetDataArpa();
-                    this.tableSetDataSatellite();
+                pointToLayer: function (feature, latlng) {
+                    return L.marker(latlng);
 
-                    if ( this.tableData.data && this.tableData.data.length>0 ) {
-                        this.selectedTab='home'
-                    } else if ( this.selectedSatelliteProcedures.length>0 ) {
-                        this.selectedTab='satellitari'
-                    } else {
-                        this.selectedTab='arpa'
-                    };
-
-                },
+                }
             },
-            cards: {
-                handler(val){
-                    // do stuff
-                },
-                deep: true
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            currentZoom: 10.5,
+            //currentCenter: latLng(47.41322, -1.219482),
+            showParagraph: false,
+            mapOptions: {
+                zoomSnap: 0.5,
+                scrollWheelZoom: false
+            },
+            showMap: true,
+            selectedMarker: 0,
+            cards: [{}, {}, {}, {}, {}, {}],
+            selected: 'Serie storiche'
+        }
+    },
+    watch: {
+        selectedArpaProcedures: {
+            handler(val) {
+                // do stuff
+                // TODO: load cipais data
+                this.loadArpaData();
+            },
+            // deep: true
+        },
+        selectedSatelliteProcedures: {
+            handler(val) {
+                this.loadSatelliteData();
+            },
+            // deep: true
+        },
+        markerLayer: {
+            handler(val) {
+                // do stuff
+            },
+            deep: true
+        },
+        selectedMarker: {
+            handler(val) {
+                // do stuff
+                this.centerMapTo();
+                this.loadCardsData();
+                this.tableSetData();
+                this.tableSetDataArpa();
+                this.tableSetDataSatellite();
+
+                if (this.tableData.data && this.tableData.data.length > 0) {
+                    this.selectedTab = 'home'
+                } else if (this.selectedSatelliteProcedures.length > 0) {
+                    this.selectedTab = 'satellitari'
+                } else {
+                    this.selectedTab = 'arpa'
+                };
+
             },
         },
-        mounted() {
-            var self = this;
-            this.$root.whereAmI = 'Lago di Varese';
+        cards: {
+            handler(val) {
+                // do stuff
+            },
+            deep: true
+        },
+    },
+    mounted() {
+        var self = this;
+        this.$root.whereAmI = 'Lago di Varese';
 
-            this.istsos = this.vareseIstsos;
-            this.$root.istsos = this.istsos;
+        this.istsos = this.vareseIstsos;
+        this.$root.istsos = this.istsos;
 
-            sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
+        sharedFunctions.addBaseLayers(this.$refs.map.mapObject);
 
-            const good_names = sharedFunctions.procPriorities;
+        const good_names = sharedFunctions.procPriorities;
 
-            const groupBy = (x,f,g)=>x.reduce((a,b)=>{
-                const rr = g(b);
+        const groupBy = (x, f, g) => x.reduce((a, b) => {
+            const rr = g(b);
 
-                if ( a[f(b)] ) {
-                    // a[f(b)].push(g(b))
-                    if ( !a[f(b)][rr.name] && !['_1Q', '_3Q', '_SD'].some(suff=>rr.procedure.endsWith(suff))) {
-                        a[f(b)][rr.name] = rr;
-                    };
-                    return a;
-                } else {
-                    a[f(b)] = {};
+            if (a[f(b)]) {
+                // a[f(b)].push(g(b))
+                if (!a[f(b)][rr.name] && !['_1Q', '_3Q', '_SD'].some(suff => rr.procedure.endsWith(suff))) {
                     a[f(b)][rr.name] = rr;
-                    return a;
-                }
-            },{});
+                };
+                return a;
+            } else {
+                a[f(b)] = {};
+                a[f(b)][rr.name] = rr;
+                return a;
+            }
+        }, {});
 
-            function approxPosition (a) {
-                const ff = .005 // Approximation
-                const lon = (a.geometry.coordinates[0]/ff).toFixed(0)*ff;
-                const lat = (a.geometry.coordinates[1]/ff).toFixed(0)*ff;
-                return `${lon};${lat}`;
-            };
-            const collectNames = (b)=>{
+        function approxPosition(a) {
+            const ff = .005 // Approximation
+            const lon = (a.geometry.coordinates[0] / ff).toFixed(0) * ff;
+            const lat = (a.geometry.coordinates[1] / ff).toFixed(0) * ff;
+            return `${lon};${lat}`;
+        };
+        const collectNames = (b) => {
 
+            return {
+                name: b.properties.observedproperties[0].name,
+                procedure: b.properties.name,
+                urn: b.properties.observedproperties[0].def,
+                description: b.properties.description,
+                foi_name: b.properties.foi_name,
+                observedproperties: b.properties.observedproperties
+            }
+        };
+
+        Promise.all([
+            this.tableFetchData2(),
+            this.istsos.fetchGeometryCollection(),
+        ]).then(results => {
+            const result = results[1];
+
+            const reduced = groupBy(
+                result.data.features,
+                approxPosition,
+                collectNames
+            );
+            let bounds = L.latLngBounds([]);
+
+            const features = Object.entries(reduced).map(([k, v], ii) => {
+                const coords = k.split(';').map(parseFloat);
+                // bounds.extend(L.latLng(coords[1], coords[0]));
                 return {
-                    name: b.properties.observedproperties[0].name,
-                    procedure: b.properties.name,
-                    urn: b.properties.observedproperties[0].def,
-                    description: b.properties.description,
-                    foi_name: b.properties.foi_name,
-                    observedproperties: b.properties.observedproperties
-                }
-            };
+                    "type": "Feature",
+                    "properties": {
+                        markerIndex: ii,
+                        foi_name: Object.values(v)[0].foi_name,
+                        names: Object.entries(v).sort((a, b) => {
+                            const ia = good_names.indexOf(a[0]);
+                            const ib = good_names.indexOf(b[0]);
 
-            Promise.all([
-                this.tableFetchData2(),
-                this.istsos.fetchGeometryCollection(),
-            ]).then(results=>{
-                const result = results[1];                
+                            if (ia == ib) {
+                                if (a[1].procedure.toLowerCase().includes('arpa')) return 1;
+                                if (b[1].procedure.toLowerCase().includes('arpa')) return -1;
+                                return 0
+                            };
+                            if (ia > ib) {
+                                if (a[1].procedure.toLowerCase().includes('arpa')) return 1;
+                                if (b[1].procedure.toLowerCase().includes('arpa')) return -1;
+                                return 1
+                            };
+                            if (ia == -1) {
+                                if (a[1].procedure.toLowerCase().includes('arpa')) return 1;
+                                if (b[1].procedure.toLowerCase().includes('arpa')) return -1;
+                                return 1;
+                            };
+                            if (ib == -1) {
+                                if (a[1].procedure.toLowerCase().includes('arpa')) return 1;
+                                if (b[1].procedure.toLowerCase().includes('arpa')) return -1;
+                                return -1;
+                            };
 
-                const reduced = groupBy(
-                    result.data.features,
-                    approxPosition,
-                    collectNames
-                );
-                let bounds = L.latLngBounds([]);
+                            return -1
 
-                const features = Object.entries(reduced).map(([k, v], ii) => {
-                    const coords = k.split(';').map(parseFloat);
-                    // bounds.extend(L.latLng(coords[1], coords[0]));
-                    return {
-                        "type": "Feature",
-                        "properties": {
-                            markerIndex: ii,
-                            foi_name: Object.values(v)[0].foi_name,
-                            names: Object.entries(v).sort((a, b) => {
-                                const ia = good_names.indexOf(a[0]);
-                                const ib = good_names.indexOf(b[0]);
-
-                                if ( ia==ib ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
-                                    return 0
-                                };
-                                if ( ia>ib ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
-                                    return 1
-                                };
-                                if ( ia==-1 ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
-                                    return 1;
-                                };
-                                if ( ib==-1 ) {
-                                    if ( a[1].procedure.toLowerCase().includes('arpa') ) return 1;
-                                    if ( b[1].procedure.toLowerCase().includes('arpa') ) return -1;
-                                    return -1;
-                                };
-
-                                return -1
-
-                            }).map(a=>a[1]),
-                            // infos: v,
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": coords
-                        }
-
+                        }).map(a => a[1]),
+                        // infos: v,
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": coords
                     }
 
-                });
-                // Set FeatureCollection
-                self.features = {
-                    "type": "FeatureCollection",
-                    "features": features
-                };
-                self.loadCardsData();
-                self.tableSetData();
-                self.tableSetDataArpa();
+                }
 
-                // Set map bounds
-                self.bounds = bounds;
+            });
+            // Set FeatureCollection
+            self.features = {
+                "type": "FeatureCollection",
+                "features": features
+            };
+            self.loadCardsData();
+            self.tableSetData();
+            self.tableSetDataArpa();
 
-            })
+            // Set map bounds
+            self.bounds = bounds;
 
-            // TODO: DEPRECATE
-            // this.populateCockpit();
-            this.$root.dropdownVisible = false;
+        })
 
-        },
+        // TODO: DEPRECATE
+        // this.populateCockpit();
+        this.$root.dropdownVisible = false;
+
+    },
 
     methods: {
-        centerMapTo () {
+        centerMapTo() {
             sharedFunctions.centerMapTo(this);
         },
         toggle(index) {
-            if( this.modalClasses[index].includes('show')){
+            if (this.modalClasses[index].includes('show')) {
                 this.modalClasses[index].pop()
                 this.modalClasses[index].pop()
-                this.backdropClasses=[]
+                this.backdropClasses = []
             }
             else {
                 this.modalClasses[index].push('d-block')
                 this.modalClasses[index].push('show')
-                this.backdropClasses=['modal-backdrop', 'fade', 'show']
+                this.backdropClasses = ['modal-backdrop', 'fade', 'show']
             }
 
         },
-        selectedTabObs(){
-            if ( this.tableData.data && this.tableData.data.length>0 ) {
-                this.selectedTab='home'
-            } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length>0 ) {
-                this.selectedTab='satellitari'
-            } else if(this.selectedArpaProcedures && this.selectedArpaProcedure.length>0) {
-                this.selectedTab='arpa'
+        selectedTabObs() {
+            if (this.tableData.data && this.tableData.data.length > 0) {
+                this.selectedTab = 'home'
+            } else if (this.selectedSatelliteProcedures && this.selectedSatelliteProcedures.length > 0) {
+                this.selectedTab = 'satellitari'
+            } else if (this.selectedArpaProcedures && this.selectedArpaProcedure.length > 0) {
+                this.selectedTab = 'arpa'
             };
         },
-        guessLocLabel(foi_name){
+        guessLocLabel(foi_name) {
             return sharedFunctions.guessLocLabel(foi_name);
         },
-        guessLocTitle(foi_name){
+        guessLocTitle(foi_name) {
             return sharedFunctions.guessLocTitle(foi_name);
         },
-        loopOnPairs (myarray) {
-            return myarray.reduce(function(result, value, index, array) {
+        loopOnPairs(myarray) {
+            return myarray.reduce(function (result, value, index, array) {
                 if (index % 2 === 0)
                     result.push(array.slice(index, index + 2));
                 return result;
-                }, []);
+            }, []);
         },
-        getCardIcon (name) {
-            if(indicatorDescription.indicatorDescription[name]==undefined || indicatorDescription.indicatorDescription[name].icon==undefined){
+        getCardIcon(name) {
+            if (indicatorDescription.indicatorDescription[name] == undefined || indicatorDescription.indicatorDescription[name].icon == undefined) {
                 return 'fa fa-question-circle-o text-info';
             } else {
                 return indicatorDescription.indicatorDescription[name].icon;
             };
         },
-        loadArpaData () {
+        loadArpaData() {
             var self = this;
             let dataArpa = [];
             let prms = [];
@@ -932,7 +929,7 @@
                         info.observedproperties[0].definition,
                         begin,
                         end
-                    ).then(response=>{
+                    ).then(response => {
                         let decimals = 2
                         if (
                             info.observedproperties[0].name in indicatorDescription.indicatorDescription
@@ -941,21 +938,21 @@
                             decimals = indicatorDescription.indicatorDescription[info.observedproperties[0].name].decimals
                         };
                         const result = istsosToHighcharts.istosToLine(
-                            response, '', false, decimals, decimals+2);
+                            response, '', false, decimals, decimals + 2);
                         // result.options.name = 'foo';
-                        const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+                        const variableAverage = mean(result.options.series[0].data.map((xy) => xy[1]));
 
                         result.options.yAxis.plotLines = []
-                        result.options.yAxis.reversed=indicatorDescription.indicatorDescription[proc.name].reversed===true;
+                        result.options.yAxis.reversed = indicatorDescription.indicatorDescription[proc.name].reversed === true;
 
-                        const uom = !result.uom || result.uom=='null' ? '' : ` (${result.uom})`;
+                        const uom = !result.uom || result.uom == 'null' ? '' : ` (${result.uom})`;
 
-                        if(info.observedproperties[0].name in indicatorDescription.indicatorDescription){
+                        if (info.observedproperties[0].name in indicatorDescription.indicatorDescription) {
                             result.options.title.text = indicatorDescription.indicatorDescription[info.observedproperties[0].name].title;
                             const subt = indicatorDescription.indicatorDescription[info.observedproperties[0].name].breveDescrizioneArpa || indicatorDescription.indicatorDescription[info.observedproperties[0].name].breveDescrizione
                             result.options.subtitle.text = `${subt}${uom}`;
                         }
-                        else{
+                        else {
                             result.options.title.text = info.description;
                             result.options.subtitle.text = `${info.description}${uom}`;
                         }
@@ -1013,39 +1010,39 @@
                                 }
                             }]
                         } else if (proc.procedure.startsWith('LTLECO')) {
-                          result.options.yAxis.min = 8;
-                          result.options.yAxis.max = 16;
-                          result.options.yAxis.plotBands = [{
-                              from: 0,
-                              to: 12,
-                              color: 'rgba(255, 255, 0, 0.5)',
-                              label: {
-                                //   text: 'Sufficiente',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }, {
-                              from: 12,
-                              to: 14,
-                              color: 'rgba(50, 205, 50, 0.5)',
-                              label: {
-                                //   text: 'Buono',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }, {
-                              from: 14,
-                              to: 20,
-                              color: 'rgba(0, 0, 255, 0.5)',
-                              label: {
-                                //   text: 'Elevato',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }]
+                            result.options.yAxis.min = 8;
+                            result.options.yAxis.max = 16;
+                            result.options.yAxis.plotBands = [{
+                                from: 0,
+                                to: 12,
+                                color: 'rgba(255, 255, 0, 0.5)',
+                                label: {
+                                    //   text: 'Sufficiente',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 12,
+                                to: 14,
+                                color: 'rgba(50, 205, 50, 0.5)',
+                                label: {
+                                    //   text: 'Buono',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 14,
+                                to: 20,
+                                color: 'rgba(0, 0, 255, 0.5)',
+                                label: {
+                                    //   text: 'Elevato',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }]
                         } else if (proc.procedure.startsWith('LTLeco')) {
                             result.options.yAxis.min = 8;
                             result.options.yAxis.max = 16;
@@ -1081,101 +1078,101 @@
                                 }
                             }]
                         } else if (proc.procedure.startsWith('SDT')) {
-                          result.options.yAxis.plotBands = [{
-                              from: 0,
-                              to: 3,
-                              color: 'rgba(255, 255, 0, 0.5)',
-                              label: {
-                                //   text: 'Sufficiente',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }, {
-                              from: 3,
-                              to: 6,
-                              color: 'rgba(50, 205, 50, 0.5)',
-                              label: {
-                                //   text: 'Buono',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }, {
-                              from: 6,
-                              to: 100,
-                              color: 'rgba(0, 0, 255, 0.5)',
-                              label: {
-                                //   text: 'Elevato',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }]
-                        }  else if (proc.procedure.startsWith('PTOT')) {
-                          result.options.yAxis.plotBands = [{
-                              from: 0,
-                              to: 12,
-                              color: 'rgba(0, 0, 255, 0.5)',
-                              label: {
-                                //   text: 'Elevato',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }, {
-                              from: 12,
-                              to: 20,
-                              color: 'rgba(50, 205, 50, 0.5)',
-                              label: {
-                                //   text: 'Buono',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }, {
-                              from: 20,
-                              to: 1000,
-                              color: 'rgba(255, 255, 0, 0.5)',
-                              label: {
-                                //   text: 'Sufficiente',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }]
-                        }  else if (proc.procedure.startsWith('O2S')) {
-                          result.options.yAxis.plotBands = [{
-                              from: 0,
-                              to: 40,
-                              color: 'rgba(255, 255, 0, 0.5)',
-                              label: {
-                                //   text: 'Sufficiente',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }, {
-                              from: 40,
-                              to: 80,
-                              color: 'rgba(50, 205, 50, 0.5)',
-                              label: {
-                                //   text: 'Buono',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }, {
-                              from: 80,
-                              to: 100,
-                              color: 'rgba(0, 0, 255, 0.5)',
-                              label: {
-                                //   text: 'Elevato',
-                                  style: {
-                                      color: '#606060'
-                                  }
-                              }
-                          }]
+                            result.options.yAxis.plotBands = [{
+                                from: 0,
+                                to: 3,
+                                color: 'rgba(255, 255, 0, 0.5)',
+                                label: {
+                                    //   text: 'Sufficiente',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 3,
+                                to: 6,
+                                color: 'rgba(50, 205, 50, 0.5)',
+                                label: {
+                                    //   text: 'Buono',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 6,
+                                to: 100,
+                                color: 'rgba(0, 0, 255, 0.5)',
+                                label: {
+                                    //   text: 'Elevato',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }]
+                        } else if (proc.procedure.startsWith('PTOT')) {
+                            result.options.yAxis.plotBands = [{
+                                from: 0,
+                                to: 12,
+                                color: 'rgba(0, 0, 255, 0.5)',
+                                label: {
+                                    //   text: 'Elevato',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 12,
+                                to: 20,
+                                color: 'rgba(50, 205, 50, 0.5)',
+                                label: {
+                                    //   text: 'Buono',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 20,
+                                to: 1000,
+                                color: 'rgba(255, 255, 0, 0.5)',
+                                label: {
+                                    //   text: 'Sufficiente',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }]
+                        } else if (proc.procedure.startsWith('O2S')) {
+                            result.options.yAxis.plotBands = [{
+                                from: 0,
+                                to: 40,
+                                color: 'rgba(255, 255, 0, 0.5)',
+                                label: {
+                                    //   text: 'Sufficiente',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 40,
+                                to: 80,
+                                color: 'rgba(50, 205, 50, 0.5)',
+                                label: {
+                                    //   text: 'Buono',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }, {
+                                from: 80,
+                                to: 100,
+                                color: 'rgba(0, 0, 255, 0.5)',
+                                label: {
+                                    //   text: 'Elevato',
+                                    style: {
+                                        color: '#606060'
+                                    }
+                                }
+                            }]
                         };
 
                         //
@@ -1197,9 +1194,9 @@
                 };
             };
 
-            Promise.all(prms).then(()=>{self.dataArpa=dataArpa});
+            Promise.all(prms).then(() => { self.dataArpa = dataArpa });
         },
-        loadSatelliteData () {
+        loadSatelliteData() {
             sharedFunctions.loadSatelliteData(this);
         },
         // loadSatelliteData () {
@@ -1262,7 +1259,7 @@
         //
         // },
 
-        loadCardsData () {
+        loadCardsData() {
             var self = this;
 
             // const titles = {
@@ -1279,41 +1276,41 @@
                 // self.cards[index].description = self.cards[index].description.substring(0, 27)
                 // const title = self.tableAllData.filter((el)=>{el.definition==result.urn})[0];
                 // cards[index].title = titles[cards[index].name] || cards[index].description.substring(0, 27);
-                if(cards[index]==undefined){
+                if (cards[index] == undefined) {
                     cards[index].title = ''; //indicatorDescription.indicatorDescription[cards[index].name].title
-                } else if (indicatorDescription.indicatorDescription[cards[index].name]==undefined) {
-                  cards[index].title = cards[index].description.substring(0, 27);
+                } else if (indicatorDescription.indicatorDescription[cards[index].name] == undefined) {
+                    cards[index].title = cards[index].description.substring(0, 27);
                 } else {
-                  cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
+                    cards[index].title = indicatorDescription.indicatorDescription[cards[index].name].title
                 };
                 // cards[index].title = indicatorDescription.indicatorDescription[cards[index].name] || cards[index].description.substring(0, 27);
 
-                if(result.procedure.includes('CIPAIS') ){
-                    cards[index].type='Dato Cipais'
+                if (result.procedure.includes('CIPAIS')) {
+                    cards[index].type = 'Dato Cipais'
                 }
-                else if(result.procedure.includes('ARPA') ) {
-                cards[index].type='Dato Arpa'
+                else if (result.procedure.includes('ARPA')) {
+                    cards[index].type = 'Dato Arpa'
                 }
-                else if(result.procedure.includes('SATELLITE') ) {
-                cards[index].type='Dato Satellitare'
+                else if (result.procedure.includes('SATELLITE')) {
+                    cards[index].type = 'Dato Satellitare'
                 }
-                else{cards[index].type='Dato da Sensore'}
+                else { cards[index].type = 'Dato da Sensore' }
 
                 cards[index].data = result.value;
 
-                cards[index].uom = (!result.uom) || result.uom=='null' ? null : result.uom;
+                cards[index].uom = (!result.uom) || result.uom == 'null' ? null : result.uom;
 
-                if (result.x){
+                if (result.x) {
 
-                    if(result.procedure.includes('CIPAIS')|| result.procedure.includes('ARPA')){
+                    if (result.procedure.includes('CIPAIS') || result.procedure.includes('ARPA')) {
                         cards[index].time = {
-                        date: result.x.toLocaleDateString('it-IT', { year: 'numeric'}),
+                            date: result.x.toLocaleDateString('it-IT', { year: 'numeric' }),
                         }
                     }
-                    else{
+                    else {
                         cards[index].time = {
-                            date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                            time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                            date: result.x.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit' }),
+                            time: result.x.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
                         }
                     }
                 }
@@ -1322,37 +1319,37 @@
             };
 
             let calls = []
-            self.features.features[self.selectedMarker].properties.names.forEach((info, cidx)=>{
+            self.features.features[self.selectedMarker].properties.names.forEach((info, cidx) => {
                 // In questo modo considero anche le pèrocedure annidate
                 // (i.e. capita al momento solo per misure satellitari: Solidi sospesi e Clorofilla a)
-                info.observedproperties.forEach((nfo, idx)=>{
-                    if (calls.length<6) {
+                info.observedproperties.forEach((nfo, idx) => {
+                    if (calls.length < 6) {
                         const lidx = calls.length;
                         cards[lidx] = nfo;
                         cards[lidx].data = null;
                         calls.push(this.istsos.fetchBy(
                             nfo.def,
                             info.procedure
-                        ).then((result)=>{
+                        ).then((result) => {
                             updateCard(lidx, result);
                         }));
                     };
                 });
             });
 
-            Promise.all(calls).then(()=>{
+            Promise.all(calls).then(() => {
                 self.cards = cards;
             })
         },
-        areaLayerOptions () { return sharedFunctions.areaLayerOptions(this) },
-        markerLayerOptions () { return sharedFunctions.markerLayerOptions(this) },
+        areaLayerOptions() { return sharedFunctions.areaLayerOptions(this) },
+        markerLayerOptions() { return sharedFunctions.markerLayerOptions(this) },
         removeMarker(index) {
             this.markers.splice(index, 1);
-            },
+        },
         addMarker(event) {
             this.markers.push(event.latlng);
         },
-        displayRow (data) {
+        displayRow(data) {
             // const horizontalAlign = 'center';
             // const verticalAlign = 'top';
             // const color = Math.floor((Math.random() * 4) + 1)
@@ -1365,14 +1362,14 @@
                 const message = `Nessuna descrizione disponibile per ${data.name}`
             };
             this.$notifications.notify(
-                {message: indicatorDescription.indicatorDescription[data.name].description}
+                { message: indicatorDescription.indicatorDescription[data.name].description }
             );
         },
-        displayInfo (data) {
-          const horizontalAlign = 'center';
-          const verticalAlign = 'top';
+        displayInfo(data) {
+            const horizontalAlign = 'center';
+            const verticalAlign = 'top';
 
-          this.$notifications.notify(
+            this.$notifications.notify(
                 {
                     message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati nelle tab sottostanti.</span>`,
 
@@ -1380,13 +1377,13 @@
                     horizontalAlign: horizontalAlign,
                     verticalAlign: verticalAlign,
                     type: 'primary',
-                 })
+                })
         },
-        displayModal (data) {
-          const horizontalAlign = 'center';
-          const verticalAlign = 'top';
+        displayModal(data) {
+            const horizontalAlign = 'center';
+            const verticalAlign = 'top';
 
-          this.$notifications.notify(
+            this.$notifications.notify(
                 {
                     message: `<span>Interagisci con la <b>Mappa del Lago</b> - seleziona e visualizza i dati rilevati dai sensori nelle tab sottostanti.</span>`,
 
@@ -1394,20 +1391,20 @@
                     horizontalAlign: horizontalAlign,
                     verticalAlign: verticalAlign,
                     type: 'primary',
-                 })
+                })
         },
         updateSelectedModal(data) {
             this.selectedRow = data;
         },
-        tableFetchData2 () {
+        tableFetchData2() {
             var self = this;
 
             return Promise.all([
                 this.istsos.fetchObserverProperties(),
                 this.istsos.fetchProcedures()
-            ]).then((results)=>{
-                self.$root.allProcedures = results[1].data.data.reduce((obj, it)=>{
-                    obj[it.name]=it;
+            ]).then((results) => {
+                self.$root.allProcedures = results[1].data.data.reduce((obj, it) => {
+                    obj[it.name] = it;
                     return obj
                 }, {});
                 self.allProcedures = self.$root.allProcedures;
@@ -1415,14 +1412,14 @@
 
                 tableAllData.forEach((el => {
 
-                    const ff = results[1].data.data.filter(proc => proc.observedproperties[0].name==el.name);
-                    const ends = ff.map(proc=>proc.samplingTime.endposition);
-                    const begins = ff.map(proc=>proc.samplingTime.beginposition);
-                    const begin = begins.length ? Math.min(...begins.map(bb=>(Date.parse(bb)))) : 0;
-                    const end = ends.length ? Math.min(...ends.map(bb=>(Date.parse(bb)))) : 0;
+                    const ff = results[1].data.data.filter(proc => proc.observedproperties[0].name == el.name);
+                    const ends = ff.map(proc => proc.samplingTime.endposition);
+                    const begins = ff.map(proc => proc.samplingTime.beginposition);
+                    const begin = begins.length ? Math.min(...begins.map(bb => (Date.parse(bb)))) : 0;
+                    const end = ends.length ? Math.min(...ends.map(bb => (Date.parse(bb)))) : 0;
 
 
-                    if ( begin && end ) {
+                    if (begin && end) {
                         const diffTime = Math.abs(end - begin);
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                         el['days'] = diffDays;
@@ -1447,10 +1444,10 @@
                 // }
                 // console.log(title);
                 //testing fine
-                self.tableAllData = {data: tableAllData.filter(el => el.begin && el.end)};
+                self.tableAllData = { data: tableAllData.filter(el => el.begin && el.end) };
             })
         },
-        tableSetData () {
+        tableSetData() {
             sharedFunctions.tableSetData(this);
         },
         // tableSetData () {
@@ -1529,55 +1526,55 @@
         //     this.tableData = tableData;
         //
         // },
-        tableSetDataArpa () {
+        tableSetDataArpa() {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
-            this.selectedArpaProcedures = selectedProc.filter(el=>el.procedure.includes("ARPA"));
+            this.selectedArpaProcedures = selectedProc.filter(el => el.procedure.includes("ARPA"));
 
         },
-        tableSetDataSatellite () {
+        tableSetDataSatellite() {
             const selectedProc = this.features.features[this.selectedMarker].properties.names;
-            this.selectedSatelliteProcedures = selectedProc.filter(el=>el.procedure.includes("SATELLITE"));
+            this.selectedSatelliteProcedures = selectedProc.filter(el => el.procedure.includes("SATELLITE"));
 
         },
-        reloadTable (tableProps) {
+        reloadTable(tableProps) {
             var self = this;
             this.tableProps = tableProps
             this.tableSetData();
         },
-        reloadTableArpa (tableProps) {
+        reloadTableArpa(tableProps) {
             var self = this;
             this.tableProps = tableProps
             this.tableSetDataArpa();
         },
-        populateCockpit () {
+        populateCockpit() {
             var self = this;
-            this.istsos.fetchLastTemetature('W_TEMP_01').then((result)=>{
+            this.istsos.fetchLastTemetature('W_TEMP_01').then((result) => {
                 // self.last_temperature_data = result.options;
 
                 self.lastTemp04 = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastTemp04Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                    date: result.x.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit' }),
+                    time: result.x.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
 
                 // self.addMarker(result.coords[0], result.coords[1])
 
             });
-            this.istsos.fetchLastSdt('SDT_FIG').then((result)=>{
+            this.istsos.fetchLastSdt('SDT_FIG').then((result) => {
                 self.last_trasparency_data = result.options;
                 self.lastSdtFig = `${result.options.series[0].data[0].y}${result.uom}`
                 self.lastSdtTime = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                    date: result.x.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit' }),
+                    time: result.x.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
 
             });
-            this.istsos.fetchLastO2s('W_O2_SAT').then((result)=>{
+            this.istsos.fetchLastO2s('W_O2_SAT').then((result) => {
                 // self.last_temperature_data = result.options;
                 self.lastO2s04 = `${result.options.series[0].data[0].y} ${result.uom}`;
                 self.lastO2s04Time = {
-                    date: result.x.toLocaleDateString('it-IT', {day: '2-digit', month: '2-digit', year: '2-digit'}),
-                    time: result.x.toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'})
+                    date: result.x.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit' }),
+                    time: result.x.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
                 }//result.x.toLocaleDateString('it', {hour: "numeric", minute: "numeric"})
             });
             // this.istsos.fetchLastTemetature('TEMP_2_5').then((result)=>{
@@ -1711,10 +1708,10 @@
             //   });
 
         },
-        appendTempSeries () {
+        appendTempSeries() {
             var self = this;
-            const colors = ['#2f7ed8',, '#a6c96a', '#492970', '#f28f43',
-            '#0d233a', '#77a1e5', '#8bbc21'];
+            const colors = ['#2f7ed8', , '#a6c96a', '#492970', '#f28f43',
+                '#0d233a', '#77a1e5', '#8bbc21'];
 
             const visibleProcedure = 'W_TEMP_0_4'
             const procedures = [
@@ -1725,20 +1722,20 @@
                 'W_TEMP_12_5',
                 'W_TEMP_20_0'
             ];
-            let i=0;
+            let i = 0;
             for (const procedure of procedures) {
-                this.istsos.fetchTemperatureSeries(procedure).then((result)=>{
-                    if ( procedure!=visibleProcedure ) {
+                this.istsos.fetchTemperatureSeries(procedure).then((result) => {
+                    if (procedure != visibleProcedure) {
                         result.options.series[0].visible = false;
                     };
 
                     result.options.series[0].color = colors[i];
-                    i = i+1;
-                    if ( !self.series_data.series ) {
+                    i = i + 1;
+                    if (!self.series_data.series) {
                         self.series_data = result.options;
                     } else {
                         self.series_data.series.push(result.options.series[0]);
-                        self.series_data.series.sort((el1, el2) => { el1.name<el2.name } );
+                        self.series_data.series.sort((el1, el2) => { el1.name < el2.name });
                     };
 
                 });
@@ -1747,7 +1744,7 @@
         fetchTemperatures(procedure) {
             var self = this;
 
-            this.istsos.fetchTemperatureSeries(procedure).then((result)=>{
+            this.istsos.fetchTemperatureSeries(procedure).then((result) => {
                 self.series_data = result.options;
             });
         },
@@ -1756,10 +1753,10 @@
         },
         fetchO2c(procedure) {
             var self = this;
-            this.istsos.fetchLastO2c(procedure).then((result)=>{
+            this.istsos.fetchLastO2c(procedure).then((result) => {
                 self.last_o2c_data = result.options;
             });
-            this.istsos.fetchO2cSeries(procedure).then((result)=>{
+            this.istsos.fetchO2cSeries(procedure).then((result) => {
                 self.series_o2c_data = result.options;
             });
         },
@@ -1772,8 +1769,8 @@
         centerUpdate(center) {
             this.currentCenter = center;
         },
-        setSelected(tab){
-            this.selected =tab;
+        setSelected(tab) {
+            this.selected = tab;
         }
 
 
@@ -1787,20 +1784,27 @@
 
 </script>
 <style>
-.table > thead > tr > th:last-child,
-.table > tbody > tr > th:last-child,
-.table > tfoot > tr > th:last-child,
-.table > thead > tr > td:last-child,
-.table > tbody > tr > td:last-child,
-.table > tfoot > tr > td:last-child {
-  width: auto;
+.table>thead>tr>th:last-child,
+.table>tbody>tr>th:last-child,
+.table>tfoot>tr>th:last-child,
+.table>thead>tr>td:last-child,
+.table>tbody>tr>td:last-child,
+.table>tfoot>tr>td:last-child {
+    width: auto;
 }
-.nav-link {
-  cursor: pointer
-}
-.modal { overflow: auto !important;}
 
-.input-group > .form-control, .input-group > .form-control-plaintext, .input-group > .custom-select, .input-group > .custom-file {
+.nav-link {
+    cursor: pointer
+}
+
+.modal {
+    overflow: auto !important;
+}
+
+.input-group>.form-control,
+.input-group>.form-control-plaintext,
+.input-group>.custom-select,
+.input-group>.custom-file {
     position: relative;
     -ms-flex: 1 1 auto;
     -webkit-box-flex: 1;
@@ -1823,7 +1827,11 @@
     /* fill-opacity: 0; */
 }
 
-.btn-info:hover, .btn-info:focus, .btn-info:active, .btn-info.active, .open > .btn-info.dropdown-toggle {
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active,
+.btn-info.active,
+.open>.btn-info.dropdown-toggle {
     background-color: #eeeeee;
     color: #42d0ed;
     border-color: #42d0ed;
@@ -1839,5 +1847,4 @@
     width: 20px;
     height: 20px;
     margin-right: 10px;
-}
-</style>
+}</style>

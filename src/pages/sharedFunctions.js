@@ -3,7 +3,7 @@ import { latLng } from 'leaflet';
 import config from '../../config.js'
 import istsosToHighcharts from './istsosToHighcharts';
 import indicatorDescription from '../indicatorDescription';
-import { mean,std,min,sqrt,max } from 'mathjs';
+import { mean, std, min, sqrt, max } from 'mathjs';
 
 // const base_layers = [
 //     {
@@ -66,8 +66,8 @@ function fromNow(date) {
     }
 };
 
-const groupBy = function(xs, f) {
-    return xs.reduce(function(rv, x) {
+const groupBy = function (xs, f) {
+    return xs.reduce(function (rv, x) {
         (rv[f(x)] = rv[f(x)] || []).push(x);
         return rv;
     }, {});
@@ -75,11 +75,11 @@ const groupBy = function(xs, f) {
 
 const map_layers = [
     {
-      name: 'Maschera',
-      visible: true,
-      format: 'image/png',
-      layers: 'Maschera',
-      transparent: true/*,
+        name: 'Maschera',
+        visible: true,
+        format: 'image/png',
+        layers: 'Maschera',
+        transparent: true/*,
       attribution: "Weather data © 2012 IEM Nexrad"*/
     },
     // {
@@ -132,12 +132,12 @@ const map_layers = [
     //   attribution: "Weather data © 2012 IEM Nexrad"*/
     // },
     {
-      name: 'Laghi',
-      visible: true,
-      format: 'image/png',
-      layers: 'Laghi',
-      opacity: .5,
-      transparent: true/*,
+        name: 'Laghi',
+        visible: true,
+        format: 'image/png',
+        layers: 'Laghi',
+        opacity: .5,
+        transparent: true/*,
       attribution: "Weather data © 2012 IEM Nexrad"*/
     },
     // {
@@ -164,46 +164,46 @@ const map_layers = [
     //   transparent: true/*,
     //   attribution: "Weather data © 2012 IEM Nexrad"*/
     // },
-  //   {
-  //     name: 'Uso di suolo (CORINE_2018)',
-  //     visible: false,
-  //     format: 'image/png',
-  //     layers: 'Uso_di_suolo_CORINE_2018',
-  //     transparent: true/*,
-  //     attribution: "Weather data © 2012 IEM Nexrad"*/
-  //   },
-  //   {
-  //     name: 'Stato delle rive',
-  //     visible: false,
-  //     format: 'image/png',
-  //     layers: 'Stato_delle_rive',
-  //     transparent: true/*,
-  //     attribution: "Weather data © 2012 IEM Nexrad"*/
-  //   },
-  //   {
-  //     name: 'Depuratori con capacità > 2000 AE',
-  //     visible: false,
-  //     format: 'image/png',
-  //     layers: 'Depuratori_con_capacita_greater_2000_AE',
-  //     transparent: true/*,
-  //     attribution: "Weather data © 2012 IEM Nexrad"*/
-  //   },
-  //   {
-  //     name: 'Punti prelievo d\'acqua',
-  //     visible: false,
-  //     format: 'image/png',
-  //     layers: 'Punti_prelievo_d_acqua',
-  //     transparent: true/*,
-  //     attribution: "Weather data © 2012 IEM Nexrad"*/
-  //   },
-//     {
-//       name: 'Bacini idrografici',
-//       visible: true,
-//       format: 'image/png',
-//       layers: 'Bacini_idrografici',
-//       transparent: true/*,
-//       attribution: "Weather data © 2012 IEM Nexrad"*/
-//   }
+    //   {
+    //     name: 'Uso di suolo (CORINE_2018)',
+    //     visible: false,
+    //     format: 'image/png',
+    //     layers: 'Uso_di_suolo_CORINE_2018',
+    //     transparent: true/*,
+    //     attribution: "Weather data © 2012 IEM Nexrad"*/
+    //   },
+    //   {
+    //     name: 'Stato delle rive',
+    //     visible: false,
+    //     format: 'image/png',
+    //     layers: 'Stato_delle_rive',
+    //     transparent: true/*,
+    //     attribution: "Weather data © 2012 IEM Nexrad"*/
+    //   },
+    //   {
+    //     name: 'Depuratori con capacità > 2000 AE',
+    //     visible: false,
+    //     format: 'image/png',
+    //     layers: 'Depuratori_con_capacita_greater_2000_AE',
+    //     transparent: true/*,
+    //     attribution: "Weather data © 2012 IEM Nexrad"*/
+    //   },
+    //   {
+    //     name: 'Punti prelievo d\'acqua',
+    //     visible: false,
+    //     format: 'image/png',
+    //     layers: 'Punti_prelievo_d_acqua',
+    //     transparent: true/*,
+    //     attribution: "Weather data © 2012 IEM Nexrad"*/
+    //   },
+    //     {
+    //       name: 'Bacini idrografici',
+    //       visible: true,
+    //       format: 'image/png',
+    //       layers: 'Bacini_idrografici',
+    //       transparent: true/*,
+    //       attribution: "Weather data © 2012 IEM Nexrad"*/
+    //   }
 ]
 
 
@@ -212,7 +212,7 @@ const base_layers = {
         label: 'Openstreetmap',
         url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         options: {
-            attribution:'&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             maxZoom: 19,
             minZoom: 0
         }
@@ -223,9 +223,9 @@ const base_layers = {
         options: {
             attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             subdomains: 'abcd',
-          	minZoom: 0,
-          	maxZoom: 20,
-          	ext: 'png'
+            minZoom: 0,
+            maxZoom: 20,
+            ext: 'png'
         }
     },
     satellite: {
@@ -275,112 +275,114 @@ function addBaseLayers(map) {
 
 };
 
-function areaLayerOptions (self) {
-  return {
-      style: function (feature) {
-          let color = '#406e96'
-          if ( feature.properties.markerIndex==self.selectedMarker ) {
-            //   color = '#1D62F0 '
-            color = '#ed595b'
-          };
-          return {
-              color: color,
-              fillColor: color,
-              fillOpacity:0.1,
-          }
-      },
-      onEachFeature: function (feature, layer) {
-          layer.bindTooltip(`<h6>${guessLocLabel(feature.properties.label)}</h6>`, {sticky: true})
-          layer.on('click', ee => {
-              self.selectedMarker=feature.properties.markerIndex;
-              self.selectedTab='satellitari';
-          })
-      },
-  }
+function areaLayerOptions(self) {
+    return {
+        style: function (feature) {
+            let color = '#406e96'
+            if (feature.properties.markerIndex == self.selectedMarker) {
+                //   color = '#1D62F0 '
+                color = '#ed595b'
+            };
+            return {
+                color: color,
+                fillColor: color,
+                fillOpacity: 0.1,
+            }
+        },
+        onEachFeature: function (feature, layer) {
+            layer.bindTooltip(`<h6>${guessLocLabel(feature.properties.label)}</h6>`, { sticky: true })
+            layer.on('click', ee => {
+                self.selectedMarker = feature.properties.markerIndex;
+                self.selectedTab = 'satellitari';
+            })
+        },
+    }
 };
 
-function guessLocLabel (foi_name){
-    const locLabel= {
-        FIGINO:'Figino',
-        figino:'Figino',
-        VARESE:'Varese',
-        varese:'Varese',
-        GANDRIA:'Gandria',
-        gandria:'Gandria',
-        MELIDE:'Melide',
-        lugano_basin_north:'Bacino Nord',
-        lugano_basin_south:'Bacino Sud',
-        'Ceresio Nord':'Bacino Nord',
+function guessLocLabel(foi_name) {
+    const locLabel = {
+        FIGINO: 'Figino',
+        figino: 'Figino',
+        VARESE: 'Varese',
+        lagovarese: 'Lago di Varese',
+        LAGOVARESE: 'Lago di Varese',
+        varese: 'Varese',
+        GANDRIA: 'Gandria',
+        gandria: 'Gandria',
+        MELIDE: 'Melide',
+        lugano_basin_north: 'Bacino Nord',
+        lugano_basin_south: 'Bacino Sud',
+        'Ceresio Nord': 'Bacino Nord',
         'Ceresio Sud': 'Bacino Sud',
-        DERVIO:'Dervio',
-        MANDELLO:'Mandello',
-        lake_como_east_basin:'Bacino Est',
-        lake_como_west_basin:'Bacino Ovest',
-        lake_como_north_basin:'Bacino Nord',
-        GHIFFA:'Ghiffa',
-        PALLANZA:'Pallanza',
-        PALLANZA_D:'Pallanza',
-        PALLANZA_S:'Pallanza',
-        Pallanza_D:'Pallanza',
-        Pallanza_S:'Pallanza',
-        maggiore:'Bacino Completo',
-        ABBADIA:'Abbadia',
-        ARGEGNO:'Argegno',
-        COMO:'Como'
+        DERVIO: 'Dervio',
+        MANDELLO: 'Mandello',
+        lake_como_east_basin: 'Bacino Est',
+        lake_como_west_basin: 'Bacino Ovest',
+        lake_como_north_basin: 'Bacino Nord',
+        GHIFFA: 'Ghiffa',
+        PALLANZA: 'Pallanza',
+        PALLANZA_D: 'Pallanza',
+        PALLANZA_S: 'Pallanza',
+        Pallanza_D: 'Pallanza',
+        Pallanza_S: 'Pallanza',
+        maggiore: 'Bacino Completo',
+        ABBADIA: 'Abbadia',
+        ARGEGNO: 'Argegno',
+        COMO: 'Como'
     }
-    if(foi_name.split('_')[0] in locLabel){
+    if (foi_name.split('_')[0] in locLabel) {
         return locLabel[foi_name.split('_')[0]]
     }
-    else if(foi_name in locLabel){
+    else if (foi_name in locLabel) {
         return locLabel[foi_name]
     }
     else return foi_name
 };
-function guessLocTitle (foi_name){
-    const locTitle= {
-        FIGINO:'Dati relativi alla località di Figino',
-        VARESE:'Dati relativi alla località di Varese',
-        GANDRIA:'Dati relativi alla località di Gandria',
-        MELIDE:'Dati relativi alla località di Melide',
-        lugano_basin_north:'Dati satellitari relativi al Bacino Nord',
-        lugano_basin_south:'Dati satellitari relativi al Bacino Sud',
-        'Ceresio Nord':'Dati satellitari relativi al Bacino Nord',
+function guessLocTitle(foi_name) {
+    const locTitle = {
+        FIGINO: 'Dati relativi alla località di Figino',
+        VARESE: 'Dati relativi alla località di Varese',
+        GANDRIA: 'Dati relativi alla località di Gandria',
+        MELIDE: 'Dati relativi alla località di Melide',
+        lugano_basin_north: 'Dati satellitari relativi al Bacino Nord',
+        lugano_basin_south: 'Dati satellitari relativi al Bacino Sud',
+        'Ceresio Nord': 'Dati satellitari relativi al Bacino Nord',
         'Ceresio Sud': 'Dati satellitari relativi al Bacino Sud',
-        DERVIO:'Dati relativi alla località di Dervio',
-        MANDELLO:'Dati relativi alla località di Mandello',
-        lake_como_east_basin:'Dati satellitari relativi al Bacino Est',
-        lake_como_west_basin:'Dati satellitari relativi al Bacino Ovest',
-        lake_como_north_basin:'Dati satellitari relativi al Bacino Nord',
-        GHIFFA:'Dati relativi alla località di Ghiffa',
-        PALLANZA:'Dati relativi alla località di Pallanza',
-        PALLANZA_D:'Dati relativi alla località di Pallanza',
-        PALLANZA_S:'Dati relativi alla località di Pallanza',
-        Pallanza_D:'Dati relativi alla località di Pallanza',
-        Pallanza_S:'Dati relativi alla località di Pallanza',
-        maggiore:'Dati satellitari relativi al Bacino Completo',
-        varese:'Dati satellitari relativi al Bacino Completo',
-        ABBADIA:'Dati relativi alla località di Abbadia',
-        ARGEGNO:'Dati relativi alla località di Argegno',
-        COMO:'Dati relativi alla località di Como',
+        DERVIO: 'Dati relativi alla località di Dervio',
+        MANDELLO: 'Dati relativi alla località di Mandello',
+        lake_como_east_basin: 'Dati satellitari relativi al Bacino Est',
+        lake_como_west_basin: 'Dati satellitari relativi al Bacino Ovest',
+        lake_como_north_basin: 'Dati satellitari relativi al Bacino Nord',
+        GHIFFA: 'Dati relativi alla località di Ghiffa',
+        PALLANZA: 'Dati relativi alla località di Pallanza',
+        PALLANZA_D: 'Dati relativi alla località di Pallanza',
+        PALLANZA_S: 'Dati relativi alla località di Pallanza',
+        Pallanza_D: 'Dati relativi alla località di Pallanza',
+        Pallanza_S: 'Dati relativi alla località di Pallanza',
+        maggiore: 'Dati satellitari relativi al Bacino Completo',
+        lagovarese: 'Dati satellitari relativi al Bacino Completo',
+        ABBADIA: 'Dati relativi alla località di Abbadia',
+        ARGEGNO: 'Dati relativi alla località di Argegno',
+        COMO: 'Dati relativi alla località di Como',
 
     }
-    if(foi_name.split('_')[0] in locTitle){
+    if (foi_name.split('_')[0] in locTitle) {
         return locTitle[foi_name.split('_')[0]]
     }
-    else if(foi_name in locTitle){
+    else if (foi_name in locTitle) {
         return locTitle[foi_name]
     }
     else return foi_name
 };
 
-function markerLayerOptions (self) {
+function markerLayerOptions(self) {
     return {
         pointToLayer: function (feature, latlng) {
 
             const prefixes = feature.properties.names.reduce((prev, info) => {
                 const name = info.procedure;
                 const prefix = name.split('_')[0];
-                if ( !prev.includes(prefix) ) { prev.push(prefix); }
+                if (!prev.includes(prefix)) { prev.push(prefix); }
                 return prev;
             }, []);
             const suffixes = feature.properties.names.reduce((prev, info) => {
@@ -388,13 +390,13 @@ function markerLayerOptions (self) {
 
                 // TODO:
                 const suffix = name.split('_').at(-1);
-                if ( !prev.includes(suffix) ) { prev.push(suffix); }
+                if (!prev.includes(suffix)) { prev.push(suffix); }
                 // console.log(name, prev);
                 return prev;
             }, []);
-            if (!prefixes.every(prefix => prefix=='SATELLITE')) {
+            if (!prefixes.every(prefix => prefix == 'SATELLITE')) {
                 let clr;
-                if ( feature.properties.markerIndex == self.selectedMarker ) {
+                if (feature.properties.markerIndex == self.selectedMarker) {
                     // clr = 'text-primary'
                     clr = 'text-danger'
                 } else {
@@ -407,8 +409,8 @@ function markerLayerOptions (self) {
                     className: ''
                 });
 
-                const marker = L.marker(latlng, {icon: fontAwesomeIcon}).on('click', (ee)=>{
-                    self.selectedMarker=feature.properties.markerIndex;
+                const marker = L.marker(latlng, { icon: fontAwesomeIcon }).on('click', (ee) => {
+                    self.selectedMarker = feature.properties.markerIndex;
                 });
 
                 marker.bindTooltip(`<h6>${guessLocLabel(feature.properties.foi_name)}</h6>`)
@@ -418,7 +420,7 @@ function markerLayerOptions (self) {
                 self.basins.features.map(feat => {
                     // console.log([feat.properties.basin, suffixes]);
                     // if (feature.properties.names.every(name=>name.procedure.includes(`_${feat.properties.basin}`))) {
-                    if ( feat.properties.basin.startsWith(suffixes[0]) ) {
+                    if (feat.properties.basin.startsWith(suffixes[0])) {
                         feat.properties.markerIndex = feature.properties.markerIndex;
                     };
                 });
@@ -441,6 +443,7 @@ const procPriorities = [
     'water-temperature-ptcan1_0',
     'water-temperature-ptcan-1_0',
     "water-O2S",
+    "water-O2S-1",
     "water-SDT",
     "water-PTOT",
     "water-depth",
@@ -485,12 +488,12 @@ const windsProcedure = {
 //     return prev;
 // }, {});
 
-function groupProcedures (allProcedures) {
+function groupProcedures(allProcedures) {
     let procedureInfos = {};
-    const groupedProcedures = Object.values(allProcedures).reduce((acc, it, idx)=>{
+    const groupedProcedures = Object.values(allProcedures).reduce((acc, it, idx) => {
         let foundIt = false;
         for (const [index, group] of groupedProceduresList.entries()) {
-            if ( group.includes(it.name) ) {
+            if (group.includes(it.name)) {
                 foundIt = true;
                 const kk = index.toString();
                 if (!(kk in acc)) {
@@ -516,7 +519,7 @@ function groupProcedures (allProcedures) {
 };
 
 
-function loadSatelliteData (self) {
+function loadSatelliteData(self) {
     let dataSatellite = [];
     let dataSatelliteWithSD = [];
     let dataSatelliteWithQQ = [];
@@ -538,44 +541,44 @@ function loadSatelliteData (self) {
                         end
                     ),
                     self.istsos.fetchSeries(
-                        proc.procedure+'_SD',
+                        proc.procedure + '_SD',
                         prop.definition,
                         begin,
                         end
                     ),
                     self.istsos.fetchSeries(
-                        proc.procedure+'_1Q',
+                        proc.procedure + '_1Q',
                         prop.definition,
                         begin,
                         end
                     ),
                     self.istsos.fetchSeries(
-                        proc.procedure+'_3Q',
+                        proc.procedure + '_3Q',
                         prop.definition,
                         begin,
                         end
                     )
-                ]).then(response=>{
+                ]).then(response => {
                     const result = istsosToHighcharts.istosToLine(response[0]);
                     const result1Q = istsosToHighcharts.istosToLine(response[2]);
                     const result3Q = istsosToHighcharts.istosToLine(response[3]);
                     // const resultSD = istsosToHighcharts.istosToLine(response[1]);
 
                     // Courtesy of: https://stackoverflow.com/a/10284006/1039510
-                    const zip = (...rows) => [...rows[0]].map((_,c) => rows.map(row => row[c]));
+                    const zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row => row[c]));
                     const seriesQQ = zip(
                         result1Q.options.series[0].data,
-                        result3Q.options.series[0].data).map((data)=>[...data[0], data[1][1]]);
+                        result3Q.options.series[0].data).map((data) => [...data[0], data[1][1]]);
 
                     const dataSD = zip(
                         result.options.series[0].data,
                         istsosToHighcharts.istsosToSeries(
                             response[1]).series
-                    ).map((data)=>[data[0][0], data[0][1]-data[1][1], data[0][1]+data[1][1]]);
+                    ).map((data) => [data[0][0], data[0][1] - data[1][1], data[0][1] + data[1][1]]);
 
                     // result.options.series.push(result3Q.options.series[0])
 
-                    const variableAverage = mean(result.options.series[0].data.map((xy)=>xy[1]));
+                    const variableAverage = mean(result.options.series[0].data.map((xy) => xy[1]));
 
                     result.options.yAxis.plotLines = [{
                         color: 'darkgrey',
@@ -585,12 +588,12 @@ function loadSatelliteData (self) {
                         label: {
                             text: 'media della serie',
                             align: 'center',
-                            style: {color: 'darkgrey'}
+                            style: { color: 'darkgrey' }
                         }
                     }];
 
                     // result.options.subtitle.text = `${indicatorDescription.indicatorDescription[prop.name].breveDescrizione} (${result.uom})`;
-                    dataSatellite.push({...result.options});
+                    dataSatellite.push({ ...result.options });
 
                     const opts3Q = result3Q.options.series[0];
                     opts3Q.color = '#f28f43'
@@ -610,7 +613,7 @@ function loadSatelliteData (self) {
                     if (prop.name in indicatorDescription.indicatorDescription) {
                         result.options.title.text = indicatorDescription.indicatorDescription[prop.name].title;
                         resultQQ.options.title.text = result.options.title.text;
-                        result.options.subtitle.text = indicatorDescription.indicatorDescription[prop.name].breveDescrizione+` (${result.uom})`;
+                        result.options.subtitle.text = indicatorDescription.indicatorDescription[prop.name].breveDescrizione + ` (${result.uom})`;
                         resultQQ.options.subtitle.text = result.options.subtitle.text;
                     } else {
                         result.options.title.text = info.description;
@@ -638,8 +641,8 @@ function loadSatelliteData (self) {
                             //     // this.chart.series[2].setVisible(true);
                             // },
                             show: function () {
-                                this.chart.series.forEach((series)=>{
-                                    if (series.name==sname) {
+                                this.chart.series.forEach((series) => {
+                                    if (series.name == sname) {
                                         series.hide();
                                     };
                                 })
@@ -658,8 +661,8 @@ function loadSatelliteData (self) {
                             //     this.chart.series[1].setVisible(true);
                             // },
                             show: function () {
-                                this.chart.series.forEach((series)=>{
-                                    if (series.name=='deviazione standard') {
+                                this.chart.series.forEach((series) => {
+                                    if (series.name == 'deviazione standard') {
                                         series.hide();
                                     };
                                 })
@@ -677,13 +680,13 @@ function loadSatelliteData (self) {
 
     };
 
-    Promise.all(prms).then(()=>{
+    Promise.all(prms).then(() => {
         self.dataSatellite = dataSatellite;
         self.dataSatelliteWithQQ = dataSatelliteWithQQ;
         // self.dataSatelliteWithSD = dataSatelliteWithSD;
-        self.modalClasses=[];
+        self.modalClasses = [];
         for (let i = 0; i < self.dataSatellite.length; i++) {
-            self.modalClasses.push(['modal','fade']);
+            self.modalClasses.push(['modal', 'fade']);
         }
     });
 
@@ -697,35 +700,35 @@ function centerMapTo(self) {
     );
 };
 
-function tableSetData (self) {
+function tableSetData(self) {
 
     const substr = self.tableProps.search.toLowerCase();
 
-    const start = (self.tableProps.page||1)*self.tableProps.length-self.tableProps.length;
-    const end = (self.tableProps.page||1)*self.tableProps.length-1;
+    const start = (self.tableProps.page || 1) * self.tableProps.length - self.tableProps.length;
+    const end = (self.tableProps.page || 1) * self.tableProps.length - 1;
 
-    const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat=>feat.procedure)
+    const selectedProc = self.features.features[self.selectedMarker].properties.names.map(feat => feat.procedure)
 
     //
-    if ( self.tableProps.column=='id' ) {
+    if (self.tableProps.column == 'id') {
         self.tableProps.column = 'title';
     };
 
     // Courtesy of: https://stackoverflow.com/a/1885569/1039510
-    const hadIntersection = (array1, array2)=>array1.filter(value => array2.includes(value));
-    const sensorData = self.tableAllData.data.filter(el=>{
+    const hadIntersection = (array1, array2) => array1.filter(value => array2.includes(value));
+    const sensorData = self.tableAllData.data.filter(el => {
         const intesection = hadIntersection(selectedProc, el.procedures);
         if (
-            intesection.length>0
-            && intesection.every((proc)=>!proc.includes("ARPA"))
-            && intesection.every((proc)=>!proc.includes("CIPAIS"))
-            && intesection.every((proc)=>!proc.includes("SATELLITE"))
+            intesection.length > 0
+            && intesection.every((proc) => !proc.includes("ARPA"))
+            && intesection.every((proc) => !proc.includes("CIPAIS"))
+            && intesection.every((proc) => !proc.includes("SATELLITE"))
         ) {
             return true;
         } else {
             return false;
         };
-    }).map((el, idx)=>{
+    }).map((el, idx) => {
         el.id = idx;
         if (el.name in indicatorDescription.indicatorDescription) {
             el['title'] = indicatorDescription.indicatorDescription[el.name].title;
@@ -735,8 +738,8 @@ function tableSetData (self) {
         // el['title'] = indicatorDescription.indicatorDescription[el.name].title;
         return el;
     });
-    const filteredSortedData = sensorData.filter(el=>{
-        if (self.tableProps.search.length==0) {
+    const filteredSortedData = sensorData.filter(el => {
+        if (self.tableProps.search.length == 0) {
             return true;
         } else if (el.description.toLowerCase().includes(substr)) {
             return true;
@@ -749,11 +752,11 @@ function tableSetData (self) {
         };
     });
 
-    filteredSortedData.sort((item, other)=>{
+    filteredSortedData.sort((item, other) => {
         const column = self.tableProps.column;
         if (
             item[column] < other[column]
-            && self.tableProps.dir=='asc'
+            && self.tableProps.dir == 'asc'
         ) {
             return -1
         } else {
@@ -762,21 +765,21 @@ function tableSetData (self) {
         return 0
     });
 
-    const last_page = Math.floor(filteredSortedData.length/self.tableProps.length)+1;
-    const slicedData = filteredSortedData.slice(start, end+1);
+    const last_page = Math.floor(filteredSortedData.length / self.tableProps.length) + 1;
+    const slicedData = filteredSortedData.slice(start, end + 1);
     const tableData = {
         // payload: self.tableAllData.payload,
         links: {
-            prev: self.tableProps.page>1,
-            next: self.tableProps.page<last_page
+            prev: self.tableProps.page > 1,
+            next: self.tableProps.page < last_page
         },
         meta: {
             current_page: self.tableProps.page,
-            from: start+1,
+            from: start + 1,
             last_page: last_page,
             per_page: self.tableProps.length,
             total: sensorData.length,
-            to: Math.min(end+1, self.tableAllData.data.length),
+            to: Math.min(end + 1, self.tableAllData.data.length),
             // veryTotal: sensorData.length,
         },
         data: slicedData
@@ -793,11 +796,13 @@ function setWindData(self, result, promise, revert = false) {
 
     self.wind_data_loading = true;
 
-    self.wind_data_options = {plotOptions: {
-        windbarb: {
-           turboThreshold: Infinity
-         }
-    }};
+    self.wind_data_options = {
+        plotOptions: {
+            windbarb: {
+                turboThreshold: Infinity
+            }
+        }
+    };
 
     let windPromise = self.istsos.fetchSeries(
         dirProc,
@@ -807,65 +812,68 @@ function setWindData(self, result, promise, revert = false) {
     )
 
     let timeout;
-    results[0].options.chart.events = {render: function(event) {
-        var evt = this;
-        // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
-        clearTimeout(timeout);
-        timeout = setTimeout(()=>{
-            windPromise.then((response)=>{
-                const windirData = istsosToHighcharts.istsosToSeries(response);
+    results[0].options.chart.events = {
+        render: function (event) {
+            var evt = this;
+            // IMPORTANTE: per non reiterare l'azione ogni volta che l'evento viene invocato
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                windPromise.then((response) => {
+                    const windirData = istsosToHighcharts.istsosToSeries(response);
 
-                let windataObj = {};
-                for (const el of windirData.series) {
-                    windataObj[el[0]] = el[1];
-                };
+                    let windataObj = {};
+                    for (const el of windirData.series) {
+                        windataObj[el[0]] = el[1];
+                    };
 
-                const start_ts = evt.rangeSelector.maxInput.min;
-                const end_ts = evt.rangeSelector.minInput.max;
-                const end = new Date(end_ts);
-                const start = new Date(start_ts);
+                    const start_ts = evt.rangeSelector.maxInput.min;
+                    const end_ts = evt.rangeSelector.minInput.max;
+                    const end = new Date(end_ts);
+                    const start = new Date(start_ts);
 
-                const sd = self.series_data.series[0].data.map(cc=>(Math.abs(start-(new Date(cc[0]))) ));
-                const ed = self.series_data.series[0].data.map(cc=>(Math.abs(end-(new Date(cc[0]))) ));
+                    const sd = self.series_data.series[0].data.map(cc => (Math.abs(start - (new Date(cc[0])))));
+                    const ed = self.series_data.series[0].data.map(cc => (Math.abs(end - (new Date(cc[0])))));
 
-                const startIndex = sd.indexOf(Math.min(...sd));
-                const endIndex = ed.indexOf(Math.min(...ed));
+                    const startIndex = sd.indexOf(Math.min(...sd));
+                    const endIndex = ed.indexOf(Math.min(...ed));
 
-                let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el)=>[...el, windataObj[el[0]]]);
+                    let wind_data = self.series_data.series[0].data.slice(startIndex, endIndex).map((el) => [...el, windataObj[el[0]]]);
 
-                const wind_series = wind_data.map((el)=> el.slice(1).reverse());
+                    const wind_series = wind_data.map((el) => el.slice(1).reverse());
 
-                // *************************************
-                // WARNING: Non serve più
-                // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
-                // valori ho introdotto questo workaround per limitare la serie al massimo consentito
-                // issue aperta: https://github.com/highcharts/highcharts/issues/17851
-                // const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-                // const series_excess = wind_data.length-1000;
-                // if ( series_excess>0 ) {
-                //     for (let i = 0; i < series_excess; i++) {
-                //         wind_data.splice(random(1, wind_data.length-1), 1)
-                //     }
-                // };
-                // *************************************
+                    // *************************************
+                    // WARNING: Non serve più
+                    // A causa di uno strano limite del grafico wind barb che supporta fino a 1000
+                    // valori ho introdotto questo workaround per limitare la serie al massimo consentito
+                    // issue aperta: https://github.com/highcharts/highcharts/issues/17851
+                    // const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+                    // const series_excess = wind_data.length-1000;
+                    // if ( series_excess>0 ) {
+                    //     for (let i = 0; i < series_excess; i++) {
+                    //         wind_data.splice(random(1, wind_data.length-1), 1)
+                    //     }
+                    // };
+                    // *************************************
 
-                self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
+                    self.wind_data_options = istsosToHighcharts.windbarb(wind_data);
 
-                self.wind_data_options.title.text = 'Velocità del vento';
-                self.wind_data_options['subtitle'] = {
-                    text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
-                };
+                    self.wind_data_options.title.text = 'Velocità del vento';
+                    self.wind_data_options['subtitle'] = {
+                        text: 'Comparazione tra velocità e direzione del vento per il periodo in dettaglio'
+                    };
 
-                self.wind_series = istsosToHighcharts.polar(wind_series);
+                    self.wind_series = istsosToHighcharts.polar(wind_series);
 
-                self.wind_data_loading = false;
+                    self.wind_data_loading = false;
+                });
             });
-        });
 
-    }};
+        }
+    };
 };
 
-export default {areaLayerOptions, markerLayerOptions, map_layers,guessLocLabel,
+export default {
+    areaLayerOptions, markerLayerOptions, map_layers, guessLocLabel,
     addBaseLayers, guessLocTitle, fromNow, groupProcedures, loadSatelliteData,
     centerMapTo, tableSetData, windsProcedure, procPriorities, setWindData, groupBy
 };
